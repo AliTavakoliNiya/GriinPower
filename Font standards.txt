@@ -1,0 +1,5 @@
+Element | Font Family | Size | Weight
+Main UI Text | Segoe UI | 10 pt | Regular
+Buttons | Segoe UI | 10 pt | Semi-bold
+Headings/Titles | Segoe UI | 14–18 pt | Semi-bold
+Captions/Footnotes | Segoe UI | 9 pt | Regular

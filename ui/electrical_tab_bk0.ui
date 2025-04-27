@@ -1,0 +1,3461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1100</width>
+    <height>745</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="minimumSize">
+      <size>
+       <width>1080</width>
+       <height>730</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1080</width>
+        <height>728</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="minimumSize">
+            <size>
+             <width>320</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>320</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>GroupBox</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="2" colspan="3">
+             <widget class="QComboBox" name="bagfilter_type_2">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+              </property>
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Griin/China</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>BETH</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>AP-Zoloution</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_16">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>PLC</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2" colspan="3">
+             <widget class="QComboBox" name="plc_series_2">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>S7-300 Series</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>S7-1200 Series</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LOGO!</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="3" column="2" colspan="3">
+             <widget class="QComboBox" name="plc_protocol_2">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>PROFINET</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>PROFIBUS</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hard Wire</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_30">
+              <property name="font">
+               <font>
+                <family>Calibri</family>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>OLM</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="3">
+             <widget class="QRadioButton" name="olm_radiobtn_yes_2">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4">
+             <widget class="QRadioButton" name="olm_radiobtn_no_2">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_55">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>spare</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_23">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Touch Panel</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2" colspan="3">
+             <widget class="QComboBox" name="touch_panel_model_2">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>KTP700</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_22">
+              <property name="font">
+               <font>
+                <family>Calibri</family>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Electrical Erection</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="3">
+             <widget class="QRadioButton" name="electrical_erection_radiobtn_yes_2">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="4">
+             <widget class="QRadioButton" name="electrical_erection_radiobtn_no_2">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0" colspan="2">
+             <widget class="QLabel" name="label_29">
+              <property name="font">
+               <font>
+                <family>Calibri</family>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Electrical Material Erection</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="3">
+             <widget class="QRadioButton" name="electrical_material_erection_radiobtn_yes_2">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="4">
+             <widget class="QRadioButton" name="electrical_material_erection_radiobtn_no_2">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0">
+             <widget class="QLabel" name="label_15">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Cable Supply</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="3">
+             <widget class="QRadioButton" name="cable_supply_radiobtn_yes_2">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="4">
+             <widget class="QRadioButton" name="cable_supply_radiobtn_no_2">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0">
+             <widget class="QLabel" name="label_42">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Length (m)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="1">
+             <widget class="QPushButton" name="screw2_add_btn_3">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="2" colspan="3">
+             <widget class="QLineEdit" name="bagfilter_order_3">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="placeholderText">
+               <string>🔎 Search</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="0" colspan="5">
+             <widget class="QFrame" name="frame_3">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::HLine</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0">
+             <widget class="QLabel" name="label_21">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>ΔPressureT</string>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="2">
+             <widget class="QSpinBox" name="spinBox_11">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="3" colspan="2">
+             <widget class="QComboBox" name="electro_motor_type_cbox_15">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="14" column="0">
+             <widget class="QLabel" name="label_19">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>ΔPressureS</string>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="2">
+             <widget class="QSpinBox" name="spinBox_10">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="3" colspan="2">
+             <widget class="QComboBox" name="electro_motor_type_cbox_12">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="15" column="0">
+             <widget class="QLabel" name="label_24">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>PressureT</string>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="2">
+             <widget class="QSpinBox" name="spinBox_12">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="3" colspan="2">
+             <widget class="QComboBox" name="electro_motor_type_cbox_13">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="16" column="0">
+             <widget class="QLabel" name="label_18">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>PressureS</string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="2">
+             <widget class="QSpinBox" name="spinBox_7">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="3" colspan="2">
+             <widget class="QComboBox" name="electro_motor_type_cbox_11">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="17" column="0">
+             <widget class="QLabel" name="label_17">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Pressure Gauge</string>
+              </property>
+             </widget>
+            </item>
+            <item row="17" column="2">
+             <widget class="QSpinBox" name="spinBox_8">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="17" column="3" colspan="2">
+             <widget class="QComboBox" name="electro_motor_type_cbox_14">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="18" column="0">
+             <widget class="QLabel" name="label_20">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Inlet Temperature</string>
+              </property>
+             </widget>
+            </item>
+            <item row="18" column="2">
+             <widget class="QSpinBox" name="spinBox_14">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="18" column="3" colspan="2">
+             <widget class="QComboBox" name="electro_motor_type_cbox_10">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="19" column="0">
+             <widget class="QLabel" name="label_25">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Outlet Temperature</string>
+              </property>
+             </widget>
+            </item>
+            <item row="19" column="2">
+             <widget class="QSpinBox" name="spinBox_13">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="19" column="3" colspan="2">
+             <widget class="QComboBox" name="electro_motor_type_cbox_16">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="10" column="4">
+             <widget class="QSpinBox" name="cable_dimension_spinbox_2">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <number>9999</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <widget class="QLineEdit" name="bagfilter_order_4">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="placeholderText">
+               <string>Order</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="freshair_gbox">
+           <property name="minimumSize">
+            <size>
+             <width>320</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>320</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Vibration Motor</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="2" column="0" colspan="5">
+             <widget class="QFrame" name="frame_8">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::HLine</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QRadioButton" name="freshair_radiobtn_yes_3">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" colspan="2">
+             <widget class="QLabel" name="label_84">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Vibration Motor</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="4">
+             <widget class="QRadioButton" name="freshair_radiobtn_no_3">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLabel" name="label_83">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Vibration Motor</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QSpinBox" name="freshair_tt_qty_3">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="4">
+             <widget class="QComboBox" name="freshair_tt_brand_3">
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="3">
+             <widget class="QLabel" name="label_86">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Fresh Air TemperatureT</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_81">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>ProximityS</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4">
+             <widget class="QComboBox" name="freshair_zs_brand_3">
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="3">
+             <widget class="QSpinBox" name="freshair_zs_qty_3">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QComboBox" name="vibration_motor_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QSpinBox" name="vibration_motor_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QComboBox" name="vibration_motor_kw">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.06</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.09</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.12</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.18</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.25</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.37</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>5.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>9</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>11</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>15</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>18.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>22</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>30</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>45</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>90</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>110</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="groupBox_5">
+           <property name="minimumSize">
+            <size>
+             <width>320</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>320</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Fan Damper</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="4" column="0" rowspan="8">
+             <widget class="QFrame" name="frame">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::VLine</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <property name="lineWidth">
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="0" colspan="9">
+             <widget class="QFrame" name="frame_5">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::HLine</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_painting_ral">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7032</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7030</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="8" column="1" colspan="3">
+             <widget class="QLabel" name="label_39">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Voltage Type</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_voltage_type">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>MV</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>LV</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="9" column="1" colspan="3">
+             <widget class="QLabel" name="label_31">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Painting/RAL</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="7">
+             <widget class="QRadioButton" name="electro_motor_space_heater_yes">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_thermal_protection">
+              <property name="font">
+               <font>
+                <family>Calibri</family>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Not Included</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3xPTC</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>6xPTC</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="10" column="1" colspan="4">
+             <widget class="QLabel" name="label_33">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Thermal Protection</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="1" colspan="3">
+             <widget class="QLabel" name="label_40">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Space Heater</string>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0" colspan="5">
+             <widget class="QLabel" name="label_35">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Damper ProximityS</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="8">
+             <widget class="QRadioButton" name="electro_motor_space_heater_no">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="5" colspan="2">
+             <widget class="QSpinBox" name="damper_zs_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_type_cbox_17">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="14" column="5" colspan="2">
+             <widget class="QSpinBox" name="spinBox_15">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="7" colspan="2">
+             <widget class="QComboBox" name="damper_zs_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="14" column="0" colspan="5">
+             <widget class="QLabel" name="label_47">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Bearing TemperatureT</string>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_type_cbox_30">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="16" column="5" colspan="2">
+             <widget class="QSpinBox" name="fan_pt_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="5" colspan="2">
+             <widget class="QSpinBox" name="spinBox_27">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="0" colspan="4">
+             <widget class="QLabel" name="label_36">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Bearing VibrationT</string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="0" colspan="5">
+             <widget class="QLabel" name="label_43">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Inlet Fan PressureT</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" colspan="3">
+             <widget class="QLabel" name="label_37">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Damper Control</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="6" colspan="2">
+             <widget class="QRadioButton" name="damper_radiobtn_no">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="5">
+             <widget class="QRadioButton" name="damper_radiobtn_yes">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLabel" name="label_46">
+              <property name="font">
+               <font>
+                <family>Calibri</family>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Damper</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QLineEdit" name="damper_kw">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="placeholderText">
+               <string>kw</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="5">
+             <widget class="QRadioButton" name="fan_radiobtn_yes">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="6" colspan="2">
+             <widget class="QRadioButton" name="fan_radiobtn_no">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3" colspan="2">
+             <widget class="QLabel" name="label_45">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Fan Control</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_start_type">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Delta/Star</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>VFD</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Direct</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="3" column="4">
+             <widget class="QLineEdit" name="electro_motor_kw">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="placeholderText">
+               <string>kw</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="5">
+             <widget class="QLineEdit" name="electro_motor_rpm">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="placeholderText">
+               <string>R.P.M.</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="4">
+             <widget class="QLabel" name="label_58">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Electro Motor</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Jemco</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Motogen</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Simence</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>ABB</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>WEG</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="5" column="1" colspan="4">
+             <widget class="QLabel" name="label_32">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Cooling Method</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1" colspan="2">
+             <widget class="QLabel" name="label_34">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Brand</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_cooling_method">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Acc To IEC</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>IC411</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>IC616</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="7" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_efficiency_class">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>IE1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>IE2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>IE3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>IE4</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="6" column="7" colspan="2">
+             <widget class="QComboBox" name="electro_motor_ip">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>54</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLabel" name="label_38">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>IP</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1" colspan="3">
+             <widget class="QLabel" name="label_44">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Efficiency Class</string>
+              </property>
+             </widget>
+            </item>
+            <item row="17" column="7" colspan="2">
+             <widget class="QComboBox" name="fan_tt_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="17" column="0" colspan="5">
+             <widget class="QLabel" name="label_57">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Inlet Fan TemperatureT</string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="7" colspan="2">
+             <widget class="QComboBox" name="fan_pt_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="17" column="5" colspan="2">
+             <widget class="QSpinBox" name="fan_tt_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="5" colspan="2">
+             <widget class="QComboBox" name="damper_model">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Pneumatic</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Motorized On/Off</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Motorized Gradual </string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="7" colspan="2">
+             <widget class="QComboBox" name="rotary_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="minimumSize">
+            <size>
+             <width>320</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>320</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Hopper Heater</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="2" column="0" colspan="5">
+             <widget class="QFrame" name="frame_7">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::HLine</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="4">
+             <widget class="QRadioButton" name="freshair_radiobtn_no_2">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" colspan="2">
+             <widget class="QLabel" name="label_63">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Hopper Heater</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QRadioButton" name="freshair_radiobtn_yes_2">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLabel" name="label_62">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Hopper Heater</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QSpinBox" name="hopper_heater_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="4">
+             <widget class="QComboBox" name="transport_ls_hopper_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QComboBox" name="hopper_heater_kw">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.06</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.09</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.12</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.18</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.25</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.37</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>5.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>9</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>11</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>15</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>18.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>22</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>30</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>45</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>90</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>110</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QSpinBox" name="transport_ls_hopper_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="2">
+             <widget class="QLabel" name="label_72">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Level Switch For hopper</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QComboBox" name="hopper_heater_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="transport_gbox">
+           <property name="minimumSize">
+            <size>
+             <width>320</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>320</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Transport</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="6" column="0" colspan="7">
+             <widget class="QFrame" name="frame_4">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::HLine</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4" colspan="2">
+             <widget class="QComboBox" name="screw1_kw">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.06</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.09</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.12</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.18</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.25</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.37</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>5.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>9</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>11</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>15</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>18.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>22</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>30</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>45</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>90</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>110</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="5" column="3">
+             <widget class="QSpinBox" name="screw2_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="6">
+             <widget class="QComboBox" name="screw1_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="5" column="1" colspan="2">
+             <widget class="QLabel" name="screw2_label">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="font">
+               <font>
+                <family>Calibri</family>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::DefaultContextMenu</enum>
+              </property>
+              <property name="acceptDrops">
+               <bool>false</bool>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Screw</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QPushButton" name="screw2_minuse_btn">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/minus.png</normaloff>../assets/minus.png</iconset>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="6">
+             <widget class="QRadioButton" name="transport_radiobtn_no">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLabel" name="label_79">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Rotary</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" colspan="3">
+             <widget class="QLabel" name="label_68">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Transport Control</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="5">
+             <widget class="QRadioButton" name="transport_radiobtn_yes">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4" colspan="2">
+             <widget class="QComboBox" name="rotary_kw">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.06</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.09</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.12</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.18</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.25</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.37</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>5.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>9</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>11</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>15</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>18.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>22</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>30</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>45</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>90</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>110</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QSpinBox" name="rotary_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="3">
+             <widget class="QLabel" name="label_78">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Telescopic Chute</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="6">
+             <widget class="QComboBox" name="telescopic_chute_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QSpinBox" name="telescopic_chute_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4" colspan="2">
+             <widget class="QComboBox" name="telescopic_chute_kw">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.06</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.09</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.12</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.18</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.25</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.37</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>5.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>9</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>11</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>15</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>18.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>22</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>30</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>45</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>90</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>110</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QSpinBox" name="slide_gate_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="4" colspan="2">
+             <widget class="QComboBox" name="slide_gate_kw">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.06</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.09</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.12</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.18</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.25</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.37</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>5.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>9</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>11</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>15</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>18.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>22</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>30</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>45</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>90</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>110</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="3">
+             <widget class="QLabel" name="label_73">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Slide Gate</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="6">
+             <widget class="QComboBox" name="slide_gate_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QPushButton" name="screw2_add_btn">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1" colspan="2">
+             <widget class="QLabel" name="label_76">
+              <property name="font">
+               <font>
+                <family>Calibri</family>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Screw</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="3">
+             <widget class="QSpinBox" name="screw1_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="6">
+             <widget class="QComboBox" name="screw2_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="5" column="4" colspan="2">
+             <widget class="QComboBox" name="screw2_kw">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.06</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.09</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.12</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.18</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.25</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.37</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>0.75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>1.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>4</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>5.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>7.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>9</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>11</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>15</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>18.5</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>22</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>30</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>45</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>55</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>75</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>90</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>110</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="7" column="0" colspan="3">
+             <widget class="QLabel" name="label_70">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>ProximityS</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="6">
+             <widget class="QComboBox" name="transport_spd_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="7" column="6">
+             <widget class="QComboBox" name="transport_zs_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="8" column="0" colspan="3">
+             <widget class="QLabel" name="label_74">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Speed Detector</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="5">
+             <widget class="QSpinBox" name="transport_zs_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="5">
+             <widget class="QSpinBox" name="transport_spd_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0" colspan="4">
+             <widget class="QLabel" name="label_71">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Level Switch For Bin</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="5">
+             <widget class="QSpinBox" name="transport_lt_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="0" colspan="3">
+             <widget class="QLabel" name="label_67">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Level Transmitter</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="5">
+             <widget class="QSpinBox" name="transport_ls_bin_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="6">
+             <widget class="QComboBox" name="transport_ls_bin_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="11" column="6">
+             <widget class="QComboBox" name="transport_lt_brand">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="6">
+             <widget class="QComboBox" name="rotary_brand_2">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="minimumSize">
+            <size>
+             <width>320</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>320</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Fresh Air</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="4" column="0" colspan="5">
+             <widget class="QFrame" name="frame_6">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::HLine</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="4">
+             <widget class="QRadioButton" name="freshair_radiobtn_no">
+              <property name="text">
+               <string>No</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" colspan="2">
+             <widget class="QLabel" name="label_48">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Fresh Air</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QRadioButton" name="freshair_radiobtn_yes">
+              <property name="text">
+               <string>Yes</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLabel" name="label_49">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Fresh Air Motor</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QSpinBox" name="freshair_motor_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="2">
+             <widget class="QLabel" name="label_50">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Emergency Flap</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_53">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>ProximityS</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="4">
+             <widget class="QComboBox" name="freshair_zs_brand">
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="6" column="3">
+             <widget class="QSpinBox" name="freshair_zs_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="3">
+             <widget class="QSpinBox" name="freshair_tt_qty">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+              <property name="displayIntegerBase">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="emergency_flap_kw">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="placeholderText">
+               <string>kw</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="3" colspan="2">
+             <widget class="QComboBox" name="emergency_flap_model">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Pneumatic</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Motorized On/Off</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Motorized Gradual </string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="freshair_flap_kw">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="placeholderText">
+               <string>kw</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0" colspan="3">
+             <widget class="QLabel" name="label_52">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Fresh Air TemperatureT</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_60">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>Fresh Air Flap</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3" colspan="2">
+             <widget class="QComboBox" name="freshair_flap_model">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Pneumatic</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Motorized On/Off</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Motorized Gradual </string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QComboBox" name="freshair_motor_start_type">
+              <item>
+               <property name="text">
+                <string>--------------------</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Delta/Star</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>VFD</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Direct</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QLineEdit" name="freshair_motor_kw">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="placeholderText">
+               <string>kw</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="4">
+             <widget class="QComboBox" name="freshair_tt_brand">
+              <item>
+               <property name="text">
+                <string>DBL</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Danfoss</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
