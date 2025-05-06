@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, Float, String
-from utils.database import Base, engine, SessionLocal
+
+from utils.database import Base, SessionLocal
+from views.message_box_view import show_message
 
 
 class MCCB(Base):
@@ -20,14 +22,23 @@ class MCCB(Base):
         )
 
 
-# Create the table if it doesn't exist
-Base.metadata.create_all(bind=engine)
-
 def get_mccb_by_motor_power(p_kw_value):
+    session = SessionLocal()
     try:
-        session = SessionLocal()
-        return session.query(MCCB).filter(MCCB.p_kw >= p_kw_value).order_by(MCCB.p_kw.asc()).first()
-    except:
-        return []
+        session.begin()
+        rslt = session.query(MCCB).filter(MCCB.p_kw == p_kw_value).order_by(MCCB.p_kw.asc()).first()
+        if rslt:
+            session.refresh(rslt)
+            mccb = MCCB()
+            mccb.p_kw = rslt.p_kw
+            mccb.i_a = rslt.i_a
+            mccb.mccb_reference = rslt.mccb_reference
+            mccb.brand = rslt.brand
+            return mccb
+        return MCCB()
+    except Exception as e:
+        session.rollback()
+        show_message("---------------------------------------------\n"+str(e)+"\n")
+        return MCCB()
     finally:
         session.close()

@@ -1,32 +1,6 @@
 class Motor:
     def __init__(
-            self,
-            power_kw,
-            usage="",
-            brand="",
-            lcb_qty=1,
-            terminal_4_qty=4,
-            terminal_6_qty=10,
-            relay_1no_1nc_qty=4,
-            relay_2no_2nc_qty=1,
-            contactor_qty=1,
-            mpcb_qty=1,
-            mccb_qty=0,
-            contactor_aux_contact_qty=1,
-            mpcb_mccb_aux_contact_qty=1,
-            button_qty=3,
-            selector_switch_qty=1,
-            signal_lamp_24v_qty=2,
-            signal_cable_7x1p5_l_cofactor=1,
-            power_cable_cofactor=1,
-            duct_cover_qty=0.5,
-            miniatory_rail_qty=0.3,
-            junction_box_for_speed_qty=1,
-            panel_wire_qty=5,
-            plc_di=5,
-            plc_do=1,
-            plc_ai=0,
-            plc_ao=0
+
     ):
         self.power_kw = power_kw
         self.usage = usage

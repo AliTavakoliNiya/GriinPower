@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, Float, String
-from utils.database import Base, engine, SessionLocal
+
+from utils.database import Base, SessionLocal
 from views.message_box_view import show_message
 
 
@@ -27,27 +28,25 @@ class MPCB(Base):
         )
 
 
-# Create the table if it doesn't exist
-Base.metadata.create_all(bind=engine)
-
-
 def get_mpcb_by_motor_power(p_kw_value):
-    global session
+    session = SessionLocal()
     try:
-        session = SessionLocal()
-        rslt =  session.query(MPCB.id,
-                             MPCB.p_kw,
-                             MPCB.ie_a,
-                             MPCB.iq_ka,
-                             MPCB.mpcb_reference,
-                             MPCB.min_current_range_a,
-                             MPCB.max_current_range_a,
-                             MPCB.brand).filter(MPCB.p_kw == p_kw_value).order_by(MPCB.p_kw.asc()).first()
+        session.begin()
+        rslt = session.query(MPCB).filter(MPCB.p_kw == p_kw_value).order_by(MPCB.p_kw.asc()).first()
         if rslt:
-            return rslt
-        else:
-            return MPCB()
+            session.refresh(rslt)
+            mpcb = MPCB()
+            mpcb.p_kw = rslt.p_kw
+            mpcb.ie_a = rslt.ie_a
+            mpcb.iq_ka = rslt.iq_ka
+            mpcb.mpcb_reference = rslt.mpcb_reference
+            mpcb.min_current_range_a = rslt.min_current_range_a
+            mpcb.max_current_range_a = rslt.max_current_range_a
+            mpcb.brand = rslt.brand
+            return mpcb
+        return MPCB()
     except Exception as e:
+        session.rollback()
         show_message("---------------------------------------------\n"+str(e)+"\n")
         return MPCB()
     finally:

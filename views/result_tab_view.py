@@ -6,8 +6,9 @@ from PyQt5.QtWidgets import QWidget, QTableView, QHeaderView, QFileDialog
 
 from openpyxl.styles import Font, PatternFill
 from controllers.transport_controller import TransportController
-from controllers.fresh_air_controller import fresh_air_controller
+from controllers.fresh_air_controller import FreshAirController
 from controllers.vibration_controller import VibrationController
+from controllers.hopper_heater_controller import HopperHeaterController
 from views.message_box_view import show_message
 
 
@@ -23,6 +24,7 @@ class ResultTab(QWidget):
             "transport_panel_table": self.transport_panel_table,
             "fresh_air_panel_table": self.fresh_air_panel_table,
             "vibration_panel_table": self.vibration_panel_table,
+            "hopper_heater_panel_table": self.hopper_heater_panel_table,
         }
 
         self.panels = {}
@@ -46,13 +48,17 @@ class ResultTab(QWidget):
     def generate_panels(self):
         transport_controller = TransportController()
         self.panels["transport_panel"] = transport_controller.build_panel(self.project_details)
-        self.panels["fresh_air_panel"] = fresh_air_controller(self.project_details)
+        fresh_air_controller = FreshAirController()
+        self.panels["fresh_air_panel"] = fresh_air_controller.build_panel(self.project_details)
         vibration_controller = VibrationController()
         self.panels["vibration_panel"] = vibration_controller.build_panel(self.project_details)
+        hopper_heater_controller = HopperHeaterController()
+        self.panels["hopper_heater_panel"] = hopper_heater_controller.build_panel(self.project_details)
 
         self.generate_table(self.panels["transport_panel"], self.tables["transport_panel_table"])
         self.generate_table(self.panels["fresh_air_panel"], self.tables["fresh_air_panel_table"])
         self.generate_table(self.panels["vibration_panel"], self.tables["vibration_panel_table"])
+        self.generate_table(self.panels["hopper_heater_panel"], self.tables["hopper_heater_panel_table"])
 
     def generate_table(self, panel, table):
         df = pd.DataFrame(panel)

@@ -1,0 +1,5 @@
+heater_hopper_checkbox(qcheckbox)
+heater_hopper_ptc_qty(qspinbox)
+heater_hopper_ptc_kw(qcombobox)
+heater_hopper_ptc_qty(qspinbox)
+heater_hopper_ptc_kw(qcombobox)

@@ -23,36 +23,46 @@ class MainView(QMainWindow):
 
         # store all data of project as dictionary
         self.project_details = {"volt": 220,
+                                "rev":0,
                                 "bagfilter": {"touch_panel": "None"},
                                 "vibration": {"status": False,
                                               "motors": {
-                                                  "vibration": {"qty": 0, "power": 0}
+                                                          "vibration": {"qty": 0, "power": 0}
                                               },
                                               "instruments": {},
                                 },
                                 "transport": {"status": False,
                                               "motors": {
-                                                  "rotary": {"qty": 0, "power": 0},
-                                                  "telescopic_chute": {"qty": 0, "power": 0},
-                                                  "slide_gate": {"qty": 0, "power": 0},
-                                                  "screw1": {"qty": 0, "power": 0},
-                                                  "screw2": {"qty": 0, "power": 0}
+                                                          "rotary": {"qty": 0, "power": 0},
+                                                          "telescopic_chute": {"qty": 0, "power": 0},
+                                                          "slide_gate": {"qty": 0, "power": 0},
+                                                          "screw1": {"qty": 0, "power": 0},
+                                                          "screw2": {"qty": 0, "power": 0}
                                               },
                                               "instruments": {
-                                                  "proximity_switch": {"qty": 0, "brand": ""},
-                                                  "speed_detector": {"qty": 0, "brand": ""},
-                                                  "level_switch_bin": {"qty": 0, "brand": ""},
-                                                  "level_transmitter": {"qty": 0, "brand": ""}
+                                                          "proximity_switch": {"qty": 0, "brand": ""},
+                                                          "speed_detector": {"qty": 0, "brand": ""},
+                                                          "level_switch_bin": {"qty": 0, "brand": ""},
+                                                          "level_transmitter": {"qty": 0, "brand": ""}
                                               }},
                                 "fresh_air": {"status": False,
                                               "motors": {
-                                                  "fresh_air_flap": {"qty": 0, "power": 0},
-                                                  "emergency_flap": {"qty": 0, "power": 0}
+                                                          "freshair_motor": {"qty": 0, "power": 0, "start_type":""},
+                                                          "fresh_air_flap": {"qty": 0, "power": 0, "start_type":""},
+                                                          "emergency_flap": {"qty": 0, "power": 0, "start_type":""}
                                               },
                                               "instruments": {
-                                                  "proximity_switch": {"qty": 0, "brand": ""},
-                                                  "temperature_transmitter": {"qty": 0, "brand": ""}
+                                                          "proximity_switch": {"qty": 0, "brand": ""},
+                                                          "temperature_transmitter": {"qty": 0, "brand": ""}
                                               }},
+                                "hopper_heater": {"status": False,
+                                              "motors": {
+                                                          "elements": {"qty": 0, "power": 0}
+                                                        },
+                                              "instruments": {
+                                                          "ptc": {"qty": 0, "power": 0}
+                                                            }
+                                                  },
                                 "cable_dimension": 0
                                 }
 

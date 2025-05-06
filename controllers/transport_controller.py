@@ -46,6 +46,8 @@ class TransportController(PanelController):
             self.choose_contactor(motor, qty)
         for motor, qty in motor_objects:
             self.choose_mpcb(motor, qty)
+        for motor, qty in motor_objects:
+            self.choose_mccb(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
         instruments = project_details["transport"]["instruments"]
@@ -126,3 +128,21 @@ class TransportController(PanelController):
                     price=specs["price"],
                     note=f"Usage: {specs['usage']}\nQuantity: {qty}"
                 )
+
+    def calculate_instruments_io(self, instruments, total_di, total_ai, di_notes, ai_notes):
+        """
+        Calculate I/O requirements specific to transport instruments
+        """
+        di_instruments = ["speed_detector", "proximity_switch", "level_switch_bin"]
+        for instrument in di_instruments:
+            qty = instruments[instrument]["qty"]
+            if qty > 0:
+                total_di += qty  # Each instrument has 1 DI
+                di_notes.append(f"{instrument}: {qty} DI")
+
+        lt_qty = instruments["level_transmitter"]["qty"]
+        if lt_qty > 0:
+            total_ai += lt_qty  # Each level transmitter has 1 AI
+            ai_notes.append(f"level_transmitter: {lt_qty} AI")
+
+        return total_di, total_ai
