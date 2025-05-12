@@ -25,7 +25,6 @@ class CableRating(Base):
 def get_cable_by_dimension_current(length, current):
     session = SessionLocal()
     try:
-        session.begin()
         rslt = (session.query(CableRating)
                 .filter(CableRating.cable_length_m >= length,
                        CableRating.cable_current_a >= current)

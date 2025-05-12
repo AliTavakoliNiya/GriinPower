@@ -1,14 +1,18 @@
-import pandas as pd
 import openpyxl
+import pandas as pd
 from PyQt5 import uic
 from PyQt5.QtCore import QAbstractTableModel, Qt
-from PyQt5.QtWidgets import QWidget, QTableView, QHeaderView, QFileDialog
-
+from PyQt5.QtGui import QPainter
+from PyQt5.QtPrintSupport import QPrinter
+from PyQt5.QtWidgets import QMainWindow, QWidget, QTreeWidget, QTreeWidgetItem, QPushButton, QVBoxLayout, QFileDialog
+from PyQt5.QtWidgets import QTableView, QHeaderView
 from openpyxl.styles import Font, PatternFill
-from controllers.transport_controller import TransportController
+
+from controllers.fan_damper_controller import FanDamperController
 from controllers.fresh_air_controller import FreshAirController
-from controllers.vibration_controller import VibrationController
 from controllers.hopper_heater_controller import HopperHeaterController
+from controllers.transport_controller import TransportController
+from controllers.vibration_controller import VibrationController
 from views.message_box_view import show_message
 
 
@@ -21,6 +25,7 @@ class ResultTab(QWidget):
         self.project_details = project_details
 
         self.tables = {
+            "fan_damper_panel_table": self.fan_damper_panel_table,
             "transport_panel_table": self.transport_panel_table,
             "fresh_air_panel_table": self.fresh_air_panel_table,
             "vibration_panel_table": self.vibration_panel_table,
@@ -32,6 +37,7 @@ class ResultTab(QWidget):
         self._setup_result_table()
 
         self.excel_btn.clicked.connect(self._export_to_excel)
+        self.show_datail_btn.clicked.connect(self.show_datail_btn_handler)
         self.show()
 
     def _setup_result_table(self):
@@ -46,6 +52,8 @@ class ResultTab(QWidget):
             table.verticalHeader().setVisible(False)
 
     def generate_panels(self):
+        fan_damper_controller = FanDamperController()
+        self.panels["fan_damper_panel"] = fan_damper_controller.build_panel(self.project_details)
         transport_controller = TransportController()
         self.panels["transport_panel"] = transport_controller.build_panel(self.project_details)
         fresh_air_controller = FreshAirController()
@@ -55,6 +63,7 @@ class ResultTab(QWidget):
         hopper_heater_controller = HopperHeaterController()
         self.panels["hopper_heater_panel"] = hopper_heater_controller.build_panel(self.project_details)
 
+        self.generate_table(self.panels["fan_damper_panel"], self.tables["fan_damper_panel_table"])
         self.generate_table(self.panels["transport_panel"], self.tables["transport_panel_table"])
         self.generate_table(self.panels["fresh_air_panel"], self.tables["fresh_air_panel_table"])
         self.generate_table(self.panels["vibration_panel"], self.tables["vibration_panel_table"])
@@ -169,6 +178,11 @@ class ResultTab(QWidget):
                 # Freeze header row
                 worksheet.freeze_panes = worksheet["A3"]
 
+    def show_datail_btn_handler(self):
+        self.show_datail_window = DictionaryViewer(data=self.project_details, parent=self.main_view)
+
+
+
 
 class PandasModel(QAbstractTableModel):
     def __init__(self, data):
@@ -222,3 +236,122 @@ class PandasModel(QAbstractTableModel):
         if orientation == Qt.Vertical:
             return str(self._data.index[section])
         return None
+
+
+
+
+class DictionaryViewer(QMainWindow):
+    def __init__(self, data, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Project Details Viewer")
+        self.resize(800, 600)
+
+        # Central widget
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+
+        # Tree widget
+        self.tree = QTreeWidget()
+        self.tree.setColumnCount(2)
+        self.tree.setHeaderLabels(["panles", "Value"])
+        self.tree.setColumnWidth(0, 300)  # Set width of the "panel" column to 300px
+        self.populate_tree(self.tree.invisibleRootItem(), data)
+
+        # Print button
+        self.print_button = QPushButton("Print to PDF")
+        self.print_button.clicked.connect(self.print_to_pdf)
+
+        # Layout for central widget
+        layout = QVBoxLayout()
+        layout.addWidget(self.tree)
+        layout.addWidget(self.print_button)
+        central_widget.setLayout(layout)
+
+
+
+        self.show()
+
+    def populate_tree(self, parent_item, dictionary):
+        for key, value in dictionary.items():
+            if isinstance(value, dict):
+                item = QTreeWidgetItem([str(key)])
+                parent_item.addChild(item)
+                self.populate_tree(item, value)
+            else:
+                item = QTreeWidgetItem([str(key), str(value)])
+                parent_item.addChild(item)
+
+    def print_to_pdf(self):
+        options = QFileDialog.Options()
+        filename, _ = QFileDialog.getSaveFileName(self, "Save PDF", "", "PDF Files (*.pdf)", options=options)
+        if filename:
+            printer = QPrinter(QPrinter.HighResolution)
+            printer.setOutputFormat(QPrinter.PdfFormat)
+            printer.setOutputFileName(filename)
+
+            self.tree.expandAll()
+            self.tree.resizeColumnToContents(0)
+            self.tree.resizeColumnToContents(1)
+
+            # Save original size
+            original_size = self.tree.size()
+
+            # Estimate total size
+            total_height = self.tree.header().height()
+            for i in range(self.tree.topLevelItemCount()):
+                total_height += self.tree.sizeHintForRow(0) * (1 + self.count_all_items(self.tree.topLevelItem(i)))
+
+            total_width = sum([self.tree.sizeHintForColumn(i) for i in range(self.tree.columnCount())]) + 20
+
+            # Temporarily resize tree to fit all contents
+            self.tree.resize(total_width, total_height)
+
+            painter = QPainter(printer)
+
+            # Calculate scaling
+            page_rect = printer.pageRect()
+            widget_rect = self.tree.rect()
+
+            margin = 50
+            scale_x = (page_rect.width() - 2 * margin) / widget_rect.width()
+            scale_y = (page_rect.height() - 2 * margin) / widget_rect.height()
+            scale = min(scale_x, scale_y)
+
+            painter.translate(page_rect.left() + margin, page_rect.top() + margin)
+            painter.scale(scale, scale)
+
+            # Render the tree
+            self.tree.render(painter)
+
+            # Add grid lines
+            pen = painter.pen()
+            pen.setWidth(1)
+            painter.setPen(pen)
+
+            row_height = self.tree.sizeHintForRow(0)
+            header_height = self.tree.header().height()
+            num_rows = self.count_all_items(self.tree.invisibleRootItem())
+
+            # Horizontal grid lines
+            for row in range(num_rows + 2):
+                y = header_height + row * row_height
+                painter.drawLine(0, y, widget_rect.width(), y)
+
+            # Vertical grid lines
+            x = 0
+            for col in range(self.tree.columnCount()):
+                col_width = self.tree.columnWidth(col)
+                x += col_width
+                painter.drawLine(x, 0, x, widget_rect.height())
+
+            painter.end()
+
+            # Restore original size
+            self.tree.resize(original_size)
+
+    def count_all_items(self, parent_item):
+        count = 0
+        for i in range(parent_item.childCount()):
+            count += 1
+            count += self.count_all_items(parent_item.child(i))
+        return count

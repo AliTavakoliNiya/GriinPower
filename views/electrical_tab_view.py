@@ -1,360 +1,627 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QSpinBox
+from PyQt5.QtWidgets import QWidget, QSpinBox, QComboBox, QLineEdit, QCheckBox
 
 
 class ElectricalTab(QWidget):
     def __init__(self, project_details):
         super().__init__()
         uic.loadUi("ui/electrical_tab.ui", self)
-
         self.project_details = project_details
+        self._initialize_components()
 
-        # ------------------ Bagfilter ------------------
-        self.cable_length.valueChanged.connect(self.cable_length_handler)
-        self.touch_panel_model.currentTextChanged.connect(self.touch_panel_model_handler)
+    def _initialize_components(self):
+        """Initialize all UI components with their event handlers"""
+        # ------------ Bagfilter ------------
+        self.cable_length.valueChanged.connect(self._handle_cable_length_changed)
+        self.touch_panel_model.currentTextChanged.connect(self._handle_touch_panel_changed)
 
-        # ------------------ Transport ------------------
+        # ------------ Transport ------------
         self.transport_checkbox.stateChanged.connect(self.transport_checkbox_handler)
         self.screw2_add_btn.clicked.connect(self.show_screw2)
         self.screw2_minuse_btn.clicked.connect(self.hide_screw2)
         self.hide_screw2()
         self.transport_checkbox.setChecked(False)
 
-        # motors
-        self.rotary_qty.valueChanged.connect(self.rotary_qty_handler)
-        self.rotary_kw.currentIndexChanged.connect(self.rotary_kw_handler)
-        self.telescopic_chute_qty.valueChanged.connect(self.telescopic_chute_qty_handler)
-        self.telescopic_chute_kw.currentIndexChanged.connect(self.telescopic_chute_kw_handler)
-        self.slide_gate_qty.valueChanged.connect(self.slide_gate_qty_handler)
-        self.slide_gate_kw.currentIndexChanged.connect(self.slide_gate_kw_handler)
-        self.screw1_qty.valueChanged.connect(self.screw1_qty_handler)
-        self.screw1_kw.currentIndexChanged.connect(self.screw1_kw_handler)
-        self.screw2_qty.valueChanged.connect(self.screw2_qty_handler)
-        self.screw2_kw.currentIndexChanged.connect(self.screw2_kw_handler)
+        # Transport motors
+        self.rotary_qty.valueChanged.connect(self._handle_rotary_qty_changed)
+        self.rotary_kw.currentIndexChanged.connect(self._handle_rotary_kw_changed)
 
-        # instruments
-        self.transport_spd_qty.valueChanged.connect(self.transport_spd_qty_handler)
-        self.transport_spd_brand.currentIndexChanged.connect(self.transport_spd_brand_handler)
+        self.telescopic_chute_qty.valueChanged.connect(self._handle_telescopic_chute_qty_changed)
+        self.telescopic_chute_kw.currentIndexChanged.connect(self._handle_telescopic_chute_kw_changed)
 
-        self.transport_zs_qty.valueChanged.connect(self.transport_zs_qty_handler)
-        self.transport_zs_brand.currentIndexChanged.connect(self.transport_zs_brand_handler)
+        self.slide_gate_qty.valueChanged.connect(self._handle_slide_gate_qty_changed)
+        self.slide_gate_kw.currentIndexChanged.connect(self._handle_slide_gate_kw_changed)
 
-        self.transport_ls_bin_qty.valueChanged.connect(self.transport_ls_bin_qty_handler)
-        self.transport_ls_bin_brand.currentIndexChanged.connect(self.transport_ls_bin_brand_handler)
+        self.screw1_qty.valueChanged.connect(self._handle_screw1_qty_changed)
+        self.screw1_kw.currentIndexChanged.connect(self._handle_screw1_kw_changed)
 
-        self.transport_lt_qty.valueChanged.connect(self.transport_lt_qty_handler)
-        self.transport_lt_brand.currentIndexChanged.connect(self.transport_lt_brand_handler)
+        self.screw2_qty.valueChanged.connect(self._handle_screw2_qty_changed)
+        self.screw2_kw.currentIndexChanged.connect(self._handle_screw2_kw_changed)
 
-        # ------------------ Vibration ------------------
+        # Transport instruments
+        self.transport_spd_qty.valueChanged.connect(self._handle_transport_spd_qty_changed)
+        self.transport_spd_brand.currentIndexChanged.connect(self._handle_transport_spd_brand_changed)
+
+        self.transport_zs_qty.valueChanged.connect(self._handle_transport_zs_qty_changed)
+        self.transport_zs_brand.currentIndexChanged.connect(self._handle_transport_zs_brand_changed)
+
+        self.transport_ls_bin_qty.valueChanged.connect(self._handle_transport_ls_bin_qty_changed)
+        self.transport_ls_bin_brand.currentIndexChanged.connect(self._handle_transport_ls_bin_brand_changed)
+
+        self.transport_lt_qty.valueChanged.connect(self._handle_transport_lt_qty_changed)
+        self.transport_lt_brand.currentIndexChanged.connect(self._handle_transport_lt_brand_changed)
+
+        # ------------ Vibration ------------
         self.vibration_checkbox.stateChanged.connect(self.vibration_checkbox_handler)
         self.vibration_checkbox.setChecked(False)
 
-        # motors
-        self.vibration_motor_qty.valueChanged.connect(self.vibration_motor_qty_handler)
-        self.vibration_motor_kw.currentIndexChanged.connect(self.vibration_motor_kw_handler)
+        # Vibration motors
+        self.vibration_motor_qty.valueChanged.connect(self._handle_vibration_motor_qty_changed)
+        self.vibration_motor_kw.currentIndexChanged.connect(self._handle_vibration_motor_kw_changed)
 
-        # ------------------ Fresh Air ------------------
+        # ------------ Fresh Air ------------
         self.freshair_checkbox.stateChanged.connect(self.freshair_checkbox_handler)
         self.freshair_checkbox.setChecked(False)
 
-        # motors
+        # Fresh air motors
         self.freshair_motor_qty.valueChanged.connect(self.freshair_motor_qty_handler)
-        self.freshair_motor_kw.currentIndexChanged.connect(self.freshair_motor_kw_handler)
-        self.freshair_motor_start_type.currentIndexChanged.connect(self.freshair_motor_start_type_handler)
+        self.freshair_motor_kw.currentIndexChanged.connect(self._handle_freshair_motor_kw_changed)
+        self.freshair_motor_start_type.currentIndexChanged.connect(self._handle_freshair_motor_start_type_changed)
 
-        self.freshair_flap_motor_qty.valueChanged.connect(self.freshair_flap_motor_qty_handler)
-        self.freshair_flap_motor_kw.currentIndexChanged.connect(self.freshair_flap_motor_kw_handler)
-        self.freshair_flap_motor_start_type.currentIndexChanged.connect(self.freshair_flap_motor_start_type_handler)
+        self.freshair_flap_motor_qty.valueChanged.connect(self._handle_freshair_flap_motor_qty_changed)
+        self.freshair_flap_motor_kw.currentIndexChanged.connect(self._handle_freshair_flap_motor_kw_changed)
+        self.freshair_flap_motor_start_type.currentIndexChanged.connect(self._handle_freshair_flap_start_type_changed)
 
-        self.emergency_flap_motor_kw.currentIndexChanged.connect(self.emergency_flap_motor_kw_handler)
-        self.emergency_flap_start_type.currentIndexChanged.connect(self.emergency_flap_start_type_handler)
+        self.emergency_flap_motor_kw.currentIndexChanged.connect(self._handle_emergency_flap_motor_kw_changed)
+        self.emergency_flap_start_type.currentIndexChanged.connect(self._handle_emergency_flap_start_type_changed)
 
-        # instruments
-        self.freshair_tt_qty.valueChanged.connect(self.freshair_tt_qty_handler)
-        self.freshair_tt_brand.currentIndexChanged.connect(self.freshair_tt_brand_handler)
+        # Fresh air instruments
+        self.freshair_tt_qty.valueChanged.connect(self._handle_freshair_tt_qty_changed)
+        self.freshair_tt_brand.currentIndexChanged.connect(self._handle_freshair_tt_brand_changed)
 
-        self.freshair_zs_qty.valueChanged.connect(self.freshair_zs_qty_handler)
-        self.freshair_zs_brand.currentIndexChanged.connect(self.freshair_zs_brand_handler)
+        self.freshair_zs_qty.valueChanged.connect(self._handle_freshair_zs_qty_changed)
+        self.freshair_zs_brand.currentIndexChanged.connect(self._handle_freshair_zs_brand_changed)
 
-        # ------------------ Heater Hopper ------------------
+        # ------------ Heater Hopper ------------
         self.hopper_heater_checkbox.stateChanged.connect(self.hopper_heater_checkbox_handler)
         self.hopper_heater_checkbox.setChecked(False)
 
         self.hopper_heater_qty.valueChanged.connect(self.hopper_heater_qty_handler)
-        self.hopper_heater_kw.currentIndexChanged.connect(self.hopper_heater_kw_handler)
+        self.hopper_heater_kw.currentIndexChanged.connect(self._handle_hopper_heater_kw_changed)
+        self.hopper_heater_ptc_brand.currentIndexChanged.connect(self._handle_hopper_heater_ptc_brand_changed)
 
-        # PTC heaters
-        self.hopper_heater_ptc_brand.currentIndexChanged.connect(self.hopper_heater_ptc_brand_handler)
+        # ------------ Damper ------------
+        self.damper_checkbox.stateChanged.connect(self.damper_checkbox_handler)
+        self.damper_checkbox.setChecked(False)
 
-        self.show()
+        self.damper_kw.currentIndexChanged.connect(self._handle_damper_kw_changed)
+        self.damper_brand.currentIndexChanged.connect(self._handle_damper_brand_changed)
+        self.damper_start_type.currentIndexChanged.connect(self._handle_damper_start_type_changed)
 
-    def cable_length_handler(self):
-        self.project_details["cable_dimension"] = self.cable_length.value()
+        self.damper_zs_qty.valueChanged.connect(self._handle_damper_zs_qty_changed)
+        self.damper_zs_brand.currentIndexChanged.connect(self._handle_damper_zs_brand_changed)
 
-    # ------------------ reset_qtys ------------------
+        # ------------ Fan ------------
+        self.fan_checkbox.stateChanged.connect(self.fan_checkbox_handler)
+        self.fan_checkbox.setChecked(False)
+
+        # Fan motor properties
+        self.fan_kw.currentIndexChanged.connect(self._handle_fan_kw_changed)
+        self.fan_rpm.textChanged.connect(self._handle_fan_rpm_changed)
+        self.fan_start_type.currentIndexChanged.connect(self._handle_fan_start_type_changed)
+        self.fan_brand.currentIndexChanged.connect(self._handle_fan_brand_changed)
+        self.fan_cooling_method.currentIndexChanged.connect(self._handle_fan_cooling_method_changed)
+        self.fan_ip.currentIndexChanged.connect(self._handle_fan_ip_changed)
+        self.fan_efficiency_class.currentIndexChanged.connect(self._handle_fan_efficiency_class_changed)
+        self.fan_voltage_type.currentIndexChanged.connect(self._handle_fan_voltage_type_changed)
+        self.fan_painting_ral.currentIndexChanged.connect(self._handle_fan_painting_ral_changed)
+        self.fan_thermal_protection.currentIndexChanged.connect(self._handle_fan_thermal_protection_changed)
+        self.fan_space_heater.stateChanged.connect(self._handle_fan_space_heater_changed)
+
+        # Fan instruments
+        self.fan_bearing_tt_qty.valueChanged.connect(self._handle_fan_bearing_tt_qty_changed)
+        self.fan_bearing_tt_brand.currentIndexChanged.connect(self._handle_fan_bearing_tt_brand_changed)
+
+        self.fan_bearing_vt_qty.valueChanged.connect(self._handle_fan_bearing_vt_qty_changed)
+        self.fan_bearing_vt_brand.currentIndexChanged.connect(self._handle_fan_bearing_vt_brand_changed)
+
+        self.fan_pt_qty.valueChanged.connect(self._handle_fan_pt_qty_changed)
+        self.fan_pt_brand.currentIndexChanged.connect(self._handle_fan_pt_brand_changed)
+
+        self.fan_tt_qty.valueChanged.connect(self._handle_fan_tt_qty_changed)
+        self.fan_tt_brand.currentIndexChanged.connect(self._handle_fan_tt_brand_changed)
+
+    # ------ Individual Handlers ------
+
+    # Bagfilter handlers
+    def _handle_cable_length_changed(self, value):
+        self._update_project_value(["cable_dimension"], value)
+
+    def _handle_touch_panel_changed(self, value):
+        self._update_project_value(["bagfilter", "touch_panel"], value)
+
+    # Transport motor handlers
+    def _handle_rotary_qty_changed(self, value):
+        self._handle_rotary_screw_qty(self.rotary_qty)
+
+    def _handle_rotary_kw_changed(self, index):
+        self._handle_combobox_float(["transport", "motors", "rotary", "power"])
+
+    def _handle_telescopic_chute_qty_changed(self, value):
+        self._update_project_value(["transport", "motors", "telescopic_chute", "qty"], value)
+
+    def _handle_telescopic_chute_kw_changed(self, index):
+        self._handle_combobox_float(["transport", "motors", "telescopic_chute", "power"])
+
+    def _handle_slide_gate_qty_changed(self, value):
+        self._handle_slide_gate_qty(self.slide_gate_qty)
+
+    def _handle_slide_gate_kw_changed(self, index):
+        self._handle_combobox_float(["transport", "motors", "slide_gate", "power"])
+
+    def _handle_screw1_qty_changed(self, value):
+        self._handle_rotary_screw_qty(self.screw1_qty)
+
+    def _handle_screw1_kw_changed(self, index):
+        self._handle_combobox_float(["transport", "motors", "screw1", "power"])
+
+    def _handle_screw2_qty_changed(self, value):
+        self._handle_rotary_screw_qty(self.screw2_qty)
+
+    def _handle_screw2_kw_changed(self, index):
+        self._handle_combobox_float(["transport", "motors", "screw2", "power"])
+
+    # Transport instrument handlers
+    def _handle_transport_spd_qty_changed(self, value):
+        self._update_project_value(["transport", "instruments", "speed_detector", "qty"], value)
+
+    def _handle_transport_spd_brand_changed(self, index):
+        self._update_project_value(["transport", "instruments", "speed_detector", "brand"])
+
+    def _handle_transport_zs_qty_changed(self, value):
+        self._update_project_value(["transport", "instruments", "proximity_switch", "qty"], value)
+
+    def _handle_transport_zs_brand_changed(self, index):
+        self._update_project_value(["transport", "instruments", "proximity_switch", "brand"])
+
+    def _handle_transport_ls_bin_qty_changed(self, value):
+        self._update_project_value(["transport", "instruments", "level_switch", "qty"], value)
+
+    def _handle_transport_ls_bin_brand_changed(self, index):
+        self._update_project_value(["transport", "instruments", "level_switch", "brand"])
+
+    def _handle_transport_lt_qty_changed(self, value):
+        self._update_project_value(["transport", "instruments", "level_transmitter", "qty"], value)
+
+    def _handle_transport_lt_brand_changed(self, index):
+        self._update_project_value(["transport", "instruments", "level_transmitter", "brand"])
+
+    # Vibration motor handlers
+    def _handle_vibration_motor_qty_changed(self, value):
+        self._update_project_value(["vibration", "motors", "vibration", "qty"], value)
+
+    def _handle_vibration_motor_kw_changed(self, index):
+        self._handle_combobox_float(["vibration", "motors", "vibration", "power"])
+
+    # Fresh air motor handlers
+    def _handle_freshair_motor_kw_changed(self, index):
+        self._handle_combobox_float(["fresh_air", "motors", "freshair_motor", "power"])
+
+    def _handle_freshair_motor_start_type_changed(self, index):
+        self._update_project_value(["fresh_air", "motors", "freshair_motor", "start_type"])
+
+    def _handle_freshair_flap_motor_qty_changed(self, value):
+        self._update_project_value(["fresh_air", "motors", "fresh_air_flap", "qty"], value)
+
+    def _handle_freshair_flap_motor_kw_changed(self, index):
+        self._handle_combobox_float(["fresh_air", "motors", "fresh_air_flap", "power"])
+
+    def _handle_freshair_flap_start_type_changed(self, index):
+        self._update_project_value(["fresh_air", "motors", "fresh_air_flap", "start_type"])
+
+    def _handle_emergency_flap_motor_kw_changed(self, index):
+        self._handle_combobox_float(["fresh_air", "motors", "emergency_flap", "power"])
+
+    def _handle_emergency_flap_start_type_changed(self, index):
+        self._update_project_value(["fresh_air", "motors", "emergency_flap", "start_type"])
+
+    # Fresh air instrument handlers
+    def _handle_freshair_tt_qty_changed(self, value):
+        self._update_project_value(["fresh_air", "instruments", "temperature_transmitter", "qty"], value)
+
+    def _handle_freshair_tt_brand_changed(self, index):
+        self._update_project_value(["fresh_air", "instruments", "temperature_transmitter", "brand"])
+
+    def _handle_freshair_zs_qty_changed(self, value):
+        self._update_project_value(["fresh_air", "instruments", "proximity_switch", "qty"], value)
+
+    def _handle_freshair_zs_brand_changed(self, index):
+        self._update_project_value(["fresh_air", "instruments", "proximity_switch", "brand"])
+
+    # Hopper heater handlers
+    def _handle_hopper_heater_kw_changed(self, index):
+        self._handle_combobox_float(["hopper_heater", "motors", "elements", "power"])
+
+    def _handle_hopper_heater_ptc_brand_changed(self, index):
+        self._update_project_value(["hopper_heater", "instruments", "ptc", "brand"])
+
+    # Damper handlers
+    def _handle_damper_kw_changed(self, index):
+        self._handle_combobox_float(["damper", "motors", "damper", "power"])
+
+    def _handle_damper_brand_changed(self, index):
+        self._update_project_value(["damper", "motors", "damper", "brand"])
+
+    def _handle_damper_start_type_changed(self, index):
+        self._update_project_value(["damper", "motors", "damper", "start_type"])
+
+    def _handle_damper_zs_qty_changed(self, value):
+        self._update_project_value(["damper", "instruments", "proximity_switch", "qty"], value)
+
+    def _handle_damper_zs_brand_changed(self, index):
+        self._update_project_value(["damper", "instruments", "proximity_switch", "brand"])
+
+    # Fan motor handlers
+    def _handle_fan_kw_changed(self, index):
+        self._handle_combobox_float(["fan", "motors", "fan", "power"])
+
+    def _handle_fan_rpm_changed(self, text):
+        self._update_project_value(["fan", "motors", "fan", "rpm"])
+
+    def _handle_fan_start_type_changed(self, index):
+        self._update_project_value(["fan", "motors", "fan", "start_type"])
+
+    def _handle_fan_brand_changed(self, index):
+        self._update_project_value(["fan", "motors", "fan", "brand"])
+
+    def _handle_fan_cooling_method_changed(self, index):
+        self._update_project_value(["fan", "motors", "fan", "cooling_method"])
+
+    def _handle_fan_ip_changed(self, index):
+        self._update_project_value(["fan", "motors", "fan", "ip_rating"])
+
+    def _handle_fan_efficiency_class_changed(self, index):
+        self._update_project_value(["fan", "motors", "fan", "efficiency_class"])
+
+    def _handle_fan_voltage_type_changed(self, index):
+        self._update_project_value(["fan", "motors", "fan", "voltage_type"])
+
+    def _handle_fan_painting_ral_changed(self, index):
+        self._update_project_value(["fan", "motors", "fan", "painting_ral"])
+
+    def _handle_fan_thermal_protection_changed(self, index):
+        self._update_project_value(["fan", "motors", "fan", "thermal_protection"])
+
+    def _handle_fan_space_heater_changed(self, state):
+        self._handle_checkbox(["fan", "motors", "fan", "space_heater"])
+
+    # Fan instrument handlers
+    def _handle_fan_bearing_tt_qty_changed(self, value):
+        self._update_project_value(["fan", "instruments", "bearing_temperature_transmitter", "qty"], value)
+
+    def _handle_fan_bearing_tt_brand_changed(self, index):
+        self._update_project_value(["fan", "instruments", "bearing_temperature_transmitter", "brand"])
+
+    def _handle_fan_bearing_vt_qty_changed(self, value):
+        self._update_project_value(["fan", "instruments", "bearing_vibration_transmitter", "qty"], value)
+
+    def _handle_fan_bearing_vt_brand_changed(self, index):
+        self._update_project_value(["fan", "instruments", "bearing_vibration_transmitter", "brand"])
+
+    def _handle_fan_pt_qty_changed(self, value):
+        self._update_project_value(["fan", "instruments", "pressure_transmitter", "qty"], value)
+
+    def _handle_fan_pt_brand_changed(self, index):
+        self._update_project_value(["fan", "instruments", "pressure_transmitter", "brand"])
+
+    def _handle_fan_tt_qty_changed(self, value):
+        self._update_project_value(["fan", "instruments", "temperature_transmitter", "qty"], value)
+
+    def _handle_fan_tt_brand_changed(self, index):
+        self._update_project_value(["fan", "instruments", "temperature_transmitter", "brand"])
+
+    def _update_project_value(self, path_list, value=None):
+        """Update project details dictionary value at the specified path
+
+        Args:
+            path_list: List of keys to navigate the nested dictionary
+            value: Value to set (if None, gets from sender widget)
+        """
+        if value is None:
+            # Get value from sender
+            sender = self.sender()
+            if isinstance(sender, QComboBox):
+                value = sender.currentText()
+            elif isinstance(sender, QSpinBox):
+                value = sender.value()
+            elif isinstance(sender, QLineEdit):
+                value = sender.text()
+            elif isinstance(sender, QCheckBox):
+                value = sender.isChecked()
+            else:
+                return
+
+        # Navigate to the right location in the dictionary
+        target = self.project_details
+        for key in path_list[:-1]:
+            target = target[key]
+
+        # Set the value
+        target[path_list[-1]] = value
+
+    def _handle_combobox_float(self, path_list):
+        """Handle conversion of combobox text to float value
+
+        Args:
+            path_list: List of keys to navigate the nested dictionary
+        """
+        sender = self.sender()
+        text = sender.currentText()
+        try:
+            value = float(text)
+        except ValueError:
+            value = 0.0
+
+        self._update_project_value(path_list, value)
+
+    def _handle_checkbox(self, path_list):
+        """Handle checkbox state change
+
+        Args:
+            path_list: List of keys to navigate the nested dictionary
+        """
+        sender = self.sender()
+        state = sender.isChecked()
+        self._update_project_value(path_list, state)
+
     def reset_qtys(self, d):
+        """Reset all quantity values in a dictionary to zero
+
+        Args:
+            d: Dictionary to process
+        """
         for key, value in d.items():
             if isinstance(value, dict):
                 self.reset_qtys(value)
             elif key == "qty":
                 d[key] = 0
 
-    # ------------------ Transport ------------------
-    def transport_checkbox_handler(self, state):
-        self.project_details["transport"]["status"] = state == Qt.Checked
-        self.reset_qtys(self.project_details["transport"])
+    def _reset_section_widgets(self, parent_widget, enabled=True):
+        """Reset and enable/disable all widgets in a section
 
-        for child in self.transport_gbox.findChildren(QSpinBox):
-            child.setValue(0)
+        Args:
+            parent_widget: Parent widget containing child widgets to reset
+            enabled: Whether to enable or disable the widgets
+        """
+        for child in parent_widget.findChildren(QWidget):
+            # Skip the checkbox itself
+            if isinstance(child, QCheckBox) and child.parent() == parent_widget:
+                continue
 
-        for child in self.transport_gbox.findChildren(QWidget):
-            child.setEnabled(state == Qt.Checked)
-        self.transport_checkbox.setEnabled(True)  # Except This one
+            # Reset values if disabling
+            if not enabled:
+                if isinstance(child, QSpinBox):
+                    child.setValue(0)
+                elif isinstance(child, QComboBox):
+                    child.setCurrentIndex(0)
+                elif isinstance(child, QLineEdit):
+                    child.setText("")
+                elif isinstance(child, QCheckBox):
+                    child.setChecked(False)
 
-    def show_screw2(self):
-        self.screw2_minuse_btn.show()
-        self.screw2_label.show()
+            # Set enabled state
+            child.setEnabled(enabled)
 
-        self.screw2_qty.show()
-        self.screw2_qty.setValue(0)
+    def _handle_rotary_screw_qty(self, widget):
+        """Special handler for rotary and screw qty fields that affect speed detector"""
+        motor_type = None
+        if widget == self.rotary_qty:
+            motor_type = "rotary"
+        elif widget == self.screw1_qty:
+            motor_type = "screw1"
+        elif widget == self.screw2_qty:
+            motor_type = "screw2"
 
-        self.screw2_kw.show()
-        self.screw2_kw.setCurrentIndex(0)
+        if not motor_type:
+            return
 
-    def hide_screw2(self):
-        self.screw2_minuse_btn.hide()
-        self.screw2_label.hide()
+        # Update the project details
+        self.project_details["transport"]["motors"][motor_type]["qty"] = widget.value()
 
-        self.screw2_qty.hide()
-        self.screw2_qty.setValue(0)
+        # Calculate total rotary/screw motors
+        total_motors = (self.rotary_qty.value() +
+                       self.screw1_qty.value() +
+                       self.screw2_qty.value())
 
-        self.screw2_kw.hide()
-        self.screw2_kw.setCurrentIndex(0)
-
-    ###### rotary
-    def rotary_qty_handler(self):
-        self.project_details["transport"]["motors"]["rotary"]["qty"] = self.rotary_qty.value()
-        # rotary affect speed detector
-        if self.rotary_qty.value() + self.screw1_qty.value() + self.screw2_qty.value() == 0:
+        # Update speed detector quantity based on total motors
+        if total_motors == 0:
             self.transport_spd_qty.setValue(0)
             self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = 0
-        elif self.transport_spd_qty.value() < self.rotary_qty.value() + self.screw1_qty.value() + self.screw2_qty.value():
-            spd_qty = self.rotary_qty.value() + self.screw1_qty.value() + self.screw2_qty.value()
-            self.transport_spd_qty.setValue(spd_qty)
-            self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = spd_qty
+        elif self.transport_spd_qty.value() < total_motors:
+            self.transport_spd_qty.setValue(total_motors)
+            self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = total_motors
 
-    def rotary_kw_handler(self):
-        self.project_details["transport"]["motors"]["rotary"]["power"] = float(self.rotary_kw.currentText())
+    def _handle_slide_gate_qty(self, widget):
+        """Special handler for slide gate qty that affects proximity switch"""
+        # Update the project details
+        self.project_details["transport"]["motors"]["slide_gate"]["qty"] = widget.value()
 
-    ###### telescopic_chute
-    def telescopic_chute_qty_handler(self):
-        self.project_details["transport"]["motors"]["telescopic_chute"]["qty"] = self.telescopic_chute_qty.value()
-
-    def telescopic_chute_kw_handler(self):
-        self.project_details["transport"]["motors"]["telescopic_chute"][
-            "power"] = float(self.telescopic_chute_kw.currentText())
-
-    ###### slide_gate
-    def slide_gate_qty_handler(self):
-        self.project_details["transport"]["motors"]["slide_gate"]["qty"] = self.slide_gate_qty.value()
-        # slide gate affect proximity switch
-        if self.slide_gate_qty.value() != 0:
-            if self.transport_zs_qty.value() < self.slide_gate_qty.value() * 2:
-                self.transport_zs_qty.setValue(self.slide_gate_qty.value() * 2)
-                self.project_details["transport"]["instruments"]["proximity_switch"] \
-                    ["qty"] = self.slide_gate_qty.value() * 2
+        # Update proximity switch quantity based on slide gate qty
+        if widget.value() != 0:
+            required_switches = widget.value() * 2
+            if self.transport_zs_qty.value() < required_switches:
+                self.transport_zs_qty.setValue(required_switches)
+                self.project_details["transport"]["instruments"]["proximity_switch"]["qty"] = required_switches
         else:
             self.transport_zs_qty.setValue(0)
             self.project_details["transport"]["instruments"]["proximity_switch"]["qty"] = 0
 
-    def slide_gate_kw_handler(self):
-        self.project_details["transport"]["motors"]["slide_gate"]["power"] = float(self.slide_gate_kw.currentText())
+    def freshair_motor_qty_handler(self):
+        """Special handler for fresh air motor qty that affects proximity switch"""
+        # Update the project details
+        self.project_details["fresh_air"]["motors"]["freshair_motor"]["qty"] = self.freshair_motor_qty.value()
 
-    ###### screw1_qty
-    def screw1_qty_handler(self):
-        self.project_details["transport"]["motors"]["screw1"]["qty"] = self.screw1_qty.value()
-        # screw affect speed detector
-        if self.rotary_qty.value() + self.screw1_qty.value() + self.screw2_qty.value() == 0:
-            self.transport_spd_qty.setValue(0)
-            self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = 0
-        elif self.transport_spd_qty.value() < self.rotary_qty.value() + self.screw1_qty.value() + self.screw2_qty.value():
-            spd_qty = self.rotary_qty.value() + self.screw1_qty.value() + self.screw2_qty.value()
-            self.transport_spd_qty.setValue(spd_qty)
-            self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = spd_qty
+        # Update proximity switch quantity based on motor qty
+        if self.freshair_motor_qty.value() != 0:
+            required_switches = self.freshair_motor_qty.value() * 2
+            if self.freshair_zs_qty.value() < required_switches:
+                self.freshair_zs_qty.setValue(required_switches)
+                self.project_details["fresh_air"]["instruments"]["proximity_switch"]["qty"] = required_switches
 
-    def screw1_kw_handler(self):
-        self.project_details["transport"]["motors"]["screw1"]["power"] = float(self.screw1_kw.currentText())
+    def hopper_heater_qty_handler(self):
+        """Special handler for hopper heater qty that affects PTC qty"""
+        # Update the project details
+        qty = self.hopper_heater_qty.value()
+        self.project_details["hopper_heater"]["motors"]["elements"]["qty"] = qty
 
-    ###### screw2_qty
-    def screw2_qty_handler(self):
-        self.project_details["transport"]["motors"]["screw2"]["qty"] = self.screw2_qty.value()
-        # screw affect speed detector
-        if self.rotary_qty.value() + self.screw1_qty.value() + self.screw2_qty.value() == 0:
-            self.transport_spd_qty.setValue(0)
-            self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = 0
-        elif self.transport_spd_qty.value() < self.rotary_qty.value() + self.screw1_qty.value() + self.screw2_qty.value():
-            spd_qty = self.rotary_qty.value() + self.screw1_qty.value() + self.screw2_qty.value()
-            self.transport_spd_qty.setValue(spd_qty)
-            self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = spd_qty
+        # Update PTC qty based on heater qty
+        ptc_qty = qty * 2
+        self.project_details["hopper_heater"]["instruments"]["ptc"]["qty"] = ptc_qty
+        self.hopper_heater_ptc_qty.setText(f"Qty: {ptc_qty}")
 
-    def screw2_kw_handler(self):
-        self.project_details["transport"]["motors"]["screw2"]["power"] = float(self.screw2_kw.currentText())
+    def transport_checkbox_handler(self, state):
+        """Handle transport section enabling/disabling"""
+        enabled = state == Qt.Checked
+        self.project_details["transport"]["status"] = enabled
 
-    ###### proximity switch for slide gate
-    def transport_zs_qty_handler_legacy(self):
-        self.project_details["transport"]["instruments"]["proximity_switch"]["qty"] = self.transport_zs_qty.value()
+        if not enabled:
+            self.reset_qtys(self.project_details["transport"])
 
-    def transport_zs_kw_handler(self):
-        self.project_details["transport"]["instruments"]["proximity_switch"][
-            "brand"] = float(self.transport_zs_kw.currentText())
-
-    def touch_panel_model_handler(self, text):
-        self.project_details["bagfilter"]["touch_panel"] = text
-
-    ###### Instrument handlers
-    def transport_spd_qty_handler(self):
-        """Speed detector quantity handler"""
-        self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = self.transport_spd_qty.value()
-
-    def transport_spd_brand_handler(self):
-        """Speed detector brand handler"""
-        self.project_details["transport"]["instruments"]["speed_detector"][
-            "brand"] = self.transport_spd_brand.currentText()
-
-    def transport_zs_qty_handler(self):
-        """Proximity switch quantity handler"""
-        self.project_details["transport"]["instruments"]["proximity_switch"]["qty"] = self.transport_zs_qty.value()
-
-    def transport_zs_brand_handler(self):
-        """Proximity switch brand handler"""
-        self.project_details["transport"]["instruments"]["proximity_switch"][
-            "brand"] = self.transport_zs_brand.currentText()
-
-    def transport_ls_bin_qty_handler(self):
-        """Level switch bin quantity handler"""
-        self.project_details["transport"]["instruments"]["level_switch_bin"]["qty"] = self.transport_ls_bin_qty.value()
-
-    def transport_ls_bin_brand_handler(self):
-        """Level switch bin brand handler"""
-        self.project_details["transport"]["instruments"]["level_switch_bin"][
-            "brand"] = self.transport_ls_bin_brand.currentText()
-
-    def transport_lt_qty_handler(self):
-        """Level transmitter quantity handler"""
-        self.project_details["transport"]["instruments"]["level_transmitter"]["qty"] = self.transport_lt_qty.value()
-
-    def transport_lt_brand_handler(self):
-        """Level transmitter bin brand handler"""
-        self.project_details["transport"]["instruments"]["level_transmitter"][
-            "brand"] = self.transport_lt_brand.currentText()
-
-    # ------------------ Vibration ------------------
+        self._reset_section_widgets(self.transport_gbox, enabled)
+        self.transport_checkbox.setEnabled(True)
 
     def vibration_checkbox_handler(self, state):
-        self.project_details["vibration"]["status"] = state == Qt.Checked
-        self.reset_qtys(self.project_details["vibration"])
+        """Handle vibration section enabling/disabling"""
+        enabled = state == Qt.Checked
+        self.project_details["vibration"]["status"] = enabled
 
-        for child in self.vibration_gbox.findChildren(QSpinBox):
-            child.setValue(0)
+        if not enabled:
+            self.reset_qtys(self.project_details["vibration"])
 
-        for child in self.vibration_gbox.findChildren(QWidget):
-            child.setEnabled(state == Qt.Checked)
-        self.vibration_checkbox.setEnabled(True)  # Except This one
+        self._reset_section_widgets(self.vibration_gbox, enabled)
+        self.vibration_checkbox.setEnabled(True)
 
-    def vibration_motor_qty_handler(self):
-        self.project_details["vibration"]["motors"]["vibration"]["qty"] = self.vibration_motor_qty.value()
-
-    def vibration_motor_kw_handler(self):
-        self.project_details["vibration"]["motors"]["vibration"]["power"] = float(self.vibration_motor_kw.currentText())
-
-    # ------------------ Fresh Air ------------------
     def freshair_checkbox_handler(self, state):
-        self.project_details["fresh_air"]["status"] = state == Qt.Checked
-        self.reset_qtys(self.project_details["fresh_air"])
+        """Handle fresh air section enabling/disabling"""
+        enabled = state == Qt.Checked
+        self.project_details["fresh_air"]["status"] = enabled
 
-        for child in self.freshair_gbox.findChildren(QSpinBox):
-            child.setValue(0)
+        if not enabled:
+            self.reset_qtys(self.project_details["fresh_air"])
 
-        for child in self.freshair_gbox.findChildren(QWidget):
-            child.setEnabled(state == Qt.Checked)
+        self._reset_section_widgets(self.freshair_gbox, enabled)
         self.freshair_checkbox.setEnabled(True)
 
-    ###### Fresh Air Motor
-    def freshair_motor_qty_handler(self):
-        self.project_details["fresh_air"]["motors"]["freshair_motor"]["qty"] = self.freshair_motor_qty.value()
-        # Affect proximity switch quantity
-        if self.freshair_motor_qty.value() != 0:
-            if self.freshair_zs_qty.value() < self.freshair_motor_qty.value() * 2:
-                self.freshair_zs_qty.setValue(self.freshair_motor_qty.value() * 2)
-                self.project_details["fresh_air"]["instruments"]["proximity_switch"]["qty"] = self.freshair_motor_qty.value() * 2
-
-    def freshair_motor_kw_handler(self):
-        self.project_details["fresh_air"]["motors"]["freshair_motor"]["power"] = float(self.freshair_motor_kw.currentText())
-
-    def freshair_motor_start_type_handler(self):
-        self.project_details["fresh_air"]["motors"]["freshair_motor"]["start_type"] = self.freshair_motor_start_type.currentText()
-
-    ###### Fresh Air Flap Motor
-    def freshair_flap_motor_qty_handler(self):
-        self.project_details["fresh_air"]["motors"]["fresh_air_flap"]["qty"] = self.freshair_flap_motor_qty.value()
-
-    def freshair_flap_motor_kw_handler(self):
-        self.project_details["fresh_air"]["motors"]["fresh_air_flap"]["power"] = float(self.freshair_flap_motor_kw.currentText())
-
-    def freshair_flap_motor_start_type_handler(self):
-        self.project_details["fresh_air"]["motors"]["fresh_air_flap"]["start_type"] = self.freshair_flap_motor_start_type.currentText()
-
-    ###### Emergency Flap Motor
-    def emergency_flap_motor_kw_handler(self):
-        self.project_details["fresh_air"]["motors"]["emergency_flap"]["power"] = float(self.emergency_flap_motor_kw.currentText())
-
-    def emergency_flap_start_type_handler(self):
-        self.project_details["fresh_air"]["motors"]["emergency_flap"]["start_type"] = self.emergency_flap_start_type.currentText()
-
-    ###### Fresh Air Instruments
-    def freshair_tt_qty_handler(self):
-        """Temperature transmitter quantity handler"""
-        self.project_details["fresh_air"]["instruments"]["temperature_transmitter"]["qty"] = self.freshair_tt_qty.value()
-
-    def freshair_tt_brand_handler(self):
-        """Temperature transmitter brand handler"""
-        self.project_details["fresh_air"]["instruments"]["temperature_transmitter"]["brand"] = self.freshair_tt_brand.currentText()
-
-    def freshair_zs_qty_handler(self):
-        """Proximity switch quantity handler"""
-        self.project_details["fresh_air"]["instruments"]["proximity_switch"]["qty"] = self.freshair_zs_qty.value()
-
-    def freshair_zs_brand_handler(self):
-        """Proximity switch brand handler"""
-        self.project_details["fresh_air"]["instruments"]["proximity_switch"]["brand"] = self.freshair_zs_brand.currentText()
-
-    # ------------------ Heater Hopper ------------------
     def hopper_heater_checkbox_handler(self, state):
-        self.project_details["hopper_heater"]["status"] = state == Qt.Checked
-        self.reset_qtys(self.project_details["hopper_heater"])
+        """Handle hopper heater section enabling/disabling"""
+        enabled = state == Qt.Checked
+        self.project_details["hopper_heater"]["status"] = enabled
 
-        for child in self.hopper_heater_gbox.findChildren(QSpinBox):
-            child.setValue(0)
+        if not enabled:
+            self.reset_qtys(self.project_details["hopper_heater"])
 
-        for child in self.hopper_heater_gbox.findChildren(QWidget):
-            child.setEnabled(state == Qt.Checked)
+        self._reset_section_widgets(self.hopper_heater_gbox, enabled)
         self.hopper_heater_checkbox.setEnabled(True)
-        self.hopper_heater_ptc_qty.setEnabled(False) # user always not allowed to change PTC Quantity
 
-    ###### Elements
-    def hopper_heater_qty_handler(self):
-        """heater quantity handler"""
-        self.project_details["hopper_heater"]["motors"]["elements"]["qty"] = self.hopper_heater_qty.value()
-        self.project_details["hopper_heater"]["instruments"]["ptc"]["qty"] = self.hopper_heater_qty.value() * 2
-        self.hopper_heater_ptc_qty.setText(f"Qty: {str(self.hopper_heater_qty.value() * 2)}")
+    def damper_checkbox_handler(self, state):
+        """Handle damper section enabling/disabling"""
+        enabled = state == Qt.Checked
+        self.project_details["damper"]["status"] = enabled
+        self.project_details["damper"]["motors"]["damper"]["qty"] = 1 if enabled else 0
 
-    def hopper_heater_kw_handler(self):
-        self.project_details["hopper_heater"]["motors"]["elements"]["power"] = float(self.hopper_heater_kw.currentText())
+        if not enabled:
+            self.reset_qtys(self.project_details["damper"])
 
-    ######  Instruments
+        # Enable/disable individual damper widgets
+        self.damper_kw.setEnabled(enabled)
+        self.damper_brand.setEnabled(enabled)
+        self.damper_start_type.setEnabled(enabled)
+        self.damper_zs_qty.setEnabled(enabled)
+        self.damper_zs_brand.setEnabled(enabled)
 
-    def hopper_heater_ptc_brand_handler(self):
-        """PTC heater brand handler"""
-        self.project_details["hopper_heater"]["instruments"]["ptc"]["brand"] = self.hopper_heater_ptc_brand.currentText()
+        # Reset values if disabling
+        if not enabled:
+            self.damper_kw.setCurrentIndex(0)
+            self.damper_brand.setCurrentIndex(0)
+            self.damper_start_type.setCurrentIndex(0)
+            self.damper_zs_qty.setValue(0)
+            self.damper_zs_brand.setCurrentIndex(0)
 
+        self.damper_checkbox.setEnabled(True)
+
+    def fan_checkbox_handler(self, state):
+        """Handle fan section enabling/disabling"""
+        enabled = state == Qt.Checked
+        self.project_details["fan"]["status"] = enabled
+        self.project_details["fan"]["motors"]["fan"]["qty"] = 1 if enabled else 0
+
+
+        if not enabled:
+            self.reset_qtys(self.project_details["fan"])
+
+        # Enable/disable individual fan widgets
+        fan_widgets = [
+            self.fan_kw,
+            self.fan_rpm,
+            self.fan_start_type,
+            self.fan_brand,
+            self.fan_cooling_method,
+            self.fan_ip,
+            self.fan_efficiency_class,
+            self.fan_voltage_type,
+            self.fan_painting_ral,
+            self.fan_thermal_protection,
+            self.fan_space_heater,
+            # Fan instruments
+            self.fan_bearing_tt_qty,
+            self.fan_bearing_tt_brand,
+            self.fan_bearing_vt_qty,
+            self.fan_bearing_vt_brand,
+            self.fan_pt_qty,
+            self.fan_pt_brand,
+            self.fan_tt_qty,
+            self.fan_tt_brand
+        ]
+
+        # Enable/disable all fan widgets
+        for widget in fan_widgets:
+            widget.setEnabled(enabled)
+
+        # Reset values if disabling
+        if not enabled:
+            self.fan_kw.setCurrentIndex(0)
+            self.fan_rpm.setText("")
+            self.fan_start_type.setCurrentIndex(0)
+            self.fan_brand.setCurrentIndex(0)
+            self.fan_cooling_method.setCurrentIndex(0)
+            self.fan_ip.setCurrentIndex(0)
+            self.fan_efficiency_class.setCurrentIndex(0)
+            self.fan_voltage_type.setCurrentIndex(0)
+            self.fan_painting_ral.setCurrentIndex(0)
+            self.fan_thermal_protection.setCurrentIndex(0)
+            self.fan_space_heater.setChecked(False)
+            # Reset instrument values
+            for widget in fan_widgets[11:]:  # All widgets after fan_space_heater
+                if isinstance(widget, QSpinBox):
+                    widget.setValue(0)
+                elif isinstance(widget, QComboBox):
+                    widget.setCurrentIndex(0)
+
+        self.fan_checkbox.setEnabled(True)
+
+    def show_screw2(self):
+        """Show screw2 related widgets"""
+        self.screw2_label.setVisible(True)
+        self.screw2_minuse_btn.setVisible(True)
+        self.screw2_qty.setVisible(True)
+        self.screw2_kw.setVisible(True)
+
+    def hide_screw2(self):
+        """Hide screw2 related widgets and reset values"""
+        self.screw2_label.setVisible(False)
+        self.screw2_minuse_btn.setVisible(False)
+        self.screw2_qty.setVisible(False)
+        self.screw2_kw.setVisible(False)
+        self.screw2_qty.setValue(0)
+        self.screw2_kw.setCurrentIndex(0)

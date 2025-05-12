@@ -779,19 +779,12 @@ QTabWidget::pane {
 	border-width: 1px;
 }
 
-QTableView::item:alternate {
-	font-size: 10pt;
-	font-family: "Segoe UI";
-	background: gray;
-}
 
 QHeaderView::section {
-	font-size: 10pt;
-	font-family: "Segoe UI";
-	background-color: #F77F00;
-    color: #FFFFFF;
-    font-weight: bold;
+    background-color: #F77F00;
+    color: white;
     padding: 4px;
+    border: 1px solid black;
 }
 
 QTableView::item {
@@ -807,6 +800,13 @@ QTableView::item:alternate {
 	color: #000000;
     background: lightgray;
 }
+
+QTableView::item:selected {
+    background-color: #3399FF; /* or any contrasting color */
+    color: black; /* ensure text is visible */
+}
+
+
 
 QLabel {
 	color: #ffffff;
@@ -833,3 +833,30 @@ QGroupBox::title {
 	font-size: 14px;
 }
 
+
+QTreeWidget {
+    background-color: white;
+    border: 1px solid black;
+}
+
+QTreeWidget::item {
+    border-bottom: 1px solid black;
+}
+QTreeWidget::item:selected {
+    background-color: #3399FF; /* or any contrasting color */
+    color: black; /* ensure text is visible */
+}
+
+
+QTableWidget {
+    background-color: white;
+    border: 1px solid black;
+}
+
+QTableWidget::item {
+    border-bottom: 1px solid black;
+}
+QTableWidget::item:selected {
+    background-color: #3399FF; /* or any contrasting color */
+    color: black; /* ensure text is visible */
+}

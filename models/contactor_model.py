@@ -1,44 +1,38 @@
-from sqlalchemy import Column, Integer, Float, String
-
-from utils.database import Base, SessionLocal
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
+from utils.database import SessionLocal
 from views.message_box_view import show_message
+from models import  Base
+
 
 
 class Contactor(Base):
     __tablename__ = 'contactor'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    contactor_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
+    item_id = Column(Integer, ForeignKey('items.item_id', ondelete="CASCADE"), nullable=False, unique=True)
+    contactor_reference = Column(String, nullable=False, unique=True)
     p_kw = Column(Float, nullable=False)
-    contactor_reference = Column(String, nullable=False)
     brand = Column(String, nullable=False)
 
-    def __repr__(self):
-        return (
-            f"Motor Power(KW)={self.p_kw}, "
-            f"Contactor Reference={self.contactor_reference}', "
-            f"Brand={self.brand}"
-        )
+    modified_by = Column(String, ForeignKey('users.username', ondelete="SET NULL"), nullable=True)
+    modified_at = Column(String, nullable=False)
 
+    # Relationships
+    item = relationship("Item", back_populates="contactor", uselist=False)
+    modified_user = relationship("User", back_populates="contactors_modified")
+
+    def __repr__(self):
+        return f"<Contactor(p_kw={self.p_kw}, reference='{self.contactor_reference}', brand='{self.brand}')>"
 
 def get_contactor_by_motor_power(p_kw_value):
     session = SessionLocal()
     try:
-        session.begin()
         rslt = session.query(Contactor).filter(Contactor.p_kw == p_kw_value).order_by(Contactor.p_kw.asc()).first()
-        if rslt:
-            # Ensure all attributes are loaded before session closes
-            session.refresh(rslt)
-            # Create a new Contactor instance with the loaded values
-            contactor = Contactor()
-            contactor.p_kw = rslt.p_kw
-            contactor.contactor_reference = rslt.contactor_reference
-            contactor.brand = rslt.brand
-            return contactor
-        else:
-            return Contactor()
+        return rslt if rslt else Contactor()
     except Exception as e:
         session.rollback()
-        show_message("---------------------------------------------\n" + str(e) + "\n")
+        show_message(f"---------------------------------------------\n{str(e)}\n")
         return Contactor()
     finally:
         session.close()

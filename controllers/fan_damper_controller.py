@@ -4,42 +4,44 @@ from controllers.panel_controller import PanelController
 from models.motor_model import Motor
 
 
-class TransportController(PanelController):
+class FanDamperController(PanelController):
     """
-    Specialized controller for building a transport panel.
+    Specialized controller for building a fan_damper panel.
     """
 
     def __init__(self):
-        super().__init__("transport")
+        super().__init__("fan_damper")
 
     def build_panel(self, project_details):
         """
-        Main controller for building a transport panel from project specifications.
+        Main controller for building a fan_damper panel from project specifications.
         """
         # ----------------------- Initialize Motors -----------------------
-        motors_config = project_details["transport"]["motors"]
-        motor_objects = [
-            (Motor(motors_config["rotary"]["power"], usage="Rotary"),
-             motors_config["rotary"]["qty"]),
-            (Motor(motors_config["telescopic_chute"]["power"],
-                   usage="Telescopic Chute",
-                   relay_1no_1nc_qty=5,
-                   relay_2no_2nc_qty=2,
-                   plc_di=7,
-                   plc_do=2),
-             motors_config["telescopic_chute"]["qty"]),
-            (Motor(motors_config["slide_gate"]["power"],
-                   usage="Slide Gate",
-                   relay_1no_1nc_qty=5,
-                   relay_2no_2nc_qty=2,
-                   plc_di=7,
-                   plc_do=2),
-             motors_config["slide_gate"]["qty"]),
-            (Motor(motors_config["screw1"]["power"], usage="Screw1"),
-             motors_config["screw1"]["qty"]),
-            (Motor(motors_config["screw2"]["power"], usage="Screw2"),
-             motors_config["screw2"]["qty"])
-        ]
+        damper_config = project_details["damper"]["motors"]["damper"]
+        motor_objects = [(Motor(damper_config["power"], usage="Damper"), damper_config["qty"])]
+
+        fan_config = project_details["fan"]["motors"]["fan"]
+        fan = Motor(power_kw=fan_config["power"], usage="Fan")
+        fan.rpm=fan_config["rpm"]
+        fan.brand=fan_config["brand"]
+        fan.cooling_method=fan_config["cooling_method"]
+        fan.ip_rating=fan_config["ip_rating"]
+        fan.efficiency_class=fan_config["efficiency_class"]
+        fan.voltage_type=fan_config["voltage_type"]
+        fan.thermal_protection=fan_config["thermal_protection"]
+        fan.space_heater=fan_config["space_heater"]
+        fan.mpcb_qty=0
+        fan.mccb_qty=1
+
+        motor_objects.append((fan, fan_config["qty"]))
+
+
+
+
+    # ----------------------- choose electro motor ----------------------------
+        # ----------------------- choose electro motor ----------------------------
+        # ----------------------- choose electro motor ----------------------------
+        # ----------------------- choose electro motor ----------------------------
 
         # ----------------------- Add Components for Motors -----------------------
         for motor, qty in motor_objects:
@@ -49,8 +51,13 @@ class TransportController(PanelController):
         for motor, qty in motor_objects:
             self.choose_mccb(motor, qty)
 
+        # ----------------------- Add BiMetal -----------------------
+
+
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        instruments = project_details["transport"]["instruments"]
+        fan_instruments = project_details["fan"]["instruments"]
+        damper_instruments = project_details["damper"]["instruments"]
+        instruments = {**fan_instruments, **damper_instruments}
         self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------
@@ -73,10 +80,6 @@ class TransportController(PanelController):
 
         # ----------------------- Add Electrical Panel -----------------------
         total_motors = sum(qty for _, qty in motor_objects)
-        total_motors += sum(0.5 * qty for motor, qty in motor_objects if motor.usage == "Telescopic Chute")
-        total_motors += sum(0.5 * qty for motor, qty in motor_objects if motor.usage == "Slide Gate")
-        total_motors = ceil(total_motors)
-
         if total_motors != 0:
             self.choose_electrical_panel(total_motors)
 
@@ -87,11 +90,29 @@ class TransportController(PanelController):
 
     def choose_instruments(self, instruments):
         """
-        Adds instrument entries to the transport panel.
+        Adds instrument entries to the fan_damper panel.
         """
         instrument_specs = {
-            "speed_detector": {
-                "type": "SPEED DETECTOR",
+            "pressure_transmitter": {
+                "type": "Pressure Transmitter",
+                "specifications": "",
+                "price": 2_000_000,
+                "usage": ""
+            },
+            "temperature_transmitter": {
+                "type": "Temperature Transmitter",
+                "specifications": "",
+                "price": 1_800_000,
+                "usage": ""
+            },
+            "bearing_temperature_transmitter": {
+                "type": "Bearing Temperature Transmitter",
+                "specifications": "",
+                "price": 2_000_000,
+                "usage": ""
+            },
+            "bearing_vibration_transmitter": {
+                "type": "Bearing Vibration Transmitter",
                 "specifications": "",
                 "price": 2_000_000,
                 "usage": ""
@@ -100,18 +121,6 @@ class TransportController(PanelController):
                 "type": "PROXIMITY SWITCH",
                 "specifications": "",
                 "price": 1_500_000,
-                "usage": ""
-            },
-            "level_switch": {
-                "type": "LEVEL SWITCH BIN",
-                "specifications": "",
-                "price": 1_800_000,
-                "usage": ""
-            },
-            "level_transmitter": {
-                "type": "LEVEL TRANSMITTER",
-                "specifications": "",
-                "price": 5_000_000,
                 "usage": ""
             }
         }
@@ -131,18 +140,14 @@ class TransportController(PanelController):
 
     def calculate_instruments_io(self, instruments, total_di, total_ai, di_notes, ai_notes):
         """
-        Calculate I/O requirements specific to transport instruments
+        Calculate I/O requirements specific to fan damper instruments
         """
-        di_instruments = ["speed_detector", "proximity_switch", "level_switch"]
+        di_instruments = ["proximity_switch", "bearing_temperature_transmitter", "bearing_vibration_transmitter",
+                          "pressure_transmitter", "temperature_transmitter"]
         for instrument in di_instruments:
             qty = instruments[instrument]["qty"]
             if qty > 0:
                 total_di += qty  # Each instrument has 1 DI
                 di_notes.append(f"{instrument}: {qty} DI")
-
-        lt_qty = instruments["level_transmitter"]["qty"]
-        if lt_qty > 0:
-            total_ai += lt_qty  # Each level transmitter has 1 AI
-            ai_notes.append(f"level_transmitter: {lt_qty} AI")
 
         return total_di, total_ai
