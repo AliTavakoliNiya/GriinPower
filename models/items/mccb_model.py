@@ -12,7 +12,6 @@ class MCCB(Base):
     mccb_reference = Column(String, nullable=False, unique=True)
     p_kw = Column(Float, nullable=False)
     i_a = Column(Float, nullable=False)
-    brand = Column(String, nullable=False)
 
     modified_by = Column(String, ForeignKey('users.username', ondelete="SET NULL"), nullable=True)
     modified_at = Column(String, nullable=False)
@@ -23,16 +22,16 @@ class MCCB(Base):
     def __repr__(self):
         return (
             f"<MCCB(p_kw={self.p_kw}, i_a={self.i_a}, "
-            f"reference='{self.mccb_reference}', brand='{self.brand}')>"
+            f"reference='{self.mccb_reference}')>"
         )
 
 def get_mccb_by_motor_power(p_kw_value):
     session = SessionLocal()
     try:
-        return session.query(MCCB).filter(MCCB.p_kw == p_kw_value).order_by(MCCB.p_kw.asc()).first() or MCCB()
+        return session.query(MCCB).filter(MCCB.p_kw >= p_kw_value).order_by(MCCB.p_kw.asc()).first() or MCCB()
     except Exception as e:
         session.rollback()
-        show_message("---------------------------------------------\n" + str(e) + "\n")
+        show_message("mccb_model\n" + str(e) + "\n")
         return MCCB()
     finally:
         session.close()

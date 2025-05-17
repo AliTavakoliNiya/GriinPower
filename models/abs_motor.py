@@ -12,6 +12,7 @@ class Motor:
             contactor_qty=1,
             mpcb_qty=1,
             mccb_qty=0,
+            bimetal=0,
             contactor_aux_contact_qty=1,
             mpcb_mccb_aux_contact_qty=1,
             button_qty=3,
@@ -35,6 +36,7 @@ class Motor:
         self.contactor_qty = contactor_qty
         self.mpcb_qty = mpcb_qty
         self.mccb_qty = mccb_qty
+        self.bimetal = bimetal
         self.contactor_aux_contact_qty = contactor_aux_contact_qty
         self.mpcb_mccb_aux_contact_qty = mpcb_mccb_aux_contact_qty
         self.terminal_4_qty = terminal_4_qty

@@ -13,16 +13,20 @@ from controllers.fresh_air_controller import FreshAirController
 from controllers.hopper_heater_controller import HopperHeaterController
 from controllers.transport_controller import TransportController
 from controllers.vibration_controller import VibrationController
+from controllers.electric_motor_controller import ElectricMotorController
 from views.message_box_view import show_message
+
+from controllers.project_details import ProjectDetails
+
 
 
 class ResultTab(QWidget):
-    def __init__(self, main_view, project_details):
+    def __init__(self, main_view):
         super().__init__()
         uic.loadUi("ui/results_tab.ui", self)
 
         self.main_view = main_view
-        self.project_details = project_details
+        self.project_details = ProjectDetails()
 
         self.tables = {
             "fan_damper_panel_table": self.fan_damper_panel_table,
@@ -30,6 +34,7 @@ class ResultTab(QWidget):
             "fresh_air_panel_table": self.fresh_air_panel_table,
             "vibration_panel_table": self.vibration_panel_table,
             "hopper_heater_panel_table": self.hopper_heater_panel_table,
+            "summary_panel_table": self.summary_panel_table
         }
 
         self.panels = {}
@@ -53,21 +58,26 @@ class ResultTab(QWidget):
 
     def generate_panels(self):
         fan_damper_controller = FanDamperController()
-        self.panels["fan_damper_panel"] = fan_damper_controller.build_panel(self.project_details)
+        self.panels["fan_damper_panel"] = fan_damper_controller.build_panel()
         transport_controller = TransportController()
-        self.panels["transport_panel"] = transport_controller.build_panel(self.project_details)
+        self.panels["transport_panel"] = transport_controller.build_panel()
         fresh_air_controller = FreshAirController()
-        self.panels["fresh_air_panel"] = fresh_air_controller.build_panel(self.project_details)
+        self.panels["fresh_air_panel"] = fresh_air_controller.build_panel()
         vibration_controller = VibrationController()
-        self.panels["vibration_panel"] = vibration_controller.build_panel(self.project_details)
+        self.panels["vibration_panel"] = vibration_controller.build_panel()
         hopper_heater_controller = HopperHeaterController()
-        self.panels["hopper_heater_panel"] = hopper_heater_controller.build_panel(self.project_details)
+        self.panels["hopper_heater_panel"] = hopper_heater_controller.build_panel()
+        electric_motor_controller = ElectricMotorController()
+        electric_motor_price_and_effective_date = electric_motor_controller.calculate_price()
+
 
         self.generate_table(self.panels["fan_damper_panel"], self.tables["fan_damper_panel_table"])
         self.generate_table(self.panels["transport_panel"], self.tables["transport_panel_table"])
         self.generate_table(self.panels["fresh_air_panel"], self.tables["fresh_air_panel_table"])
         self.generate_table(self.panels["vibration_panel"], self.tables["vibration_panel_table"])
         self.generate_table(self.panels["hopper_heater_panel"], self.tables["hopper_heater_panel_table"])
+        summary_data = self.generate_summary_panel(electric_motor_price_and_effective_date)
+        self.generate_table(summary_data, self.tables["summary_panel_table"])
 
     def generate_table(self, panel, table):
         df = pd.DataFrame(panel)
@@ -101,6 +111,36 @@ class ResultTab(QWidget):
             for col in df.columns
         }
         return pd.concat([df, pd.DataFrame([summary], index=["Total"])])
+
+    def generate_summary_panel(self, electric_motor_price_and_effective_date):
+        summary = {
+            "title": [],
+            "Price": [],
+            "Note":[]
+        }
+
+        total_sum = 0
+
+        for name, panel in self.panels.items():
+            summary["title"].append(name)
+            panel_df = pd.DataFrame(panel)
+            panel_total = panel_df["total_price"].sum() if "total_price" in panel_df.columns else 0
+            summary["Price"].append(panel_total)
+            summary["Note"].append("")
+            total_sum += panel_total
+
+        if self.project_details["fan"]["status"]:
+            summary["title"].append("ELECTRIC MOTOR")
+            motor_price = electric_motor_price_and_effective_date[0]
+            total_sum += motor_price
+            summary["Price"].append(motor_price)
+            summary["Note"].append(electric_motor_price_and_effective_date[1])
+
+        summary["title"].append("Total")
+        summary["Price"].append(total_sum)
+        summary["Note"].append("")
+
+        return summary
 
     def _export_to_excel(self):
 
@@ -182,8 +222,6 @@ class ResultTab(QWidget):
         self.show_datail_window = DictionaryViewer(data=self.project_details, parent=self.main_view)
 
 
-
-
 class PandasModel(QAbstractTableModel):
     def __init__(self, data):
         super().__init__()
@@ -202,7 +240,7 @@ class PandasModel(QAbstractTableModel):
         value = self._data.iat[index.row(), index.column()]
         column_name = self._data.columns[index.column()]
 
-        if column_name in {"price", "total_price"} and pd.notnull(value):
+        if column_name.lower() in {"price", "total_price"} and pd.notnull(value):
             try:
                 value = float(value)
                 return f"{value:,.0f}" if value.is_integer() else f"{value:,.2f}"
@@ -238,8 +276,6 @@ class PandasModel(QAbstractTableModel):
         return None
 
 
-
-
 class DictionaryViewer(QMainWindow):
     def __init__(self, data, parent=None):
         super().__init__(parent)
@@ -254,22 +290,37 @@ class DictionaryViewer(QMainWindow):
         self.tree = QTreeWidget()
         self.tree.setColumnCount(2)
         self.tree.setHeaderLabels(["panles", "Value"])
-        self.tree.setColumnWidth(0, 300)  # Set width of the "panel" column to 300px
+        self.tree.setColumnWidth(0, 300)
         self.populate_tree(self.tree.invisibleRootItem(), data)
 
-        # Print button
+        # Buttons
         self.print_button = QPushButton("Print to PDF")
         self.print_button.clicked.connect(self.print_to_pdf)
 
-        # Layout for central widget
+        self.toggle_button = QPushButton("Expand All")
+        self.toggle_button.clicked.connect(self.toggle_tree)
+
+        # Layout
         layout = QVBoxLayout()
         layout.addWidget(self.tree)
+        layout.addWidget(self.toggle_button)
         layout.addWidget(self.print_button)
         central_widget.setLayout(layout)
 
-
+        # State tracker
+        self.tree_expanded = False
 
         self.show()
+
+
+    def toggle_tree(self):
+        if self.tree_expanded:
+            self.tree.collapseAll()
+            self.toggle_button.setText("Expand All")
+        else:
+            self.tree.expandAll()
+            self.toggle_button.setText("Collapse All")
+        self.tree_expanded = not self.tree_expanded
 
     def populate_tree(self, parent_item, dictionary):
         for key, value in dictionary.items():

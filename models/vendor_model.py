@@ -1,0 +1,1 @@
+# item_prices = relationship("ItemPrice", back_populates="vendor", cascade="all, delete-orphan")

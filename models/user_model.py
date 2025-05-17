@@ -7,11 +7,9 @@ from models import Base
 import hashlib
 
 
-
-
-
 def now_jalali():
     return jdatetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -29,9 +27,12 @@ class User(Base):
     mpcbs_modified = relationship("MPCB", back_populates="modified_user")
     mccbs_modified = relationship("MCCB", back_populates="modified_user")
     generals_modified = relationship("General", back_populates="modified_user")
+    instruments_modified = relationship("Instrument", back_populates="modified_user")
+    item_prices_created = relationship("ItemPrice", back_populates="creator")
 
     def __repr__(self):
         return f"<User(username='{self.username}', role='{self.role}')>"
+
 
 def get_user_by_username(username: str, password: str):
     session = SessionLocal()

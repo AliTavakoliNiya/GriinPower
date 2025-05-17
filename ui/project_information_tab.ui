@@ -209,7 +209,7 @@
      <string>Humidity (%):</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="project_voltage">
+   <widget class="QComboBox" name="project_l_voltage">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -242,7 +242,7 @@
      <string notr="true"/>
     </property>
     <property name="text">
-     <string>Low Voltage:</string>
+     <string>L Voltage:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_40">
@@ -261,7 +261,7 @@
      <string>Voltage Variation:</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="electro_motor_start_type_2">
+   <widget class="QComboBox" name="project_voltage_variation">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -313,7 +313,7 @@
      <string>Frequency:</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="electro_motor_start_type_3">
+   <widget class="QComboBox" name="project_voltage_frequency">
     <property name="geometry">
      <rect>
       <x>470</x>
@@ -333,7 +333,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QComboBox" name="electro_motor_start_type_4">
+   <widget class="QComboBox" name="project_voltage_frequency_variation">
     <property name="geometry">
      <rect>
       <x>470</x>
@@ -369,7 +369,7 @@
      <string>M Voltage:</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="project_voltage_2">
+   <widget class="QComboBox" name="project_m_voltage">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -378,11 +378,6 @@
       <height>25</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>----</string>
-     </property>
-    </item>
     <item>
      <property name="text">
       <string>6.3</string>

@@ -1,19 +1,51 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QSpinBox, QComboBox, QLineEdit, QCheckBox
-
+from controllers.project_details import ProjectDetails
 
 class ElectricalTab(QWidget):
-    def __init__(self, project_details):
+    def __init__(self):
         super().__init__()
         uic.loadUi("ui/electrical_tab.ui", self)
-        self.project_details = project_details
+        self.project_details = ProjectDetails()
         self._initialize_components()
 
     def _initialize_components(self):
         """Initialize all UI components with their event handlers"""
         # ------------ Bagfilter ------------
+        self.bagfilter_type.currentTextChanged.connect(self._handle_bagfilter_type_changed)
+        self.bagfilter_order.textChanged.connect(self._handle_bagfilter_order_changed)
+        self.plc_series.currentTextChanged.connect(self._handle_plc_series_changed)
+        self.plc_protocol.currentTextChanged.connect(self._handle_plc_protocol_changed)
+        self.touch_panel_model.currentTextChanged.connect(self._handle_touch_panel_changed)
+        self.olm.stateChanged.connect(self._handle_olm_changed)
+        self.ee.stateChanged.connect(self._handle_ee_changed)
+        self.me.stateChanged.connect(self._handle_me_changed)
+        self.cable_supply.stateChanged.connect(self._handle_cable_supply_changed)
         self.cable_length.valueChanged.connect(self._handle_cable_length_changed)
+
+        # Bagfilter instruments
+        self.bagfilter_dpt_qty.valueChanged.connect(self._handle_bagfilter_dpt_qty_changed)
+        self.bagfilter_dpt_brand.currentTextChanged.connect(self._handle_bagfilter_dpt_brand_changed)
+
+        self.bagfilter_dps_qty.valueChanged.connect(self._handle_bagfilter_dps_qty_changed)
+        self.bagfilter_dps_brand.currentTextChanged.connect(self._handle_bagfilter_dps_brand_changed)
+
+        self.bagfilter_pt_qty.valueChanged.connect(self._handle_bagfilter_pt_qty_changed)
+        self.bagfilter_pt_brand.currentTextChanged.connect(self._handle_bagfilter_pt_brand_changed)
+
+        self.bagfilter_ps_qty.valueChanged.connect(self._handle_bagfilter_ps_qty_changed)
+        self.bagfilter_ps_brand.currentTextChanged.connect(self._handle_bagfilter_ps_brand_changed)
+
+        self.bagfilter_pg_qty.valueChanged.connect(self._handle_bagfilter_pg_qty_changed)
+        self.bagfilter_pg_brand.currentTextChanged.connect(self._handle_bagfilter_pg_brand_changed)
+
+        self.bagfilter_inlet_tt_qty.valueChanged.connect(self._handle_bagfilter_inlet_tt_qty_changed)
+        self.bagfilter_inlet_tt_brand.currentTextChanged.connect(self._handle_bagfilter_inlet_tt_brand_changed)
+
+        self.bagfilter_outlet_tt_qty.valueChanged.connect(self._handle_bagfilter_outlet_tt_qty_changed)
+        self.bagfilter_outlet_tt_brand.currentTextChanged.connect(self._handle_bagfilter_outlet_tt_brand_changed)
+
         self.touch_panel_model.currentTextChanged.connect(self._handle_touch_panel_changed)
 
         # ------------ Transport ------------
@@ -73,6 +105,7 @@ class ElectricalTab(QWidget):
         self.freshair_flap_motor_kw.currentIndexChanged.connect(self._handle_freshair_flap_motor_kw_changed)
         self.freshair_flap_motor_start_type.currentIndexChanged.connect(self._handle_freshair_flap_start_type_changed)
 
+        self.emergency_flap_motor_qty.valueChanged.connect(self._handle_emergency_flap_motor_qty_changed)
         self.emergency_flap_motor_kw.currentIndexChanged.connect(self._handle_emergency_flap_motor_kw_changed)
         self.emergency_flap_start_type.currentIndexChanged.connect(self._handle_emergency_flap_start_type_changed)
 
@@ -219,6 +252,9 @@ class ElectricalTab(QWidget):
 
     def _handle_freshair_flap_start_type_changed(self, index):
         self._update_project_value(["fresh_air", "motors", "fresh_air_flap", "start_type"])
+
+    def _handle_emergency_flap_motor_qty_changed(self, value):
+        self._update_project_value(["fresh_air", "motors", "emergency_flap", "qty"], value)
 
     def _handle_emergency_flap_motor_kw_changed(self, index):
         self._handle_combobox_float(["fresh_air", "motors", "emergency_flap", "power"])
@@ -625,3 +661,77 @@ class ElectricalTab(QWidget):
         self.screw2_kw.setVisible(False)
         self.screw2_qty.setValue(0)
         self.screw2_kw.setCurrentIndex(0)
+
+
+    def _handle_bagfilter_type_changed(self, value):
+        self._update_project_value(["bagfilter", "type"], value)
+
+    def _handle_bagfilter_order_changed(self, value):
+        self._update_project_value(["bagfilter", "order"], value)
+
+    def _handle_plc_series_changed(self, value):
+        self._update_project_value(["bagfilter", "plc_series"], value)
+
+    def _handle_plc_protocol_changed(self, value):
+        self._update_project_value(["bagfilter", "plc_protocol"], value)
+
+    def _handle_touch_panel_changed(self, value):
+        self._update_project_value(["bagfilter", "touch_panel"], value)
+
+    def _handle_olm_changed(self, state):
+        self._update_project_value(["bagfilter", "olm"], state == Qt.Checked)
+
+    def _handle_ee_changed(self, state):
+        self._update_project_value(["bagfilter", "ee"], state == Qt.Checked)
+
+    def _handle_me_changed(self, state):
+        self._update_project_value(["bagfilter", "me"], state == Qt.Checked)
+
+    def _handle_cable_supply_changed(self, state):
+        self._update_project_value(["bagfilter", "cable_supply"], state == Qt.Checked)
+
+    def _handle_cable_length_changed(self, value):
+        self._update_project_value(["cable_dimension"], value)
+
+    # Bagfilter instrument handlers
+    def _handle_bagfilter_dpt_qty_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "qty"], value)
+
+    def _handle_bagfilter_dpt_brand_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "brand"], value)
+
+    def _handle_bagfilter_dps_qty_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "delta_pressure_switch", "qty"], value)
+
+    def _handle_bagfilter_dps_brand_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "delta_pressure_switch", "brand"], value)
+
+    def _handle_bagfilter_pt_qty_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "pressure_transmitter", "qty"], value)
+
+    def _handle_bagfilter_pt_brand_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "pressure_transmitter", "brand"], value)
+
+    def _handle_bagfilter_ps_qty_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "pressure_switch", "qty"], value)
+
+    def _handle_bagfilter_ps_brand_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "pressure_switch", "brand"], value)
+
+    def _handle_bagfilter_pg_qty_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "pressure_gauge", "qty"], value)
+
+    def _handle_bagfilter_pg_brand_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "pressure_gauge", "brand"], value)
+
+    def _handle_bagfilter_inlet_tt_qty_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "inlet_temperature_transmitter", "qty"], value)
+
+    def _handle_bagfilter_inlet_tt_brand_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "inlet_temperature_transmitter", "brand"], value)
+
+    def _handle_bagfilter_outlet_tt_qty_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "outlet_temperature_transmitter", "qty"], value)
+
+    def _handle_bagfilter_outlet_tt_brand_changed(self, value):
+        self._update_project_value(["bagfilter", "instruments", "outlet_temperature_transmitter", "brand"], value)

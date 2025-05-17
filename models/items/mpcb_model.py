@@ -15,7 +15,6 @@ class MPCB(Base):
     iq_ka = Column(Float, nullable=False)
     min_current_range_a = Column(Float, nullable=False)
     max_current_range_a = Column(Float, nullable=False)
-    brand = Column(String, nullable=False)
 
     modified_by = Column(String, ForeignKey('users.username', ondelete="SET NULL"), nullable=True)
     modified_at = Column(String, nullable=False)
@@ -31,17 +30,16 @@ class MPCB(Base):
             f"MPCB Reference={self.mpcb_reference}, "
             f"Minimum Current(A)={self.min_current_range_a}, "
             f"Maximum Current(A)={self.max_current_range_a}, "
-            f"Brand={self.brand}"
         )
 
 
 def get_mpcb_by_motor_power(p_kw_value):
     session = SessionLocal()
     try:
-        return session.query(MPCB).filter(MPCB.p_kw == p_kw_value).order_by(MPCB.p_kw.asc()).first() or MPCB()
+        return session.query(MPCB).filter(MPCB.p_kw >= p_kw_value).order_by(MPCB.p_kw.asc()).first() or MPCB()
     except Exception as e:
         session.rollback()
-        show_message(f"---------------------------------------------\n{str(e)}\n", "Error")
+        show_message(f"mpcb_model\n{str(e)}\n", "Error")
         return MPCB()
     finally:
         session.close()

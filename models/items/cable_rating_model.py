@@ -42,7 +42,7 @@ def get_cable_by_dimension_current(length, current):
         return CableRating()
     except Exception as e:
         session.rollback()
-        show_message("---------------------------------------------\n" + str(e) + "\n")
+        show_message("cable_rating_model\n" + str(e) + "\n")
         return CableRating()
     finally:
         session.close()

@@ -1,8 +1,7 @@
 from math import ceil
 
 from controllers.panel_controller import PanelController
-from models.motor_model import Motor
-
+from models.abs_motor import Motor
 
 class VibrationController(PanelController):
     """
@@ -12,12 +11,12 @@ class VibrationController(PanelController):
     def __init__(self):
         super().__init__("vibration")
 
-    def build_panel(self, project_details):
+    def build_panel(self):
         """
         Main controller for building a vibration panel from project specifications.
         """
         # ----------------------- Initialize Motors -----------------------
-        motors_config = project_details["vibration"]["motors"]
+        motors_config = self.project_details["vibration"]["motors"]
         motor_objects = [
             (Motor(motors_config["vibration"]["power"],
                    usage="Vibration Motor",
@@ -34,7 +33,7 @@ class VibrationController(PanelController):
             self.choose_mccb(motor, qty)  # Add MCCB selection
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        instruments = project_details["vibration"]["instruments"]
+        instruments = self.project_details["vibration"]["instruments"]
         self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------
@@ -44,16 +43,12 @@ class VibrationController(PanelController):
         # ----------------------- Add General Accessories -----------------------
         self.choose_general(motor_objects)
 
-        if project_details["bagfilter"]["touch_panel"] == "None":  # no touch panel required
+        if self.project_details["bagfilter"]["touch_panel"] == "None":  # no touch panel required
             self.choose_general(motor_objects, ["signal_lamp_24v"])
 
         # ----------------------- Add Cables -----------------------
-        length = project_details["cable_dimension"]
-        volt = project_details["volt"]
-
-        if length > 0:
-            self.choose_signal_cable(motor_objects, length)
-            self.choose_power_cable(motor_objects, length, volt)
+        self.choose_signal_cable(motor_objects)
+        self.choose_power_cable(motor_objects)
 
         # ----------------------- Add Electrical Panel -----------------------
         total_motors = sum(qty for _, qty in motor_objects)
@@ -64,16 +59,3 @@ class VibrationController(PanelController):
 
         return self.panel
 
-    def calculate_instruments_io(self, instruments, total_di, total_ai, di_notes, ai_notes):
-        """
-        Calculate I/O requirements specific to vibration instruments
-        """
-        # Vibration system currently has no specific instruments
-        return total_di, total_ai
-
-    def choose_instruments(self, instruments):
-        """
-        Adds instrument entries to the vibration panel.
-        """
-        # Currently no instruments for vibration system
-        pass

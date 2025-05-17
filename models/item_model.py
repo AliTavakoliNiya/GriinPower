@@ -14,6 +14,8 @@ class Item(Base):
     mccb = relationship("MCCB", back_populates="item", uselist=False)
     general = relationship("General", back_populates="item", uselist=False)
     electric_motor = relationship("ElectricMotor", back_populates="item", uselist=False)
+    instrument = relationship("Instrument", back_populates="item", uselist=False)
+    prices = relationship("ItemPrice", back_populates="item", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Item(item_id={self.item_id}, name='{self.name}')>"

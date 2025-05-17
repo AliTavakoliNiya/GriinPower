@@ -1,7 +1,7 @@
 from math import ceil
 
 from controllers.panel_controller import PanelController
-from models.motor_model import Motor
+from models.abs_motor import Motor
 
 
 class TransportController(PanelController):
@@ -12,12 +12,12 @@ class TransportController(PanelController):
     def __init__(self):
         super().__init__("transport")
 
-    def build_panel(self, project_details):
+    def build_panel(self):
         """
         Main controller for building a transport panel from project specifications.
         """
         # ----------------------- Initialize Motors -----------------------
-        motors_config = project_details["transport"]["motors"]
+        motors_config = self.project_details["transport"]["motors"]
         motor_objects = [
             (Motor(motors_config["rotary"]["power"], usage="Rotary"),
              motors_config["rotary"]["qty"]),
@@ -50,7 +50,7 @@ class TransportController(PanelController):
             self.choose_mccb(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        instruments = project_details["transport"]["instruments"]
+        instruments = self.project_details["transport"]["instruments"]
         self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------
@@ -60,16 +60,12 @@ class TransportController(PanelController):
         # ----------------------- Add General Accessories -----------------------
         self.choose_general(motor_objects)
 
-        if project_details["bagfilter"]["touch_panel"] == "None":  # no touch panel required
+        if self.project_details["bagfilter"]["touch_panel"] == "None":  # no touch panel required
             self.choose_general(motor_objects, ["signal_lamp_24v"])
 
         # ----------------------- Add Cables -----------------------
-        length = project_details["cable_dimension"]
-        volt = project_details["volt"]
-
-        if length > 0:
-            self.choose_signal_cable(motor_objects, length)
-            self.choose_power_cable(motor_objects, length, volt)
+        self.choose_signal_cable(motor_objects)
+        self.choose_power_cable(motor_objects)
 
         # ----------------------- Add Electrical Panel -----------------------
         total_motors = sum(qty for _, qty in motor_objects)
@@ -85,64 +81,3 @@ class TransportController(PanelController):
 
         return self.panel
 
-    def choose_instruments(self, instruments):
-        """
-        Adds instrument entries to the transport panel.
-        """
-        instrument_specs = {
-            "speed_detector": {
-                "type": "SPEED DETECTOR",
-                "specifications": "",
-                "price": 2_000_000,
-                "usage": ""
-            },
-            "proximity_switch": {
-                "type": "PROXIMITY SWITCH",
-                "specifications": "",
-                "price": 1_500_000,
-                "usage": ""
-            },
-            "level_switch": {
-                "type": "LEVEL SWITCH BIN",
-                "specifications": "",
-                "price": 1_800_000,
-                "usage": ""
-            },
-            "level_transmitter": {
-                "type": "LEVEL TRANSMITTER",
-                "specifications": "",
-                "price": 5_000_000,
-                "usage": ""
-            }
-        }
-
-        for instrument_name, specs in instrument_specs.items():
-            qty = instruments[instrument_name]["qty"]
-            brand = instruments[instrument_name]["brand"]
-            if qty > 0:
-                self.add_to_panel(
-                    type_=specs["type"],
-                    brand=brand if brand else "-",
-                    specifications=f"Instrument: {specs['specifications']}",
-                    quantity=qty,
-                    price=specs["price"],
-                    note=f"Usage: {specs['usage']}\nQuantity: {qty}"
-                )
-
-    def calculate_instruments_io(self, instruments, total_di, total_ai, di_notes, ai_notes):
-        """
-        Calculate I/O requirements specific to transport instruments
-        """
-        di_instruments = ["speed_detector", "proximity_switch", "level_switch"]
-        for instrument in di_instruments:
-            qty = instruments[instrument]["qty"]
-            if qty > 0:
-                total_di += qty  # Each instrument has 1 DI
-                di_notes.append(f"{instrument}: {qty} DI")
-
-        lt_qty = instruments["level_transmitter"]["qty"]
-        if lt_qty > 0:
-            total_ai += lt_qty  # Each level transmitter has 1 AI
-            ai_notes.append(f"level_transmitter: {lt_qty} AI")
-
-        return total_di, total_ai

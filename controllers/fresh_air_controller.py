@@ -1,5 +1,5 @@
 from controllers.panel_controller import PanelController
-from models.motor_model import Motor
+from models.abs_motor import Motor
 
 
 class FreshAirController(PanelController):
@@ -10,17 +10,16 @@ class FreshAirController(PanelController):
     def __init__(self):
         super().__init__("fresh_air")
 
-    def build_panel(self, project_details):
+    def build_panel(self):
         """
         Main controller for building a fresh air panel from project specifications.
         """
         # ----------------------- Initialize Motors -----------------------
-        motors_config = project_details["fresh_air"]["motors"]
+        motors_config = self.project_details["fresh_air"]["motors"]
         motor_objects = []
 
         freshair_motor = Motor(motors_config["freshair_motor"]["power"], usage="Fresh Air Motor")
         if motors_config["freshair_motor"]["start_type"] == "VFD":
-            # Rules for choosing vfd
             freshair_motor.plc_ai = 1
             freshair_motor.plc_ao = 1
         elif motors_config["freshair_motor"]["start_type"] == "Pneumatic":
@@ -87,7 +86,7 @@ class FreshAirController(PanelController):
             self.choose_mccb(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        instruments = project_details["fresh_air"]["instruments"]
+        instruments = self.project_details["fresh_air"]["instruments"]
         self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------
@@ -97,16 +96,12 @@ class FreshAirController(PanelController):
         # ----------------------- Add General Accessories -----------------------
         self.choose_general(motor_objects)
 
-        if project_details["bagfilter"]["touch_panel"] == "None":
+        if self.project_details["bagfilter"]["touch_panel"] == "None":
             self.choose_general(motor_objects, ["signal_lamp_24v"])
 
         # ----------------------- Add Cables -----------------------
-        length = project_details["cable_dimension"]
-        volt = project_details["volt"]
-
-        if length > 0:
-            self.choose_signal_cable(motor_objects, length)
-            self.choose_power_cable(motor_objects, length, volt)
+        self.choose_signal_cable(motor_objects)
+        self.choose_power_cable(motor_objects)
 
         # ----------------------- Add Electrical Panel -----------------------
         total_motors = sum(qty for _, qty in motor_objects)
@@ -117,51 +112,3 @@ class FreshAirController(PanelController):
 
         return self.panel
 
-    def choose_instruments(self, instruments):
-        """
-        Adds instrument entries to the fresh air panel.
-        """
-        instrument_specs = {
-            "proximity_switch": {
-                "type": "PROXIMITY SWITCH",
-                "specifications": "For flap position detection",
-                "price": 1_500_000,
-                "usage": "Flap position monitoring"
-            },
-            "temperature_transmitter": {
-                "type": "TEMPERATURE TRANSMITTER",
-                "specifications": "For air temperature measurement",
-                "price": 3_000_000,
-                "usage": "Air temperature monitoring"
-            }
-        }
-
-        for instrument_name, specs in instrument_specs.items():
-            qty = instruments[instrument_name]["qty"]
-            brand = instruments[instrument_name]["brand"]
-            if qty > 0:
-                self.add_to_panel(
-                    type_=specs["type"],
-                    brand=brand if brand else "-",
-                    specifications=f"Instrument: {specs['specifications']}",
-                    quantity=qty,
-                    price=specs["price"],
-                    note=f"Usage: {specs['usage']}\nQuantity: {qty}")
-
-    def calculate_instruments_io(self, instruments, total_di, total_ai, di_notes, ai_notes):
-        """
-        Calculate I/O requirements specific to fresh air instruments
-        """
-        # Proximity switches use DI
-        prox_qty = instruments["proximity_switch"]["qty"]
-        if prox_qty > 0:
-            total_di += prox_qty
-            di_notes.append(f"proximity_switch: {prox_qty} DI")
-
-        # Temperature transmitters use AI
-        temp_qty = instruments["temperature_transmitter"]["qty"]
-        if temp_qty > 0:
-            total_ai += temp_qty
-            ai_notes.append(f"temperature_transmitter: {temp_qty} AI")
-
-        return total_di, total_ai

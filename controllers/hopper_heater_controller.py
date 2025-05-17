@@ -1,5 +1,5 @@
 from controllers.panel_controller import PanelController
-from models.motor_model import Motor
+from models.abs_motor import Motor
 
 
 class HopperHeaterController(PanelController):
@@ -8,12 +8,12 @@ class HopperHeaterController(PanelController):
     def __init__(self):
         super().__init__("hopper_heater")
 
-    def build_panel(self, project_details):
+    def build_panel(self):
         """
         Main controller for building a hopper heater panel from project specifications.
         """
         # ----------------------- Initialize Motors -----------------------
-        motors_config = project_details["hopper_heater"]["motors"]
+        motors_config = self.project_details["hopper_heater"]["motors"]
         motor_objects = [
             (Motor(motors_config["elements"]["power"],
                    usage="Hopper Heater",
@@ -48,12 +48,8 @@ class HopperHeaterController(PanelController):
         self.choose_general(motor_objects)
 
         # ----------------------- Add Cables -----------------------
-        length = project_details["cable_dimension"]
-        volt = project_details["volt"]
-
-        if length > 0:
-            self.choose_signal_cable(motor_objects, length)
-            self.choose_power_cable(motor_objects, length, volt)
+        self.choose_signal_cable(motor_objects)
+        self.choose_power_cable(motor_objects)
 
         # ----------------------- Add Electrical Panel -----------------------
         total_motors = sum(qty for _, qty in motor_objects)
@@ -61,32 +57,7 @@ class HopperHeaterController(PanelController):
             self.choose_electrical_panel(total_motors)
 
         # ----------------------- Add instruments -----------------------
-        instruments = project_details["hopper_heater"]["instruments"]
+        instruments = self.project_details["hopper_heater"]["instruments"]
         self.choose_instruments(instruments)
 
         return self.panel
-
-    def choose_instruments(self, instruments):
-        """
-        Adds instrument entries to the hopper heater panel.
-        """
-        instrument_specs = {
-            "ptc": {
-                "type": "PTC TEMPERATURE SENSOR",
-                "specifications": "",
-                "price": 1_500_000,
-                "usage": ""
-            }
-        }
-
-        for instrument_name, specs in instrument_specs.items():
-            qty = instruments[instrument_name]["qty"]
-            if qty > 0:
-                self.add_to_panel(
-                    type_=specs["type"],
-                    brand="-",
-                    specifications=specs["specifications"],
-                    quantity=qty,
-                    price=specs["price"],
-                    note=""
-                )
