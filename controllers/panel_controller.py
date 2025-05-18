@@ -3,7 +3,7 @@ from math import sqrt
 
 from config import COSNUS_PI, ETA
 from models.items.cable_rating_model import get_cable_by_dimension_current
-from models.items.contactor_model import get_contactor_by_motor_power
+from models.items.contactor_model import get_contactor_by_current
 from models.items.general_model import get_general_by_name
 from models.items.instrument_model import get_instrument_by_type
 from models.items.mpcb_model import get_mpcb_by_motor_power
@@ -100,7 +100,9 @@ class PanelController:
         if qty == 0 or motor.power_kw == 0 or motor.contactor_qty == 0:
             return
 
-        contactor = get_contactor_by_motor_power(motor.power_kw)
+        volt = self.project_details["project_info"]["project_l_voltage"]
+        current = 1.6 / (sqrt(3) * volt * COSNUS_PI * ETA)
+        contactor = get_contactor_by_current(current)
         if contactor.item_id:
             price_item = get_price(contactor.item_id, brand=False, item_brand=False)
             price = price_item.price if price_item.price else 0
@@ -117,7 +119,7 @@ class PanelController:
             type=f"CONTACTOR FOR {motor.usage}",
             brand=brand,
             reference_number=contactor.contactor_reference,
-            specifications=f"Motor Power: {contactor.p_kw} KW",
+            specifications=f"Motor Current: {current} A",
             quantity=total_qty,
             price=price,
             last_price_update=effective_date,
