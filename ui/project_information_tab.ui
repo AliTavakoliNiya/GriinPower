@@ -476,8 +476,7 @@ Contact Person</string>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
+           <string notr="true"/>
           </property>
          </widget>
         </item>

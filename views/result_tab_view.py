@@ -18,7 +18,7 @@ from controllers.electric_motor_controller import ElectricMotorController
 from views.message_box_view import show_message
 
 from controllers.project_details import ProjectDetails
-
+import re
 
 
 class ResultTab(QWidget):
@@ -58,7 +58,36 @@ class ResultTab(QWidget):
             table.setTextElideMode(Qt.ElideRight)
             table.verticalHeader().setVisible(False)
 
+    def _check_ui_rules(self):
+
+        if self.main_view.electrical_tab.bagfilter_order.text == "":
+            show_message("Enter Bagfilter Order", "Error")
+            return False
+
+        if self.main_view.electrical_tab.bagfilter_type.currentIndex() == 1:
+            griin_pattern = r"^\d+(\.\d+)?×\d+\.?\(\d+(\.\d+)?m\)\.\d+$"
+            match = re.fullmatch(griin_pattern, self.project_details["bagfilter"]["order"])
+            if not match:  # Griin/China
+                show_message("Please Follow Pattern Like 8.96×5.(2.7m).10 for Griin/China Model", "Error")
+                return False
+        if self.main_view.electrical_tab.bagfilter_type.currentIndex() == 2:
+            beth_pattern = r"^(\d+)\.\d+x(\d+)\.\d+x\d+$"
+            match = re.fullmatch(beth_pattern, self.project_details["bagfilter"]["order"])
+            if not match:  # BETH
+                show_message("Please Follow Pattern Like 6.78x2.3x10 for BETH Model", "Error")
+                return False
+
+        if self.main_view.electrical_tab.touch_panel_model.currentIndex() == 0:
+            show_message("Select Touch Panel Model")
+            return False
+
+        return True
+
     def generate_panels(self):
+        if not self._check_ui_rules():
+            self.main_view.tabWidget.setCurrentIndex(1)
+            return
+
         bagfilter_controller = BagfilterController()
         self.panels["bagfilter_panel"] = bagfilter_controller.build_panel()
         fan_damper_controller = FanDamperController()

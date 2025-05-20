@@ -18,10 +18,10 @@ class ProjectDetails:
                                  "project_voltage_frequency":50,
                                  "project_voltage_frequency_variation":2},
                 "bagfilter": {"type": None,
-                              "order": None,
+                              "order": "",
                               "plc_series": None,
                               "plc_protocol": None,
-                              "touch_panel": None,
+                              "touch_panel": "",
                               "olm": False,
                               "ee": False,
                               "me": False,
@@ -64,7 +64,8 @@ class ProjectDetails:
                             "bearing_temperature_transmitter": {"qty": 0, "brand": None},
                             "bearing_vibration_transmitter": {"qty": 0, "brand": None},
                             "pressure_transmitter": {"qty": 0, "brand": None},
-                            "temperature_transmitter": {"qty": 0, "brand": None}
+                            "temperature_transmitter": {"qty": 0, "brand": None},
+                            "PT100": {"qty": 0, "brand": None}
                         }},
                 "vibration": {"status": False,
                               "motors": {

@@ -945,6 +945,52 @@ QTableWidget::item:selected {
           <string>Bagfilter/Baghouse</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
+          <item row="10" column="3" colspan="3">
+           <widget class="QLineEdit" name="search_instrument">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="placeholderText">
+             <string>🔎 Search</string>
+            </property>
+           </widget>
+          </item>
+          <item row="15" column="5">
+           <widget class="QComboBox" name="bagfilter_pg_brand">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DBL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Danfoss</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="14" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>PressureS</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2" colspan="4">
+           <widget class="QCheckBox" name="ee">
+            <property name="text">
+             <string>Electrical Erection</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="2">
            <widget class="QComboBox" name="bagfilter_type">
             <property name="sizeAdjustPolicy">
@@ -972,20 +1018,10 @@ QTableWidget::item:selected {
             </item>
            </widget>
           </item>
-          <item row="14" column="0">
-           <widget class="QLabel" name="label_11">
+          <item row="17" column="0" colspan="3">
+           <widget class="QLabel" name="label_14">
             <property name="text">
-             <string>PressureS</string>
-            </property>
-           </widget>
-          </item>
-          <item row="15" column="3">
-           <widget class="QSpinBox" name="bagfilter_pg_qty">
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="value">
-             <number>0</number>
+             <string>Outlet TemperatureT</string>
             </property>
            </widget>
           </item>
@@ -1018,90 +1054,7 @@ QTableWidget::item:selected {
             </property>
            </widget>
           </item>
-          <item row="10" column="3" colspan="3">
-           <widget class="QLineEdit" name="bagfilter_order_2">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="placeholderText">
-             <string>🔎 Search</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="2">
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="7" column="2" colspan="2">
-           <widget class="QCheckBox" name="cable_supply">
-            <property name="text">
-             <string>Cable Supply(m)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="13" column="3">
-           <widget class="QSpinBox" name="bagfilter_pt_qty">
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item row="16" column="0" colspan="3">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Inlet TemperatureT</string>
-            </property>
-           </widget>
-          </item>
-          <item row="15" column="5">
-           <widget class="QComboBox" name="bagfilter_pg_brand">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DBL</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Danfoss</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="5" column="2" colspan="4">
-           <widget class="QCheckBox" name="ee">
-            <property name="text">
-             <string>Electrical Erection</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>PLC</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2" colspan="2">
+          <item row="1" column="2">
            <widget class="QComboBox" name="plc_series">
             <item>
              <property name="text">
@@ -1125,114 +1078,25 @@ QTableWidget::item:selected {
             </item>
            </widget>
           </item>
-          <item row="0" column="3" colspan="3">
-           <widget class="QLineEdit" name="bagfilter_order">
+          <item row="12" column="0">
+           <widget class="QLabel" name="label_9">
             <property name="text">
-             <string/>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="placeholderText">
-             <string>Order</string>
+             <string>ΔPressureS</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>Bagfilter</string>
+          <item row="11" column="2">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-           </widget>
-          </item>
-          <item row="4" column="5">
-           <widget class="QCheckBox" name="olm">
-            <property name="text">
-             <string>OLM</string>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
             </property>
-           </widget>
-          </item>
-          <item row="11" column="5">
-           <widget class="QComboBox" name="bagfilter_dpt_brand">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DBL</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Danfoss</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="5">
-           <widget class="QComboBox" name="plc_protocol">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>PROFINET</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>PROFIBUS</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Hard Wire</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="15" column="0" colspan="3">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Pressure Gauge</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2" colspan="2">
-           <widget class="QComboBox" name="touch_panel_model">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>None</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>KTP700</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="12" column="3">
-           <widget class="QSpinBox" name="bagfilter_dps_qty">
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="displayIntegerBase">
-             <number>10</number>
-            </property>
-           </widget>
+           </spacer>
           </item>
           <item row="12" column="5">
            <widget class="QComboBox" name="bagfilter_dps_brand">
@@ -1253,41 +1117,25 @@ QTableWidget::item:selected {
             </item>
            </widget>
           </item>
-          <item row="13" column="5">
-           <widget class="QComboBox" name="bagfilter_pt_brand">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DBL</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Danfoss</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="12" column="0">
-           <widget class="QLabel" name="label_9">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>ΔPressureS</string>
+             <string>Bagfilter</string>
             </property>
            </widget>
           </item>
-          <item row="11" column="3">
-           <widget class="QSpinBox" name="bagfilter_dpt_qty">
-            <property name="minimum">
-             <number>0</number>
+          <item row="10" column="0" colspan="2">
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-            <property name="value">
-             <number>0</number>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
             </property>
-           </widget>
+           </spacer>
           </item>
           <item row="9" column="0" colspan="6">
            <widget class="QFrame" name="frame_7">
@@ -1297,40 +1145,6 @@ QTableWidget::item:selected {
             <property name="frameShadow">
              <enum>QFrame::Plain</enum>
             </property>
-           </widget>
-          </item>
-          <item row="11" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>-1</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>ΔPressureT</string>
-            </property>
-           </widget>
-          </item>
-          <item row="17" column="5">
-           <widget class="QComboBox" name="bagfilter_outlet_tt_brand">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DBL</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Danfoss</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="7" column="5">
@@ -1355,8 +1169,28 @@ QTableWidget::item:selected {
             </property>
            </widget>
           </item>
-          <item row="16" column="5">
-           <widget class="QComboBox" name="bagfilter_inlet_tt_brand">
+          <item row="7" column="2" colspan="2">
+           <widget class="QCheckBox" name="cable_supply">
+            <property name="text">
+             <string>Cable Supply(m)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" colspan="3">
+           <widget class="QLineEdit" name="bagfilter_order">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="placeholderText">
+             <string>Order</string>
+            </property>
+           </widget>
+          </item>
+          <item row="14" column="5">
+           <widget class="QComboBox" name="bagfilter_ps_brand">
             <item>
              <property name="text">
               <string>--------------------</string>
@@ -1381,8 +1215,8 @@ QTableWidget::item:selected {
             </property>
            </widget>
           </item>
-          <item row="14" column="5">
-           <widget class="QComboBox" name="bagfilter_ps_brand">
+          <item row="11" column="5">
+           <widget class="QComboBox" name="bagfilter_dpt_brand">
             <item>
              <property name="text">
               <string>--------------------</string>
@@ -1400,22 +1234,34 @@ QTableWidget::item:selected {
             </item>
            </widget>
           </item>
-          <item row="6" column="2" colspan="4">
-           <widget class="QCheckBox" name="me">
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Mechanical Erection</string>
+             <string>Touch Panel</string>
             </property>
            </widget>
           </item>
-          <item row="17" column="0" colspan="3">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Outlet TemperatureT</string>
-            </property>
+          <item row="13" column="5">
+           <widget class="QComboBox" name="bagfilter_pt_brand">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DBL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Danfoss</string>
+             </property>
+            </item>
            </widget>
           </item>
-          <item row="17" column="3">
-           <widget class="QSpinBox" name="bagfilter_outlet_tt_qty">
+          <item row="15" column="3">
+           <widget class="QSpinBox" name="bagfilter_pg_qty">
             <property name="minimum">
              <number>0</number>
             </property>
@@ -1434,10 +1280,94 @@ QTableWidget::item:selected {
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_4">
+          <item row="12" column="3">
+           <widget class="QSpinBox" name="bagfilter_dps_qty">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="displayIntegerBase">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="3">
+           <widget class="QSpinBox" name="bagfilter_dpt_qty">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="17" column="3">
+           <widget class="QSpinBox" name="bagfilter_outlet_tt_qty">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="3">
+           <widget class="QSpinBox" name="bagfilter_pt_qty">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
-             <string>Touch Panel</string>
+             <string>ΔPressureT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="16" column="5">
+           <widget class="QComboBox" name="bagfilter_inlet_tt_brand">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DBL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Danfoss</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="16" column="0" colspan="3">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Inlet TemperatureT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2" colspan="4">
+           <widget class="QCheckBox" name="me">
+            <property name="text">
+             <string>Mechanical Erection</string>
             </property>
            </widget>
           </item>
@@ -1451,18 +1381,88 @@ QTableWidget::item:selected {
             </property>
            </widget>
           </item>
-          <item row="10" column="0" colspan="2">
-           <spacer name="horizontalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+          <item row="17" column="5">
+           <widget class="QComboBox" name="bagfilter_outlet_tt_brand">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DBL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Danfoss</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="15" column="0" colspan="3">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Pressure Gauge</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>PLC</string>
             </property>
-           </spacer>
+           </widget>
+          </item>
+          <item row="1" column="3" colspan="3">
+           <widget class="QComboBox" name="plc_protocol">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>PROFINET</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>PROFIBUS</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Hard Wire</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QComboBox" name="touch_panel_model">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>None</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>KTP700</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QCheckBox" name="olm">
+            <property name="text">
+             <string>OLM</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

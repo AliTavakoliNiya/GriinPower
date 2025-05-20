@@ -488,6 +488,7 @@ class PanelController:
             'delta_pressure_switch': {'n_di': 1, 'n_ai': 0},
             'pressure_transmitter': {'n_di': 0, 'n_ai': 1},
             'pressure_switch': {'n_di': 1, 'n_ai': 0},
+            'pressure_gauge': {'n_di': 0, 'n_ai': 0},
             'temperature_transmitter': {'n_di': 0, 'n_ai': 1},
             'proximity_switch': {'n_di': 1, 'n_ai': 0},
             'vibration_transmitter': {'n_di': 0, 'n_ai': 1},

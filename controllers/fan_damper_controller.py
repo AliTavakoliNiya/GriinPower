@@ -100,9 +100,8 @@ class FanDamperController(PanelController):
         damper_instruments = self.project_details["damper"]["instruments"]
         instruments = {**fan_instruments, **damper_instruments}
         # Create a copy with "bearing_" removed from keys
-        instruments_cloned = {
-            key.replace("bearing_", ""): value for key, value in instruments.items()
-        }
+        instruments_cloned = { key.replace("bearing_", ""): value for key, value in instruments.items() }
+        instruments_cloned = { key.replace("PT100", "temperature_transmitter"): value for key, value in instruments_cloned.items() }
         self.calculate_plc_io_requirements(motor_objects, instruments_cloned)
 
         # ----------------------- Add internal wiring -----------------------

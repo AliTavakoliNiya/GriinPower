@@ -554,8 +554,15 @@ class ElectricalTab(QWidget):
         self.screw2_qty.setValue(0)
         self.screw2_kw.setCurrentIndex(0)
 
-    def _handle_bagfilter_type_changed(self, value):
-        self._update_project_value(["bagfilter", "type"], value)
+    def _handle_bagfilter_type_changed(self, index):
+        if index == 0:
+            self.bagfilter_order.setPlaceholderText("Order")
+        if index == 1: # Griin/China
+            self.bagfilter_order.setPlaceholderText("Ex: 8.96×5.(2.7m).10") # 5 valve ~ compartment
+        if index == 2: # BETH
+            self.bagfilter_order.setPlaceholderText("Ex: 6.78x2.3.10") # 6x2 valve
+
+        self._update_project_value(["bagfilter", "type"], self.bagfilter_type.currentText())
 
     def _handle_bagfilter_order_changed(self, value):
         self._update_project_value(["bagfilter", "order"], value)
@@ -566,8 +573,8 @@ class ElectricalTab(QWidget):
     def _handle_plc_protocol_changed(self, value):
         self._update_project_value(["bagfilter", "plc_protocol"], value)
 
-    def _handle_touch_panel_changed(self, value):
-        self._update_project_value(["bagfilter", "touch_panel"], value)
+    def _handle_touch_panel_changed(self, index):
+        self._update_project_value(["bagfilter", "touch_panel"], self.touch_panel_model.currentText())
 
     def _handle_olm_changed(self, state):
         self._update_project_value(["bagfilter", "olm"], state == Qt.Checked)
