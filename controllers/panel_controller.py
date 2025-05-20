@@ -2,15 +2,14 @@ from collections import defaultdict
 from math import sqrt
 
 from config import COSNUS_PI, ETA
+from controllers.project_details import ProjectDetails
+from models.item_price_model import get_price
 from models.items.cable_rating_model import get_cable_by_dimension_current
 from models.items.contactor_model import get_contactor_by_motor_power
 from models.items.general_model import get_general_by_name
 from models.items.instrument_model import get_instrument_by_type
-from models.items.mpcb_model import get_mpcb_by_motor_power
 from models.items.mccb_model import get_mccb_by_motor_power
-from models.item_price_model import get_price
-
-from controllers.project_details import ProjectDetails
+from models.items.mpcb_model import get_mpcb_by_motor_power
 
 
 class PanelController:
@@ -393,3 +392,120 @@ class PanelController:
                     price=price,
                     last_price_update=effective_date,
                     note=str(instrument.note) + " <calibration fee & manifolds fee>")
+
+    def calculate_plc_io_requirements(self, motor_objects, instruments=None):
+        total_di = total_do = total_ai = total_ao = 0
+        di_notes = []
+        do_notes = []
+        ai_notes = []
+        ao_notes = []
+
+        for motor, qty in motor_objects:
+            if qty > 0:
+                motor_di = motor.plc_di * qty
+                motor_do = motor.plc_do * qty
+                motor_ai = motor.plc_ai * qty
+                motor_ao = motor.plc_ao * qty
+                total_di += motor_di
+                total_do += motor_do
+                total_ai += motor_ai
+                total_ao += motor_ao
+                if motor_di > 0:
+                    di_notes.append(f"{motor.usage}: {motor_di} DI")
+                if motor_do > 0:
+                    do_notes.append(f"{motor.usage}: {motor_do} DO")
+                if motor_ai > 0:
+                    ai_notes.append(f"{motor.usage}: {motor_ai} AI")
+                if motor_ao > 0:
+                    ao_notes.append(f"{motor.usage}: {motor_ao} AO")
+
+        if instruments:
+            total_di, total_ai = self.calculate_instruments_io(instruments, total_di, total_ai, di_notes, ai_notes)
+
+        total_digital = total_di + total_do
+        total_analog = total_ai + total_ao
+        digital_notes = di_notes + do_notes
+        analog_notes = ai_notes + ao_notes
+
+        if total_digital > 0:
+            digital_cards = max(1, (total_digital + 15) // 16)
+            self.add_io_card("DIGITAL 16 CHANNEL", "digital_16_channel", digital_cards, total_digital, digital_notes)
+        else:
+            digital_cards = 0
+
+        if total_analog > 0:
+            analog_cards = max(1, (total_analog + 15) // 16)
+            self.add_io_card("ANALOG 16 CHANNEL", "analog_16_channel", analog_cards, total_analog, analog_notes)
+        else:
+            analog_cards = 0
+
+        total_20pin = digital_cards + analog_cards
+        if total_20pin > 0:
+            pin_card = get_general_by_name("front_connector_20_pin")
+            if pin_card.item_id:
+                price_item = get_price(pin_card.item_id, brand=False, item_brand=False)
+                price = price_item.price if price_item.price else 0
+                effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+                brand = price_item.brand
+            else:
+                price = 0
+                effective_date = "Not Found"
+                brand = ""
+            self.add_to_panel(
+                type="FRONT CONNECTOR 20PIN",
+                brand=brand,
+                specifications="Total 20PIN connectors needed",
+                quantity=total_20pin,
+                price=price,
+                last_price_update=effective_date,
+                note="Total connectors for all 16CH cards"
+            )
+
+    def add_io_card(self, label, general_name, qty, total, notes):
+        card = get_general_by_name(general_name)
+        if card.item_id:
+            price_item = get_price(card.item_id, brand=False, item_brand=False)
+            price = price_item.price if price_item.price else 0
+            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+            brand = price_item.brand
+        else:
+            price = 0
+            effective_date = "Not Found"
+            brand = ""
+        self.add_to_panel(
+            type=label,
+            brand=brand,
+            specifications=f"Total: {total}",
+            quantity=qty,
+            price=price,
+            last_price_update=effective_date,
+            note="\n".join(notes)
+        )
+
+    def calculate_instruments_io(self, instruments, total_di, total_ai, di_notes, ai_notes):
+        instruments_types = {
+            'delta_pressure_transmitter': {'n_di': 0, 'n_ai': 1},
+            'delta_pressure_switch': {'n_di': 1, 'n_ai': 0},
+            'pressure_transmitter': {'n_di': 0, 'n_ai': 1},
+            'pressure_switch': {'n_di': 1, 'n_ai': 0},
+            'temperature_transmitter': {'n_di': 0, 'n_ai': 1},
+            'proximity_switch': {'n_di': 1, 'n_ai': 0},
+            'vibration_transmitter': {'n_di': 0, 'n_ai': 1},
+            'speed_detector': {'n_di': 1, 'n_ai': 0},
+            'level_switch': {'n_di': 1, 'n_ai': 0},
+            'level_transmitter': {'n_di': 0, 'n_ai': 1},
+            'ptc': {'n_di': 0, 'n_ai': 0}
+        }
+
+        for instrument_name, properties in instruments.items():
+            n_di = instruments_types[instrument_name]["n_di"]
+            n_ai = instruments_types[instrument_name]["n_ai"]
+            if properties["qty"] > 0:
+                if n_di > 0:
+                    total_di += n_di * properties["qty"]
+                    di_notes.append(f"{instrument_name}: {properties['qty']}*{n_di} DI")
+                if n_ai > 0:
+                    total_ai += n_ai * properties["qty"]
+                    ai_notes.append(f"{instrument_name}: {properties['qty']}*{n_ai} AI")
+
+        return total_di, total_ai

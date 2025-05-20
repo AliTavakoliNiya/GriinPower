@@ -103,6 +103,7 @@ class FanDamperController(PanelController):
         instruments_cloned = {
             key.replace("bearing_", ""): value for key, value in instruments.items()
         }
+        self.calculate_plc_io_requirements(motor_objects, instruments_cloned)
 
         # ----------------------- Add internal wiring -----------------------
         self.choose_internal_signal_wire(motor_objects)
