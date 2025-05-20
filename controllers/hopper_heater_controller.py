@@ -37,7 +37,6 @@ class HopperHeaterController(PanelController):
             self.choose_mccb(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        # self.calculate_plc_io_requirements(motor_objects)
 
         # ----------------------- Add internal wiring -----------------------
         self.choose_internal_signal_wire(motor_objects)

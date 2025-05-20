@@ -1,9 +1,11 @@
+import math
 from math import ceil
 
 from controllers.panel_controller import PanelController
 from controllers.project_details import ProjectDetails
 from models.abs_motor import Motor
 from models.item_price_model import get_price
+from models.items.general_model import get_general_by_name
 from models.items.mccb_model import get_mccb_by_motor_power
 
 
@@ -36,7 +38,7 @@ class BagfilterController(PanelController):
         self.choose_mccb()
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        # self.calculate_plc_io_requirements()
+        self.calculate_plc_io_requirements()
 
         # # ----------------------- Add internal wiring -----------------------
         # self.choose_internal_signal_wire(motor_objects)
@@ -113,65 +115,44 @@ class BagfilterController(PanelController):
         Calculates total PLC I/O requirements and adds appropriate I/O cards
         """
 
-        total_di, total_ai, di_notes, ai_notes = self.summarize_total_io()
+        total_di, total_do, total_ai, total_ao,  io_notes = self.summarize_total_io()
+        io_notes = "\n".join(io_notes)
 
 
 
-        """          
+        # Grouping totals
+        total_digital = total_di + total_do
+        total_analog = total_ai + total_ao
 
-        for motor, qty in motor_objects:
-            if qty > 0:
-                motor_di = motor.plc_di * qty
-                motor_do = motor.plc_do * qty
-                motor_ai = motor.plc_ai * qty
-                motor_ao = motor.plc_ao * qty
-                total_di += motor_di
-                total_do += motor_do
-                total_ai += motor_ai
-                total_ao += motor_ao
-                if motor_di > 0:
-                    di_notes.append(f"{motor.usage}: {motor_di} DI")
-                if motor_do > 0:
-                    do_notes.append(f"{motor.usage}: {motor_do} DO")
-                if motor_ai > 0:
-                    ai_notes.append(f"{motor.usage}: {motor_ai} AI")
-                if motor_ao > 0:
-                    ao_notes.append(f"{motor.usage}: {motor_ao} AO")
+        # Calculate card requirements
+        digital_16, digital_32 = self.calculate_card_distribution(total_digital)
+        analog_16, analog_32 = self.calculate_card_distribution(total_analog)
 
-        # Calculate I/O for instruments if provided
+        # Add digital 16-channel cards
+        if digital_16 > 0:
+            card = get_general_by_name("digital_16_channel")
+            if card.item_id:
+                price_item = get_price(card.item_id, brand=False, item_brand=False)
+                price = price_item.price if price_item.price else 0
+                effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+                brand = price_item.brand
+            else:
+                price = 0
+                effective_date = "Not Found"
+                brand = ""
 
-        if instruments:
-            total_di, total_ai = self.calculate_instruments_io(instruments, total_di, total_ai, di_notes, ai_notes)
+            self.add_to_panel(
+                type="DIGITAL_CARD_16CH",
+                brand=brand,  # Replace with actual brand logic if needed
+                quantity=digital_16,
+                price=price,  # Replace with pricing logic
+                last_price_update=effective_date,
+                note=io_notes
+            )
 
-        # Rest of the method remains the same...
-        di_16ch = (total_di + 15) // 16  # Round up to full 16-channel cards
-        do_16ch = (total_do + 15) // 16
-        ai_16ch = (total_ai + 15) // 16
-        ao_16ch = (total_ao + 15) // 16
-
-        total_cards = di_16ch + do_16ch + ai_16ch + ao_16ch
-        if total_cards > 8:
-            # If exceeding 8 cards, switch to 32-channel cards as needed
-            di_32ch = (total_di + 31) // 32
-            di_16ch = 0
-            remaining = 8 - di_32ch
-
-            do_32ch = (total_do + 31) // 32 if remaining > 0 else 0
-            do_16ch = 0
-            remaining -= do_32ch
-
-            ai_32ch = (total_ai + 31) // 32 if remaining > 0 else 0
-            ai_16ch = 0
-            remaining -= ai_32ch
-
-            ao_32ch = (total_ao + 31) // 32 if remaining > 0 else 0
-            ao_16ch = 0
-        else:
-            di_32ch = do_32ch = ai_32ch = ao_32ch = 0
-
-        # Add card entries and their corresponding connectors
-        if di_16ch > 0:
-            card = get_general_by_name("digital_input_16_channel")
+        # Add digital 32-channel cards
+        if digital_32 > 0:
+            card = get_general_by_name("digital_32_channel")
             if card.item_id:
                 price_item = get_price(card.item_id, brand=False, item_brand=False)
                 price = price_item.price if price_item.price else 0
@@ -182,16 +163,17 @@ class BagfilterController(PanelController):
                 effective_date = "Not Found"
                 brand = ""
             self.add_to_panel(
-                type="DIGITAL INPUT 16 CHANNEL",
+                type="DIGITAL_CARD_32CH",
                 brand=brand,
-                specifications=f"Total DI: {total_di}",
-                quantity=di_16ch,
+                quantity=digital_32,
                 price=price,
                 last_price_update=effective_date,
-                note="\n".join(di_notes)
+                note=io_notes
             )
-        elif di_32ch > 0:
-            card = get_general_by_name("digital_input_32_channel")
+
+        # Add analog 16-channel cards
+        if analog_16 > 0:
+            card = get_general_by_name("analog_16_channel")
             if card.item_id:
                 price_item = get_price(card.item_id, brand=False, item_brand=False)
                 price = price_item.price if price_item.price else 0
@@ -202,18 +184,17 @@ class BagfilterController(PanelController):
                 effective_date = "Not Found"
                 brand = ""
             self.add_to_panel(
-                type="DIGITAL INPUT 32 CHANNEL",
+                type="ANALOG_CARD_16CH",
                 brand=brand,
-                specifications=f"Total DI: {total_di}",
-                quantity=di_32ch,
+                quantity=analog_16,
                 price=price,
                 last_price_update=effective_date,
-                note="\n".join(di_notes)
+                note=io_notes
             )
 
-        # Similar pattern for DO cards
-        if do_16ch > 0:
-            card = get_general_by_name("digital_output_16_channel")
+        # Add analog 32-channel cards
+        if analog_32 > 0:
+            card = get_general_by_name("analog_32_channel")
             if card.item_id:
                 price_item = get_price(card.item_id, brand=False, item_brand=False)
                 price = price_item.price if price_item.price else 0
@@ -224,18 +205,20 @@ class BagfilterController(PanelController):
                 effective_date = "Not Found"
                 brand = ""
             self.add_to_panel(
-                type="DIGITAL OUTPUT 16 CHANNEL",
+                type="ANALOG_CARD_32CH",
                 brand=brand,
-                specifications=f"Total DO: {total_do}",
-                quantity=do_16ch,
+                specifications="32-channel Analog I/O card",
+                quantity=analog_32,
                 price=price,
                 last_price_update=effective_date,
-                note="\n".join(do_notes)
+                note=io_notes
             )
-        elif do_32ch > 0:
-            card = get_general_by_name("digital_output_32_channel")
-            if card.item_id:
-                price_item = get_price(card.item_id, brand=False, item_brand=False)
+
+        total_front_connector_20_pin = digital_16 + analog_16
+        if total_front_connector_20_pin > 0:
+            connector = get_general_by_name("front_connector_20_pin")
+            if connector.item_id:
+                price_item = get_price(connector.item_id, brand=False, item_brand=False)
                 price = price_item.price if price_item.price else 0
                 effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
                 brand = price_item.brand
@@ -244,20 +227,19 @@ class BagfilterController(PanelController):
                 effective_date = "Not Found"
                 brand = ""
             self.add_to_panel(
-                type="DIGITAL OUTPUT 32 CHANNEL",
+                type="FRONT CONNECTOR 20 PIN",
                 brand=brand,
-                specifications=f"Total DO: {total_do}",
-                quantity=do_32ch,
+                quantity=total_front_connector_20_pin,
                 price=price,
                 last_price_update=effective_date,
-                note="\n".join(do_notes)
+                note=f"{digital_16}Digital Card + {analog_16}Analog Card"
             )
 
-        # Add AI cards if needed
-        if ai_16ch > 0:
-            card = get_general_by_name("analog_input_16_channel")
-            if card.item_id:
-                price_item = get_price(card.item_id, brand=False, item_brand=False)
+        total_front_connector_40_pin = digital_32 + analog_32
+        if total_front_connector_40_pin > 0:
+            connector = get_general_by_name("front_connector_40_pin")
+            if connector.item_id:
+                price_item = get_price(connector.item_id, brand=False, item_brand=False)
                 price = price_item.price if price_item.price else 0
                 effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
                 brand = price_item.brand
@@ -266,125 +248,20 @@ class BagfilterController(PanelController):
                 effective_date = "Not Found"
                 brand = ""
             self.add_to_panel(
-                type="ANALOG INPUT 16 CHANNEL",
+                type="FRONT CONNECTOR 40 PIN",
                 brand=brand,
-                specifications=f"Total AI: {total_ai}",
-                quantity=ai_16ch,
+                quantity=total_front_connector_40_pin,
                 price=price,
                 last_price_update=effective_date,
-                note="\n".join(ai_notes)
-            )
-        elif ai_32ch > 0:
-            card = get_general_by_name("analog_input_32_channel")
-            if card.item_id:
-                price_item = get_price(card.item_id, brand=False, item_brand=False)
-                price = price_item.price if price_item.price else 0
-                effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-                brand = price_item.brand
-            else:
-                price = 0
-                effective_date = "Not Found"
-                brand = ""
-            self.add_to_panel(
-                type="ANALOG INPUT 32 CHANNEL",
-                brand=brand,
-                specifications=f"Total AI: {total_ai}",
-                quantity=ai_32ch,
-                price=price,
-                last_price_update=effective_date,
-                note="\n".join(ai_notes)
-            )
-
-        # Add AO cards if needed
-        if ao_16ch > 0:
-            card = get_general_by_name("analog_output_16_channel")
-            if card.item_id:
-                price_item = get_price(card.item_id, brand=False, item_brand=False)
-                price = price_item.price if price_item.price else 0
-                effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-                brand = price_item.brand
-            else:
-                price = 0
-                effective_date = "Not Found"
-                brand = ""
-            self.add_to_panel(
-                type="ANALOG OUTPUT 16 CHANNEL",
-                brand=brand,
-                specifications=f"Total AO: {total_ao}",
-                quantity=ao_16ch,
-                price=price,
-                last_price_update=effective_date,
-                note="\n".join(ao_notes)
-            )
-        elif ao_32ch > 0:
-            card = get_general_by_name("analog_output_32_channel")
-            if card.item_id:
-                price_item = get_price(card.item_id, brand=False, item_brand=False)
-                price = price_item.price if price_item.price else 0
-                effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-                brand = price_item.brand
-            else:
-                price = 0
-                effective_date = "Not Found"
-                brand = ""
-            self.add_to_panel(
-                type="ANALOG OUTPUT 32 CHANNEL",
-                brand=brand,
-                specifications=f"Total AO: {total_ao}",
-                quantity=ao_32ch,
-                price=price,
-                last_price_update=effective_date,
-                note="\n".join(ao_notes)
-            )
-
-        # Calculate and add total connectors
-        total_20pin = di_16ch + do_16ch + ai_16ch + ao_16ch
-        total_40pin = di_32ch + do_32ch + ai_32ch + ao_32ch
-
-        if total_20pin > 0:
-            pin_card = get_general_by_name("front_connector_20_pin")
-            if pin_card.item_id:
-                price_item = get_price(pin_card.item_id, brand=False, item_brand=False)
-                price = price_item.price if price_item.price else 0
-                effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-                brand = price_item.brand
-            else:
-                price = 0
-                effective_date = "Not Found"
-                brand = ""
-            self.add_to_panel(
-                type="FRONT CONNECTOR 20PIN",
-                brand=brand,
-                specifications="Total 20PIN connectors needed",
-                quantity=total_20pin,
-                price=price,
-                last_price_update=effective_date,
-                note=f"Total connectors for all 16CH cards"
-            )
-
-        if total_40pin > 0:
-            pin_card = get_general_by_name("front_connector_40_pin")
-            if pin_card.item_id:
-                price_item = get_price(pin_card.item_id, brand=False, item_brand=False)
-                price = price_item.price if price_item.price else 0
-                effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-                brand = price_item.brand
-            else:
-                price = 0
-                effective_date = "Not Found"
-                brand = ""
-            self.add_to_panel(
-                type="FRONT CONNECTOR 40PIN",
-                brand=brand,
-                specifications="Total 40PIN connectors needed",
-                quantity=total_40pin,
-                price=price,
-                last_price_update=effective_date,
-                note=f"Total connectors for all 32CH cards"
+                note=f"{digital_32}Digital Card + {analog_32}Analog Card"
             )
 
 
-        """
+    def calculate_card_distribution(self, channel_total):
+        cards_16 = math.ceil(channel_total / 16)
+        if cards_16 <= 8:
+            return cards_16, 0
+        return 0, max(math.ceil(channel_total / 32), 1)
 
     def summarize_total_io(self):
         instruments_io_config = {
@@ -418,10 +295,10 @@ class BagfilterController(PanelController):
                 io_def = instruments_io_config.get(name, {"n_di": 0, "n_ai": 0})
                 if io_def["n_di"] > 0:
                     total_di += qty * io_def["n_di"]
-                    io_notes.append(f"{name}: {qty} × {io_def['n_di']} DI")
+                    io_notes.append(f"{qty}×{name} → {qty * io_def['n_di']} DI")
                 if io_def["n_ai"] > 0:
                     total_ai += qty * io_def["n_ai"]
-                    io_notes.append(f"{name}: {qty} × {io_def['n_ai']} AI")
+                    io_notes.append(f"{qty}×{name} → {qty * io_def['n_ai']} AI")
 
             # --- Motors ---
             motors = content.get("motors", {})
@@ -433,15 +310,7 @@ class BagfilterController(PanelController):
                     total_do += motor.plc_do * qty
                     total_ai += motor.plc_ai * qty
                     total_ao += motor.plc_ao * qty
-                    io_notes.append(f"{section} → {m_name}: {qty} motor(s) × "
-                                    f"{motor.plc_di} DI, {motor.plc_do} DO, "
-                                    f"{motor.plc_ai} AI, {motor.plc_ao} AO")
+                    io_notes.append(f"{qty}×{m_name} motor(s)")
 
-        return {
-            "total_di": total_di,
-            "total_do": total_do,
-            "total_ai": total_ai,
-            "total_ao": total_ao,
-            "notes": io_notes
-        }
+        return total_di, total_do, total_ai, total_ao, io_notes
 

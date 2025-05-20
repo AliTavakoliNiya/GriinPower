@@ -90,7 +90,6 @@ class FreshAirController(PanelController):
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
         instruments = self.project_details["fresh_air"]["instruments"]
-        # self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------
         self.choose_internal_signal_wire(motor_objects)

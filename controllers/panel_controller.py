@@ -151,7 +151,6 @@ class PanelController:
             note=f"{total_qty} x Motor Power: {motor.power_kw} KW {motor.usage}"
         )
 
-
     def choose_internal_signal_wire(self, motor_objects):
         """
         Adds internal signal panel wire (1x1.5) entries for each motor.
@@ -394,30 +393,3 @@ class PanelController:
                     price=price,
                     last_price_update=effective_date,
                     note=str(instrument.note) + " <calibration fee & manifolds fee>")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
