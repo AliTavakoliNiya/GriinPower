@@ -29,6 +29,7 @@ class User(Base):
     generals_modified = relationship("General", back_populates="modified_user")
     instruments_modified = relationship("Instrument", back_populates="modified_user")
     item_prices_created = relationship("ItemPrice", back_populates="creator")
+    plcs_modified = relationship("PLC", back_populates="modified_user")
 
     def __repr__(self):
         return f"<User(username='{self.username}', role='{self.role}')>"

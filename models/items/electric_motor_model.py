@@ -14,7 +14,7 @@ class ElectricMotor(Base):
 
     power = Column(Float, nullable=False)
     rpm = Column(Integer, nullable=False)
-    starting_method = Column(String, nullable=False)
+    start_type = Column(String, nullable=False)
     cooling_method = Column(String, nullable=False)
     ip = Column(String, nullable=False)
     efficiency_class = Column(String, nullable=False)
@@ -30,14 +30,14 @@ class ElectricMotor(Base):
         return f"<ElectricMotor(power={self.power}, rpm={self.rpm}')>"
 
 
-def get_electric_motor_by_specs(*, power, rpm, starting_method, cooling_method, ip, efficiency_class,
+def get_electric_motor_by_specs(*, power, rpm, start_type, cooling_method, ip, efficiency_class,
                                 voltage, painting_ral, thermal_protection, space_heater):
     session = SessionLocal()
     try:
         return session.query(ElectricMotor).filter_by(
             power=power,
             rpm=rpm,
-            starting_method=starting_method,
+            start_type=start_type,
             cooling_method=cooling_method,
             ip=ip,
             efficiency_class=efficiency_class,

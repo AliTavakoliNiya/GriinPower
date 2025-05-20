@@ -14,8 +14,7 @@ class HopperHeaterController(PanelController):
         """
         # ----------------------- Initialize Motors -----------------------
         motors_config = self.project_details["hopper_heater"]["motors"]
-        motor_objects = [
-            (Motor(motors_config["elements"]["power"],
+        hopper_heater = Motor(motors_config["elements"]["power"],
                    usage="Hopper Heater",
                    plc_di=4,
                    junction_box_for_speed_qty=4,
@@ -26,9 +25,9 @@ class HopperHeaterController(PanelController):
                    mccb_qty=1,
                    button_qty=0,
                    selector_switch_qty=0,
-                   signal_lamp_24v_qty=0),
-             motors_config["elements"]["qty"])
-        ]
+                   signal_lamp_24v_qty=0)
+        self.project_details["hopper_heater"]["motors"]["elements"]["motor"] = hopper_heater
+        motor_objects = [(hopper_heater, motors_config["elements"]["qty"])]
         motor_objects[0][0].temperature_meter = 2
 
         # ----------------------- Add Components for Motors -----------------------
@@ -38,7 +37,7 @@ class HopperHeaterController(PanelController):
             self.choose_mccb(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        self.calculate_plc_io_requirements(motor_objects)
+        # self.calculate_plc_io_requirements(motor_objects)
 
         # ----------------------- Add internal wiring -----------------------
         self.choose_internal_signal_wire(motor_objects)

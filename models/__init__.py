@@ -20,6 +20,7 @@ __all__ = [
     "ElectricMotor",
     "Instrument",
     "ItemPrice",
+    "PLC"
 ]
 
 from .item_price_model import ItemPrice
@@ -31,5 +32,6 @@ from models.items.mccb_model import MCCB
 from models.items.mpcb_model import MPCB
 from .item_model import Item
 from models.items.general_model import General
+from models.items.plc import PLC
 
 

@@ -14,7 +14,7 @@ class ElectricMotorController():
         brand   = motor["brand"]
         electric_motor = get_electric_motor_by_specs(power=motor["power"],
                                                      rpm=motor["rpm"],
-                                                     starting_method=motor["starting_method"],
+                                                     start_type=motor["start_type"],
                                                      cooling_method=motor["cooling_method"],
                                                      ip=motor["ip_rating"],
                                                      efficiency_class=motor["efficiency_class"],

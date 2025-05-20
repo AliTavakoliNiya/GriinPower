@@ -18,28 +18,39 @@ class TransportController(PanelController):
         """
         # ----------------------- Initialize Motors -----------------------
         motors_config = self.project_details["transport"]["motors"]
-        motor_objects = [
-            (Motor(motors_config["rotary"]["power"], usage="Rotary"),
-             motors_config["rotary"]["qty"]),
-            (Motor(motors_config["telescopic_chute"]["power"],
+
+        rotary = Motor(motors_config["rotary"]["power"], usage="Rotary")
+        self.project_details["transport"]["motors"]["rotary"]["motor"] = rotary
+
+        telescopic_chute = Motor(motors_config["telescopic_chute"]["power"],
                    usage="Telescopic Chute",
                    relay_1no_1nc_qty=5,
                    relay_2no_2nc_qty=2,
                    plc_di=7,
-                   plc_do=2),
-             motors_config["telescopic_chute"]["qty"]),
-            (Motor(motors_config["slide_gate"]["power"],
+                   plc_do=2)
+        self.project_details["transport"]["motors"]["telescopic_chute"]["motor"] = telescopic_chute
+
+        slide_gate = Motor(motors_config["slide_gate"]["power"],
                    usage="Slide Gate",
                    relay_1no_1nc_qty=5,
                    relay_2no_2nc_qty=2,
                    plc_di=7,
-                   plc_do=2),
-             motors_config["slide_gate"]["qty"]),
-            (Motor(motors_config["screw1"]["power"], usage="Screw1"),
-             motors_config["screw1"]["qty"]),
-            (Motor(motors_config["screw2"]["power"], usage="Screw2"),
-             motors_config["screw2"]["qty"])
-        ]
+                   plc_do=2)
+        self.project_details["transport"]["motors"]["slide_gate"]["motor"] = slide_gate
+
+        screw1 = Motor(motors_config["screw1"]["power"], usage="Screw1")
+        self.project_details["transport"]["motors"]["screw1"]["motor"] = screw1
+
+        screw2 = Motor(motors_config["screw2"]["power"], usage="Screw2")
+        self.project_details["transport"]["motors"]["screw2"]["motor"] = screw2
+
+        motor_objects = [
+                            (rotary, motors_config["rotary"]["qty"]),
+                            (telescopic_chute, motors_config["telescopic_chute"]["qty"]),
+                            (slide_gate, motors_config["slide_gate"]["qty"]),
+                            (screw1, motors_config["screw1"]["qty"]),
+                            (screw2, motors_config["screw2"]["qty"])
+                        ]
 
         # ----------------------- Add Components for Motors -----------------------
         for motor, qty in motor_objects:
@@ -51,7 +62,7 @@ class TransportController(PanelController):
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
         instruments = self.project_details["transport"]["instruments"]
-        self.calculate_plc_io_requirements(motor_objects, instruments)
+        # self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------
         self.choose_internal_signal_wire(motor_objects)

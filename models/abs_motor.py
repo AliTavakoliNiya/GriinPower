@@ -2,8 +2,8 @@ class Motor:
     def __init__(
             self,
             power_kw,
-            usage="",
-            brand="",
+            usage=None,
+            brand=None,
             lcb_qty=1,
             terminal_4_qty=4,
             terminal_6_qty=10,
@@ -62,6 +62,6 @@ class Motor:
     def __repr__(self):
         return (
             f"Motor Power(KW)={self.power_kw}, "
-            f"Usage={self.usage}', "
+            f"Usage={self.usage}, "
             f"Brand={self.brand}"
         )

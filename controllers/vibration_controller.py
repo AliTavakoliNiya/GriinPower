@@ -17,12 +17,12 @@ class VibrationController(PanelController):
         """
         # ----------------------- Initialize Motors -----------------------
         motors_config = self.project_details["vibration"]["motors"]
-        motor_objects = [
-            (Motor(motors_config["vibration"]["power"],
+        vibration = Motor(motors_config["vibration"]["power"],
                    usage="Vibration Motor",
                    plc_di=4,
-                   junction_box_for_speed_qty=0), motors_config["vibration"]["qty"])
-        ]
+                   junction_box_for_speed_qty=0)
+        self.project_details["vibration"]["motors"]["vibration"]["motor"] = vibration
+        motor_objects = [(vibration, motors_config["vibration"]["qty"])]
 
         # ----------------------- Add Components for Motors -----------------------
         for motor, qty in motor_objects:
@@ -34,7 +34,7 @@ class VibrationController(PanelController):
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
         instruments = self.project_details["vibration"]["instruments"]
-        self.calculate_plc_io_requirements(motor_objects, instruments)
+        # self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------
         self.choose_internal_signal_wire(motor_objects)

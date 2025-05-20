@@ -1,4 +1,4 @@
-from math import ceil
+import copy
 
 from controllers.panel_controller import PanelController
 from models.abs_motor import Motor
@@ -19,6 +19,8 @@ class FanDamperController(PanelController):
         # ----------------------- Initialize Motors -----------------------
         damper_config = self.project_details["damper"]["motors"]["damper"]
         damper = Motor(damper_config["power"], usage="Damper")
+        self.project_details["damper"]["motors"]["damper"]["motor"] = damper
+
         if damper_config["start_type"] == "Pneumatic":
             damper.mpcb_qty = 0
             damper.mccb_qty = 1
@@ -42,17 +44,19 @@ class FanDamperController(PanelController):
             damper.relay_1no_1nc_qty = 5
         motor_objects = [(damper, damper_config["qty"])]
 
+
         fan_config = self.project_details["fan"]["motors"]["fan"]
         fan = Motor(power_kw=fan_config["power"], usage="Fan")
-        fan.starting_method=fan_config["starting_method"]
-        if fan_config["starting_method"] == "Delta/Star":
-            fan.contactor_qty = 2
+        self.project_details["fan"]["motors"]["fan"]["motor"] = fan
+        fan.start_type=fan_config["start_type"]
+        if fan_config["start_type"] == "Delta/Star":
+            fan.contactor_qty = 3
             fan.contactor_aux_contact_qty = 2
             fan.plc_di = 6
             fan.plc_do = 2
             fan.button_qty = 4
             fan.relay_1no_1nc_qty = 5
-        elif fan_config["starting_method"] == "VFD":
+        elif fan_config["start_type"] == "VFD":
             fan.plc_ai = 1
             fan.plc_ao = 1
 
@@ -72,18 +76,21 @@ class FanDamperController(PanelController):
 
 
 
+
     # ----------------------- choose electro motor ----------------------------
-        # ----------------------- choose electro motor ----------------------------
-        # ----------------------- choose electro motor ----------------------------
-        # ----------------------- choose electro motor ----------------------------
 
         # ----------------------- Add Components for Motors -----------------------
-        for motor, qty in motor_objects:
-            self.choose_contactor(motor, qty)
-        for motor, qty in motor_objects:
-            self.choose_mpcb(motor, qty)
-        for motor, qty in motor_objects:
-            self.choose_mccb(motor, qty)
+        self.choose_contactor(damper, damper_config["qty"])
+        self.choose_contactor(fan, fan_config["qty"])
+
+        self.choose_mpcb(damper, damper_config["qty"])
+        self.choose_mpcb(fan, fan_config["qty"])
+
+        self.choose_mccb(damper, damper_config["qty"])
+        fan_with_half_power = copy.deepcopy(fan)
+        fan_with_half_power.power_kw = fan_with_half_power.power_kw/2 if fan_config["start_type"] == "Delta/Star" else fan_with_half_power.power_kw
+        self.choose_mccb(fan_with_half_power, fan_config["qty"])
+        # choose BiMetals
 
         # ----------------------- Add BiMetal -----------------------
 
@@ -96,7 +103,7 @@ class FanDamperController(PanelController):
         instruments_cloned = {
             key.replace("bearing_", ""): value for key, value in instruments.items()
         }
-        self.calculate_plc_io_requirements(motor_objects, instruments_cloned)
+        # self.calculate_plc_io_requirements(motor_objects, instruments_cloned)
 
         # ----------------------- Add internal wiring -----------------------
         self.choose_internal_signal_wire(motor_objects)
