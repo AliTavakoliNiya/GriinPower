@@ -4,7 +4,6 @@ from math import sqrt
 from config import COSNUS_PI, ETA
 from controllers.project_details import ProjectDetails
 from models.item_price_model import get_price
-from models.items.cable_rating_model import get_cable_by_dimension_current
 from models.items.contactor_model import get_contactor_by_motor_power
 from models.items.general_model import get_general_by_name
 from models.items.instrument_model import get_instrument_by_type
@@ -41,7 +40,7 @@ class PanelController:
             "note": []
         }
 
-    def add_to_panel(self, *, type, brand, reference_number="-", specifications="-",
+    def add_to_panel(self, *, type, brand="", reference_number="", specifications="",
                      quantity=1, price=0, last_price_update="", note=""):
         """
         Adds a new entry to the panel dictionary.
@@ -150,72 +149,6 @@ class PanelController:
             note=f"{total_qty} x Motor Power: {motor.power_kw} KW {motor.usage}"
         )
 
-    def choose_internal_signal_wire(self, motor_objects):
-        """
-        Adds internal signal panel wire (1x1.5) entries for each motor.
-        Each motor gets 4 meters of wire if its quantity isn't 0.
-        """
-        total_length = 0
-        notes = []
-
-        for motor, qty in motor_objects:
-            if qty > 0:
-                wire_length = 4 * qty  # 4 meters per motor
-                total_length += wire_length
-                notes.append(f"{wire_length} m for {motor.usage}")
-
-        if total_length == 0:
-            return
-
-        self.add_to_panel(
-            type="INTERNAL SIGNAL PANEL WIRE 1x1.5",
-            brand="check this out",
-            specifications="Size: 1x1.5 mm²",
-            quantity=total_length,
-            price=50_000,
-            note="\n".join(notes))
-
-    def choose_internal_power_wire(self, motor_objects):
-        """
-        Adds internal power panel wire or busbar based on motor power:
-        - For motors <= 45kW: 4 meters of 1x1.6 wire per motor
-        - For motors > 45kW: 5 meters of busbar per motor
-        """
-        wire_length = 0
-        busbar_length = 0
-        wire_notes = []
-        busbar_notes = []
-
-        for motor, qty in motor_objects:
-            if qty > 0:
-                if motor.power_kw <= 45:
-                    motor_wire_length = 4 * qty
-                    wire_length += motor_wire_length
-                    wire_notes.append(f"{motor_wire_length} m for {motor.usage}")
-                else:
-                    motor_busbar_length = 5 * qty
-                    busbar_length += motor_busbar_length
-                    busbar_notes.append(f"{motor_busbar_length} m for {motor.usage}")
-
-        if wire_length > 0:
-            self.add_to_panel(
-                type="INTERNAL POWER PANEL WIRE 1x1.6",
-                brand="check this out",
-                specifications="Size: 1x1.6 mm²",
-                quantity=wire_length,
-                price=60_000,
-                note="\n".join(wire_notes)
-            )
-
-        if busbar_length > 0:
-            self.add_to_panel(
-                type="POWER BUSBAR",
-                brand="check this out",
-                specifications="For motors > 45kW",
-                quantity=busbar_length,
-                price=250_000,
-                note="\n".join(busbar_notes))
-
     def choose_general(self, motor_objects, general_items=[]):
         """
         Adds general accessories like terminals, buttons, etc. based on motor needs.
@@ -264,72 +197,6 @@ class PanelController:
                 note="\n".join(notes)
             )
 
-    def choose_signal_cable(self, motor_objects):
-        """
-        Adds signal cable entries based on motor usage and length.
-        """
-
-        length = self.project_details["bagfilter"]["cable_dimension"]
-        if length == 0:
-            return
-
-        total_length = 0
-        notes = []
-        for motor, qty in motor_objects:
-            if qty > 0:
-                seg_length = length * motor.signal_cable_7x1p5_l_cofactor * qty
-                total_length += seg_length
-                notes.append(f"{seg_length:.1f} m for {motor.usage}")
-
-        if total_length == 0:
-            return
-
-        cable = get_general_by_name("signal_cable_7x1p5")
-        total_length = round(total_length, 1)
-
-        self.add_to_panel(
-            type="SIGNAL CABLE 7x1.5",
-            brand="check this out",
-            quantity=total_length,
-            price=400_000,
-            note="\n".join(notes)
-        )
-
-    def choose_power_cable(self, motor_objects):
-        """
-        Adds power cable entries with sizing based on current and motor demand.
-        """
-        volt = self.project_details["project_info"]["project_l_voltage"]
-        length = self.project_details["bagfilter"]["cable_dimension"]
-        if length == 0:
-            return
-
-        cable_grouping = defaultdict(lambda: {"total_length": 0, "notes": []})
-        correction_factor = 1.6 / (sqrt(3) * volt * COSNUS_PI * ETA)
-
-        for motor, qty in motor_objects:
-            if qty > 0 and motor.power_kw > 0:
-                current = motor.power_kw * 1000 * correction_factor
-                cable = get_cable_by_dimension_current(length=length, current=current)
-                motor_length = length * motor.power_cable_cofactor * qty
-
-                key = cable.cable_size_mm
-                cable_grouping[key]["total_length"] += motor_length
-                cable_grouping[key]["notes"].append(f"{motor_length:.1f} m for {motor.usage}")
-
-        for size_mm, data in cable_grouping.items():
-            total_len = round(data["total_length"], 1)
-            if total_len == 0:
-                continue
-
-            self.add_to_panel(
-                type=f"POWER CABLE SIZE {size_mm}mm",
-                brand="check this out",
-                quantity=total_len,
-                price=850_000,
-                note="\n".join(data["notes"])
-            )
-
     def choose_electrical_panel(self, total_motors):
         """
         Chooses electrical panel size based on number of motors.
@@ -373,6 +240,10 @@ class PanelController:
         Adds instrument entries to panel.
         """
         for instrument_name, properties in instruments.items():
+            qty = properties["qty"]
+            if qty == 0:
+                return
+
             # calibration fee
             # manifolds fee
 
@@ -382,16 +253,14 @@ class PanelController:
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
 
-            qty = properties["qty"]
-            if qty > 0:
-                self.add_to_panel(
-                    type=instrument.type,
-                    brand=properties["brand"],
-                    specifications="",
-                    quantity=qty,
-                    price=price,
-                    last_price_update=effective_date,
-                    note=str(instrument.note) + " <calibration fee & manifolds fee>")
+            self.add_to_panel(
+                type=instrument.type,
+                brand=properties["brand"],
+                specifications="",
+                quantity=qty,
+                price=price,
+                last_price_update=effective_date,
+                note=str(instrument.note) + " <calibration fee & manifolds fee>")
 
     def calculate_plc_io_requirements(self, motor_objects, instruments=None):
         total_di = total_do = total_ai = total_ao = 0
@@ -510,3 +379,357 @@ class PanelController:
                     ai_notes.append(f"{instrument_name}: {properties['qty']}*{n_ai} AI")
 
         return total_di, total_ai
+
+    def choose_signal_cable(self, motor_objects):
+        """
+        Adds signal cable entries based on motor usage and length.
+        """
+
+        length = self.project_details["bagfilter"]["cable_dimension"]
+        if length == 0:
+            return
+
+        total_length = 0
+        notes = []
+        for motor, qty in motor_objects:
+            if qty > 0:
+                seg_length = length * motor.signal_cable_7x1p5_l_cofactor * qty
+                total_length += seg_length
+                notes.append(f"{seg_length:.1f} m for {motor.usage}")
+
+        total_length = round(total_length, 1)  # round to 1 point float
+        if total_length == 0:
+            return
+
+        cable = get_general_by_name("cable_7x1p5")
+        price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doent matter in this stage
+
+        price = price_item.price if price_item.price else 0
+        effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+
+        self.add_to_panel(
+            type="SIGNAL CABLE 7x1.5",
+            quantity=total_length,
+            price=price,
+            last_price_update=effective_date,
+            note="\n".join(notes)
+        )
+
+    def choose_power_cable(self, motor_objects):
+        """
+        Adds power cable entries with sizing based on current and motor demand.
+        """
+        volt = self.project_details["project_info"]["project_l_voltage"]
+        length = self.project_details["bagfilter"]["cable_dimension"]
+        if length == 0:
+            return
+
+        cable_grouping = defaultdict(lambda: {"total_length": 0, "notes": []})
+        correction_factor = 1.6 / (sqrt(3) * volt * COSNUS_PI * ETA)
+
+        for motor, qty in motor_objects:
+            if qty > 0 and motor.power_kw > 0:
+                current = motor.power_kw * 1000 * correction_factor
+                cable = cable_rating(cable_length_m=length, cable_current_a=current)
+                if cable:
+                    motor_length = length * motor.power_cable_cofactor * qty
+                    cable_grouping[cable]["total_length"] += motor_length
+                    cable_grouping[cable]["notes"].append(f"{motor_length:.1f} m for {motor.usage}")
+                else:
+                    self.add_to_panel(
+                        type=f"POWER CABLE",
+                        note="POWER CABLE For {motor.usage} Not Found"
+                    )
+
+        for size_mm, data in cable_grouping.items():
+            total_len = round(data["total_length"], 1)
+            if total_len == 0:
+                continue
+
+            cable_name = "cable_4x" + str(size_mm).replace(".", "p")
+            cable = get_general_by_name(cable_name)
+            price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
+
+            price = price_item.price if price_item.price else 0
+            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+
+            self.add_to_panel(
+                type=f"POWER CABLE SIZE 4x{size_mm}mm²",
+                quantity=total_len,
+                price=price,
+                last_price_update=effective_date,
+                note="\n".join(data["notes"])
+            )
+
+    def choose_internal_signal_wire(self, motor_objects):
+        """
+        Adds internal signal panel wire (1x1.5) entries for each motor.
+        Each motor gets 4 meters of wire if its quantity isn't 0.
+        """
+        total_length = 0
+        notes = []
+
+        for motor, qty in motor_objects:
+            if qty > 0:
+                wire_length = 4 * qty  # 4 meters per motor
+                total_length += wire_length
+                notes.append(f"{wire_length} m for {motor.usage}")
+
+        if total_length == 0:
+            return
+
+        cable = get_general_by_name("cable_1x1p5")
+        price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
+
+        price = price_item.price if price_item.price else 0
+        effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+
+        self.add_to_panel(
+            type="INTERNAL SIGNAL PANEL WIRE 1x1.5",
+            specifications="Size: 1x1.5 mm²",
+            quantity=total_length,
+            price=price,
+            last_price_update=effective_date,
+            note="\n".join(notes))
+
+    def choose_internal_power_wire(self, motor_objects):
+        """
+        Adds internal power panel wire or busbar based on motor power:
+        - For motors <= 45kW: 4 meters of 1x1.6 wire per motor
+        - For motors > 45kW: 5 meters of busbar per motor
+        """
+        wire_length = 0
+        busbar_length = 0
+        wire_notes = []
+        busbar_notes = []
+
+        for motor, qty in motor_objects:
+            if qty > 0:
+                if motor.power_kw <= 45:
+                    motor_wire_length = 4 * qty
+                    wire_length += motor_wire_length
+                    wire_notes.append(f"{motor_wire_length} m for {motor.usage}")
+                else:
+                    motor_busbar_length = 5 * qty
+                    busbar_length += motor_busbar_length
+                    busbar_notes.append(f"{motor_busbar_length} m for {motor.usage}")
+
+
+        if wire_length > 0:
+            cable = get_general_by_name("cable_1x1p6")
+            price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
+
+            price = price_item.price if price_item.price else 0
+            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+
+            self.add_to_panel(
+                type="INTERNAL POWER PANEL WIRE 1x1.6mm²",
+                specifications="Size: 1x1.6 mm²",
+                quantity=wire_length,
+                price=price,
+                last_price_update=effective_date,
+                note="\n".join(wire_notes)
+            )
+
+        if busbar_length > 0:
+            cable = get_general_by_name("busbar")
+            price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
+
+            price = price_item.price if price_item.price else 0
+            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+
+            self.add_to_panel(
+                type="INTERNAL POWER BUSBAR",
+                specifications="For motors > 45kW",
+                quantity=busbar_length,
+                price=price,
+                last_price_update=effective_date,
+                note="\n".join(busbar_notes))
+
+def cable_rating(cable_length_m, cable_current_a):
+        cable_rating = \
+            [{'cable_size_mm': 1.5, 'cable_length_m': 10, 'cable_current_a': 27.0},
+             {'cable_size_mm': 1.5, 'cable_length_m': 50, 'cable_current_a': 15.0},
+             {'cable_size_mm': 1.5, 'cable_length_m': 100, 'cable_current_a': 7.0},
+             {'cable_size_mm': 1.5, 'cable_length_m': 150, 'cable_current_a': 5.0},
+             {'cable_size_mm': 2.5, 'cable_length_m': 10, 'cable_current_a': 36.0},
+             {'cable_size_mm': 2.5, 'cable_length_m': 50, 'cable_current_a': 25.0},
+             {'cable_size_mm': 2.5, 'cable_length_m': 100, 'cable_current_a': 12.0},
+             {'cable_size_mm': 2.5, 'cable_length_m': 150, 'cable_current_a': 8.0},
+             {'cable_size_mm': 2.5, 'cable_length_m': 200, 'cable_current_a': 6.0},
+             {'cable_size_mm': 4.0, 'cable_length_m': 10, 'cable_current_a': 46.0},
+             {'cable_size_mm': 4.0, 'cable_length_m': 50, 'cable_current_a': 40.0},
+             {'cable_size_mm': 4.0, 'cable_length_m': 100, 'cable_current_a': 20.0},
+             {'cable_size_mm': 4.0, 'cable_length_m': 150, 'cable_current_a': 13.0},
+             {'cable_size_mm': 4.0, 'cable_length_m': 200, 'cable_current_a': 10.0},
+             {'cable_size_mm': 4.0, 'cable_length_m': 250, 'cable_current_a': 8.0},
+             {'cable_size_mm': 4.0, 'cable_length_m': 300, 'cable_current_a': 6.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 10, 'cable_current_a': 58.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 50, 'cable_current_a': 58.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 100, 'cable_current_a': 30.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 150, 'cable_current_a': 20.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 200, 'cable_current_a': 15.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 250, 'cable_current_a': 12.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 300, 'cable_current_a': 10.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 350, 'cable_current_a': 8.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 400, 'cable_current_a': 7.0},
+             {'cable_size_mm': 6.0, 'cable_length_m': 450, 'cable_current_a': 6.5},
+             {'cable_size_mm': 6.0, 'cable_length_m': 500, 'cable_current_a': 6.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 10, 'cable_current_a': 77.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 50, 'cable_current_a': 77.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 100, 'cable_current_a': 50.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 150, 'cable_current_a': 33.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 200, 'cable_current_a': 25.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 250, 'cable_current_a': 20.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 300, 'cable_current_a': 16.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 350, 'cable_current_a': 14.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 400, 'cable_current_a': 12.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 450, 'cable_current_a': 11.0},
+             {'cable_size_mm': 10.0, 'cable_length_m': 500, 'cable_current_a': 10.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 10, 'cable_current_a': 100.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 50, 'cable_current_a': 100.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 100, 'cable_current_a': 80.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 150, 'cable_current_a': 63.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 200, 'cable_current_a': 40.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 250, 'cable_current_a': 32.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 300, 'cable_current_a': 26.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 350, 'cable_current_a': 22.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 400, 'cable_current_a': 20.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 450, 'cable_current_a': 17.0},
+             {'cable_size_mm': 16.0, 'cable_length_m': 500, 'cable_current_a': 16.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 10, 'cable_current_a': 130.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 50, 'cable_current_a': 130.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 100, 'cable_current_a': 125.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 150, 'cable_current_a': 83.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 200, 'cable_current_a': 62.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 250, 'cable_current_a': 50.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 300, 'cable_current_a': 41.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 350, 'cable_current_a': 35.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 400, 'cable_current_a': 31.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 450, 'cable_current_a': 27.0},
+             {'cable_size_mm': 25.0, 'cable_length_m': 500, 'cable_current_a': 25.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 10, 'cable_current_a': 155.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 50, 'cable_current_a': 155.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 100, 'cable_current_a': 155.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 150, 'cable_current_a': 115.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 200, 'cable_current_a': 86.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 250, 'cable_current_a': 69.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 300, 'cable_current_a': 57.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 350, 'cable_current_a': 49.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 400, 'cable_current_a': 43.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 450, 'cable_current_a': 38.0},
+             {'cable_size_mm': 35.0, 'cable_length_m': 500, 'cable_current_a': 34.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 10, 'cable_current_a': 185.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 50, 'cable_current_a': 185.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 100, 'cable_current_a': 185.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 150, 'cable_current_a': 156.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 200, 'cable_current_a': 117.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 250, 'cable_current_a': 93.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 300, 'cable_current_a': 78.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 350, 'cable_current_a': 66.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 400, 'cable_current_a': 58.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 450, 'cable_current_a': 52.0},
+             {'cable_size_mm': 50.0, 'cable_length_m': 500, 'cable_current_a': 46.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 10, 'cable_current_a': 230.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 50, 'cable_current_a': 230.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 100, 'cable_current_a': 230.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 150, 'cable_current_a': 222.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 200, 'cable_current_a': 166.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 250, 'cable_current_a': 133.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 300, 'cable_current_a': 111.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 350, 'cable_current_a': 95.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 400, 'cable_current_a': 83.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 450, 'cable_current_a': 74.0},
+             {'cable_size_mm': 70.0, 'cable_length_m': 500, 'cable_current_a': 66.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 10, 'cable_current_a': 275.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 50, 'cable_current_a': 275.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 100, 'cable_current_a': 275.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 150, 'cable_current_a': 275.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 200, 'cable_current_a': 225.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 250, 'cable_current_a': 180.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 300, 'cable_current_a': 150.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 350, 'cable_current_a': 129.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 400, 'cable_current_a': 112.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 450, 'cable_current_a': 100.0},
+             {'cable_size_mm': 95.0, 'cable_length_m': 500, 'cable_current_a': 90.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 10, 'cable_current_a': 315.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 50, 'cable_current_a': 315.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 100, 'cable_current_a': 315.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 150, 'cable_current_a': 315.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 200, 'cable_current_a': 278.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 250, 'cable_current_a': 222.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 300, 'cable_current_a': 185.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 350, 'cable_current_a': 159.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 400, 'cable_current_a': 139.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 450, 'cable_current_a': 123.0},
+             {'cable_size_mm': 120.0, 'cable_length_m': 500, 'cable_current_a': 111.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 10, 'cable_current_a': 355.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 50, 'cable_current_a': 355.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 100, 'cable_current_a': 355.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 150, 'cable_current_a': 355.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 200, 'cable_current_a': 330.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 250, 'cable_current_a': 264.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 300, 'cable_current_a': 220.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 350, 'cable_current_a': 189.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 400, 'cable_current_a': 165.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 450, 'cable_current_a': 147.0},
+             {'cable_size_mm': 150.0, 'cable_length_m': 500, 'cable_current_a': 132.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 10, 'cable_current_a': 400.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 50, 'cable_current_a': 400.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 100, 'cable_current_a': 400.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 150, 'cable_current_a': 400.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 200, 'cable_current_a': 393.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 250, 'cable_current_a': 314.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 300, 'cable_current_a': 267.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 350, 'cable_current_a': 224.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 400, 'cable_current_a': 196.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 450, 'cable_current_a': 174.0},
+             {'cable_size_mm': 185.0, 'cable_length_m': 500, 'cable_current_a': 157.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 10, 'cable_current_a': 465.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 50, 'cable_current_a': 465.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 100, 'cable_current_a': 465.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 150, 'cable_current_a': 465.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 200, 'cable_current_a': 437.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 250, 'cable_current_a': 349.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 300, 'cable_current_a': 291.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 350, 'cable_current_a': 249.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 400, 'cable_current_a': 218.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 450, 'cable_current_a': 194.0},
+             {'cable_size_mm': 240.0, 'cable_length_m': 500, 'cable_current_a': 174.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 10, 'cable_current_a': 550.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 50, 'cable_current_a': 550.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 100, 'cable_current_a': 550.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 150, 'cable_current_a': 550.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 200, 'cable_current_a': 496.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 250, 'cable_current_a': 397.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 300, 'cable_current_a': 331.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 350, 'cable_current_a': 283.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 400, 'cable_current_a': 248.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 450, 'cable_current_a': 220.0},
+             {'cable_size_mm': 300.0, 'cable_length_m': 500, 'cable_current_a': 198.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 10, 'cable_current_a': 745.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 50, 'cable_current_a': 745.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 100, 'cable_current_a': 745.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 150, 'cable_current_a': 745.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 200, 'cable_current_a': 559.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 250, 'cable_current_a': 447.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 300, 'cable_current_a': 373.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 350, 'cable_current_a': 319.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 400, 'cable_current_a': 279.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 450, 'cable_current_a': 248.0},
+             {'cable_size_mm': 400.0, 'cable_length_m': 500, 'cable_current_a': 224.0}]
+
+        # Filter entries with cable_length >= input
+        filtered = [
+            r for r in cable_rating
+            if r['cable_length_m'] >= cable_length_m and r['cable_current_a'] >= cable_current_a
+        ]
+
+        # Sort by cable_length_m then cable_current_a
+        filtered.sort(key=lambda x: (x['cable_length_m'], x['cable_current_a']))
+
+        # Return the first matching cable_size_mm
+        if filtered:
+            return filtered[0]['cable_size_mm']
+        else:
+            return None  # or raise an exception / return default
