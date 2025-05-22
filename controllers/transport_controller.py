@@ -71,8 +71,6 @@ class TransportController(PanelController):
         # ----------------------- Add General Accessories -----------------------
         self.choose_general(motor_objects)
 
-        if self.project_details["bagfilter"]["touch_panel"] == "None":  # no touch panel required
-            self.choose_general(motor_objects, ["signal_lamp_24v"])
 
         # ----------------------- Add Cables -----------------------
         self.choose_signal_cable(motor_objects)

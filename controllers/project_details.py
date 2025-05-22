@@ -65,7 +65,7 @@ class ProjectDetails:
                             "bearing_vibration_transmitter": {"qty": 0, "brand": None},
                             "pressure_transmitter": {"qty": 0, "brand": None},
                             "temperature_transmitter": {"qty": 0, "brand": None},
-                            "PT100": {"qty": 0, "brand": None}
+                            "pt100": {"qty": 0, "brand": None}
                         }},
                 "vibration": {"status": False,
                               "motors": {

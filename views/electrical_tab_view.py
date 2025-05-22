@@ -152,8 +152,8 @@ class ElectricalTab(QWidget):
         self.fan_space_heater.stateChanged.connect(self._handle_fan_space_heater_changed)
 
         # Fan instruments
-        # self.pt100_qty.valueChanged.connect(self._handle_fan_pt100_qty_changed)
-        # self.pt100_brand.currentIndexChanged.connect(self._handle_fan_pt100_brand_changed)
+        self.pt100_qty.valueChanged.connect(self._handle_fan_pt100_qty_changed)
+        self.pt100_brand.currentIndexChanged.connect(self._handle_fan_pt100_brand_changed)
 
         self.fan_bearing_tt_qty.valueChanged.connect(self._handle_fan_bearing_tt_qty_changed)
         self.fan_bearing_tt_brand.currentIndexChanged.connect(self._handle_fan_bearing_tt_brand_changed)
@@ -352,6 +352,13 @@ class ElectricalTab(QWidget):
         self._handle_checkbox(["fan", "motors", "fan", "space_heater"])
 
     # Fan instrument handlers
+
+    def _handle_fan_pt100_qty_changed(self, value ):
+        self._update_project_value(["fan", "instruments", "pt100", "qty"], value)
+
+    def _handle_fan_pt100_brand_changed(self, index):
+        self._update_project_value(["fan", "instruments", "pt100", "brand"])
+
     def _handle_fan_bearing_tt_qty_changed(self, value):
         self._update_project_value(["fan", "instruments", "bearing_temperature_transmitter", "qty"], value)
 

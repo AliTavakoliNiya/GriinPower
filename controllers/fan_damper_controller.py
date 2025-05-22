@@ -99,10 +99,7 @@ class FanDamperController(PanelController):
         fan_instruments = self.project_details["fan"]["instruments"]
         damper_instruments = self.project_details["damper"]["instruments"]
         instruments = {**fan_instruments, **damper_instruments}
-        # Create a copy with "bearing_" removed from keys
-        instruments_cloned = { key.replace("bearing_", ""): value for key, value in instruments.items() }
-        instruments_cloned = { key.replace("PT100", "temperature_transmitter"): value for key, value in instruments_cloned.items() }
-        self.calculate_plc_io_requirements(motor_objects, instruments_cloned)
+        self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------
         self.choose_internal_signal_wire(motor_objects)
@@ -111,8 +108,6 @@ class FanDamperController(PanelController):
         # ----------------------- Add General Accessories -----------------------
         self.choose_general(motor_objects)
 
-        if self.project_details["bagfilter"]["touch_panel"] == "None":  # no touch panel required
-            self.choose_general(motor_objects, ["signal_lamp_24v"])
 
         # ----------------------- Add Cables -----------------------
         self.choose_signal_cable(motor_objects)

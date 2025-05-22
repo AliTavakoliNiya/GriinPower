@@ -58,6 +58,7 @@ class PanelController:
         self.panel["last_price_update"].append(last_price_update)
         self.panel["note"].append(note)
 
+    """ ------------------------------------- Contactor/MPCB/MCCB/BiMetal ------------------------------------- """
     def choose_mpcb(self, motor, qty):
         """
         Adds an MPCB entry to the panel based on motor specifications.
@@ -149,18 +150,22 @@ class PanelController:
             note=f"{total_qty} x Motor Power: {motor.power_kw} KW {motor.usage}"
         )
 
-    def choose_general(self, motor_objects, general_items=[]):
+    """ ------------------------------------- Generals ------------------------------------- """
+    def choose_general(self, motor_objects):
         """
         Adds general accessories like terminals, buttons, etc. based on motor needs.
         """
-        if not general_items:
-            general_items = [
-                "lcb", "terminal_4", "terminal_6",
-                "contactor_aux_contact", "mpcb_mccb_aux_contact",
-                "relay_1no_1nc", "relay_2no_2nc",
-                "button", "selector_switch",
-                "duct_cover", "miniatory_rail", "junction_box_for_speed"
-            ]
+        general_items = [
+            "lcb", "terminal_4", "terminal_6",
+            "contactor_aux_contact", "mpcb_mccb_aux_contact",
+            "relay_1no_1nc", "relay_2no_2nc",
+            "button", "selector_switch",
+            "duct_cover", "miniatory_rail", "junction_box_for_speed"
+        ]
+        has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
+        if not has_hmi:
+            has_hmi.append("signal_lamp_24v")
+
         for item_name in general_items:
             total_qty = 0
             notes = []
@@ -235,6 +240,7 @@ class PanelController:
             last_price_update=effective_date,
             note="")
 
+    """ ------------------------------------- Instrument ------------------------------------- """
     def choose_instruments(self, instruments):
         """
         Adds instrument entries to panel.
@@ -242,25 +248,32 @@ class PanelController:
         for instrument_name, properties in instruments.items():
             qty = properties["qty"]
             if qty == 0:
-                return
+                continue
 
             # calibration fee
             # manifolds fee
 
-            instrument = get_instrument_by_type(instrument_name)
+            name = "temperature_transmitter" if instrument_name == "inlet_temperature_transmitter" \
+                                            or instrument_name == "outlet_temperature_transmitter" \
+                                            or instrument_name == "bearing_temperature_transmitter" \
+                                            or instrument_name == "pt100" \
+                                            else instrument_name
+            name = "vibration_transmitter" if instrument_name == "bearing_vibration_transmitter" else instrument_name
+
+            instrument = get_instrument_by_type(name)
             price_item = get_price(instrument.item_id, properties["brand"])
 
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
 
             self.add_to_panel(
-                type=instrument.type,
+                type=instrument_name.upper().replace("_", " "),
                 brand=properties["brand"],
                 specifications="",
                 quantity=qty,
                 price=price,
                 last_price_update=effective_date,
-                note=str(instrument.note) + " <calibration fee & manifolds fee>")
+                note="<calibration fee & manifolds fee>")
 
     def calculate_plc_io_requirements(self, motor_objects, instruments=None):
         total_di = total_do = total_ai = total_ao = 0
@@ -291,24 +304,35 @@ class PanelController:
         if instruments:
             total_di, total_ai = self.calculate_instruments_io(instruments, total_di, total_ai, di_notes, ai_notes)
 
-        total_digital = total_di + total_do
-        total_analog = total_ai + total_ao
-        digital_notes = di_notes + do_notes
-        analog_notes = ai_notes + ao_notes
-
-        if total_digital > 0:
-            digital_cards = max(1, (total_digital + 15) // 16)
-            self.add_io_card("DIGITAL 16 CHANNEL", "digital_16_channel", digital_cards, total_digital, digital_notes)
+        # Calculate DI cards
+        if total_di > 0:
+            di_cards = max(1, (total_di + 15) // 16)
+            self.add_io_card_to_panel("DI 16 CHANNEL", "di_16_channel", di_cards, total_di, di_notes)
         else:
-            digital_cards = 0
+            di_cards = 0
 
-        if total_analog > 0:
-            analog_cards = max(1, (total_analog + 15) // 16)
-            self.add_io_card("ANALOG 16 CHANNEL", "analog_16_channel", analog_cards, total_analog, analog_notes)
+        # Calculate DO cards
+        if total_do > 0:
+            do_cards = max(1, (total_do + 15) // 16)
+            self.add_io_card_to_panel("DO 16 CHANNEL", "do_16_channel", do_cards, total_do, do_notes)
         else:
-            analog_cards = 0
+            do_cards = 0
 
-        total_20pin = digital_cards + analog_cards
+        # Calculate AI cards
+        if total_ai > 0:
+            ai_cards = max(1, (total_ai + 15) // 16)
+            self.add_io_card_to_panel("AI 16 CHANNEL", "ai_16_channel", ai_cards, total_ai, ai_notes)
+        else:
+            ai_cards = 0
+
+        # Calculate AO cards
+        if total_ao > 0:
+            ao_cards = max(1, (total_ao + 15) // 16)
+            self.add_io_card_to_panel("AO 16 CHANNEL", "ao_16_channel", ao_cards, total_ao, ao_notes)
+        else:
+            ao_cards = 0
+
+        total_20pin = di_cards + do_cards + ai_cards + ao_cards
         if total_20pin > 0:
             pin_card = get_general_by_name("front_connector_20_pin")
             if pin_card.item_id:
@@ -323,14 +347,13 @@ class PanelController:
             self.add_to_panel(
                 type="FRONT CONNECTOR 20PIN",
                 brand=brand,
-                specifications="Total 20PIN connectors needed",
                 quantity=total_20pin,
                 price=price,
                 last_price_update=effective_date,
                 note="Total connectors for all 16CH cards"
             )
 
-    def add_io_card(self, label, general_name, qty, total, notes):
+    def add_io_card_to_panel(self, label, general_name, qty, total, notes):
         card = get_general_by_name(general_name)
         if card.item_id:
             price_item = get_price(card.item_id, brand=False, item_brand=False)
@@ -352,7 +375,7 @@ class PanelController:
         )
 
     def calculate_instruments_io(self, instruments, total_di, total_ai, di_notes, ai_notes):
-        instruments_types = {
+        instruments_pins = {
             'delta_pressure_transmitter': {'n_di': 0, 'n_ai': 1},
             'delta_pressure_switch': {'n_di': 1, 'n_ai': 0},
             'pressure_transmitter': {'n_di': 0, 'n_ai': 1},
@@ -368,8 +391,16 @@ class PanelController:
         }
 
         for instrument_name, properties in instruments.items():
-            n_di = instruments_types[instrument_name]["n_di"]
-            n_ai = instruments_types[instrument_name]["n_ai"]
+
+            name = "temperature_transmitter" if instrument_name == "inlet_temperature_transmitter" \
+                                                or instrument_name == "outlet_temperature_transmitter" \
+                                                or instrument_name == "bearing_temperature_transmitter" \
+                                                or instrument_name == "pt100" \
+                else instrument_name
+            name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
+
+            n_di = instruments_pins[name]["n_di"]
+            n_ai = instruments_pins[name]["n_ai"]
             if properties["qty"] > 0:
                 if n_di > 0:
                     total_di += n_di * properties["qty"]
@@ -380,6 +411,7 @@ class PanelController:
 
         return total_di, total_ai
 
+    """ ------------------------------------- Wire and Cable ------------------------------------- """
     def choose_signal_cable(self, motor_objects):
         """
         Adds signal cable entries based on motor usage and length.
@@ -514,7 +546,6 @@ class PanelController:
                     busbar_length += motor_busbar_length
                     busbar_notes.append(f"{motor_busbar_length} m for {motor.usage}")
 
-
         if wire_length > 0:
             cable = get_general_by_name("cable_1x1p6")
             price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
@@ -546,190 +577,191 @@ class PanelController:
                 last_price_update=effective_date,
                 note="\n".join(busbar_notes))
 
+
 def cable_rating(cable_length_m, cable_current_a):
-        cable_rating = \
-            [{'cable_size_mm': 1.5, 'cable_length_m': 10, 'cable_current_a': 27.0},
-             {'cable_size_mm': 1.5, 'cable_length_m': 50, 'cable_current_a': 15.0},
-             {'cable_size_mm': 1.5, 'cable_length_m': 100, 'cable_current_a': 7.0},
-             {'cable_size_mm': 1.5, 'cable_length_m': 150, 'cable_current_a': 5.0},
-             {'cable_size_mm': 2.5, 'cable_length_m': 10, 'cable_current_a': 36.0},
-             {'cable_size_mm': 2.5, 'cable_length_m': 50, 'cable_current_a': 25.0},
-             {'cable_size_mm': 2.5, 'cable_length_m': 100, 'cable_current_a': 12.0},
-             {'cable_size_mm': 2.5, 'cable_length_m': 150, 'cable_current_a': 8.0},
-             {'cable_size_mm': 2.5, 'cable_length_m': 200, 'cable_current_a': 6.0},
-             {'cable_size_mm': 4.0, 'cable_length_m': 10, 'cable_current_a': 46.0},
-             {'cable_size_mm': 4.0, 'cable_length_m': 50, 'cable_current_a': 40.0},
-             {'cable_size_mm': 4.0, 'cable_length_m': 100, 'cable_current_a': 20.0},
-             {'cable_size_mm': 4.0, 'cable_length_m': 150, 'cable_current_a': 13.0},
-             {'cable_size_mm': 4.0, 'cable_length_m': 200, 'cable_current_a': 10.0},
-             {'cable_size_mm': 4.0, 'cable_length_m': 250, 'cable_current_a': 8.0},
-             {'cable_size_mm': 4.0, 'cable_length_m': 300, 'cable_current_a': 6.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 10, 'cable_current_a': 58.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 50, 'cable_current_a': 58.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 100, 'cable_current_a': 30.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 150, 'cable_current_a': 20.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 200, 'cable_current_a': 15.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 250, 'cable_current_a': 12.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 300, 'cable_current_a': 10.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 350, 'cable_current_a': 8.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 400, 'cable_current_a': 7.0},
-             {'cable_size_mm': 6.0, 'cable_length_m': 450, 'cable_current_a': 6.5},
-             {'cable_size_mm': 6.0, 'cable_length_m': 500, 'cable_current_a': 6.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 10, 'cable_current_a': 77.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 50, 'cable_current_a': 77.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 100, 'cable_current_a': 50.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 150, 'cable_current_a': 33.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 200, 'cable_current_a': 25.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 250, 'cable_current_a': 20.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 300, 'cable_current_a': 16.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 350, 'cable_current_a': 14.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 400, 'cable_current_a': 12.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 450, 'cable_current_a': 11.0},
-             {'cable_size_mm': 10.0, 'cable_length_m': 500, 'cable_current_a': 10.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 10, 'cable_current_a': 100.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 50, 'cable_current_a': 100.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 100, 'cable_current_a': 80.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 150, 'cable_current_a': 63.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 200, 'cable_current_a': 40.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 250, 'cable_current_a': 32.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 300, 'cable_current_a': 26.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 350, 'cable_current_a': 22.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 400, 'cable_current_a': 20.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 450, 'cable_current_a': 17.0},
-             {'cable_size_mm': 16.0, 'cable_length_m': 500, 'cable_current_a': 16.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 10, 'cable_current_a': 130.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 50, 'cable_current_a': 130.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 100, 'cable_current_a': 125.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 150, 'cable_current_a': 83.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 200, 'cable_current_a': 62.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 250, 'cable_current_a': 50.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 300, 'cable_current_a': 41.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 350, 'cable_current_a': 35.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 400, 'cable_current_a': 31.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 450, 'cable_current_a': 27.0},
-             {'cable_size_mm': 25.0, 'cable_length_m': 500, 'cable_current_a': 25.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 10, 'cable_current_a': 155.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 50, 'cable_current_a': 155.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 100, 'cable_current_a': 155.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 150, 'cable_current_a': 115.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 200, 'cable_current_a': 86.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 250, 'cable_current_a': 69.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 300, 'cable_current_a': 57.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 350, 'cable_current_a': 49.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 400, 'cable_current_a': 43.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 450, 'cable_current_a': 38.0},
-             {'cable_size_mm': 35.0, 'cable_length_m': 500, 'cable_current_a': 34.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 10, 'cable_current_a': 185.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 50, 'cable_current_a': 185.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 100, 'cable_current_a': 185.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 150, 'cable_current_a': 156.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 200, 'cable_current_a': 117.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 250, 'cable_current_a': 93.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 300, 'cable_current_a': 78.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 350, 'cable_current_a': 66.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 400, 'cable_current_a': 58.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 450, 'cable_current_a': 52.0},
-             {'cable_size_mm': 50.0, 'cable_length_m': 500, 'cable_current_a': 46.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 10, 'cable_current_a': 230.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 50, 'cable_current_a': 230.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 100, 'cable_current_a': 230.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 150, 'cable_current_a': 222.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 200, 'cable_current_a': 166.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 250, 'cable_current_a': 133.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 300, 'cable_current_a': 111.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 350, 'cable_current_a': 95.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 400, 'cable_current_a': 83.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 450, 'cable_current_a': 74.0},
-             {'cable_size_mm': 70.0, 'cable_length_m': 500, 'cable_current_a': 66.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 10, 'cable_current_a': 275.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 50, 'cable_current_a': 275.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 100, 'cable_current_a': 275.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 150, 'cable_current_a': 275.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 200, 'cable_current_a': 225.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 250, 'cable_current_a': 180.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 300, 'cable_current_a': 150.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 350, 'cable_current_a': 129.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 400, 'cable_current_a': 112.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 450, 'cable_current_a': 100.0},
-             {'cable_size_mm': 95.0, 'cable_length_m': 500, 'cable_current_a': 90.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 10, 'cable_current_a': 315.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 50, 'cable_current_a': 315.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 100, 'cable_current_a': 315.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 150, 'cable_current_a': 315.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 200, 'cable_current_a': 278.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 250, 'cable_current_a': 222.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 300, 'cable_current_a': 185.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 350, 'cable_current_a': 159.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 400, 'cable_current_a': 139.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 450, 'cable_current_a': 123.0},
-             {'cable_size_mm': 120.0, 'cable_length_m': 500, 'cable_current_a': 111.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 10, 'cable_current_a': 355.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 50, 'cable_current_a': 355.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 100, 'cable_current_a': 355.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 150, 'cable_current_a': 355.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 200, 'cable_current_a': 330.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 250, 'cable_current_a': 264.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 300, 'cable_current_a': 220.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 350, 'cable_current_a': 189.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 400, 'cable_current_a': 165.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 450, 'cable_current_a': 147.0},
-             {'cable_size_mm': 150.0, 'cable_length_m': 500, 'cable_current_a': 132.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 10, 'cable_current_a': 400.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 50, 'cable_current_a': 400.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 100, 'cable_current_a': 400.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 150, 'cable_current_a': 400.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 200, 'cable_current_a': 393.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 250, 'cable_current_a': 314.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 300, 'cable_current_a': 267.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 350, 'cable_current_a': 224.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 400, 'cable_current_a': 196.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 450, 'cable_current_a': 174.0},
-             {'cable_size_mm': 185.0, 'cable_length_m': 500, 'cable_current_a': 157.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 10, 'cable_current_a': 465.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 50, 'cable_current_a': 465.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 100, 'cable_current_a': 465.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 150, 'cable_current_a': 465.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 200, 'cable_current_a': 437.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 250, 'cable_current_a': 349.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 300, 'cable_current_a': 291.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 350, 'cable_current_a': 249.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 400, 'cable_current_a': 218.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 450, 'cable_current_a': 194.0},
-             {'cable_size_mm': 240.0, 'cable_length_m': 500, 'cable_current_a': 174.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 10, 'cable_current_a': 550.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 50, 'cable_current_a': 550.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 100, 'cable_current_a': 550.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 150, 'cable_current_a': 550.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 200, 'cable_current_a': 496.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 250, 'cable_current_a': 397.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 300, 'cable_current_a': 331.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 350, 'cable_current_a': 283.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 400, 'cable_current_a': 248.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 450, 'cable_current_a': 220.0},
-             {'cable_size_mm': 300.0, 'cable_length_m': 500, 'cable_current_a': 198.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 10, 'cable_current_a': 745.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 50, 'cable_current_a': 745.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 100, 'cable_current_a': 745.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 150, 'cable_current_a': 745.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 200, 'cable_current_a': 559.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 250, 'cable_current_a': 447.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 300, 'cable_current_a': 373.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 350, 'cable_current_a': 319.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 400, 'cable_current_a': 279.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 450, 'cable_current_a': 248.0},
-             {'cable_size_mm': 400.0, 'cable_length_m': 500, 'cable_current_a': 224.0}]
+    cable_rating = \
+        [{'cable_size_mm': 1.5, 'cable_length_m': 10, 'cable_current_a': 27.0},
+         {'cable_size_mm': 1.5, 'cable_length_m': 50, 'cable_current_a': 15.0},
+         {'cable_size_mm': 1.5, 'cable_length_m': 100, 'cable_current_a': 7.0},
+         {'cable_size_mm': 1.5, 'cable_length_m': 150, 'cable_current_a': 5.0},
+         {'cable_size_mm': 2.5, 'cable_length_m': 10, 'cable_current_a': 36.0},
+         {'cable_size_mm': 2.5, 'cable_length_m': 50, 'cable_current_a': 25.0},
+         {'cable_size_mm': 2.5, 'cable_length_m': 100, 'cable_current_a': 12.0},
+         {'cable_size_mm': 2.5, 'cable_length_m': 150, 'cable_current_a': 8.0},
+         {'cable_size_mm': 2.5, 'cable_length_m': 200, 'cable_current_a': 6.0},
+         {'cable_size_mm': 4.0, 'cable_length_m': 10, 'cable_current_a': 46.0},
+         {'cable_size_mm': 4.0, 'cable_length_m': 50, 'cable_current_a': 40.0},
+         {'cable_size_mm': 4.0, 'cable_length_m': 100, 'cable_current_a': 20.0},
+         {'cable_size_mm': 4.0, 'cable_length_m': 150, 'cable_current_a': 13.0},
+         {'cable_size_mm': 4.0, 'cable_length_m': 200, 'cable_current_a': 10.0},
+         {'cable_size_mm': 4.0, 'cable_length_m': 250, 'cable_current_a': 8.0},
+         {'cable_size_mm': 4.0, 'cable_length_m': 300, 'cable_current_a': 6.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 10, 'cable_current_a': 58.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 50, 'cable_current_a': 58.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 100, 'cable_current_a': 30.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 150, 'cable_current_a': 20.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 200, 'cable_current_a': 15.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 250, 'cable_current_a': 12.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 300, 'cable_current_a': 10.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 350, 'cable_current_a': 8.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 400, 'cable_current_a': 7.0},
+         {'cable_size_mm': 6.0, 'cable_length_m': 450, 'cable_current_a': 6.5},
+         {'cable_size_mm': 6.0, 'cable_length_m': 500, 'cable_current_a': 6.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 10, 'cable_current_a': 77.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 50, 'cable_current_a': 77.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 100, 'cable_current_a': 50.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 150, 'cable_current_a': 33.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 200, 'cable_current_a': 25.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 250, 'cable_current_a': 20.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 300, 'cable_current_a': 16.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 350, 'cable_current_a': 14.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 400, 'cable_current_a': 12.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 450, 'cable_current_a': 11.0},
+         {'cable_size_mm': 10.0, 'cable_length_m': 500, 'cable_current_a': 10.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 10, 'cable_current_a': 100.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 50, 'cable_current_a': 100.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 100, 'cable_current_a': 80.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 150, 'cable_current_a': 63.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 200, 'cable_current_a': 40.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 250, 'cable_current_a': 32.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 300, 'cable_current_a': 26.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 350, 'cable_current_a': 22.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 400, 'cable_current_a': 20.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 450, 'cable_current_a': 17.0},
+         {'cable_size_mm': 16.0, 'cable_length_m': 500, 'cable_current_a': 16.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 10, 'cable_current_a': 130.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 50, 'cable_current_a': 130.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 100, 'cable_current_a': 125.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 150, 'cable_current_a': 83.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 200, 'cable_current_a': 62.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 250, 'cable_current_a': 50.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 300, 'cable_current_a': 41.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 350, 'cable_current_a': 35.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 400, 'cable_current_a': 31.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 450, 'cable_current_a': 27.0},
+         {'cable_size_mm': 25.0, 'cable_length_m': 500, 'cable_current_a': 25.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 10, 'cable_current_a': 155.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 50, 'cable_current_a': 155.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 100, 'cable_current_a': 155.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 150, 'cable_current_a': 115.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 200, 'cable_current_a': 86.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 250, 'cable_current_a': 69.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 300, 'cable_current_a': 57.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 350, 'cable_current_a': 49.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 400, 'cable_current_a': 43.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 450, 'cable_current_a': 38.0},
+         {'cable_size_mm': 35.0, 'cable_length_m': 500, 'cable_current_a': 34.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 10, 'cable_current_a': 185.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 50, 'cable_current_a': 185.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 100, 'cable_current_a': 185.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 150, 'cable_current_a': 156.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 200, 'cable_current_a': 117.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 250, 'cable_current_a': 93.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 300, 'cable_current_a': 78.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 350, 'cable_current_a': 66.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 400, 'cable_current_a': 58.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 450, 'cable_current_a': 52.0},
+         {'cable_size_mm': 50.0, 'cable_length_m': 500, 'cable_current_a': 46.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 10, 'cable_current_a': 230.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 50, 'cable_current_a': 230.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 100, 'cable_current_a': 230.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 150, 'cable_current_a': 222.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 200, 'cable_current_a': 166.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 250, 'cable_current_a': 133.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 300, 'cable_current_a': 111.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 350, 'cable_current_a': 95.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 400, 'cable_current_a': 83.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 450, 'cable_current_a': 74.0},
+         {'cable_size_mm': 70.0, 'cable_length_m': 500, 'cable_current_a': 66.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 10, 'cable_current_a': 275.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 50, 'cable_current_a': 275.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 100, 'cable_current_a': 275.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 150, 'cable_current_a': 275.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 200, 'cable_current_a': 225.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 250, 'cable_current_a': 180.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 300, 'cable_current_a': 150.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 350, 'cable_current_a': 129.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 400, 'cable_current_a': 112.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 450, 'cable_current_a': 100.0},
+         {'cable_size_mm': 95.0, 'cable_length_m': 500, 'cable_current_a': 90.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 10, 'cable_current_a': 315.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 50, 'cable_current_a': 315.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 100, 'cable_current_a': 315.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 150, 'cable_current_a': 315.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 200, 'cable_current_a': 278.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 250, 'cable_current_a': 222.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 300, 'cable_current_a': 185.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 350, 'cable_current_a': 159.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 400, 'cable_current_a': 139.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 450, 'cable_current_a': 123.0},
+         {'cable_size_mm': 120.0, 'cable_length_m': 500, 'cable_current_a': 111.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 10, 'cable_current_a': 355.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 50, 'cable_current_a': 355.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 100, 'cable_current_a': 355.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 150, 'cable_current_a': 355.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 200, 'cable_current_a': 330.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 250, 'cable_current_a': 264.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 300, 'cable_current_a': 220.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 350, 'cable_current_a': 189.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 400, 'cable_current_a': 165.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 450, 'cable_current_a': 147.0},
+         {'cable_size_mm': 150.0, 'cable_length_m': 500, 'cable_current_a': 132.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 10, 'cable_current_a': 400.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 50, 'cable_current_a': 400.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 100, 'cable_current_a': 400.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 150, 'cable_current_a': 400.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 200, 'cable_current_a': 393.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 250, 'cable_current_a': 314.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 300, 'cable_current_a': 267.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 350, 'cable_current_a': 224.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 400, 'cable_current_a': 196.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 450, 'cable_current_a': 174.0},
+         {'cable_size_mm': 185.0, 'cable_length_m': 500, 'cable_current_a': 157.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 10, 'cable_current_a': 465.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 50, 'cable_current_a': 465.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 100, 'cable_current_a': 465.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 150, 'cable_current_a': 465.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 200, 'cable_current_a': 437.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 250, 'cable_current_a': 349.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 300, 'cable_current_a': 291.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 350, 'cable_current_a': 249.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 400, 'cable_current_a': 218.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 450, 'cable_current_a': 194.0},
+         {'cable_size_mm': 240.0, 'cable_length_m': 500, 'cable_current_a': 174.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 10, 'cable_current_a': 550.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 50, 'cable_current_a': 550.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 100, 'cable_current_a': 550.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 150, 'cable_current_a': 550.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 200, 'cable_current_a': 496.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 250, 'cable_current_a': 397.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 300, 'cable_current_a': 331.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 350, 'cable_current_a': 283.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 400, 'cable_current_a': 248.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 450, 'cable_current_a': 220.0},
+         {'cable_size_mm': 300.0, 'cable_length_m': 500, 'cable_current_a': 198.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 10, 'cable_current_a': 745.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 50, 'cable_current_a': 745.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 100, 'cable_current_a': 745.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 150, 'cable_current_a': 745.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 200, 'cable_current_a': 559.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 250, 'cable_current_a': 447.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 300, 'cable_current_a': 373.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 350, 'cable_current_a': 319.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 400, 'cable_current_a': 279.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 450, 'cable_current_a': 248.0},
+         {'cable_size_mm': 400.0, 'cable_length_m': 500, 'cable_current_a': 224.0}]
 
-        # Filter entries with cable_length >= input
-        filtered = [
-            r for r in cable_rating
-            if r['cable_length_m'] >= cable_length_m and r['cable_current_a'] >= cable_current_a
-        ]
+    # Filter entries with cable_length >= input
+    filtered = [
+        r for r in cable_rating
+        if r['cable_length_m'] >= cable_length_m and r['cable_current_a'] >= cable_current_a
+    ]
 
-        # Sort by cable_length_m then cable_current_a
-        filtered.sort(key=lambda x: (x['cable_length_m'], x['cable_current_a']))
+    # Sort by cable_length_m then cable_current_a
+    filtered.sort(key=lambda x: (x['cable_length_m'], x['cable_current_a']))
 
-        # Return the first matching cable_size_mm
-        if filtered:
-            return filtered[0]['cable_size_mm']
-        else:
-            return None  # or raise an exception / return default
+    # Return the first matching cable_size_mm
+    if filtered:
+        return filtered[0]['cable_size_mm']
+    else:
+        return None  # or raise an exception / return default

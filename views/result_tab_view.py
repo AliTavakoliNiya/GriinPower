@@ -65,7 +65,7 @@ class ResultTab(QWidget):
             return False
 
         if self.main_view.electrical_tab.bagfilter_type.currentIndex() == 1:
-            griin_pattern = r"^\d+(\.\d+)?×\d+\.?\(\d+(\.\d+)?m\)\.\d+$"
+            griin_pattern = r"^\d+(\.\d+)?x\d+\.?\(\d+(\.\d+)?m\)\.\d+$"
             match = re.fullmatch(griin_pattern, self.project_details["bagfilter"]["order"])
             if not match:  # Griin/China
                 show_message("Please Follow Pattern Like 8.96×5.(2.7m).10 for Griin/China Model", "Error")

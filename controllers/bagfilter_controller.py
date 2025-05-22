@@ -1,14 +1,12 @@
 import math
 
 from controllers.panel_controller import PanelController
-from controllers.project_details import ProjectDetails
 from models.item_price_model import get_price
 from models.items.general_model import get_general_by_name
 from models.items.instrument_model import get_instrument_by_type
 from models.items.mccb_model import get_mccb_by_motor_power
 from copy import deepcopy
 import re
-from views.message_box_view import show_message
 
 
 class BagfilterController(PanelController):
@@ -18,18 +16,6 @@ class BagfilterController(PanelController):
 
     def __init__(self):
         super().__init__("bagfilter")
-        self.project_details = ProjectDetails()
-        self.panel = {
-            "type": [],
-            "brand": [],
-            "reference_number": [],
-            "specifications": [],
-            "quantity": [],
-            "price": [],
-            "total_price": [],
-            "last_price_update": [],
-            "note": []
-        }
 
     def build_panel(self):
         """
@@ -90,25 +76,16 @@ class BagfilterController(PanelController):
         #
         # # ----------------------- Add General Accessories -----------------------
         self.choose_general(bagfilter_general_items)
-        #
-        # if self.project_details["bagfilter"]["touch_panel"] == "None":  # no touch panel required
-        #     self.choose_general(motor_objects, ["signal_lamp_24v"])
-        #
+
         # # ----------------------- Add Cables -----------------------
         # self.choose_signal_cable(motor_objects)
         # self.choose_power_cable(motor_objects)
         #
         # # ----------------------- Add Electrical Panel -----------------------
-        # total_motors = sum(qty for _, qty in motor_objects)
-        # total_motors += sum(0.5 * qty for motor, qty in motor_objects if motor.usage == "Telescopic Chute")
-        # total_motors += sum(0.5 * qty for motor, qty in motor_objects if motor.usage == "Slide Gate")
-        # total_motors = ceil(total_motors)
-        #
-        # if total_motors != 0:
-        #     self.choose_electrical_panel(total_motors)
+        # self.choose_electrical_panel(total_motors)
         #
         # # ----------------------- Add instruments -----------------------
-        self.choose_instruments()
+        self.choose_instruments(instruments=self.project_details["bagfilter"]["instruments"])
 
         return self.panel
 
@@ -188,41 +165,41 @@ class BagfilterController(PanelController):
 
     def calculate_plc_io_requirements(self, total_do, total_di, total_ao, total_ai):
         instruments = deepcopy(self.project_details["bagfilter"]["instruments"])
-        instruments = {
-            key.replace("inlet_", "").replace("outlet_", ""): val
-            for key, val in instruments.items()
-        }
 
         di_notes = [f"Initial DI: {total_di}"] if total_di else []
         ai_notes = [f"Initial AI: {total_ai}"] if total_ai else []
+        do_notes = [f"Initial DO: {total_do}"] if total_do else []
+        ao_notes = [f"Initial AO: {total_ao}"] if total_ao else []
 
         if instruments:
             total_di, total_ai = self.calculate_instruments_io(
                 instruments, total_di, total_ai, di_notes, ai_notes
             )
 
-        # Combine DO and DI as digital, AO and AI as analog
-        total_digital = total_do + total_di
-        total_analog = total_ao + total_ai
-
-        digital_notes = [f"Initial DO: {total_do}"] if total_do else []
-        digital_notes += di_notes
-
-        analog_notes = [f"Initial AO: {total_ao}"] if total_ao else []
-        analog_notes += ai_notes
-
         io_config = [
             {
-                "count": total_digital,
-                "label": "DIGITAL 16 CHANNEL",
-                "general_name": "digital_16_channel",
-                "notes": digital_notes
+                "count": total_di,
+                "label": "DI 16 CHANNEL",
+                "general_name": "di_16_channel",
+                "notes": di_notes
             },
             {
-                "count": total_analog,
-                "label": "ANALOG 16 CHANNEL",
-                "general_name": "analog_16_channel",
-                "notes": analog_notes
+                "count": total_do,
+                "label": "DO 16 CHANNEL",
+                "general_name": "do_16_channel",
+                "notes": do_notes
+            },
+            {
+                "count": total_ai,
+                "label": "AI 16 CHANNEL",
+                "general_name": "ai_16_channel",
+                "notes": ai_notes
+            },
+            {
+                "count": total_ao,
+                "label": "AO 16 CHANNEL",
+                "general_name": "ao_16_channel",
+                "notes": ao_notes
             }
         ]
 
@@ -231,7 +208,7 @@ class BagfilterController(PanelController):
             if io["count"] > 0:
                 cards = (io["count"] + 15) // 16
                 total_20pin += cards
-                self.add_io_card(io["label"], io["general_name"], cards, io["count"], io["notes"])
+                self.add_io_card_to_panel(io["label"], io["general_name"], cards, io["count"], io["notes"])
 
         if total_20pin > 0:
             pin_card = get_general_by_name("front_connector_20_pin")
@@ -247,36 +224,35 @@ class BagfilterController(PanelController):
             self.add_to_panel(
                 type="FRONT CONNECTOR 20PIN",
                 brand=brand,
-                specifications="Total 20PIN connectors needed",
                 quantity=total_20pin,
                 price=price,
                 last_price_update=effective_date,
                 note="Total connectors for all 16CH cards"
             )
 
-    def choose_instruments(self):
-        """
-        Adds instrument entries to panel.
-        """
-
-        instruments = self.project_details["bagfilter"]["instruments"]
-        for instrument_name, properties in instruments.items():
-            # calibration fee
-            # manifolds fee
-
-            instrument = get_instrument_by_type(instrument_name)
-            price_item = get_price(instrument.item_id, properties["brand"])
-
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-
-            qty = properties["qty"]
-            if qty > 0:
-                self.add_to_panel(
-                    type=instrument.type,
-                    brand=properties["brand"],
-                    specifications="",
-                    quantity=qty,
-                    price=price,
-                    last_price_update=effective_date,
-                    note=str(instrument.note) + " <calibration fee & manifolds fee>")
+    # def choose_instruments(self):
+    #     """
+    #     Adds instrument entries to panel.
+    #     """
+    #
+    #     instruments = self.project_details["bagfilter"]["instruments"]
+    #     for instrument_name, properties in instruments.items():
+    #         # calibration fee
+    #         # manifolds fee
+    #
+    #         instrument = get_instrument_by_type(instrument_name)
+    #         price_item = get_price(instrument.item_id, properties["brand"])
+    #
+    #         price = price_item.price if price_item.price else 0
+    #         effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+    #
+    #         qty = properties["qty"]
+    #         if qty > 0:
+    #             self.add_to_panel(
+    #                 type=instrument.type,
+    #                 brand=properties["brand"],
+    #                 specifications="",
+    #                 quantity=qty,
+    #                 price=price,
+    #                 last_price_update=effective_date,
+    #                 note=str(instrument.note) + " <calibration fee & manifolds fee>")

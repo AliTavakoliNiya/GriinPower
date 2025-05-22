@@ -89,7 +89,7 @@ if __name__ == "__main__":
     login = LoginView(db_session)
     if login.exec_() == QDialog.Accepted:
         session = QSettings("Griin", "GriinPower")
-        username = session.value("last_username", "Unknown")
+        username = session.value("last_username", "")
         current_user = UserSession()
 
         show_message(f"Welcome back, {current_user.first_name} {current_user.last_name}", title="Welcome")
