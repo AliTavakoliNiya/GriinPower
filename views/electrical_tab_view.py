@@ -577,8 +577,14 @@ class ElectricalTab(QWidget):
     def _handle_plc_series_changed(self, value):
         self._update_project_value(["bagfilter", "plc_series"], value)
 
-    def _handle_plc_protocol_changed(self, value):
-        self._update_project_value(["bagfilter", "plc_protocol"], value)
+    def _handle_plc_protocol_changed(self, index):
+        self._update_project_value(["bagfilter", "plc_protocol"], index)
+        if index == 2:
+            self.olm.setEnabled(True)
+        else:
+            self.olm.setEnabled(False)
+            self.olm.setChecked(False)
+            self._update_project_value(["bagfilter", "olm"], False)
 
     def _handle_touch_panel_changed(self, index):
         self._update_project_value(["bagfilter", "touch_panel"], self.touch_panel_model.currentText())

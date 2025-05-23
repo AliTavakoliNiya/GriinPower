@@ -39,7 +39,8 @@ class BagfilterController(PanelController):
                                    "terminal_4": n_valves * 2 + 20,
                                    "mpcb_mccb_aux_contact": 1,
                                    "duct_cover": round(n_valves * 0.1, 2),
-                                   "miniatory_rail": round(n_valves * 0.3, 2)}
+                                   "miniatory_rail": round(n_valves * 0.3, 2),
+                                   "power_outlet ": 1}
 
         total_do = 3
         total_di = 3
@@ -62,6 +63,8 @@ class BagfilterController(PanelController):
         else:
             hmi_type = self.project_details["bagfilter"]["touch_panel"]
             bagfilter_general_items[hmi_type] = 1
+
+        bagfilter_general_items["olm"] = 1 if self.project_details["bagfilter"]["olm"] else 0
 
         # ----------------------- Add Components for Motors -----------------------
         self.choose_mccb()
@@ -95,7 +98,7 @@ class BagfilterController(PanelController):
 
         for item, qty in general_items.items():
             if qty == 0:
-                return
+                continue
 
             general_item = get_general_by_name(item)
             if general_item.item_id:

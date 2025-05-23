@@ -12,8 +12,6 @@ class Instrument(Base):
     instruments_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     item_id = Column(Integer, ForeignKey('items.item_id', ondelete="CASCADE"), nullable=False, unique=True)
     type = Column(Integer, nullable=False)
-    plc_di_pin = Column(Integer, nullable=False)
-    plc_ai_pin = Column(Integer, nullable=False)
     modified_by = Column(String, ForeignKey('users.username', ondelete="SET NULL"), nullable=False)
     modified_at = Column(String, nullable=False)
     note = Column(String, nullable=True)

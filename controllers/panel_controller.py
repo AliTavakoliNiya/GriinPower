@@ -205,6 +205,7 @@ class PanelController:
         )
 
     """ ------------------------------------- Generals ------------------------------------- """
+
     def choose_general(self, motor_objects):
         """
         Adds general accessories like terminals, buttons, etc. based on motor needs.
@@ -295,6 +296,7 @@ class PanelController:
             note="")
 
     """ ------------------------------------- Instrument ------------------------------------- """
+
     def choose_instruments(self, instruments):
         """
         Adds instrument entries to panel.
@@ -308,11 +310,11 @@ class PanelController:
             # manifolds fee
 
             name = "temperature_transmitter" if instrument_name == "inlet_temperature_transmitter" \
-                                            or instrument_name == "outlet_temperature_transmitter" \
-                                            or instrument_name == "bearing_temperature_transmitter" \
-                                            or instrument_name == "pt100" \
-                                            else instrument_name
-            name = "vibration_transmitter" if instrument_name == "bearing_vibration_transmitter" else instrument_name
+                                                or instrument_name == "outlet_temperature_transmitter" \
+                                                or instrument_name == "bearing_temperature_transmitter" \
+                                                or instrument_name == "pt100" \
+                else instrument_name
+            name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
             instrument = get_instrument_by_type(name)
             price_item = get_price(instrument.item_id, properties["brand"])
@@ -326,8 +328,61 @@ class PanelController:
                 specifications="",
                 quantity=qty,
                 price=price,
-                last_price_update=effective_date,
-                note="<calibration fee & manifolds fee>")
+                last_price_update=effective_date)
+
+            # ------------ Choose Manifold ------------
+            manifold_qty = 0
+            if "delta" in name:
+                manifold = "3ways_manifold"
+                manifold_qty = qty
+            elif "pressure" in name:
+                manifold = "2ways_manifold"
+                manifold_qty = qty
+
+            if manifold_qty > 0:
+                general_item = get_general_by_name(manifold)
+                if general_item.item_id:
+                    price_item = get_price(general_item.item_id, brand=False, item_brand=False)
+                    price = price_item.price if price_item.price else 0
+                    effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+                    brand = price_item.brand
+                else:
+                    price = 0
+                    effective_date = "Not Found"
+                    brand = ""
+
+                formatted_name = manifold.upper().replace("_", " ")
+
+                self.add_to_panel(
+                    type=formatted_name,
+                    brand=brand,
+                    quantity=qty,
+                    price=price,
+                    last_price_update=effective_date,
+                    note=f"manifold for {instrument_name}"
+                )
+
+            # ------------ Calibration ------------
+            if "transmitter" in name and qty != 0:
+                general_item = get_general_by_name("calibration")
+                if general_item.item_id:
+                    price_item = get_price(general_item.item_id, brand=False, item_brand=False)
+                    price = price_item.price if price_item.price else 0
+                    effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+                    brand = price_item.brand
+                else:
+                    price = 0
+                    effective_date = "Not Found"
+                    brand = ""
+
+                self.add_to_panel(
+                    type="CALIBRATION",
+                    brand=brand,
+                    quantity=qty,
+                    price=price,
+                    last_price_update=effective_date,
+                    note=f"calibration for {instrument_name}"
+                )
 
     def calculate_plc_io_requirements(self, motor_objects, instruments=None):
         total_di = total_do = total_ai = total_ao = 0
@@ -450,7 +505,7 @@ class PanelController:
                                                 or instrument_name == "outlet_temperature_transmitter" \
                                                 or instrument_name == "bearing_temperature_transmitter" \
                                                 or instrument_name == "pt100" \
-                                                else instrument_name
+                else instrument_name
             name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
             n_di = instruments_pins[name]["n_di"]
@@ -466,6 +521,7 @@ class PanelController:
         return total_di, total_ai
 
     """ ------------------------------------- Wire and Cable ------------------------------------- """
+
     def choose_signal_cable(self, motor_objects):
         """
         Adds signal cable entries based on motor usage and length.
@@ -632,11 +688,13 @@ class PanelController:
                 note="\n".join(busbar_notes))
 
     """ ------------------------------------- Calculate Motor Current ------------------------------------- """
+
     def calculate_motor_current(self, power, volt=None):
         if volt is None:
             volt = self.project_details["project_info"]["project_l_voltage"]
 
         return round(power / (sqrt(3) * volt * COSNUS_PI * ETA), 2)
+
 
 def cable_rating(cable_length_m, cable_current_a):
     cable_rating = \
