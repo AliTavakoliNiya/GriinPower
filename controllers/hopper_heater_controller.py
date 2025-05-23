@@ -26,6 +26,7 @@ class HopperHeaterController(PanelController):
                    button_qty=0,
                    selector_switch_qty=0,
                    signal_lamp_24v_qty=0)
+        hopper_heater.current = self.calculate_motor_current(power=hopper_heater.power)
         self.project_details["hopper_heater"]["motors"]["elements"]["motor"] = hopper_heater
         motor_objects = [(hopper_heater, motors_config["elements"]["qty"])]
         motor_objects[0][0].temperature_meter = 2
@@ -35,6 +36,7 @@ class HopperHeaterController(PanelController):
             self.choose_contactor(motor, qty)
         for motor, qty in motor_objects:
             self.choose_mccb(motor, qty)
+        # bi_metal???
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
         instruments = self.project_details["hopper_heater"]["instruments"]

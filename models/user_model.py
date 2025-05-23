@@ -26,6 +26,7 @@ class User(Base):
     contactors_modified = relationship("Contactor", back_populates="modified_user")
     mpcbs_modified = relationship("MPCB", back_populates="modified_user")
     mccbs_modified = relationship("MCCB", back_populates="modified_user")
+    bimetals_modified = relationship("Bimetal", back_populates="modified_user")
     generals_modified = relationship("General", back_populates="modified_user")
     instruments_modified = relationship("Instrument", back_populates="modified_user")
     item_prices_created = relationship("ItemPrice", back_populates="creator")

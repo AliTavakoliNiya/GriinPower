@@ -20,6 +20,7 @@ class TransportController(PanelController):
         motors_config = self.project_details["transport"]["motors"]
 
         rotary = Motor(motors_config["rotary"]["power"], usage="Rotary")
+        rotary.current = self.calculate_motor_current(power=rotary.power)
         self.project_details["transport"]["motors"]["rotary"]["motor"] = rotary
 
         telescopic_chute = Motor(motors_config["telescopic_chute"]["power"],
@@ -28,6 +29,7 @@ class TransportController(PanelController):
                    relay_2no_2nc_qty=2,
                    plc_di=7,
                    plc_do=2)
+        telescopic_chute.current = self.calculate_motor_current(power=telescopic_chute.power)
         self.project_details["transport"]["motors"]["telescopic_chute"]["motor"] = telescopic_chute
 
         slide_gate = Motor(motors_config["slide_gate"]["power"],
@@ -36,12 +38,15 @@ class TransportController(PanelController):
                    relay_2no_2nc_qty=2,
                    plc_di=7,
                    plc_do=2)
+        slide_gate.current = self.calculate_motor_current(power=slide_gate.power)
         self.project_details["transport"]["motors"]["slide_gate"]["motor"] = slide_gate
 
         screw1 = Motor(motors_config["screw1"]["power"], usage="Screw1")
+        screw1.current = self.calculate_motor_current(power=screw1.power)
         self.project_details["transport"]["motors"]["screw1"]["motor"] = screw1
 
         screw2 = Motor(motors_config["screw2"]["power"], usage="Screw2")
+        screw2.current = self.calculate_motor_current(power=screw2.power)
         self.project_details["transport"]["motors"]["screw2"]["motor"] = screw2
 
         motor_objects = [
@@ -59,6 +64,8 @@ class TransportController(PanelController):
             self.choose_mpcb(motor, qty)
         for motor, qty in motor_objects:
             self.choose_mccb(motor, qty)
+        for motor, qty in motor_objects:
+            self.choose_bimetal(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
         instruments = self.project_details["transport"]["instruments"]

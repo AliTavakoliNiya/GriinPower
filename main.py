@@ -41,7 +41,7 @@ class MainView(QMainWindow):
 
         self.tabWidget.currentChanged.connect(self.on_tab_changed)
 
-        self.tabWidget.setCurrentIndex(1)  # temprory
+        self.tabWidget.setCurrentIndex(0)  # Start at first tab
 
         self.themes = {
             "dark": "styles/dark_style.qss",
@@ -61,9 +61,15 @@ class MainView(QMainWindow):
         self.showMaximized()
 
     def on_tab_changed(self, index):
-        tab_text = self.tabWidget.tabText(index)
-        if tab_text == "Result":
-            self.result_tab.generate_panels()
+        if index == 1: # Electrical
+            if not self.result_tab.check_info_tab_ui_rules():
+                self.tabWidget.setCurrentIndex(0)
+
+        if index == 2 : # Result
+            if not self.result_tab.check_electrical_tab_ui_rules():
+                self.tabWidget.setCurrentIndex(1)
+            else:
+                self.result_tab.generate_panels()
 
     def apply_stylesheet(self, path):
         if os.path.exists(path):

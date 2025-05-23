@@ -172,13 +172,13 @@ class ElectricalTab(QWidget):
         self._handle_rotary_screw_qty(self.rotary_qty)
 
     def _handle_rotary_kw_changed(self, index):
-        self._handle_combobox_float(["transport", "motors", "rotary", "power"])
+        self._handle_combobox_float_kilo(["transport", "motors", "rotary", "power"])
 
     def _handle_telescopic_chute_qty_changed(self, value):
         self._update_project_value(["transport", "motors", "telescopic_chute", "qty"], value)
 
     def _handle_telescopic_chute_kw_changed(self, index):
-        self._handle_combobox_float(["transport", "motors", "telescopic_chute", "power"])
+        self._handle_combobox_float_kilo(["transport", "motors", "telescopic_chute", "power"])
 
     def _handle_slide_gate_qty_changed(self, value):
         self._update_project_value(["transport", "motors", "slide_gate", "qty"], value)
@@ -193,19 +193,19 @@ class ElectricalTab(QWidget):
             self.project_details["transport"]["instruments"]["proximity_switch"]["qty"] = 0
 
     def _handle_slide_gate_kw_changed(self, index):
-        self._handle_combobox_float(["transport", "motors", "slide_gate", "power"])
+        self._handle_combobox_float_kilo(["transport", "motors", "slide_gate", "power"])
 
     def _handle_screw1_qty_changed(self, value):
         self._handle_rotary_screw_qty(self.screw1_qty)
 
     def _handle_screw1_kw_changed(self, index):
-        self._handle_combobox_float(["transport", "motors", "screw1", "power"])
+        self._handle_combobox_float_kilo(["transport", "motors", "screw1", "power"])
 
     def _handle_screw2_qty_changed(self, value):
         self._handle_rotary_screw_qty(self.screw2_qty)
 
     def _handle_screw2_kw_changed(self, index):
-        self._handle_combobox_float(["transport", "motors", "screw2", "power"])
+        self._handle_combobox_float_kilo(["transport", "motors", "screw2", "power"])
 
     # Transport instrument handlers
     def _handle_transport_spd_qty_changed(self, value):
@@ -237,7 +237,7 @@ class ElectricalTab(QWidget):
         self._update_project_value(["vibration", "motors", "vibration", "qty"], value)
 
     def _handle_vibration_motor_kw_changed(self, index):
-        self._handle_combobox_float(["vibration", "motors", "vibration", "power"])
+        self._handle_combobox_float_kilo(["vibration", "motors", "vibration", "power"])
 
     # Fresh air motor handlers
     def _handle_freshair_motor_qty_changed(self, value):
@@ -250,7 +250,7 @@ class ElectricalTab(QWidget):
                 self.project_details["fresh_air"]["instruments"]["proximity_switch"]["qty"] = required_switches
 
     def _handle_freshair_motor_kw_changed(self, index):
-        self._handle_combobox_float(["fresh_air", "motors", "freshair_motor", "power"])
+        self._handle_combobox_float_kilo(["fresh_air", "motors", "freshair_motor", "power"])
 
     def _handle_freshair_motor_start_type_changed(self, index):
         self._update_project_value(["fresh_air", "motors", "freshair_motor", "start_type"])
@@ -259,7 +259,7 @@ class ElectricalTab(QWidget):
         self._update_project_value(["fresh_air", "motors", "fresh_air_flap", "qty"], value)
 
     def _handle_freshair_flap_motor_kw_changed(self, index):
-        self._handle_combobox_float(["fresh_air", "motors", "fresh_air_flap", "power"])
+        self._handle_combobox_float_kilo(["fresh_air", "motors", "fresh_air_flap", "power"])
 
     def _handle_freshair_flap_start_type_changed(self, index):
         self._update_project_value(["fresh_air", "motors", "fresh_air_flap", "start_type"])
@@ -268,7 +268,7 @@ class ElectricalTab(QWidget):
         self._update_project_value(["fresh_air", "motors", "emergency_flap", "qty"], value)
 
     def _handle_emergency_flap_motor_kw_changed(self, index):
-        self._handle_combobox_float(["fresh_air", "motors", "emergency_flap", "power"])
+        self._handle_combobox_float_kilo(["fresh_air", "motors", "emergency_flap", "power"])
 
     def _handle_emergency_flap_start_type_changed(self, index):
         self._update_project_value(["fresh_air", "motors", "emergency_flap", "start_type"])
@@ -296,14 +296,14 @@ class ElectricalTab(QWidget):
         self.hopper_heater_ptc_qty.setText(f"Qty: {ptc_qty}")
 
     def _handle_hopper_heater_kw_changed(self, index):
-        self._handle_combobox_float(["hopper_heater", "motors", "elements", "power"])
+        self._handle_combobox_float_kilo(["hopper_heater", "motors", "elements", "power"])
 
     def _handle_hopper_heater_ptc_brand_changed(self, index):
         self._update_project_value(["hopper_heater", "instruments", "ptc", "brand"])
 
     # Damper handlers
     def _handle_damper_kw_changed(self, index):
-        self._handle_combobox_float(["damper", "motors", "damper", "power"])
+        self._handle_combobox_float_kilo(["damper", "motors", "damper", "power"])
 
     def _handle_damper_brand_changed(self, index):
         self._update_project_value(["damper", "motors", "damper", "brand"])
@@ -319,7 +319,7 @@ class ElectricalTab(QWidget):
 
     # Fan motor handlers
     def _handle_fan_kw_changed(self, index):
-        self._handle_combobox_float(["fan", "motors", "fan", "power"])
+        self._handle_combobox_float_kilo(["fan", "motors", "fan", "power"])
 
     def _handle_fan_rpm_changed(self, text):
         self._update_project_value(["fan", "motors", "fan", "rpm"])
@@ -671,16 +671,12 @@ class ElectricalTab(QWidget):
         # Set the value
         target[path_list[-1]] = value
 
-    def _handle_combobox_float(self, path_list):
-        """Handle conversion of combobox text to float value
+    def _handle_combobox_float_kilo(self, path_list):
 
-        Args:
-            path_list: List of keys to navigate the nested dictionary
-        """
         sender = self.sender()
         text = sender.currentText()
         try:
-            value = float(text)
+            value = float(text) * 1000
         except ValueError:
             value = 0.0
 

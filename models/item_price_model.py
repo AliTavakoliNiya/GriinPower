@@ -17,6 +17,7 @@ class ItemPrice(Base):
 
     price = Column(Float, nullable=False)
     brand = Column(String, nullable=False)
+    reference = Column(String, nullable=False)
     effective_date = Column(String, nullable=False)
 
     # Relationships

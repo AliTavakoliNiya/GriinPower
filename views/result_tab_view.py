@@ -45,7 +45,7 @@ class ResultTab(QWidget):
 
         self.excel_btn.clicked.connect(self._export_to_excel)
         self.show_datail_btn.clicked.connect(self.show_datail_btn_handler)
-        self.show()
+
 
     def _setup_result_table(self):
         for table in self.tables.values():
@@ -58,7 +58,18 @@ class ResultTab(QWidget):
             table.setTextElideMode(Qt.ElideRight)
             table.verticalHeader().setVisible(False)
 
-    def _check_ui_rules(self):
+    def check_info_tab_ui_rules(self):
+        if self.main_view.project_information_tab.project_m_voltage.currentIndex() == 0:
+            show_message("Please Choose M Voltage", "Error")
+            return False
+
+        if self.main_view.project_information_tab.project_l_voltage.currentIndex() == 0:
+            show_message("Please Choose L Voltage", "Error")
+            return False
+
+        return True
+
+    def check_electrical_tab_ui_rules(self):
 
         if self.main_view.electrical_tab.bagfilter_order.text == "":
             show_message("Enter Bagfilter Order", "Error")
@@ -81,12 +92,14 @@ class ResultTab(QWidget):
             show_message("Select Touch Panel Model")
             return False
 
+        if self.main_view.electrical_tab.fan_checkbox.isChecked():
+            if self.main_view.electrical_tab.fan_voltage_type.currentIndex() == 0:
+                show_message("Select Fan Voltage Type")
+                return False
+
         return True
 
     def generate_panels(self):
-        if not self._check_ui_rules():
-            self.main_view.tabWidget.setCurrentIndex(1)
-            return
 
         bagfilter_controller = BagfilterController()
         self.panels["bagfilter_panel"] = bagfilter_controller.build_panel()

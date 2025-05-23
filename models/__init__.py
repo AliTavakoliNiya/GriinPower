@@ -16,6 +16,9 @@ __all__ = [
     "Base",
     "User",
     "Contactor",
+    "MCCB",
+    "MPCB",
+    "Bimetal",
     "General",
     "ElectricMotor",
     "Instrument",
@@ -30,6 +33,7 @@ from .user_model import User
 from models.items.contactor_model import Contactor
 from models.items.mccb_model import MCCB
 from models.items.mpcb_model import MPCB
+from models.items.bimetal_model import Bimetal
 from .item_model import Item
 from models.items.general_model import General
 from models.items.plc import PLC

@@ -19,6 +19,7 @@ class FreshAirController(PanelController):
         motor_objects = []
 
         freshair_motor = Motor(motors_config["freshair_motor"]["power"], usage="Fresh Air Motor")
+        freshair_motor.current = self.calculate_motor_current(power=freshair_motor.power)
         self.project_details["fresh_air"]["motors"]["freshair_motor"]["motor"] = freshair_motor
         if motors_config["freshair_motor"]["start_type"] == "VFD":
             freshair_motor.plc_ai = 1
@@ -31,6 +32,7 @@ class FreshAirController(PanelController):
         motor_objects.append((freshair_motor, motors_config["freshair_motor"]["qty"]))
 
         fresh_air_flap = Motor(motors_config["fresh_air_flap"]["power"], usage="Fresh Air Flap")
+        fresh_air_flap.current = self.calculate_motor_current(power=fresh_air_flap.power)
         self.project_details["fresh_air"]["motors"]["fresh_air_flap"]["motor"] = fresh_air_flap
         if motors_config["fresh_air_flap"]["start_type"] == "Pneumatic":
             fresh_air_flap.mpcb_qty = 0
@@ -56,6 +58,7 @@ class FreshAirController(PanelController):
         motor_objects.append((fresh_air_flap, motors_config["fresh_air_flap"]["qty"]))
 
         emergency_flap = Motor(motors_config["emergency_flap"]["power"], usage="Emergency Flap")
+        emergency_flap.current = self.calculate_motor_current(power=emergency_flap.power)
         self.project_details["fresh_air"]["motors"]["emergency_flap"]["motor"] = emergency_flap
         if motors_config["fresh_air_flap"]["start_type"] == "Pneumatic":
             emergency_flap.mpcb_qty = 0
@@ -87,6 +90,8 @@ class FreshAirController(PanelController):
             self.choose_mpcb(motor, qty)
         for motor, qty in motor_objects:
             self.choose_mccb(motor, qty)
+        for motor, qty in motor_objects:
+            self.choose_bimetal(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
         instruments = self.project_details["fresh_air"]["instruments"]

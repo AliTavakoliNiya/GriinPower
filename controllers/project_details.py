@@ -12,8 +12,8 @@ class ProjectDetails:
 
     def get_default_project_details(self):
         return {"project_info": {"rev": 1,
-                                 "project_m_voltage":6300,
-                                 "project_l_voltage":400,
+                                 "project_m_voltage":0,
+                                 "project_l_voltage":0,
                                  "voltage_variation":10,
                                  "project_voltage_frequency":50,
                                  "project_voltage_frequency_variation":2},
@@ -38,14 +38,14 @@ class ProjectDetails:
                                            }},
                 "damper": {"status": False,
                            "motors": {
-                               "damper": {"motor":Motor(power_kw=0), "qty": 0, "power": 0, "brand": None, "start_type": None}
+                               "damper": {"motor":Motor(power=0), "qty": 0, "power": 0, "brand": None, "start_type": None}
                                     },
                            "instruments": {
                                "proximity_switch": {"qty": 0, "brand": None},
                                           }},
                 "fan": {"status": False,
                         "motors": {
-                            "fan": {"motor":Motor(power_kw=0),
+                            "fan": {"motor":Motor(power=0),
                                     "qty": 0,
                                     "power": 0,
                                     "rpm": None,
@@ -69,17 +69,17 @@ class ProjectDetails:
                         }},
                 "vibration": {"status": False,
                               "motors": {
-                                  "vibration": {"motor":Motor(power_kw=0),"qty": 0, "power": 0}
+                                  "vibration": {"motor":Motor(power=0), "qty": 0, "power": 0}
                               },
                               "instruments": {},
                               },
                 "transport": {"status": False,
                               "motors": {
-                                  "rotary": {"motor":Motor(power_kw=0),"qty": 0, "power": 0},
-                                  "telescopic_chute": {"motor":Motor(power_kw=0),"qty": 0, "power": 0},
-                                  "slide_gate": {"motor":Motor(power_kw=0),"qty": 0, "power": 0},
-                                  "screw1": {"motor":Motor(power_kw=0),"qty": 0, "power": 0},
-                                  "screw2": {"motor":Motor(power_kw=0),"qty": 0, "power": 0}
+                                  "rotary": {"motor":Motor(power=0), "qty": 0, "power": 0},
+                                  "telescopic_chute": {"motor":Motor(power=0), "qty": 0, "power": 0},
+                                  "slide_gate": {"motor":Motor(power=0), "qty": 0, "power": 0},
+                                  "screw1": {"motor":Motor(power=0), "qty": 0, "power": 0},
+                                  "screw2": {"motor":Motor(power=0), "qty": 0, "power": 0}
                               },
                               "instruments": {
                                   "proximity_switch": {"qty": 0, "brand": None},
@@ -89,9 +89,9 @@ class ProjectDetails:
                               }},
                 "fresh_air": {"status": False,
                               "motors": {
-                                  "freshair_motor": {"motor":Motor(power_kw=0),"qty": 0, "power": 0, "start_type": None},
-                                  "fresh_air_flap": {"motor":Motor(power_kw=0),"qty": 0, "power": 0, "start_type": None},
-                                  "emergency_flap": {"motor":Motor(power_kw=0),"qty": 0, "power": 0, "start_type": None}
+                                  "freshair_motor": {"motor":Motor(power=0), "qty": 0, "power": 0, "start_type": None},
+                                  "fresh_air_flap": {"motor":Motor(power=0), "qty": 0, "power": 0, "start_type": None},
+                                  "emergency_flap": {"motor":Motor(power=0), "qty": 0, "power": 0, "start_type": None}
                               },
                               "instruments": {
                                   "proximity_switch": {"qty": 0, "brand": None},
@@ -99,7 +99,7 @@ class ProjectDetails:
                               }},
                 "hopper_heater": {
                                   "status": False,
-                                  "motors": {"elements": {"motor":Motor(power_kw=0), "qty": 0, "power": 0}},
+                                  "motors": {"elements": {"motor":Motor(power=0), "qty": 0, "power": 0}},
                                   "instruments": {"ptc": {"qty": 0, "brand": None}}
                 },
                 }

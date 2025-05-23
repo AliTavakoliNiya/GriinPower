@@ -1,7 +1,8 @@
 class Motor:
     def __init__(
             self,
-            power_kw,
+            power,
+            current=0,
             usage=None,
             brand=None,
             lcb_qty=1,
@@ -12,7 +13,7 @@ class Motor:
             contactor_qty=1,
             mpcb_qty=1,
             mccb_qty=0,
-            bimetal=0,
+            bimetal_qty=0,
             contactor_aux_contact_qty=1,
             mpcb_mccb_aux_contact_qty=1,
             button_qty=3,
@@ -29,14 +30,15 @@ class Motor:
             plc_ai=0,
             plc_ao=0
     ):
-        self.power_kw = power_kw
+        self.power = power
+        self.current = current
         self.usage = usage
         self.brand = brand
         self.lcb_qty = lcb_qty
         self.contactor_qty = contactor_qty
         self.mpcb_qty = mpcb_qty
         self.mccb_qty = mccb_qty
-        self.bimetal = bimetal
+        self.bimetal_qty = bimetal_qty
         self.contactor_aux_contact_qty = contactor_aux_contact_qty
         self.mpcb_mccb_aux_contact_qty = mpcb_mccb_aux_contact_qty
         self.terminal_4_qty = terminal_4_qty
@@ -61,7 +63,7 @@ class Motor:
 
     def __repr__(self):
         return (
-            f"Motor Power(KW)={self.power_kw}, "
-            f"Usage={self.usage}, "
-            f"Brand={self.brand}"
+            f"Power={self.power}, "
+            f"Current={self.current}, "
+            f"Usage={self.usage}"
         )

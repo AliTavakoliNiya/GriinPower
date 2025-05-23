@@ -19,6 +19,7 @@ class FanDamperController(PanelController):
         # ----------------------- Initialize Motors -----------------------
         damper_config = self.project_details["damper"]["motors"]["damper"]
         damper = Motor(damper_config["power"], usage="Damper")
+        damper.current = self.calculate_motor_current(power=damper.power)
         self.project_details["damper"]["motors"]["damper"]["motor"] = damper
 
         if damper_config["start_type"] == "Pneumatic":
@@ -46,7 +47,13 @@ class FanDamperController(PanelController):
 
 
         fan_config = self.project_details["fan"]["motors"]["fan"]
-        fan = Motor(power_kw=fan_config["power"], usage="Fan")
+        fan = Motor(power=fan_config["power"], usage="Fan")
+        if self.project_details["fan"]["motors"]["fan"]["voltage_type"] == "LV":
+            fan_voltage = self.project_details["project_info"]["project_l_voltage"]
+        else:
+            fan_voltage = self.project_details["project_info"]["project_m_voltage"]
+        fan.current = self.calculate_motor_current(power=fan.power, volt=fan_voltage)
+
         self.project_details["fan"]["motors"]["fan"]["motor"] = fan
         fan.start_type=fan_config["start_type"]
         if fan_config["start_type"] == "Delta/Star":
@@ -88,9 +95,11 @@ class FanDamperController(PanelController):
 
         self.choose_mccb(damper, damper_config["qty"])
         fan_with_half_power = copy.deepcopy(fan)
-        fan_with_half_power.power_kw = fan_with_half_power.power_kw/2 if fan_config["start_type"] == "Delta/Star" else fan_with_half_power.power_kw
+        fan_with_half_power.power = fan_with_half_power.power / 2 if fan_config["start_type"] == "Delta/Star" else fan_with_half_power.power
         self.choose_mccb(fan_with_half_power, fan_config["qty"])
-        # choose BiMetals
+
+        self.choose_bimetal(damper, damper_config["qty"])
+        self.choose_bimetal(fan, fan_config["qty"])
 
         # ----------------------- Add BiMetal -----------------------
 

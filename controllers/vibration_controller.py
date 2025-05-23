@@ -21,6 +21,7 @@ class VibrationController(PanelController):
                    usage="Vibration Motor",
                    plc_di=4,
                    junction_box_for_speed_qty=0)
+        vibration.current = self.calculate_motor_current(power=vibration.power)
         self.project_details["vibration"]["motors"]["vibration"]["motor"] = vibration
         motor_objects = [(vibration, motors_config["vibration"]["qty"])]
 
@@ -30,7 +31,9 @@ class VibrationController(PanelController):
         for motor, qty in motor_objects:
             self.choose_mpcb(motor, qty)
         for motor, qty in motor_objects:
-            self.choose_mccb(motor, qty)  # Add MCCB selection
+            self.choose_mccb(motor, qty)
+        for motor, qty in motor_objects:
+            self.choose_bimetal(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
         instruments = self.project_details["vibration"]["instruments"]

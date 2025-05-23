@@ -12,6 +12,7 @@ class Item(Base):
     contactor = relationship("Contactor", back_populates="item", uselist=False)
     mpcb = relationship("MPCB", back_populates="item", uselist=False)
     mccb = relationship("MCCB", back_populates="item", uselist=False)
+    bimetal = relationship("Bimetal", back_populates="item", uselist=False)
     general = relationship("General", back_populates="item", uselist=False)
     electric_motor = relationship("ElectricMotor", back_populates="item", uselist=False)
     instrument = relationship("Instrument", back_populates="item", uselist=False)

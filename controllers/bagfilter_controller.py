@@ -3,8 +3,7 @@ import math
 from controllers.panel_controller import PanelController
 from models.item_price_model import get_price
 from models.items.general_model import get_general_by_name
-from models.items.instrument_model import get_instrument_by_type
-from models.items.mccb_model import get_mccb_by_motor_power
+from models.items.mccb_model import get_mccb_by_motor_current
 from copy import deepcopy
 import re
 
@@ -124,43 +123,49 @@ class BagfilterController(PanelController):
             )
 
     def choose_mccb(self):
-
-        # Calculate total power of all motors
-        total_power = 0
+        """
+    Adds an MCCB entry to the panel based on the total motor power in the project.
+        """
+        total_current = 0.0
 
         for section in self.project_details.values():
             motors = section.get("motors", {})
             for motor_name, motor_data in motors.items():
                 try:
                     qty = motor_data.get("qty", 0)
-                    power = motor_data.get("power", 0)
-                    total_power += qty * power
-                except:
+                    current = motor_data.get("motor", 0).current
+                    total_current += qty * current
+                except Exception:
                     pass
 
-        if total_power == 0:
+        if total_current == 0:
             return
 
-        mccb = get_mccb_by_motor_power(total_power)
+
+        mccb = get_mccb_by_motor_current(total_current)
         if mccb.item_id:
             price_item = get_price(mccb.item_id, brand=False, item_brand=False)
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
             brand = price_item.brand
+            reference = price_item.reference
         else:
             price = 0
             effective_date = "Not Found"
             brand = ""
+            reference = ""
 
         self.add_to_panel(
-            type=f"MCCB FOR BAGFILTER",
+            type="MCCB INPUT PANEL",
             brand=brand,
-            reference_number=mccb.mccb_reference,
-            specifications=f"For Total Power: {mccb.p_kw} KW\nCurrent: {mccb.i_a} A",
+            reference_number=reference,
+            specifications=(
+                f"Total Motor Current: {total_current:.2f} A\n"
+            ),
             quantity=1,
             price=price,
             last_price_update=effective_date,
-            note=f"Total Power: {total_power} KW"
+            note=""
         )
 
     def calculate_plc_io_requirements(self, total_do, total_di, total_ao, total_ai):

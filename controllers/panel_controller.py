@@ -4,11 +4,12 @@ from math import sqrt
 from config import COSNUS_PI, ETA
 from controllers.project_details import ProjectDetails
 from models.item_price_model import get_price
-from models.items.contactor_model import get_contactor_by_motor_power
+from models.items.bimetal_model import get_bimetal_by_motor_current
+from models.items.contactor_model import get_contactor_by_current
 from models.items.general_model import get_general_by_name
 from models.items.instrument_model import get_instrument_by_type
-from models.items.mccb_model import get_mccb_by_motor_power
-from models.items.mpcb_model import get_mpcb_by_motor_power
+from models.items.mccb_model import get_mccb_by_motor_current
+from models.items.mpcb_model import get_mpcb_by_motor_current
 
 
 class PanelController:
@@ -59,95 +60,148 @@ class PanelController:
         self.panel["note"].append(note)
 
     """ ------------------------------------- Contactor/MPCB/MCCB/BiMetal ------------------------------------- """
-    def choose_mpcb(self, motor, qty):
-        """
-        Adds an MPCB entry to the panel based on motor specifications.
-        """
-        if qty == 0 or motor.power_kw == 0 or motor.mpcb_qty == 0:
-            return
-
-        mpcb = get_mpcb_by_motor_power(motor.power_kw)
-        if mpcb.item_id:
-            price_item = get_price(mpcb.item_id, brand=False, item_brand=False)
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-            brand = price_item.brand
-        else:
-            price = 0
-            effective_date = "Not Found"
-            brand = ""
-        total_qty = qty * motor.mpcb_qty
-
-        self.add_to_panel(
-            type=f"MPCB FOR {motor.usage.upper()}",
-            brand=brand,
-            reference_number=mpcb.mpcb_reference,
-            specifications=f"Motor Power: {mpcb.p_kw} KW\nIe: {mpcb.ie_a} A",
-            quantity=total_qty,
-            price=price,
-            last_price_update=effective_date,
-            note=f"{total_qty} x Motor Power: {motor.power_kw} KW {motor.usage}"
-        )
 
     def choose_contactor(self, motor, qty):
         """
-        Adds a contactor entry to the panel based on motor specifications.
+        Adds a contactor entry to the panel based on motor current specifications.
         """
-        if qty == 0 or motor.power_kw == 0 or motor.contactor_qty == 0:
+        if qty == 0 or motor.current == 0 or motor.contactor_qty == 0:
             return
 
-        contactor = get_contactor_by_motor_power(motor.power_kw)
+        contactor = get_contactor_by_current(motor.current)
         if contactor.item_id:
             price_item = get_price(contactor.item_id, brand=False, item_brand=False)
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
             brand = price_item.brand
+            reference = price_item.reference
         else:
             price = 0
             effective_date = "Not Found"
             brand = ""
+            reference = ""
 
         total_qty = qty * motor.contactor_qty
 
         self.add_to_panel(
-            type=f"CONTACTOR FOR {motor.usage}",
+            type=f"CONTACTOR FOR {motor.usage.upper()}",
             brand=brand,
-            reference_number=contactor.contactor_reference,
-            specifications=f"Motor Power: {contactor.p_kw} KW",
+            reference_number=reference,
+            specifications=f"Current: {contactor.current_a} A",
             quantity=total_qty,
             price=price,
             last_price_update=effective_date,
-            note=f"{total_qty} x Motor Power: {motor.power_kw} KW {motor.usage}"
+            note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+        )
+
+    def choose_mpcb(self, motor, qty):
+        """
+        Adds an MPCB entry to the panel based on motor current specifications.
+        """
+        if qty == 0 or motor.current == 0 or motor.mpcb_qty == 0:
+            return
+
+        mpcb = get_mpcb_by_motor_current(motor.current)
+        if mpcb.item_id:
+            price_item = get_price(mpcb.item_id, brand=False, item_brand=False)
+            price = price_item.price if price_item.price else 0
+            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+            brand = price_item.brand
+            reference = price_item.reference
+        else:
+            price = 0
+            effective_date = "Not Found"
+            brand = ""
+            reference = ""
+
+        total_qty = qty * motor.mpcb_qty
+
+        self.add_to_panel(
+            type=f"MPCB FOR {motor.usage.upper()}",
+            brand=brand,
+            reference_number=reference,
+            specifications=(
+                f"Current Range: {mpcb.min_current}A - {mpcb.max_current}A\n"
+                f"Breaking Capacity: {mpcb.breaking_capacity} A\n"
+                f"Trip Class: {mpcb.trip_class}"
+            ),
+            quantity=total_qty,
+            price=price,
+            last_price_update=effective_date,
+            note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
         )
 
     def choose_mccb(self, motor, qty):
         """
-        Adds an MCCB entry to the panel based on motor specifications.
+        Adds an MCCB entry to the panel based on motor current specifications.
         """
-        if qty == 0 or motor.power_kw == 0 or motor.mccb_qty == 0:
+        if qty == 0 or motor.current == 0 or motor.mccb_qty == 0:
             return
 
-        mccb = get_mccb_by_motor_power(motor.power_kw)
+        mccb = get_mccb_by_motor_current(motor.current)
         if mccb.item_id:
             price_item = get_price(mccb.item_id, brand=False, item_brand=False)
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
             brand = price_item.brand
+            reference = price_item.reference
         else:
             price = 0
             effective_date = "Not Found"
             brand = ""
-        total_qty = qty * motor.mpcb_qty
+            reference = ""
+
+        total_qty = qty * motor.mccb_qty
 
         self.add_to_panel(
             type=f"MCCB FOR {motor.usage.upper()}",
             brand=brand,
-            reference_number=mccb.mccb_reference,
-            specifications=f"For Motor Power: {mccb.p_kw} KW\nCurrent: {mccb.i_a} A",
+            reference_number=reference,
+            specifications=(
+                f"Breaking Capacity: {mccb.breaking_capacity} A\n"
+                f"Rated Current: {mccb.rated_current} A"
+            ),
             quantity=total_qty,
             price=price,
             last_price_update=effective_date,
-            note=f"{total_qty} x Motor Power: {motor.power_kw} KW {motor.usage}"
+            note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+        )
+
+    def choose_bimetal(self, motor, qty):
+        """
+        Adds a bimetal entry to the panel based on motor current specifications.
+        """
+        if qty == 0 or motor.current == 0 or motor.bimetal_qty == 0:
+            return
+
+        bimetal = get_bimetal_by_motor_current(motor.current)
+
+        if bimetal.item_id:
+            price_item = get_price(bimetal.item_id, brand=False, item_brand=False)
+            price = price_item.price if price_item.price else 0
+            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+            brand = price_item.brand
+            reference = price_item.reference
+        else:
+            price = 0
+            effective_date = "Not Found"
+            brand = ""
+            reference = ""
+
+        total_qty = qty * motor.bimetal_qty
+
+        self.add_to_panel(
+            type=f"BIMETAL FOR {motor.usage.upper()}",
+            brand=brand,
+            reference_number=reference,
+            specifications=(
+                f"Current Setting: {bimetal.current_setting_min} A - {bimetal.current_setting_max} A\n"
+                f"Trip Time: {bimetal.trip_time} sec"
+            ),
+            quantity=total_qty,
+            price=price,
+            last_price_update=effective_date,
+            note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
         )
 
     """ ------------------------------------- Generals ------------------------------------- """
@@ -164,7 +218,7 @@ class PanelController:
         ]
         has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
-            has_hmi.append("signal_lamp_24v")
+            general_items.append("signal_lamp_24v")
 
         for item_name in general_items:
             total_qty = 0
@@ -396,7 +450,7 @@ class PanelController:
                                                 or instrument_name == "outlet_temperature_transmitter" \
                                                 or instrument_name == "bearing_temperature_transmitter" \
                                                 or instrument_name == "pt100" \
-                else instrument_name
+                                                else instrument_name
             name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
             n_di = instruments_pins[name]["n_di"]
@@ -460,8 +514,8 @@ class PanelController:
         correction_factor = 1.6 / (sqrt(3) * volt * COSNUS_PI * ETA)
 
         for motor, qty in motor_objects:
-            if qty > 0 and motor.power_kw > 0:
-                current = motor.power_kw * 1000 * correction_factor
+            if qty > 0 and motor.power > 0:
+                current = motor.power * correction_factor
                 cable = cable_rating(cable_length_m=length, cable_current_a=current)
                 if cable:
                     motor_length = length * motor.power_cable_cofactor * qty
@@ -537,7 +591,7 @@ class PanelController:
 
         for motor, qty in motor_objects:
             if qty > 0:
-                if motor.power_kw <= 45:
+                if motor.power <= 45:
                     motor_wire_length = 4 * qty
                     wire_length += motor_wire_length
                     wire_notes.append(f"{motor_wire_length} m for {motor.usage}")
@@ -577,6 +631,12 @@ class PanelController:
                 last_price_update=effective_date,
                 note="\n".join(busbar_notes))
 
+    """ ------------------------------------- Calculate Motor Current ------------------------------------- """
+    def calculate_motor_current(self, power, volt=None):
+        if volt is None:
+            volt = self.project_details["project_info"]["project_l_voltage"]
+
+        return round(power / (sqrt(3) * volt * COSNUS_PI * ETA), 2)
 
 def cable_rating(cable_length_m, cable_current_a):
     cable_rating = \

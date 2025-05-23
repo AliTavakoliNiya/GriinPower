@@ -2,7 +2,7 @@ class Motor:
     def __init__(
 
     ):
-        self.power_kw = power_kw
+        self.power = power_kw
         self.usage = usage
         self.brand = brand
         self.lcb_qty = lcb_qty
