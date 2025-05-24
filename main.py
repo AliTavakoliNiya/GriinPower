@@ -1,7 +1,6 @@
-import os
 import sys
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import uic
 from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
@@ -9,80 +8,33 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 from utils.database import SessionLocal
 from views.login_view import LoginView
 
-from views.electrical_tab_view import ElectricalTab
 from views.message_box_view import show_message
-from views.project_information_view import ProjectInformationTab
-from views.result_tab_view import ResultTab
 
 from controllers.user_session import UserSession
-from controllers.project_details import ProjectDetails
+from views.tender_application_view import TenderApplication
+from views.data_entry_view import DataEntry
 
 
-class MainView(QMainWindow):
+class GriinPower(QMainWindow):
     def __init__(self):
         super().__init__()
 
         # Load the main window UI (with the QTabWidget)
-        uic.loadUi("ui/main_window.ui", self)
+        uic.loadUi("ui/GrrinPower.ui", self)
         self.setWindowIcon(QIcon('assets/Logo.ico'))
         self.setWindowTitle("GriinPower")
         self.settings = QSettings("Griin", "GriinPower")
 
-        self.project_details = ProjectDetails()
-
-        self.project_information_tab = ProjectInformationTab()
-        self.tabWidget.addTab(self.project_information_tab, "Project Information")
-
-        self.electrical_tab = ElectricalTab()
-        self.tabWidget.addTab(self.electrical_tab, "Electrical")
-
-        self.result_tab = ResultTab(self)
-        self.tabWidget.addTab(self.result_tab, "Result")
-
-        self.tabWidget.currentChanged.connect(self.on_tab_changed)
-
-        self.tabWidget.setCurrentIndex(0)  # Start at first tab
-
-        self.themes = {
-            "dark": "styles/dark_style.qss",
-            "coffee": "styles/coffee_style.qss",
-            "light": "styles/light_style.qss"
-        }
-        self.theme_menu = self.menuBar().addMenu("Change Theme")
-        for name, path in self.themes.items():
-            action = QtWidgets.QAction(name, self)
-            action.triggered.connect(lambda checked, p=path: self.change_theme(p))
-            self.theme_menu.addAction(action)
-
-        # try - except here
-        last_theme = self.settings.value("theme_path", "styles/dark_style.qss")
-        self.apply_stylesheet(last_theme)
+        self.new_project_btn.clicked.connect(self.open_new_project_func)
+        self.data_entry_btn.clicked.connect(self.open_data_entry_func)
 
         self.showMaximized()
 
-    def on_tab_changed(self, index):
-        if index == 1: # Electrical
-            if not self.result_tab.check_info_tab_ui_rules():
-                self.tabWidget.setCurrentIndex(0)
+    def open_new_project_func(self):
+        self.tender_application_window = TenderApplication()
 
-        if index == 2 : # Result
-            if not self.result_tab.check_electrical_tab_ui_rules():
-                self.tabWidget.setCurrentIndex(1)
-            else:
-                self.result_tab.generate_panels()
-
-    def apply_stylesheet(self, path):
-        if os.path.exists(path):
-            with open(path, "r") as f:
-                style = f.read()
-                self.setStyleSheet(style)
-        else:
-            show_message(f"file {path} not found.", "Details")
-
-    def change_theme(self, path):
-        self.apply_stylesheet(path)
-        self.settings.setValue("theme_path", path)
-
+    def open_data_entry_func(self):
+        self.data_entry_window = DataEntry()
 
 
 if __name__ == "__main__":
@@ -98,8 +50,8 @@ if __name__ == "__main__":
         username = session.value("last_username", "")
         current_user = UserSession()
 
-        show_message(f"Welcome back, {current_user.first_name} {current_user.last_name}", title="Welcome")
+        # show_message(f"Welcome back, {current_user.first_name} {current_user.last_name}", title="Welcome")
 
-        window = MainView()
+        window = GriinPower()
         window.show()
         sys.exit(app.exec_())
