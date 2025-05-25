@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1381</width>
-    <height>860</height>
+    <width>1397</width>
+    <height>791</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -907,8 +907,8 @@ QTableWidget::item:selected {
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1363</width>
-        <height>860</height>
+        <width>1379</width>
+        <height>791</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_8">

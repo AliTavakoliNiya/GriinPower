@@ -1,6 +1,12 @@
+import os
+
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QWidget, QSpinBox, QComboBox, QLineEdit, QCheckBox
+from docx import Document
+import jdatetime
+
 from controllers.project_details import ProjectDetails
 
 
@@ -13,7 +19,7 @@ class ElectricalTab(QWidget):
 
     def _initialize_components(self):
         """Initialize all UI components with their event handlers"""
-        # ------------ Bagfilter ------------
+        """ ------------ Bagfilter ------------ """
         self.bagfilter_type.currentIndexChanged.connect(self._handle_bagfilter_type_changed)
         self.bagfilter_order.textChanged.connect(self._handle_bagfilter_order_changed)
         self.plc_series.currentIndexChanged.connect(self._handle_plc_series_changed)
@@ -25,7 +31,7 @@ class ElectricalTab(QWidget):
         self.cable_supply.stateChanged.connect(self._handle_cable_supply_changed)
         self.cable_length.valueChanged.connect(self._handle_cable_length_changed)
 
-        # Bagfilter instruments
+        """ ------------Bagfilter instruments ------------ """
         self.bagfilter_dpt_qty.valueChanged.connect(self._handle_bagfilter_dpt_qty_changed)
         self.bagfilter_dpt_brand.currentIndexChanged.connect(self._handle_bagfilter_dpt_brand_changed)
 
@@ -47,14 +53,14 @@ class ElectricalTab(QWidget):
         self.bagfilter_outlet_tt_qty.valueChanged.connect(self._handle_bagfilter_outlet_tt_qty_changed)
         self.bagfilter_outlet_tt_brand.currentIndexChanged.connect(self._handle_bagfilter_outlet_tt_brand_changed)
 
-        # ------------ Transport ------------
+        """ ------------ Transport ------------ """
         self.transport_checkbox.stateChanged.connect(self._handle_transport_checkbox_changed)
         self.screw2_add_btn.clicked.connect(self._show_screw2)
         self.screw2_minuse_btn.clicked.connect(self._hide_screw2)
         self._hide_screw2()
         self.transport_checkbox.setChecked(False)
 
-        # Transport motors
+        """ ------------Transport motors ------------ """
         self.rotary_qty.valueChanged.connect(self._handle_rotary_qty_changed)
         self.rotary_kw.currentIndexChanged.connect(self._handle_rotary_kw_changed)
 
@@ -70,7 +76,7 @@ class ElectricalTab(QWidget):
         self.screw2_qty.valueChanged.connect(self._handle_screw2_qty_changed)
         self.screw2_kw.currentIndexChanged.connect(self._handle_screw2_kw_changed)
 
-        # Transport instruments
+        """ ------------Transport instruments ------------ """
         self.transport_spd_qty.valueChanged.connect(self._handle_transport_spd_qty_changed)
         self.transport_spd_brand.currentIndexChanged.connect(self._handle_transport_spd_brand_changed)
 
@@ -83,19 +89,19 @@ class ElectricalTab(QWidget):
         self.transport_lt_qty.valueChanged.connect(self._handle_transport_lt_qty_changed)
         self.transport_lt_brand.currentIndexChanged.connect(self._handle_transport_lt_brand_changed)
 
-        # ------------ Vibration ------------
+        """ ------------ Vibration ------------ """
         self.vibration_checkbox.stateChanged.connect(self._handle_vibration_checkbox_changed)
         self.vibration_checkbox.setChecked(False)
 
-        # Vibration motors
+        """ ------------Vibration motors ------------ """
         self.vibration_motor_qty.valueChanged.connect(self._handle_vibration_motor_qty_changed)
         self.vibration_motor_kw.currentIndexChanged.connect(self._handle_vibration_motor_kw_changed)
 
-        # ------------ Fresh Air ------------
+        """ ------------ Fresh Air ------------ """
         self.freshair_checkbox.stateChanged.connect(self._handle_freshair_checkbox_changed)
         self.freshair_checkbox.setChecked(False)
 
-        # Fresh air motors
+        """ ------------Fresh air motors ------------ """
         self.freshair_motor_qty.valueChanged.connect(self._handle_freshair_motor_qty_changed)
         self.freshair_motor_kw.currentIndexChanged.connect(self._handle_freshair_motor_kw_changed)
         self.freshair_motor_start_type.currentIndexChanged.connect(self._handle_freshair_motor_start_type_changed)
@@ -108,14 +114,14 @@ class ElectricalTab(QWidget):
         self.emergency_flap_motor_kw.currentIndexChanged.connect(self._handle_emergency_flap_motor_kw_changed)
         self.emergency_flap_start_type.currentIndexChanged.connect(self._handle_emergency_flap_start_type_changed)
 
-        # Fresh air instruments
+        """ ------------Fresh air instruments ------------ """
         self.freshair_tt_qty.valueChanged.connect(self._handle_freshair_tt_qty_changed)
         self.freshair_tt_brand.currentIndexChanged.connect(self._handle_freshair_tt_brand_changed)
 
         self.freshair_zs_qty.valueChanged.connect(self._handle_freshair_zs_qty_changed)
         self.freshair_zs_brand.currentIndexChanged.connect(self._handle_freshair_zs_brand_changed)
 
-        # ------------ Heater Hopper ------------
+        """ ------------ Heater Hopper ------------ """
         self.hopper_heater_checkbox.stateChanged.connect(self._handle_hopper_heater_checkbox_changed)
         self.hopper_heater_checkbox.setChecked(False)
 
@@ -123,7 +129,7 @@ class ElectricalTab(QWidget):
         self.hopper_heater_kw.currentIndexChanged.connect(self._handle_hopper_heater_kw_changed)
         self.hopper_heater_ptc_brand.currentIndexChanged.connect(self._handle_hopper_heater_ptc_brand_changed)
 
-        # ------------ Damper ------------
+        """ ------------ Damper ------------ """
         self.damper_checkbox.stateChanged.connect(self._handle_damper_checkbox_changed)
         self.damper_checkbox.setChecked(False)
 
@@ -134,11 +140,12 @@ class ElectricalTab(QWidget):
         self.damper_zs_qty.valueChanged.connect(self._handle_damper_zs_qty_changed)
         self.damper_zs_brand.currentIndexChanged.connect(self._handle_damper_zs_brand_changed)
 
-        # ------------ Fan ------------
+        """ ------------ Fan ------------ """
         self.fan_checkbox.stateChanged.connect(self._handle_fan_checkbox_changed)
         self.fan_checkbox.setChecked(False)
+        self.qss_btn.clicked.connect(self._handle_qss_generate)
 
-        # Fan motor properties
+        """ ------------Fan motor properties ------------ """
         self.fan_kw.currentIndexChanged.connect(self._handle_fan_kw_changed)
         self.fan_rpm.textChanged.connect(self._handle_fan_rpm_changed)
         self.fan_start_type.currentIndexChanged.connect(self._handle_fan_start_type_changed)
@@ -151,7 +158,7 @@ class ElectricalTab(QWidget):
         self.fan_thermal_protection.currentIndexChanged.connect(self._handle_fan_thermal_protection_changed)
         self.fan_space_heater.stateChanged.connect(self._handle_fan_space_heater_changed)
 
-        # Fan instruments
+        """ ------------Fan instruments ------------ """
         self.pt100_qty.valueChanged.connect(self._handle_fan_pt100_qty_changed)
         self.pt100_brand.currentIndexChanged.connect(self._handle_fan_pt100_brand_changed)
 
@@ -167,7 +174,8 @@ class ElectricalTab(QWidget):
         self.fan_tt_qty.valueChanged.connect(self._handle_fan_tt_qty_changed)
         self.fan_tt_brand.currentIndexChanged.connect(self._handle_fan_tt_brand_changed)
 
-    # Transport motor handlers
+    """ ------------Transport motor handlers ------------ """
+
     def _handle_rotary_qty_changed(self, value):
         self._handle_rotary_screw_qty(self.rotary_qty)
 
@@ -182,7 +190,7 @@ class ElectricalTab(QWidget):
 
     def _handle_slide_gate_qty_changed(self, value):
         self._update_project_value(["transport", "motors", "slide_gate", "qty"], value)
-        # Update proximity switch quantity based on slide gate qty
+        """ ------------Update proximity switch quantity based on slide gate qty ------------ """
         if value != 0:
             required_switches = value * 2
             if self.transport_zs_qty.value() < required_switches:
@@ -207,7 +215,8 @@ class ElectricalTab(QWidget):
     def _handle_screw2_kw_changed(self, index):
         self._handle_combobox_float_kilo(["transport", "motors", "screw2", "power"])
 
-    # Transport instrument handlers
+    """ ------------Transport instrument handlers ------------ """
+
     def _handle_transport_spd_qty_changed(self, value):
         self._update_project_value(["transport", "instruments", "speed_detector", "qty"], value)
 
@@ -232,17 +241,19 @@ class ElectricalTab(QWidget):
     def _handle_transport_lt_brand_changed(self, index):
         self._update_project_value(["transport", "instruments", "level_transmitter", "brand"])
 
-    # Vibration motor handlers
+    """ ------------Vibration motor handlers ------------ """
+
     def _handle_vibration_motor_qty_changed(self, value):
         self._update_project_value(["vibration", "motors", "vibration", "qty"], value)
 
     def _handle_vibration_motor_kw_changed(self, index):
         self._handle_combobox_float_kilo(["vibration", "motors", "vibration", "power"])
 
-    # Fresh air motor handlers
+    """ ------------Fresh air motor handlers ------------ """
+
     def _handle_freshair_motor_qty_changed(self, value):
         self._update_project_value(["fresh_air", "motors", "freshair_motor", "qty"], value)
-        # Update proximity switch quantity based on motor qty
+        """ ------------Update proximity switch quantity based on motor qty ------------ """
         if self.freshair_motor_qty.value() != 0:
             required_switches = self.freshair_motor_qty.value() * 2
             if self.freshair_zs_qty.value() < required_switches:
@@ -273,7 +284,8 @@ class ElectricalTab(QWidget):
     def _handle_emergency_flap_start_type_changed(self, index):
         self._update_project_value(["fresh_air", "motors", "emergency_flap", "start_type"])
 
-    # Fresh air instrument handlers
+    """ ------------Fresh air instrument handlers ------------ """
+
     def _handle_freshair_tt_qty_changed(self, value):
         self._update_project_value(["fresh_air", "instruments", "temperature_transmitter", "qty"], value)
 
@@ -286,11 +298,12 @@ class ElectricalTab(QWidget):
     def _handle_freshair_zs_brand_changed(self, index):
         self._update_project_value(["fresh_air", "instruments", "proximity_switch", "brand"])
 
-    # Hopper heater handlers
+    """ ------------Hopper heater handlers ------------ """
+
     def _handle_hopper_heater_qty_changed(self, value):
         self._update_project_value(["hopper_heater", "motors", "elements", "qty"], value)
 
-        # Update PTC qty based on heater qty
+        """ ------------Update PTC qty based on heater qty ------------ """
         ptc_qty = value * 2
         self.project_details["hopper_heater"]["instruments"]["ptc"]["qty"] = ptc_qty
         self.hopper_heater_ptc_qty.setText(f"Qty: {ptc_qty}")
@@ -301,7 +314,8 @@ class ElectricalTab(QWidget):
     def _handle_hopper_heater_ptc_brand_changed(self, index):
         self._update_project_value(["hopper_heater", "instruments", "ptc", "brand"])
 
-    # Damper handlers
+    """ ------------Damper handlers ------------ """
+
     def _handle_damper_kw_changed(self, index):
         self._handle_combobox_float_kilo(["damper", "motors", "damper", "power"])
 
@@ -317,7 +331,11 @@ class ElectricalTab(QWidget):
     def _handle_damper_zs_brand_changed(self, index):
         self._update_project_value(["damper", "instruments", "proximity_switch", "brand"])
 
-    # Fan motor handlers
+    """ ------------Fan motor handlers ------------ """
+
+    def _handle_qss_generate(self):
+        create_qss_word()
+
     def _handle_fan_kw_changed(self, index):
         self._handle_combobox_float_kilo(["fan", "motors", "fan", "power"])
 
@@ -351,9 +369,9 @@ class ElectricalTab(QWidget):
     def _handle_fan_space_heater_changed(self, state):
         self._handle_checkbox(["fan", "motors", "fan", "space_heater"])
 
-    # Fan instrument handlers
+    """ ------------Fan instrument handlers ------------ """
 
-    def _handle_fan_pt100_qty_changed(self, value ):
+    def _handle_fan_pt100_qty_changed(self, value):
         self._update_project_value(["fan", "instruments", "pt100", "qty"], value)
 
     def _handle_fan_pt100_brand_changed(self, index):
@@ -396,15 +414,15 @@ class ElectricalTab(QWidget):
         if not motor_type:
             return
 
-        # Update the project details
+        """ ------------Update the project details ------------ """
         self.project_details["transport"]["motors"][motor_type]["qty"] = widget.value()
 
-        # Calculate total rotary/screw motors
+        """ ------------Calculate total rotary/screw motors ------------ """
         total_motors = (self.rotary_qty.value() +
                         self.screw1_qty.value() +
                         self.screw2_qty.value())
 
-        # Update speed detector quantity based on total motors
+        """ ------------Update speed detector quantity based on total motors ------------ """
         if total_motors == 0:
             self.transport_spd_qty.setValue(0)
             self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = 0
@@ -465,14 +483,14 @@ class ElectricalTab(QWidget):
         if not enabled:
             self._reset_qtys(self.project_details["damper"])
 
-        # Enable/disable individual damper widgets
+        """ ------------Enable/disable individual damper widgets ------------ """
         self.damper_kw.setEnabled(enabled)
         self.damper_brand.setEnabled(enabled)
         self.damper_start_type.setEnabled(enabled)
         self.damper_zs_qty.setEnabled(enabled)
         self.damper_zs_brand.setEnabled(enabled)
 
-        # Reset values if disabling
+        """ ------------Reset values if disabling ------------ """
         if not enabled:
             self.damper_kw.setCurrentIndex(0)
             self.damper_brand.setCurrentIndex(0)
@@ -491,7 +509,7 @@ class ElectricalTab(QWidget):
         if not enabled:
             self._reset_qtys(self.project_details["fan"])
 
-        # Enable/disable individual fan widgets
+        """ ------------Enable/disable individual fan widgets ------------ """
         fan_widgets = [
             self.fan_kw,
             self.fan_rpm,
@@ -504,7 +522,6 @@ class ElectricalTab(QWidget):
             self.fan_painting_ral,
             self.fan_thermal_protection,
             self.fan_space_heater,
-            # Fan instruments
             self.fan_bearing_tt_qty,
             self.fan_bearing_tt_brand,
             self.fan_bearing_vt_qty,
@@ -519,11 +536,11 @@ class ElectricalTab(QWidget):
             self.qss_btn
         ]
 
-        # Enable/disable all fan widgets
+        """ ------------Enable/disable all fan widgets ------------ """
         for widget in fan_widgets:
             widget.setEnabled(enabled)
 
-        # Reset values if disabling
+        """ ------------Reset values if disabling ------------ """
         if not enabled:
             self.fan_kw.setCurrentIndex(0)
             self.fan_rpm.setText("")
@@ -536,7 +553,7 @@ class ElectricalTab(QWidget):
             self.fan_painting_ral.setCurrentIndex(0)
             self.fan_thermal_protection.setCurrentIndex(0)
             self.fan_space_heater.setChecked(False)
-            # Reset instrument values
+            """ ------------Reset instrument values ------------ """
             for widget in fan_widgets[11:]:  # All widgets after fan_space_heater
                 if isinstance(widget, QSpinBox):
                     widget.setValue(0)
@@ -564,10 +581,10 @@ class ElectricalTab(QWidget):
     def _handle_bagfilter_type_changed(self, index):
         if index == 0:
             self.bagfilter_order.setPlaceholderText("Order")
-        if index == 1: # Griin/China
-            self.bagfilter_order.setPlaceholderText("Ex: 8.96×5.(2.7m).10") # 5 valve ~ compartment
-        if index == 2: # BETH
-            self.bagfilter_order.setPlaceholderText("Ex: 6.78x2.3.10") # 6x2 valve
+        if index == 1:  # Griin/China
+            self.bagfilter_order.setPlaceholderText("Ex: 8.96×5.(2.7m).10")  #5 valve ~ compartment
+        if index == 2:  # BETH
+            self.bagfilter_order.setPlaceholderText("Ex: 6.78x2.3.10")  #6x2 valve
 
         self._update_project_value(["bagfilter", "type"], self.bagfilter_type.currentText())
 
@@ -604,7 +621,8 @@ class ElectricalTab(QWidget):
     def _handle_cable_length_changed(self, value):
         self._update_project_value(["bagfilter", "cable_dimension"], value)
 
-    # Bagfilter instrument handlers
+    """ ------------Bagfilter instrument handlers ------------ """
+
     def _handle_bagfilter_dpt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "qty"], value)
 
@@ -656,7 +674,7 @@ class ElectricalTab(QWidget):
             value: Value to set (if None, gets from sender widget)
         """
         if value is None:
-            # Get value from sender
+            """ ------------Get value from sender ------------ """
             sender = self.sender()
             if isinstance(sender, QComboBox):
                 value = sender.currentText()
@@ -669,12 +687,12 @@ class ElectricalTab(QWidget):
             else:
                 return
 
-        # Navigate to the right location in the dictionary
+        """ ------------Navigate to the right location in the dictionary ------------ """
         target = self.project_details
         for key in path_list[:-1]:
             target = target[key]
 
-        # Set the value
+        """ ------------Set the value ------------ """
         target[path_list[-1]] = value
 
     def _handle_combobox_float_kilo(self, path_list):
@@ -718,11 +736,11 @@ class ElectricalTab(QWidget):
             enabled: Whether to enable or disable the widgets
         """
         for child in parent_widget.findChildren(QWidget):
-            # Skip the checkbox itself
+            """ ------------Skip the checkbox itself ------------ """
             if isinstance(child, QCheckBox) and child.parent() == parent_widget:
                 continue
 
-            # Reset values if disabling
+            """ ------------Reset values if disabling ------------ """
             if not enabled:
                 if isinstance(child, QSpinBox):
                     child.setValue(0)
@@ -733,5 +751,72 @@ class ElectricalTab(QWidget):
                 elif isinstance(child, QCheckBox):
                     child.setChecked(False)
 
-            # Set enabled state
+            """ ------------Set enabled state ------------ """
             child.setEnabled(enabled)
+
+
+def replace_placeholders(doc: Document, data: dict):
+    def replace_in_paragraph(paragraph):
+        original_text = ''.join(run.text for run in paragraph.runs)
+        updated_text = original_text
+
+        for key, value in data.items():
+            updated_text = updated_text.replace(f"{{{{{key}}}}}", str(value))
+
+        if updated_text != original_text:
+            # Clear existing runs
+            for run in paragraph.runs:
+                run.text = ''
+            # Add the updated text in the first run or a new one
+            if paragraph.runs:
+                paragraph.runs[0].text = updated_text
+            else:
+                paragraph.add_run(updated_text)
+
+    # Process all paragraphs in the main body
+    for paragraph in doc.paragraphs:
+        replace_in_paragraph(paragraph)
+
+    # Process all table cell paragraphs
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for paragraph in cell.paragraphs:
+                    replace_in_paragraph(paragraph)
+
+
+def create_qss_word():
+    template_path = "assets/Motor_Qss.docx"
+    doc = Document(template_path)
+
+    project_details = ProjectDetails()
+    today_shamsi = jdatetime.date.today().strftime("%Y/%m/%d")
+    fan = project_details["fan"]["motors"]["fan"]
+    keywords = {
+        "date": today_shamsi,
+        "project_name": project_details["project_info"]["project_name"],
+        "project_code": project_details["project_info"]["project_code"],
+        "power": fan["power"],
+        "rpm": fan["rpm"],
+        "brand": fan["brand"],
+        "start_type": fan["start_type"],
+        "cooling_method": fan["cooling_method"],
+        "ip_rating": fan["ip_rating"],
+        "efficiency_class": fan["efficiency_class"],
+        "voltage_type": fan["voltage_type"],
+        "painting_ral": fan["painting_ral"],
+        "thermal_protection": fan["thermal_protection"],
+        "space_heater": fan["space_heater"]
+    }
+
+    replace_placeholders(doc, keywords)
+
+    output_path, _ = QFileDialog.getSaveFileName(
+        caption="Save Word File",
+        directory=f"QSS_For_Motor_{fan['power']}KW_{fan['rpm']}RPM",
+        filter="Word Documents (*.docx)"
+    )
+
+    if output_path:
+        doc.save(output_path)
+        os.startfile(output_path)

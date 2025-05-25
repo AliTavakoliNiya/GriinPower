@@ -11,7 +11,9 @@ class ProjectDetails:
 
 
     def get_default_project_details(self):
-        return {"project_info": {"rev": 1,
+        return {"project_info": {"project_name": "Cany Mes",
+                                 "project_code": "2996",
+                                 "rev": 1,
                                  "project_m_voltage":0,
                                  "project_l_voltage":0,
                                  "voltage_variation":10,
