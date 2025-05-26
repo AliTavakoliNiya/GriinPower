@@ -1,24 +1,27 @@
+import re
+
 import openpyxl
 import pandas as pd
 from PyQt5 import uic
 from PyQt5.QtCore import QAbstractTableModel, Qt
 from PyQt5.QtGui import QPainter
 from PyQt5.QtPrintSupport import QPrinter
-from PyQt5.QtWidgets import QMainWindow, QWidget, QTreeWidget, QTreeWidgetItem, QPushButton, QVBoxLayout, QFileDialog
+from PyQt5.QtWidgets import (
+    QMainWindow, QWidget, QTreeWidget, QTreeWidgetItem,
+    QPushButton, QVBoxLayout, QFileDialog
+)
 from PyQt5.QtWidgets import QTableView, QHeaderView
 from openpyxl.styles import Font, PatternFill
 
 from controllers.bagfilter_controller import BagfilterController
+from controllers.electric_motor_controller import ElectricMotorController
 from controllers.fan_damper_controller import FanDamperController
 from controllers.fresh_air_controller import FreshAirController
 from controllers.hopper_heater_controller import HopperHeaterController
+from controllers.project_details import ProjectDetails
 from controllers.transport_controller import TransportController
 from controllers.vibration_controller import VibrationController
-from controllers.electric_motor_controller import ElectricMotorController
 from views.message_box_view import show_message
-
-from controllers.project_details import ProjectDetails
-import re
 
 
 class ResultTab(QWidget):
@@ -45,7 +48,6 @@ class ResultTab(QWidget):
 
         self.excel_btn.clicked.connect(self._export_to_excel)
         self.show_datail_btn.clicked.connect(self.show_datail_btn_handler)
-
 
     def _setup_result_table(self):
         for table in self.tables.values():
@@ -116,7 +118,6 @@ class ResultTab(QWidget):
         electric_motor_controller = ElectricMotorController()
         electric_motor_price_and_effective_date = electric_motor_controller.calculate_price()
 
-
         self.generate_table(self.panels["bagfilter_panel"], self.tables["bagfilter_panel_table"])
         self.generate_table(self.panels["fan_damper_panel"], self.tables["fan_damper_panel_table"])
         self.generate_table(self.panels["transport_panel"], self.tables["transport_panel_table"])
@@ -163,7 +164,7 @@ class ResultTab(QWidget):
         summary = {
             "title": [],
             "Price": [],
-            "Note":[]
+            "Note": []
         }
 
         total_sum = 0
@@ -336,7 +337,7 @@ class DictionaryViewer(QMainWindow):
         # Tree widget
         self.tree = QTreeWidget()
         self.tree.setColumnCount(2)
-        self.tree.setHeaderLabels(["panles", "Value"])
+        self.tree.setHeaderLabels(["Panels", "Value"])
         self.tree.setColumnWidth(0, 300)
         self.populate_tree(self.tree.invisibleRootItem(), data)
 
@@ -359,7 +360,6 @@ class DictionaryViewer(QMainWindow):
 
         self.show()
 
-
     def toggle_tree(self):
         if self.tree_expanded:
             self.tree.collapseAll()
@@ -370,13 +370,17 @@ class DictionaryViewer(QMainWindow):
         self.tree_expanded = not self.tree_expanded
 
     def populate_tree(self, parent_item, dictionary):
+        def format_key(key):
+            return ' '.join(word.capitalize() for word in str(key).split('_'))
+
         for key, value in dictionary.items():
+            display_key = format_key(key)
             if isinstance(value, dict):
-                item = QTreeWidgetItem([str(key)])
+                item = QTreeWidgetItem([display_key])
                 parent_item.addChild(item)
                 self.populate_tree(item, value)
             else:
-                item = QTreeWidgetItem([str(key), str(value)])
+                item = QTreeWidgetItem([display_key, str(value)])
                 parent_item.addChild(item)
 
     def print_to_pdf(self):

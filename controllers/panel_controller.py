@@ -561,7 +561,7 @@ class PanelController:
         """
         Adds power cable entries with sizing based on current and motor demand.
         """
-        volt = self.project_details["project_info"]["project_l_voltage"]
+        volt = self.project_details["project_info"]["l_voltage"]
         length = self.project_details["bagfilter"]["cable_dimension"]
         if length == 0:
             return
@@ -691,7 +691,7 @@ class PanelController:
 
     def calculate_motor_current(self, power, volt=None):
         if volt is None:
-            volt = self.project_details["project_info"]["project_l_voltage"]
+            volt = self.project_details["project_info"]["l_voltage"]
 
         return round(power / (sqrt(3) * volt * COSNUS_PI * ETA), 2)
 

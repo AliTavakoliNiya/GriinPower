@@ -49,9 +49,9 @@ class FanDamperController(PanelController):
         fan_config = self.project_details["fan"]["motors"]["fan"]
         fan = Motor(power=fan_config["power"], usage="Fan")
         if self.project_details["fan"]["motors"]["fan"]["voltage_type"] == "LV":
-            fan_voltage = self.project_details["project_info"]["project_l_voltage"]
+            fan_voltage = self.project_details["project_info"]["l_voltage"]
         else:
-            fan_voltage = self.project_details["project_info"]["project_m_voltage"]
+            fan_voltage = self.project_details["project_info"]["m_voltage"]
         fan.current = self.calculate_motor_current(power=fan.power, volt=fan_voltage)
 
         self.project_details["fan"]["motors"]["fan"]["motor"] = fan

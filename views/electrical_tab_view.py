@@ -786,18 +786,29 @@ def replace_placeholders(doc: Document, data: dict):
 
 
 def create_qss_word():
-    template_path = "assets/Motor_Qss.docx"
+    template_path = "assets/QSS-Template.docx"
     doc = Document(template_path)
 
     project_details = ProjectDetails()
     today_shamsi = jdatetime.date.today().strftime("%Y/%m/%d")
     fan = project_details["fan"]["motors"]["fan"]
+    if project_details["fan"]["motors"]["fan"]["voltage_type"] == "LV":
+        fan_voltage = project_details["project_info"]["l_voltage"]
+    else:
+        fan_voltage = project_details["project_info"]["m_voltage"]
     keywords = {
         "date": today_shamsi,
         "project_name": project_details["project_info"]["project_name"],
         "project_code": project_details["project_info"]["project_code"],
+        "humidity": project_details["project_info"]["project_code"],
+        "min_temp": project_details["project_info"]["minimum_temprature"],
+        "max_temp": project_details["project_info"]["maximum_temprature"],
         "power": fan["power"],
         "rpm": fan["rpm"],
+        "voltage": fan_voltage,
+        "voltage_variation": project_details["project_info"]["voltage_variation"],
+        "frequency": project_details["project_info"]["voltage_frequency"],
+        "frequency_variation": project_details["project_info"]["frequency_variation"],
         "brand": fan["brand"],
         "start_type": fan["start_type"],
         "cooling_method": fan["cooling_method"],

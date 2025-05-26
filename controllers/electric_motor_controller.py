@@ -10,7 +10,7 @@ class ElectricMotorController():
 
     def calculate_price(self):
         motor = self.project_details["fan"]["motors"]["fan"]
-        voltage = self.project_details["project_info"]["project_l_voltage"]
+        voltage = self.project_details["project_info"]["l_voltage"]
         brand   = motor["brand"]
         electric_motor = get_electric_motor_by_specs(power=motor["power"],
                                                      rpm=motor["rpm"],

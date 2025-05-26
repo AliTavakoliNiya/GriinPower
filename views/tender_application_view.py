@@ -13,8 +13,8 @@ from views.result_tab_view import ResultTab
 
 
 class TenderApplication(QMainWindow):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent)
 
         # Load the main window UI (with the QTabWidget)
         uic.loadUi("ui/tender_application.ui", self)
@@ -37,20 +37,6 @@ class TenderApplication(QMainWindow):
 
         self.tabWidget.setCurrentIndex(0)  # Start at first tab
 
-        self.themes = {
-            "dark": "styles/dark_style.qss",
-            "coffee": "styles/coffee_style.qss",
-            "light": "styles/light_style.qss"
-        }
-        self.theme_menu = self.menuBar().addMenu("Change Theme")
-        for name, path in self.themes.items():
-            action = QtWidgets.QAction(name, self)
-            action.triggered.connect(lambda checked, p=path: self.change_theme(p))
-            self.theme_menu.addAction(action)
-
-        # try - except here
-        last_theme = self.settings.value("theme_path", "styles/dark_style.qss")
-        self.apply_stylesheet(last_theme)
 
         self.showMaximized()
 
@@ -65,14 +51,6 @@ class TenderApplication(QMainWindow):
             else:
                 self.result_tab.generate_panels()
 
-    def apply_stylesheet(self, path):
-        if os.path.exists(path):
-            with open(path, "r") as f:
-                style = f.read()
-                self.setStyleSheet(style)
-        else:
-            show_message(f"file {path} not found.", "Details")
 
-    def change_theme(self, path):
-        self.apply_stylesheet(path)
-        self.settings.setValue("theme_path", path)
+
+

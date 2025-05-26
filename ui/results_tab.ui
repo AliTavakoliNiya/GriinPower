@@ -239,7 +239,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../assets/details.png</normaloff>../assets/details.png</iconset>
+         <normaloff>../assets/check-list.png</normaloff>../assets/check-list.png</iconset>
        </property>
       </widget>
      </item>
