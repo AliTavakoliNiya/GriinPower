@@ -12,6 +12,7 @@ from views.data_entry_view import DataEntry
 from views.login_view import LoginView
 from views.message_box_view import show_message
 from views.tender_application_view import TenderApplication
+from views.vendor_view import VendorEntry
 
 
 class GriinPower(QMainWindow):
@@ -26,6 +27,7 @@ class GriinPower(QMainWindow):
 
         self.new_project_btn.clicked.connect(self.open_new_project_func)
         self.data_entry_btn.clicked.connect(self.open_data_entry_func)
+        self.vendor_btn.clicked.connect(self.open_vendors_func)
 
         self.themes = {
             "dark": "styles/dark_style.qss",
@@ -60,6 +62,9 @@ class GriinPower(QMainWindow):
 
     def open_data_entry_func(self):
         self.data_entry_window = DataEntry(parent=self)
+
+    def open_vendors_func(self):
+        self.venor_application_window = VendorEntry(parent=self)
 
 
 if __name__ == "__main__":

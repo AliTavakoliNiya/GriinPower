@@ -16,6 +16,7 @@ class ProjectInformationTab(QWidget):
         self.project_name.textChanged.connect(self._handle_project_name_changed)
         self.project_code.textChanged.connect(self._handle_project_code_changed)
         self.project_unique_code.textChanged.connect(self._handle_project_unique_code_changed)
+        self.Project_site_location.textChanged.connect(self._handle_project_site_location_changed)
 
         """ --------------------------- Site Condition --------------------------- """
         self.project_m_voltage.currentIndexChanged.connect(self._handle_m_voltage_changed)
@@ -88,6 +89,8 @@ class ProjectInformationTab(QWidget):
     def _handle_project_unique_code_changed(self):
         self._update_project_value(["project_info", "project_unique_code"], str(self.project_unique_code.text()))
 
+    def _handle_project_site_location_changed(self):
+        self._update_project_value(["project_info", "Project_site_location"], str(self.project_site_location.text()))
 
 
     """ --------------------------- Site Condition --------------------------- """

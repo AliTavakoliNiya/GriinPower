@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>621</width>
-    <height>546</height>
+    <width>616</width>
+    <height>547</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -901,38 +901,6 @@ QListWidget::item:selected {
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_11">
-    <item row="2" column="2">
-     <spacer name="verticalSpacer_9">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="1">
-     <spacer name="verticalSpacer_8">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="1" column="1">
      <widget class="QListWidget" name="item_list">
       <property name="minimumSize">
@@ -1158,7 +1126,7 @@ QListWidget::item:selected {
             </widget>
            </item>
            <item row="14" column="0">
-            <widget class="QPushButton" name="pushButton_2">
+            <widget class="QPushButton" name="add_vendor_btn4">
              <property name="maximumSize">
               <size>
                <width>16</width>
@@ -1595,7 +1563,7 @@ Cards Support </string>
             </widget>
            </item>
            <item row="9" column="0">
-            <widget class="QPushButton" name="pushButton_3">
+            <widget class="QPushButton" name="add_vendor_btn5">
              <property name="maximumSize">
               <size>
                <width>16</width>
@@ -1712,7 +1680,7 @@ Cards Support </string>
             </widget>
            </item>
            <item row="4" column="0">
-            <widget class="QPushButton" name="pushButton_5">
+            <widget class="QPushButton" name="add_vendor_btn6">
              <property name="maximumSize">
               <size>
                <width>16</width>
@@ -1792,7 +1760,7 @@ Cards Support </string>
             </widget>
            </item>
            <item row="4" column="0">
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="add_vendor_btn7">
              <property name="maximumSize">
               <size>
                <width>16</width>
@@ -2003,7 +1971,7 @@ Cards Support </string>
             </widget>
            </item>
            <item row="5" column="0">
-            <widget class="QPushButton" name="pushButton_6">
+            <widget class="QPushButton" name="add_vendor_btn1">
              <property name="maximumSize">
               <size>
                <width>16</width>
@@ -2149,7 +2117,7 @@ Cards Support </string>
             </widget>
            </item>
            <item row="5" column="0">
-            <widget class="QPushButton" name="pushButton_14">
+            <widget class="QPushButton" name="add_vendor_btn2">
              <property name="maximumSize">
               <size>
                <width>16</width>
@@ -2409,7 +2377,7 @@ Cards Support </string>
             </widget>
            </item>
            <item row="5" column="0">
-            <widget class="QPushButton" name="pushButton_12">
+            <widget class="QPushButton" name="add_vendor_btn3">
              <property name="maximumSize">
               <size>
                <width>16</width>
@@ -2488,6 +2456,22 @@ Cards Support </string>
       </property>
      </spacer>
     </item>
+    <item row="0" column="1">
+     <spacer name="verticalSpacer_8">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item row="1" column="0">
      <spacer name="horizontalSpacer_2">
       <property name="orientation">
@@ -2500,6 +2484,22 @@ Cards Support </string>
        <size>
         <width>40</width>
         <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="2">
+     <spacer name="verticalSpacer_9">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
        </size>
       </property>
      </spacer>
