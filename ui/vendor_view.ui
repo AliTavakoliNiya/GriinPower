@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>776</width>
-    <height>599</height>
+    <width>653</width>
+    <height>412</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -934,7 +934,7 @@ QListWidget::item:selected {
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_19">
+     <widget class="QLineEdit" name="search_vendor_field">
       <property name="maximumSize">
        <size>
         <width>135</width>
@@ -950,7 +950,7 @@ QListWidget::item:selected {
      </widget>
     </item>
     <item row="1" column="2" rowspan="2">
-     <widget class="QGroupBox" name="groupBox_5">
+     <widget class="QGroupBox" name="vendor_gp_box">
       <property name="title">
        <string>Vendor's Info</string>
       </property>
@@ -1186,7 +1186,7 @@ QListWidget::item:selected {
   <tabstop>phone2</tabstop>
   <tabstop>email</tabstop>
   <tabstop>address</tabstop>
-  <tabstop>lineEdit_19</tabstop>
+  <tabstop>search_vendor_field</tabstop>
   <tabstop>vendors_list</tabstop>
  </tabstops>
  <resources/>

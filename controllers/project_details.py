@@ -14,7 +14,7 @@ class ProjectDetails:
         return {"project_info": {"project_name": "",
                                  "project_code": "",
                                  "project_unique_code":"",
-                                 "Project_site_location":"",
+                                 "project_site_location":"",
                                  "owner_name":"",
                                  "consultant_name":"",
                                  "employer_name":"",

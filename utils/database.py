@@ -16,7 +16,12 @@ engine = create_engine(
 )
 
 # Create a configured "Session" class with autocommit disabled to enforce transactions
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    expire_on_commit=False,
+    bind=engine
+)
 
 # Define the Base class for our models.
 Base = declarative_base()
