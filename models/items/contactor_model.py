@@ -1,8 +1,11 @@
+
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
+
+from models import Base
+from models.item_model import Item
 from utils.database import SessionLocal
 from views.message_box_view import show_message
-from models import Base
 
 
 class Contactor(Base):
@@ -40,3 +43,27 @@ def get_contactor_by_current(current_a_value: float):
         return Contactor()
     finally:
         session.close()
+
+
+def insert_contactor(contactor: Contactor) -> Contactor:
+    session = SessionLocal()
+    try:
+        # Step 1: Create and save the Item first
+        item = Item(name="contactor")  # You can customize the name if needed
+        session.add(item)
+        session.flush()  # Flush to assign item_id
+
+        # Step 2: Link the contactor to the item
+        contactor.item_id = item.item_id
+
+        session.add(contactor)
+
+        # Step 3: Commit the transaction
+        session.commit()
+
+        return True
+
+    except Exception as e:
+        session.rollback()
+        return False
+

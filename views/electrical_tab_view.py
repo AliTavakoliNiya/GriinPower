@@ -792,6 +792,7 @@ def create_qss_word():
     project_details = ProjectDetails()
     today_shamsi = jdatetime.date.today().strftime("%Y/%m/%d")
     fan = project_details["fan"]["motors"]["fan"]
+    anti_condensation_heater = "Yes (220vAc)" if fan["space_heater"] else "No"
     if project_details["fan"]["motors"]["fan"]["voltage_type"] == "LV":
         fan_voltage = project_details["project_info"]["l_voltage"]
     else:
@@ -803,6 +804,7 @@ def create_qss_word():
         "humidity": project_details["project_info"]["project_code"],
         "min_temp": project_details["project_info"]["minimum_temprature"],
         "max_temp": project_details["project_info"]["maximum_temprature"],
+        "altitude_elevation": project_details["project_info"]["altitude_elevation"],
         "power": fan["power"],
         "rpm": fan["rpm"],
         "voltage": fan_voltage,
@@ -817,7 +819,7 @@ def create_qss_word():
         "voltage_type": fan["voltage_type"],
         "painting_ral": fan["painting_ral"],
         "thermal_protection": fan["thermal_protection"],
-        "space_heater": fan["space_heater"]
+        "anti_condensation_heater": anti_condensation_heater
     }
 
     replace_placeholders(doc, keywords)

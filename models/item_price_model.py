@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from sqlalchemy import Column, String
 from sqlalchemy import Integer, Float, ForeignKey
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import relationship
 
 from models import Base
@@ -61,3 +64,24 @@ def get_price(item_id, brand, item_brand=True):
 
     finally:
         session.close()
+
+
+def insert_price( item_id: int, price: float, brand: str, reference: str, created_by: str) -> bool:
+    session = SessionLocal()
+    try:
+        new_price = ItemPrice(
+            item_id=item_id,
+            price=price,
+            brand=brand,
+            reference=reference,
+            created_by=created_by,
+            effective_date=datetime.utcnow().strftime("%Y-%m-%d")
+        )
+        session.add(new_price)
+        session.commit()
+        return True
+
+    except Exception as e:
+        session.rollback()
+        print(f"Error inserting ItemPrice: {e}")
+        return False

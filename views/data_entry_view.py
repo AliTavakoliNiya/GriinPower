@@ -4,6 +4,9 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 import jdatetime
 
+from models import Contactor
+from models.item_price_model import insert_price
+from models.items.contactor_model import insert_contactor
 from models.vendor_model import get_all_vendors, Vendor
 from views.message_box_view import show_message
 from views.vendor_view import VendorEntry
@@ -48,16 +51,18 @@ class DataEntry(QMainWindow):
         for vendor in self.vendors:
             self.contactor_vendor_list.addItem(vendor.name)
 
-    def contactor_save_func(self):
-        contactor_current = self.contactor_current.value()
-        contactor_brand = self.contactor_brand.text()
-        contactor_refrence_number = self.contactor_refrence_number.text()
-        contactor_vendor = self.vendors[self.contactor_vendor_list.currentIndex()]
-        contactor_price = self.contactor_price.text()
-        modified_by = f"{self.user_logged.first_name} {self.user_logged.last_name}"
-        modified_at = jdatetime.date.today().strftime("%Y/%m/%d")
 
-        if contactor_current == 0:
+    def contactor_save_func(self):
+        contactor = Contactor()
+        contactor.current_a = self.contactor_current.value()
+        contactor_brand = self.contactor_brand.text() #??????????????????
+        contactor_refrence_number = self.contactor_refrence_number.text() #?????????????????
+        contactor_vendor = self.vendors[self.contactor_vendor_list.currentIndex()] #??????????????
+        contactor_price = self.contactor_price.text() #????????????????????
+        contactor.modified_by = f"{self.user_logged.first_name} {self.user_logged.last_name}"
+        contactor.modified_at = jdatetime.date.today().strftime("%Y/%m/%d")
+
+        if contactor.current_a == 0:
             show_message("Contactor Current cant be 0", "Error")
             return
 
@@ -79,7 +84,20 @@ class DataEntry(QMainWindow):
             show_message("Price cant be 0", "Error")
             return
 
-        # show_message(modified_by, "Error")
+        if insert_contactor( contactor):
+            success = insert_price(
+                item_id=contactor.item_id,
+                price=contactor_price,
+                brand=contactor_brand,
+                reference=contactor_refrence_number,
+                created_by=contactor.modified_by
+            )
+            if success:
+                show_message(f"Inserted Contactor and Price for item_id={contactor.item_id}", "")
+            else:
+                show_message("Contactor saved, but failed to insert price", "Warning")
+        else:
+            show_message("Error inserting Contactor", "Error")
 
     def display_entry(self, index):
         self.item_stack.setCurrentIndex(index)

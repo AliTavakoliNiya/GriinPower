@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from models import Base
 
-
 class Item(Base):
     __tablename__ = 'items'
 
@@ -21,3 +20,5 @@ class Item(Base):
 
     def __repr__(self):
         return f"<Item(item_id={self.item_id}, name='{self.name}')>"
+
+
