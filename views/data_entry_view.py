@@ -2,8 +2,13 @@ from PyQt5 import uic
 from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
+import jdatetime
 
+from models.vendor_model import get_all_vendors, Vendor
+from views.message_box_view import show_message
 from views.vendor_view import VendorEntry
+
+from controllers.user_session import UserSession
 
 
 class DataEntry(QMainWindow):
@@ -16,7 +21,11 @@ class DataEntry(QMainWindow):
         self.setWindowTitle("GriinPower")
         self.settings = QSettings("Griin", "GriinPower")
 
+        self.user_logged = UserSession()
+
         self.item_list.currentRowChanged.connect(self.display_entry)  # this match QListWidget to QStackWidget
+
+        self.contactor_save_btn.clicked.connect(self.contactor_save_func)
 
         self.add_vendor_btn1.clicked.connect(self.add_vendor)
         self.add_vendor_btn2.clicked.connect(self.add_vendor)
@@ -24,9 +33,53 @@ class DataEntry(QMainWindow):
         self.add_vendor_btn4.clicked.connect(self.add_vendor)
         self.add_vendor_btn5.clicked.connect(self.add_vendor)
         self.add_vendor_btn6.clicked.connect(self.add_vendor)
-        self.add_vendor_btn7.clicked.connect(self.add_vendor)
+        self.contactor_add_vendor_btn7.clicked.connect(self.add_vendor)
 
+        self.refresh_data()
         self.show()
+
+    def refresh_data(self):
+        self.vendors = [Vendor()] + get_all_vendors()
+
+        # Clear the combo box first (optional, in case you're repopulating)
+        self.contactor_vendor_list.clear()
+
+        # Populate the combo box with vendor names
+        for vendor in self.vendors:
+            self.contactor_vendor_list.addItem(vendor.name)
+
+    def contactor_save_func(self):
+        contactor_current = self.contactor_current.value()
+        contactor_brand = self.contactor_brand.text()
+        contactor_refrence_number = self.contactor_refrence_number.text()
+        contactor_vendor = self.vendors[self.contactor_vendor_list.currentIndex()]
+        contactor_price = self.contactor_price.text()
+        modified_by = f"{self.user_logged.first_name} {self.user_logged.last_name}"
+        modified_at = jdatetime.date.today().strftime("%Y/%m/%d")
+
+        if contactor_current == 0:
+            show_message("Contactor Current cant be 0", "Error")
+            return
+
+        if contactor_brand == "":
+            show_message("Contactor Brand cant be empty", "Error")
+            return
+
+        if not contactor_vendor.vendor_id:
+            show_message("Select Vendor", "Error")
+            return
+
+        if not contactor_price.isdigit():
+            show_message("Please Enter correct price value", "Error")
+            return
+        else:
+            contactor_price =int(contactor_price)
+
+        if contactor_price == 0:
+            show_message("Price cant be 0", "Error")
+            return
+
+        # show_message(modified_by, "Error")
 
     def display_entry(self, index):
         self.item_stack.setCurrentIndex(index)
