@@ -1,9 +1,9 @@
 """
-When you have multiple model files (like user_model.py, contactor_model.py, etc.) that reference each other, circular imports can easily happen. For example:
+When you have multiple model files (like user_model.py, contactor_model.py, etc.) that order each other, circular imports can easily happen. For example:
 
-    user_model.py references Contactor
+    user_model.py orders Contactor
 
-    contactor_model.py references User
+    contactor_model.py orders User
 
 If each file tries to import the other directly, Python's import system can run into a circular dependency where neither module is fully loaded when the other needs it.
 """

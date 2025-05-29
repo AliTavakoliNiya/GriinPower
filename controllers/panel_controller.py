@@ -32,7 +32,7 @@ class PanelController:
         return {
             "type": [],
             "brand": [],
-            "reference_number": [],
+            "order_number": [],
             "specifications": [],
             "quantity": [],
             "price": [],
@@ -41,7 +41,7 @@ class PanelController:
             "note": []
         }
 
-    def add_to_panel(self, *, type, brand="", reference_number="", specifications="",
+    def add_to_panel(self, *, type, brand="", order_number="", specifications="",
                      quantity=1, price=0, last_price_update="", note=""):
         """
         Adds a new entry to the panel dictionary.
@@ -51,7 +51,7 @@ class PanelController:
 
         self.panel["type"].append(type)
         self.panel["brand"].append(brand)
-        self.panel["reference_number"].append(reference_number)
+        self.panel["order_number"].append(order_number)
         self.panel["specifications"].append(specifications)
         self.panel["quantity"].append(quantity)
         self.panel["price"].append(price)
@@ -74,19 +74,19 @@ class PanelController:
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
             brand = price_item.brand
-            reference = price_item.reference
+            order_number = price_item.order_number
         else:
             price = 0
             effective_date = "Not Found"
             brand = ""
-            reference = ""
+            order_number = ""
 
         total_qty = qty * motor.contactor_qty
 
         self.add_to_panel(
             type=f"CONTACTOR FOR {motor.usage.upper()}",
             brand=brand,
-            reference_number=reference,
+            order_number=order_number,
             specifications=f"Current: {contactor.current_a} A",
             quantity=total_qty,
             price=price,
@@ -107,19 +107,19 @@ class PanelController:
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
             brand = price_item.brand
-            reference = price_item.reference
+            order_number = price_item.order_number
         else:
             price = 0
             effective_date = "Not Found"
             brand = ""
-            reference = ""
+            order_number = ""
 
         total_qty = qty * motor.mpcb_qty
 
         self.add_to_panel(
             type=f"MPCB FOR {motor.usage.upper()}",
             brand=brand,
-            reference_number=reference,
+            order_number=order_number,
             specifications=(
                 f"Current Range: {mpcb.min_current}A - {mpcb.max_current}A\n"
                 f"Breaking Capacity: {mpcb.breaking_capacity} A\n"
@@ -144,19 +144,19 @@ class PanelController:
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
             brand = price_item.brand
-            reference = price_item.reference
+            order_number = price_item.order_number
         else:
             price = 0
             effective_date = "Not Found"
             brand = ""
-            reference = ""
+            order_number = ""
 
         total_qty = qty * motor.mccb_qty
 
         self.add_to_panel(
             type=f"MCCB FOR {motor.usage.upper()}",
             brand=brand,
-            reference_number=reference,
+            order_number=order_number,
             specifications=(
                 f"Breaking Capacity: {mccb.breaking_capacity} A\n"
                 f"Rated Current: {mccb.rated_current} A"
@@ -181,19 +181,19 @@ class PanelController:
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
             brand = price_item.brand
-            reference = price_item.reference
+            order_number = price_item.order_number
         else:
             price = 0
             effective_date = "Not Found"
             brand = ""
-            reference = ""
+            order_number = ""
 
         total_qty = qty * motor.bimetal_qty
 
         self.add_to_panel(
             type=f"BIMETAL FOR {motor.usage.upper()}",
             brand=brand,
-            reference_number=reference,
+            order_number=order_number,
             specifications=(
                 f"Current Setting: {bimetal.current_setting_min} A - {bimetal.current_setting_max} A\n"
                 f"Trip Time: {bimetal.trip_time} sec"
@@ -206,17 +206,18 @@ class PanelController:
 
     """ ------------------------------------- Generals ------------------------------------- """
 
-    def choose_general(self, motor_objects):
+    def choose_general(self, motor_objects, general_items=None):
         """
         Adds general accessories like terminals, buttons, etc. based on motor needs.
         """
-        general_items = [
-            "lcb", "terminal_4", "terminal_6",
-            "contactor_aux_contact", "mpcb_mccb_aux_contact",
-            "relay_1no_1nc", "relay_2no_2nc",
-            "button", "selector_switch",
-            "duct_cover", "miniatory_rail", "junction_box_for_speed"
-        ]
+        if not general_items:
+            general_items = [
+                "lcb", "terminal_4", "terminal_6",
+                "contactor_aux_contact", "mpcb_mccb_aux_contact",
+                "relay_1no_1nc", "relay_2no_2nc",
+                "button", "selector_switch",
+                "duct_cover", "miniatory_rail", "junction_box_for_speed"
+            ]
         has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
             general_items.append("signal_lamp_24v")

@@ -1,5 +1,3 @@
-import re
-
 import openpyxl
 import pandas as pd
 from PyQt5 import uic
@@ -59,47 +57,6 @@ class ResultTab(QWidget):
             table.setWordWrap(True)
             table.setTextElideMode(Qt.ElideRight)
             table.verticalHeader().setVisible(False)
-
-    def check_info_tab_ui_rules(self):
-        if self.main_view.project_information_tab.project_m_voltage.currentIndex() == 0:
-            show_message("Please Choose M Voltage", "Error")
-            return False
-
-        if self.main_view.project_information_tab.project_l_voltage.currentIndex() == 0:
-            show_message("Please Choose L Voltage", "Error")
-            return False
-
-        return True
-
-    def check_electrical_tab_ui_rules(self):
-
-        if self.main_view.electrical_tab.bagfilter_order.text == "":
-            show_message("Enter Bagfilter Order", "Error")
-            return False
-
-        if self.main_view.electrical_tab.bagfilter_type.currentIndex() == 1:
-            griin_pattern = r"^\d+(\.\d+)?x\d+\.?\(\d+(\.\d+)?m\)\.\d+$"
-            match = re.fullmatch(griin_pattern, self.project_details["bagfilter"]["order"])
-            if not match:  # Griin/China
-                show_message("Please Follow Pattern Like 8.96×5.(2.7m).10 for Griin/China Model", "Error")
-                return False
-        if self.main_view.electrical_tab.bagfilter_type.currentIndex() == 2:
-            beth_pattern = r"^(\d+)\.\d+x(\d+)\.\d+x\d+$"
-            match = re.fullmatch(beth_pattern, self.project_details["bagfilter"]["order"])
-            if not match:  # BETH
-                show_message("Please Follow Pattern Like 6.78x2.3x10 for BETH Model", "Error")
-                return False
-
-        if self.main_view.electrical_tab.touch_panel_model.currentIndex() == 0:
-            show_message("Select Touch Panel Model")
-            return False
-
-        if self.main_view.electrical_tab.fan_checkbox.isChecked():
-            if self.main_view.electrical_tab.fan_voltage_type.currentIndex() == 0:
-                show_message("Select Fan Voltage Type")
-                return False
-
-        return True
 
     def generate_panels(self):
 

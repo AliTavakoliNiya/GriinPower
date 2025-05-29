@@ -83,7 +83,6 @@ class FanDamperController(PanelController):
 
 
 
-
     # ----------------------- choose electro motor ----------------------------
 
         # ----------------------- Add Components for Motors -----------------------
@@ -116,6 +115,9 @@ class FanDamperController(PanelController):
 
         # ----------------------- Add General Accessories -----------------------
         self.choose_general(motor_objects)
+
+        # if fan_config["start_type"] == "Soft Starter": & VFD ???????????????????????
+        #     self.choose_general(motor_objects, ["soft_starter"])
 
 
         # ----------------------- Add Cables -----------------------

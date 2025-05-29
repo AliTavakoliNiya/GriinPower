@@ -56,7 +56,7 @@ class DataEntry(QMainWindow):
         contactor = Contactor()
         contactor.current_a = self.contactor_current.value()
         contactor_brand = self.contactor_brand.text() #??????????????????
-        contactor_refrence_number = self.contactor_refrence_number.text() #?????????????????
+        contactor_order_number = self.contactor_order_number.text() #?????????????????
         contactor_vendor = self.vendors[self.contactor_vendor_list.currentIndex()] #??????????????
         contactor_price = self.contactor_price.text() #????????????????????
         contactor.modified_by = f"{self.user_logged.first_name} {self.user_logged.last_name}"
@@ -89,7 +89,7 @@ class DataEntry(QMainWindow):
                 item_id=contactor.item_id,
                 price=contactor_price,
                 brand=contactor_brand,
-                reference=contactor_refrence_number,
+                order_number=contactor_order_number,
                 created_by=contactor.modified_by
             )
             if success:

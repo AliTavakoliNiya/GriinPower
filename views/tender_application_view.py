@@ -1,13 +1,11 @@
-import os
 
-from PyQt5 import uic, QtWidgets
+from PyQt5 import uic
 from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
 from controllers.project_details import ProjectDetails
 from views.electrical_tab_view import ElectricalTab
-from views.message_box_view import show_message
 from views.project_information_view import ProjectInformationTab
 from views.result_tab_view import ResultTab
 
@@ -42,11 +40,11 @@ class TenderApplication(QMainWindow):
 
     def on_tab_changed(self, index):
         if index == 1: # Electrical
-            if not self.result_tab.check_info_tab_ui_rules():
+            if not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
 
         if index == 2 : # Result
-            if not self.result_tab.check_electrical_tab_ui_rules():
+            if not self.electrical_tab.check_electrical_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(1)
             else:
                 self.result_tab.generate_panels()

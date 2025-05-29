@@ -77,7 +77,8 @@ class ProjectDetails:
                                     "voltage_type": None,
                                     "painting_ral": None,
                                     "thermal_protection": None,
-                                    "space_heater": False
+                                    "space_heater": False,
+                                    "de_nde": False,
                                      }
                         },
                         "instruments": {

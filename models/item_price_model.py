@@ -20,7 +20,7 @@ class ItemPrice(Base):
 
     price = Column(Float, nullable=False)
     brand = Column(String, nullable=False)
-    reference = Column(String, nullable=False)
+    order_number = Column(String, nullable=False)
     effective_date = Column(String, nullable=False)
 
     # Relationships
@@ -66,14 +66,14 @@ def get_price(item_id, brand, item_brand=True):
         session.close()
 
 
-def insert_price( item_id: int, price: float, brand: str, reference: str, created_by: str) -> bool:
+def insert_price( item_id: int, price: float, brand: str, order_number: str, created_by: str) -> bool:
     session = SessionLocal()
     try:
         new_price = ItemPrice(
             item_id=item_id,
             price=price,
             brand=brand,
-            reference=reference,
+            order_number=order_number,
             created_by=created_by,
             effective_date=datetime.utcnow().strftime("%Y-%m-%d")
         )

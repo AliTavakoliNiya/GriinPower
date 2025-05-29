@@ -951,7 +951,7 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>7</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -1839,7 +1839,7 @@ QListWidget::item:selected {
            <item row="3" column="0" colspan="2">
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>Refrence Number</string>
+              <string>Order Number</string>
              </property>
             </widget>
            </item>
@@ -1916,7 +1916,7 @@ QListWidget::item:selected {
             </widget>
            </item>
            <item row="3" column="3" colspan="2">
-            <widget class="QLineEdit" name="contactor_refrence_number">
+            <widget class="QLineEdit" name="contactor_order_number">
              <property name="minimumSize">
               <size>
                <width>150</width>

@@ -1447,13 +1447,6 @@
             </item>
            </widget>
           </item>
-          <item row="11" column="1">
-           <widget class="QLabel" name="label_24">
-            <property name="text">
-             <string>Painting/RAL</string>
-            </property>
-           </widget>
-          </item>
           <item row="17" column="1">
            <widget class="QLabel" name="label_26">
             <property name="text">
@@ -1608,15 +1601,8 @@
             </property>
            </widget>
           </item>
-          <item row="12" column="1">
-           <widget class="QLabel" name="label_25">
-            <property name="text">
-             <string>Winding Thermal Protection</string>
-            </property>
-           </widget>
-          </item>
           <item row="13" column="0" colspan="7">
-           <widget class="QCheckBox" name="de_nde">
+           <widget class="QCheckBox" name="fan_de_nde">
             <property name="text">
              <string>Fan Motor DE and NDE (Thermal Ptotection)</string>
             </property>
@@ -1812,13 +1798,6 @@
               <string>54</string>
              </property>
             </item>
-           </widget>
-          </item>
-          <item row="9" column="1">
-           <widget class="QLabel" name="label_22">
-            <property name="text">
-             <string>Efficiency Class</string>
-            </property>
            </widget>
           </item>
           <item row="1" column="3" colspan="4">
@@ -2098,13 +2077,6 @@
             </item>
            </widget>
           </item>
-          <item row="8" column="1">
-           <widget class="QLabel" name="label_21">
-            <property name="text">
-             <string>IP</string>
-            </property>
-           </widget>
-          </item>
           <item row="4" column="0" colspan="2">
            <widget class="QCheckBox" name="fan_checkbox">
             <property name="text">
@@ -2112,20 +2084,6 @@
             </property>
             <property name="checked">
              <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="1">
-           <widget class="QLabel" name="label_23">
-            <property name="text">
-             <string>Voltage Type</string>
-            </property>
-           </widget>
-          </item>
-          <item row="23" column="1">
-           <widget class="QLabel" name="label_31">
-            <property name="text">
-             <string>Inlet Fan TemperatureT</string>
             </property>
            </widget>
           </item>
@@ -2141,6 +2099,48 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="12" column="1" colspan="3">
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Winding Thermal Protection</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="1" colspan="3">
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>Painting/RAL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1" colspan="3">
+           <widget class="QLabel" name="fan_voltage_type_text">
+            <property name="text">
+             <string>Voltage Type</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1" colspan="3">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Efficiency Class</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1" colspan="2">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>IP</string>
+            </property>
+           </widget>
+          </item>
+          <item row="23" column="1" colspan="2">
+           <widget class="QLabel" name="label_31">
+            <property name="text">
+             <string>Inlet Fan TT</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

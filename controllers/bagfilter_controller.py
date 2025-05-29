@@ -151,17 +151,17 @@ class BagfilterController(PanelController):
             price = price_item.price if price_item.price else 0
             effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
             brand = price_item.brand
-            reference = price_item.reference
+            order_number = price_item.order_number
         else:
             price = 0
             effective_date = "Not Found"
             brand = ""
-            reference = ""
+            order_number = ""
 
         self.add_to_panel(
             type="MCCB INPUT PANEL",
             brand=brand,
-            reference_number=reference,
+            order_number=order_number,
             specifications=(
                 f"Total Motor Current: {total_current:.2f} A\n"
             ),

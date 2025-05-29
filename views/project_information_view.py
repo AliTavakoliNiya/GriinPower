@@ -1,6 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox
 from controllers.project_details import ProjectDetails
+from views.message_box_view import show_message
 
 
 class ProjectInformationTab(QWidget):
@@ -162,3 +163,13 @@ class ProjectInformationTab(QWidget):
         self._update_project_value(["project_info", "employer_name"], str(self.employer_name.text()))
 
 
+    def check_info_tab_ui_rules(self):
+        if self.project_m_voltage.currentIndex() == 0:
+            show_message("Please Choose M Voltage", "Error")
+            return False
+
+        if self.project_l_voltage.currentIndex() == 0:
+            show_message("Please Choose L Voltage", "Error")
+            return False
+
+        return True
