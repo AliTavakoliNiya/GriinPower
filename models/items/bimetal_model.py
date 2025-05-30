@@ -2,23 +2,25 @@ from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models.items import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentVendor
 from utils.database import SessionLocal
 
 
 class Bimetal:
 
-    def __init__(self, name, brand, model, rated_current, operating_range, reset_type, component_vendor):
+    def __init__(self, name, brand, model, min_current, max_current, trip_time, class_type, component_vendor, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
-        self.rated_current = rated_current
-        self.operating_range = operating_range
-        self.reset_type = reset_type
+        self.order_number = order_number
+        self.min_current = min_current
+        self.max_current = max_current
+        self.trip_time = trip_time
+        self.class_type = class_type
         self.component_vendor = component_vendor
 
     def __repr__(self):
-        return f"<Bimetal(name={self.name}, current={self.rated_current}A, range={self.operating_range})>"
+        return f"<Bimetal(name={self.name}, current= {self.min_current}A - {self.max_current}A)>"
 
 
 def get_bimetal_by_current(min_rated_current):
@@ -26,9 +28,6 @@ def get_bimetal_by_current(min_rated_current):
 
     try:
         bimetal_type = session.query(ComponentType).filter_by(name='Bimetal').first()
-        if not bimetal_type:
-            return None, "ComponentType 'Bimetal' not found."
-
         rated_attr = aliased(ComponentAttribute)
 
         component = (
@@ -42,10 +41,6 @@ def get_bimetal_by_current(min_rated_current):
             .order_by(cast(rated_attr.value, Float).asc())
             .first()
         )
-
-        if not component:
-            return None, "No Bimetal found with sufficient rated current."
-
         latest_vendor = (
             session.query(ComponentVendor)
             .options(joinedload(ComponentVendor.vendor))
@@ -60,17 +55,18 @@ def get_bimetal_by_current(min_rated_current):
             name=component.name,
             brand=component.brand,
             model=component.model,
-            rated_current=attrs.get("rated_current"),
-            operating_range=attrs.get("operating_range"),
-            reset_type=attrs.get("reset_type"),
+            min_current=attrs.get("min_current"),
+            max_current=attrs.get("max_current"),
+            trip_time=attrs.get("trip_time"),
+            class_type=attrs.get("class_type"),
             component_vendor=latest_vendor
         )
 
-        return bimetal, f"{bimetal}"
+        return True, bimetal
 
     except Exception as e:
         session.rollback()
-        return None, f"❌ Failed in get_bimetal_by_current:\n{str(e)}"
+        return False, f"❌ Failed in get_bimetal_by_current:\n{str(e)}"
 
     finally:
         session.close()

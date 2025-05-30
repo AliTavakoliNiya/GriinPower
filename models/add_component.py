@@ -1,4 +1,4 @@
-from models.items import Component, ComponentAttribute, ComponentType, ComponentVendor, Vendor
+from models import Component, ComponentAttribute, ComponentType, ComponentVendor, Vendor
 from utils.database import SessionLocal
 from datetime import date
 

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import relationship
-from models.items import Base
+from models import Base
 
 class Vendor(Base):
     __tablename__ = 'vendors'
@@ -10,3 +10,9 @@ class Vendor(Base):
     website = Column(String, nullable=True)
 
     components = relationship('ComponentVendor', back_populates='vendor')
+
+def get_all_vendors():
+    pass
+
+def save_vendor_to_db():
+    pass

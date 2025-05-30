@@ -3,7 +3,7 @@ import jdatetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
-from models.items import Base
+from models import Base
 
 today_shamsi = jdatetime.date.today().strftime("%Y/%m/%d %H:%M")
 
@@ -15,6 +15,7 @@ class Component(Base):
     type_id = Column(Integer, ForeignKey('component_types.id'))
     brand = Column(String)
     model = Column(String)
+    order_number = Column(String)
     created_at = Column(DateTime, default=today_shamsi)
     created_by_id = Column(Integer, ForeignKey('users.id'), nullable=True)
 

@@ -1,5 +1,5 @@
 import jdatetime
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 from utils.database import SessionLocal
 from views.message_box_view import show_message
@@ -14,6 +14,7 @@ def now_jalali():
 class User(Base):
     __tablename__ = 'users'
 
+    id = Column(Integer, primary_key=True)
     username = Column(String, primary_key=True, unique=True, nullable=False)
     password = Column(String, nullable=False)
     first_name = Column(String, nullable=False)
@@ -22,15 +23,15 @@ class User(Base):
     email = Column(String, unique=True, nullable=True)
     role = Column(String, nullable=False)
     created_at = Column(String, nullable=False, default=now_jalali)
-
-    contactors_modified = relationship("Contactor", back_populates="modified_user")
-    mpcbs_modified = relationship("MPCB", back_populates="modified_user")
-    mccbs_modified = relationship("MCCB", back_populates="modified_user")
-    bimetals_modified = relationship("Bimetal", back_populates="modified_user")
-    generals_modified = relationship("General", back_populates="modified_user")
-    instruments_modified = relationship("Instrument", back_populates="modified_user")
-    item_prices_created = relationship("ItemPrice", back_populates="creator")
-    plcs_modified = relationship("PLC", back_populates="modified_user")
+    #
+    # contactors_modified = relationship("Contactor", back_populates="modified_user")
+    # mpcbs_modified = relationship("MPCB", back_populates="modified_user")
+    # mccbs_modified = relationship("MCCB", back_populates="modified_user")
+    # bimetals_modified = relationship("Bimetal", back_populates="modified_user")
+    # generals_modified = relationship("General", back_populates="modified_user")
+    # instruments_modified = relationship("Instrument", back_populates="modified_user")
+    # item_prices_created = relationship("ItemPrice", back_populates="creator")
+    # plcs_modified = relationship("PLC", back_populates="modified_user")
 
     def __repr__(self):
         return f"<User(username='{self.username}', role='{self.role}')>"

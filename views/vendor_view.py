@@ -6,7 +6,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
 from controllers.vendor_controller import VendorController
-from models.vendor_model import Vendor
+from models import Vendor
 from views.message_box_view import show_message, confirmation
 
 

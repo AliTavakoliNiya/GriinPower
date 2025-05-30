@@ -3,13 +3,29 @@ from math import sqrt
 
 from config import COSNUS_PI, ETA
 from controllers.project_details import ProjectDetails
-from models.item_price_model import get_price
-from models.items.bimetal_model import get_bimetal_by_motor_current
-from models.items.contactor_model import get_contactor_by_current
-from models.items.general_model import get_general_by_name
+from models.items.button import get_button
+from models.items.contactor_aux_contact import get_contactor_aux_contact
+from models.items.duct_cover import get_duct_cover
+from models.items.electrical_panel import get_electrical_panel
+from models.items.front_connector import get_front_connector
 from models.items.instrument_model import get_instrument_by_type
-from models.items.mccb_model import get_mccb_by_motor_current
-from models.items.mpcb_model import get_mpcb_by_motor_current
+from models.items.io_card import get_io_card
+from models.items.jb import get_junction_box
+from models.items.lcb import get_lcb
+from models.items.manifold import get_manifold
+from models.items.calibration import get_calibration
+from models.items.miniatory_rail import get_miniatory_rail
+from models.items.mpcb_mccb_aux_contact import get_mpcb_mccb_aux_contact
+from models.items.relay import get_relay_by_contacts
+from models.items.selector_switch import get_selector_switch
+from models.items.signal_lamp import get_signal_lamp
+from models.items.terminal import get_terminal_by_current
+from views.message_box_view import show_message
+
+from models.items.contactor_model import get_contactor_by_current
+from models.items.mpcb_model import get_mpcb_by_current
+from models.items.mccb_model import get_mccb_by_current
+from models.items.bimetal_model import get_bimetal_by_current
 
 
 class PanelController:
@@ -42,7 +58,7 @@ class PanelController:
         }
 
     def add_to_panel(self, *, type, brand="", order_number="", specifications="",
-                     quantity=1, price=0, last_price_update="", note=""):
+                     quantity=0, price=0, last_price_update="", note=""):
         """
         Adds a new entry to the panel dictionary.
         All parameters must be passed by keyword for clarity.
@@ -67,32 +83,32 @@ class PanelController:
         """
         if qty == 0 or motor.current == 0 or motor.contactor_qty == 0:
             return
-
-        contactor = get_contactor_by_current(motor.current)
-        if contactor.item_id:
-            price_item = get_price(contactor.item_id, brand=False, item_brand=False)
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-            brand = price_item.brand
-            order_number = price_item.order_number
-        else:
-            price = 0
-            effective_date = "Not Found"
-            brand = ""
-            order_number = ""
-
         total_qty = qty * motor.contactor_qty
 
-        self.add_to_panel(
-            type=f"CONTACTOR FOR {motor.usage.upper()}",
-            brand=brand,
-            order_number=order_number,
-            specifications=f"Current: {contactor.current_a} A",
-            quantity=total_qty,
-            price=price,
-            last_price_update=effective_date,
-            note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
-        )
+        success, contactor = get_contactor_by_current(motor.current)
+        if success:
+            self.add_to_panel(
+                type=f"CONTACTOR FOR {motor.usage.upper()}",
+                brand=contactor.brand,
+                order_number=contactor.order_number,
+                specifications=f"Current: {contactor.rated_current} A",
+                quantity=total_qty,
+                price=contactor.component_vendor.price,
+                last_price_update=f"{contactor.component_vendor.vendor.name}\n{contactor.component_vendor.date}",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+            )
+        else:
+            self.add_to_panel(
+                type=f"CONTACTOR FOR {motor.usage.upper()}",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=total_qty,
+                price=0,
+                last_price_update="",
+                note=f"Not Found"
+            )
+            show_message(contactor, title="Error")
 
     def choose_mpcb(self, motor, qty):
         """
@@ -100,36 +116,36 @@ class PanelController:
         """
         if qty == 0 or motor.current == 0 or motor.mpcb_qty == 0:
             return
-
-        mpcb = get_mpcb_by_motor_current(motor.current)
-        if mpcb.item_id:
-            price_item = get_price(mpcb.item_id, brand=False, item_brand=False)
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-            brand = price_item.brand
-            order_number = price_item.order_number
-        else:
-            price = 0
-            effective_date = "Not Found"
-            brand = ""
-            order_number = ""
-
         total_qty = qty * motor.mpcb_qty
 
-        self.add_to_panel(
-            type=f"MPCB FOR {motor.usage.upper()}",
-            brand=brand,
-            order_number=order_number,
-            specifications=(
-                f"Current Range: {mpcb.min_current}A - {mpcb.max_current}A\n"
-                f"Breaking Capacity: {mpcb.breaking_capacity} A\n"
-                f"Trip Class: {mpcb.trip_class}"
-            ),
-            quantity=total_qty,
-            price=price,
-            last_price_update=effective_date,
-            note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
-        )
+        success, mpcb = get_mpcb_by_current(motor.current)
+        if success:
+            self.add_to_panel(
+                type=f"MPCB FOR {motor.usage.upper()}",
+                brand=mpcb.brand,
+                order_number=mpcb.order_number,
+                specifications=(
+                    f"Current Range: {mpcb.min_current}A - {mpcb.max_current}A\n"
+                    f"Breaking Capacity: {mpcb.breaking_capacity} A\n"
+                    f"Trip Class: {mpcb.trip_class}"
+                ),
+                quantity=total_qty,
+                price=mpcb.component_vendor.price,
+                last_price_update=f"{mpcb.component_vendor.vendor.name}\n{mpcb.component_vendor.date}",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+            )
+        else:
+            self.add_to_panel(
+                type=f"MPCB FOR {motor.usage.upper()}",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=total_qty,
+                price=0,
+                last_price_update="",
+                note=f"Not Found"
+            )
+            show_message(mpcb, title="Error")
 
     def choose_mccb(self, motor, qty):
         """
@@ -137,35 +153,35 @@ class PanelController:
         """
         if qty == 0 or motor.current == 0 or motor.mccb_qty == 0:
             return
-
-        mccb = get_mccb_by_motor_current(motor.current)
-        if mccb.item_id:
-            price_item = get_price(mccb.item_id, brand=False, item_brand=False)
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-            brand = price_item.brand
-            order_number = price_item.order_number
-        else:
-            price = 0
-            effective_date = "Not Found"
-            brand = ""
-            order_number = ""
-
         total_qty = qty * motor.mccb_qty
 
-        self.add_to_panel(
-            type=f"MCCB FOR {motor.usage.upper()}",
-            brand=brand,
-            order_number=order_number,
-            specifications=(
-                f"Breaking Capacity: {mccb.breaking_capacity} A\n"
-                f"Rated Current: {mccb.rated_current} A"
-            ),
-            quantity=total_qty,
-            price=price,
-            last_price_update=effective_date,
-            note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
-        )
+        success, mccb = get_mccb_by_current(motor.current)
+        if success:
+            self.add_to_panel(
+                type=f"MCCB FOR {motor.usage.upper()}",
+                brand=mccb.brand,
+                order_number=mccb.order_number,
+                specifications=(
+                    f"Rated Current: {mccb.rated_current} A\n"
+                    f"Breaking Capacity: {mccb.breaking_capacity} A"
+                ),
+                quantity=total_qty,
+                price=mccb.component_vendor.price,
+                last_price_update=f"{mccb.component_vendor.vendor.name}\n{mccb.component_vendor.date}",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+            )
+        else:
+            self.add_to_panel(
+                type=f"MCCB FOR {motor.usage.upper()}",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=total_qty,
+                price=0,
+                last_price_update="",
+                note=f"Not Found"
+            )
+            show_message(mccb, title="Error")
 
     def choose_bimetal(self, motor, qty):
         """
@@ -173,128 +189,137 @@ class PanelController:
         """
         if qty == 0 or motor.current == 0 or motor.bimetal_qty == 0:
             return
-
-        bimetal = get_bimetal_by_motor_current(motor.current)
-
-        if bimetal.item_id:
-            price_item = get_price(bimetal.item_id, brand=False, item_brand=False)
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-            brand = price_item.brand
-            order_number = price_item.order_number
-        else:
-            price = 0
-            effective_date = "Not Found"
-            brand = ""
-            order_number = ""
-
         total_qty = qty * motor.bimetal_qty
 
-        self.add_to_panel(
-            type=f"BIMETAL FOR {motor.usage.upper()}",
-            brand=brand,
-            order_number=order_number,
-            specifications=(
-                f"Current Setting: {bimetal.current_setting_min} A - {bimetal.current_setting_max} A\n"
-                f"Trip Time: {bimetal.trip_time} sec"
-            ),
-            quantity=total_qty,
-            price=price,
-            last_price_update=effective_date,
-            note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
-        )
+        success, bimetal = get_bimetal_by_current(motor.current)
+
+        if success:
+            self.add_to_panel(
+                type=f"BIMETAL FOR {motor.usage.upper()}",
+                brand=bimetal.brand,
+                order_number=bimetal.order_number,
+                specifications=(
+                    f"Current: {bimetal.min_current} A - {bimetal.max_current} A\n"
+                    f"Trip Time: {bimetal.trip_time} sec"
+                ),
+                quantity=total_qty,
+                price=bimetal.component_vendor.price,
+                last_price_update=f"{bimetal.component_vendor.vendor.name}\n{bimetal.component_vendor.date}",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+            )
+        else:
+            self.add_to_panel(
+                type=f"BIMETAL FOR {motor.usage.upper()}",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=total_qty,
+                price=0,
+                last_price_update="",
+                note=f"Not Found"
+            )
+            show_message(bimetal, title="Error")
 
     """ ------------------------------------- Generals ------------------------------------- """
 
-    def choose_general(self, motor_objects, general_items=None):
+    def choose_general(self, motor_objects):
         """
         Adds general accessories like terminals, buttons, etc. based on motor needs.
         """
-        if not general_items:
-            general_items = [
-                "lcb", "terminal_4", "terminal_6",
-                "contactor_aux_contact", "mpcb_mccb_aux_contact",
-                "relay_1no_1nc", "relay_2no_2nc",
-                "button", "selector_switch",
-                "duct_cover", "miniatory_rail", "junction_box_for_speed"
-            ]
-        has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
-        if not has_hmi:
-            general_items.append("signal_lamp_24v")
 
-        for item_name in general_items:
+        def process_item(attr_name, display_name, get_func, value=None):
             total_qty = 0
             notes = []
-
             for motor, qty in motor_objects:
                 if qty > 0:
-                    item_qty = getattr(motor, f"{item_name}_qty")
+                    item_qty = getattr(motor, f"{attr_name}_qty")
                     total_qty += qty * item_qty
                     notes.append(f"{qty}x{item_qty} for {motor.usage}")
+            if total_qty > 0:
+                success, item = get_func(value) if value else get_func()
+                if success:
+                    self.add_to_panel(
+                                        type=display_name,
+                                        brand=item.brand,
+                                        quantity=total_qty,
+                                        price=item.component_vendor.price,
+                                        last_price_update=f"{item.component_vendor.vendor.name}\n{item.component_vendor.date}",
+                                        note="\n".join(notes)
+                                    )
+                else:
+                    self.add_to_panel(
+                        type=display_name,
+                        brand="",
+                        order_number="",
+                        specifications="",
+                        quantity=total_qty,
+                        price=0,
+                        last_price_update="",
+                        note=f"Not Found"
+                    )
 
-            if total_qty == 0:
-                return
+        process_item("lcb", "LCB", get_lcb)
+        process_item("terminal_4", "TERMINAL 4", get_terminal_by_current, 4)
+        process_item("terminal_6", "TERMINAL 6", get_terminal_by_current, 6)
+        process_item("contactor_aux_contact", "CONTACTOR AUX CONTACT", get_contactor_aux_contact)
+        process_item("mpcb_mccb_aux_contact", "MPCB/MCCB AUX CONTACT", get_mpcb_mccb_aux_contact)
+        process_item("relay_1no_1nc", "RELAY 1NO 1NC", get_relay_by_contacts, 1)
+        process_item("relay_2no_2nc", "RELAY 2NO 2NC", get_relay_by_contacts, 2)
+        process_item("button", "BUTTON", get_button)
+        process_item("selector_switch", "SELECTOR SWITCH", get_selector_switch)
+        process_item("duct_cover", "DUCT COVER", get_duct_cover)
+        process_item("miniatory_rail", "MINIATORY RAIL", get_miniatory_rail)
+        process_item("junction_box_for_speed", "JUNCTION BOX FOR SPEED", get_junction_box)
 
-            general_item = get_general_by_name(item_name)
-            if general_item.item_id:
-                price_item = get_price(general_item.item_id, brand=False, item_brand=False)
-                price = price_item.price if price_item.price else 0
-                effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-                brand = price_item.brand
-            else:
-                price = 0
-                effective_date = "Not Found"
-                brand = ""
-
-            formatted_name = item_name.upper().replace("_", " ")
-            total_qty = round(total_qty, 1)
-
-            self.add_to_panel(
-                type=formatted_name,
-                brand=brand,
-                quantity=total_qty,
-                price=price,
-                last_price_update=effective_date,
-                note="\n".join(notes)
-            )
+        has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
+        if not has_hmi:
+            process_item("signal_lamp_24v", "SIGNAL LAMP 24V", get_signal_lamp, 24)
 
     def choose_electrical_panel(self, total_motors):
         """
-        Chooses electrical panel size based on number of motors.
+        Chooses electrical panel size based on number of motors and retrieves real component data.
         """
         if total_motors == 0:
             return
-        elif total_motors < 3:
-            panel_name, label = "electrical_panel_0p8x1", "0.8x1"
+
+        if total_motors < 3:
+            width, height, depth = 80, 100, 25
+            label = "0.8x1"
             qty = 1
         elif total_motors < 4:
-            panel_name, label = "electrical_panel_0p8x1p6", "0.8x1.6"
+            width, height, depth = 80, 160, 25
+            label = "0.8x1.6"
             qty = 1
         elif total_motors < 8:
-            panel_name, label = "electrical_panel_1p2x2p2", "1.2x2.2"
+            width, height, depth = 120, 220, 30
+            label = "1.2x2.2"
             qty = 1
         else:
-            panel_name, label = "electrical_panel_1p2x2", "1.2x2"
+            width, height, depth = 120, 200, 30
+            label = "1.2x2 (x2)"
             qty = 2
 
-        panel = get_general_by_name(panel_name)
-        if panel.item_id:
-            price_item = get_price(panel.item_id, brand=False, item_brand=False)
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-            brand = price_item.brand
-        else:
-            price = 0
-            effective_date = "Not Found"
-            brand = ""
+        success, panel = get_electrical_panel(width=width, height=height, depth=depth)
 
-        self.add_to_panel(
-            type=f"ELECTRICAL PANEL {label}",
-            brand=brand,
-            quantity=qty,
-            price=price,
-            last_price_update=effective_date,
-            note="")
+        if success:
+            self.add_to_panel(
+                type=f"ELECTRICAL PANEL {label}",
+                brand=panel.brand,
+                quantity=qty,
+                price=panel.component_vendor.price,
+                last_price_update=f"{panel.component_vendor.vendor.name}\n{panel.component_vendor.date}",
+                note=f"{panel.name} ({panel.model})"
+            )
+        else:
+            self.add_to_panel(
+                type=f"ELECTRICAL PANEL {label}",
+                brand="Not Found",
+                quantity=qty,
+                price=0,
+                last_price_update="Not Found",
+                note="❌ Panel not found"
+            )
+            show_message(panel, title="Error")
 
     """ ------------------------------------- Instrument ------------------------------------- """
 
@@ -317,143 +342,135 @@ class PanelController:
                 else instrument_name
             name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
-            instrument = get_instrument_by_type(name)
-            price_item = get_price(instrument.item_id, properties["brand"])
+            success, instrument = get_instrument_by_type(name)
 
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-
-            self.add_to_panel(
-                type=instrument_name.upper().replace("_", " "),
-                brand=properties["brand"],
-                specifications="",
-                quantity=qty,
-                price=price,
-                last_price_update=effective_date)
-
-            # ------------ Choose Manifold ------------
-            manifold_qty = 0
-            if "delta" in name:
-                manifold = "3ways_manifold"
-                manifold_qty = qty
-            elif "pressure" in name:
-                manifold = "2ways_manifold"
-                manifold_qty = qty
-
-            if manifold_qty > 0:
-                general_item = get_general_by_name(manifold)
-                if general_item.item_id:
-                    price_item = get_price(general_item.item_id, brand=False, item_brand=False)
-                    price = price_item.price if price_item.price else 0
-                    effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-                    brand = price_item.brand
-                else:
-                    price = 0
-                    effective_date = "Not Found"
-                    brand = ""
-
-                formatted_name = manifold.upper().replace("_", " ")
-
+            if success:
                 self.add_to_panel(
-                    type=formatted_name,
-                    brand=brand,
+                    type=instrument_name.upper().replace("_", " "),
+                    brand=instrument.brand,
+                    order_number=instrument.order_number,
+                    specifications="",
                     quantity=qty,
-                    price=price,
-                    last_price_update=effective_date,
-                    note=f"manifold for {instrument_name}"
+                    price=instrument.component_vendor.price,
+                    last_price_update=f"{instrument.component_vendor.vendor.name}\n{instrument.component_vendor.date}",
                 )
+                # ------------ Choose Manifold ------------
+                manifold_qty = 0
+                manifold_ways = None
+                if "delta" in name.lower():
+                    manifold_ways = 3
+                    manifold_qty = qty
+                elif "pressure" in name.lower():
+                    manifold_ways = 2
+                    manifold_qty = qty
 
-            # ------------ Calibration ------------
-            if "transmitter" in name and qty != 0:
-                general_item = get_general_by_name("calibration")
-                if general_item.item_id:
-                    price_item = get_price(general_item.item_id, brand=False, item_brand=False)
-                    price = price_item.price if price_item.price else 0
-                    effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-                    brand = price_item.brand
-                else:
-                    price = 0
-                    effective_date = "Not Found"
-                    brand = ""
+                if manifold_qty > 0 and manifold_ways is not None:
+                    formatted_name = f"{manifold_ways} WAYS MANIFOLD"
+                    success, manifold_obj = get_manifold(manifold_ways)
+                    if success and manifold_obj.component_vendor and manifold_obj.component_vendor.item_id:
+                        self.add_to_panel(
+                            type=formatted_name,
+                            brand=manifold_obj.brand,
+                            order_number=manifold_obj.order_number,
+                            quantity=qty,
+                            price=manifold_obj.component_vendor.price,
+                            last_price_update=f"{manifold_obj.component_vendor.vendor.name}\n{manifold_obj.component_vendor.date}",
+                            note=f"manifold for {instrument_name}")
+                    else:
+                        self.add_to_panel(
+                            type=formatted_name,
+                            brand="",
+                            order_number="",
+                            quantity=qty,
+                            price=0,
+                            last_price_update="",
+                            note=f"manifold for {instrument_name}")
+                        show_message(manifold_obj, title="Error")
 
+                # ------------ Calibration ------------
+                if "transmitter" in name and qty != 0:
+                    success, calibration = get_calibration()
+                    if success:
+                        self.add_to_panel(
+                            type="CALIBRATION",
+                            brand=calibration.brand,
+                            quantity=qty,
+                            price=calibration.component_vendor.price,
+                            last_price_update=f"{calibration.component_vendor.vendor.name}\n{calibration.component_vendor.date}",
+                            note=f"calibration for {instrument_name}"
+                        )
+                    else:
+                        self.add_to_panel(
+                            type="CALIBRATION",
+                            brand="",
+                            quantity=qty,
+                            price=0,
+                            last_price_update="Not Found",
+                            note=f"❌ Calibration not found for {instrument_name}"
+                        )
+                        show_message(calibration, title="Error")
+
+
+            else:
                 self.add_to_panel(
-                    type="CALIBRATION",
-                    brand=brand,
+                    type=instrument_name.upper().replace("_", " "),
+                    brand="",
+                    order_number="",
+                    specifications="",
                     quantity=qty,
-                    price=price,
-                    last_price_update=effective_date,
-                    note=f"calibration for {instrument_name}"
+                    price=0,
+                    last_price_update="",
+                    note=f"Not Found"
                 )
+                show_message(instrument, title="Error")
 
     def calculate_plc_io_requirements(self, motor_objects, instruments=None):
         total_di = total_do = total_ai = total_ao = 0
-        di_notes = []
-        do_notes = []
-        ai_notes = []
-        ao_notes = []
+        di_notes, do_notes, ai_notes, ao_notes = [], [], [], []
 
         for motor, qty in motor_objects:
-            if qty > 0:
-                motor_di = motor.plc_di * qty
-                motor_do = motor.plc_do * qty
-                motor_ai = motor.plc_ai * qty
-                motor_ao = motor.plc_ao * qty
-                total_di += motor_di
-                total_do += motor_do
-                total_ai += motor_ai
-                total_ao += motor_ao
-                if motor_di > 0:
-                    di_notes.append(f"{motor.usage}: {motor_di} DI")
-                if motor_do > 0:
-                    do_notes.append(f"{motor.usage}: {motor_do} DO")
-                if motor_ai > 0:
-                    ai_notes.append(f"{motor.usage}: {motor_ai} AI")
-                if motor_ao > 0:
-                    ao_notes.append(f"{motor.usage}: {motor_ao} AO")
+            if qty <= 0:
+                continue
+            motor_di = motor.plc_di * qty
+            motor_do = motor.plc_do * qty
+            motor_ai = motor.plc_ai * qty
+            motor_ao = motor.plc_ao * qty
+
+            total_di += motor_di
+            total_do += motor_do
+            total_ai += motor_ai
+            total_ao += motor_ao
+
+            if motor_di > 0:
+                di_notes.append(f"{motor.usage}: {motor_di} DI")
+            if motor_do > 0:
+                do_notes.append(f"{motor.usage}: {motor_do} DO")
+            if motor_ai > 0:
+                ai_notes.append(f"{motor.usage}: {motor_ai} AI")
+            if motor_ao > 0:
+                ao_notes.append(f"{motor.usage}: {motor_ao} AO")
 
         if instruments:
             total_di, total_ai = self.calculate_instruments_io(instruments, total_di, total_ai, di_notes, ai_notes)
 
-        # Calculate DI cards
-        if total_di > 0:
-            di_cards = max(1, (total_di + 15) // 16)
-            self.add_io_card_to_panel("DI 16 CHANNEL", "di_16_channel", di_cards, total_di, di_notes)
-        else:
-            di_cards = 0
-
-        # Calculate DO cards
-        if total_do > 0:
-            do_cards = max(1, (total_do + 15) // 16)
-            self.add_io_card_to_panel("DO 16 CHANNEL", "do_16_channel", do_cards, total_do, do_notes)
-        else:
-            do_cards = 0
-
-        # Calculate AI cards
-        if total_ai > 0:
-            ai_cards = max(1, (total_ai + 15) // 16)
-            self.add_io_card_to_panel("AI 16 CHANNEL", "ai_16_channel", ai_cards, total_ai, ai_notes)
-        else:
-            ai_cards = 0
-
-        # Calculate AO cards
-        if total_ao > 0:
-            ao_cards = max(1, (total_ao + 15) // 16)
-            self.add_io_card_to_panel("AO 16 CHANNEL", "ao_16_channel", ao_cards, total_ao, ao_notes)
-        else:
-            ao_cards = 0
+        # Cards calculation
+        di_cards = self._calculate_and_add_io("DI", total_di, di_notes)
+        do_cards = self._calculate_and_add_io("DO", total_do, do_notes)
+        ai_cards = self._calculate_and_add_io("AI", total_ai, ai_notes)
+        ao_cards = self._calculate_and_add_io("AO", total_ao, ao_notes)
 
         total_20pin = di_cards + do_cards + ai_cards + ao_cards
         if total_20pin > 0:
-            pin_card = get_general_by_name("front_connector_20_pin")
-            if pin_card.item_id:
-                price_item = get_price(pin_card.item_id, brand=False, item_brand=False)
-                price = price_item.price if price_item.price else 0
-                effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-                brand = price_item.brand
+            success, pin_card = get_front_connector(20)
+            if success and pin_card.component_vendor:
+                price = pin_card.component_vendor.price or 0
+                effective_date = pin_card.component_vendor.date or "Not Found"
+                brand = pin_card.brand
             else:
                 price = 0
                 effective_date = "Not Found"
                 brand = ""
+
             self.add_to_panel(
                 type="FRONT CONNECTOR 20PIN",
                 brand=brand,
@@ -463,26 +480,31 @@ class PanelController:
                 note="Total connectors for all 16CH cards"
             )
 
-    def add_io_card_to_panel(self, label, general_name, qty, total, notes):
-        card = get_general_by_name(general_name)
-        if card.item_id:
-            price_item = get_price(card.item_id, brand=False, item_brand=False)
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-            brand = price_item.brand
+    def _calculate_and_add_io(self, io_type, total, notes):
+        if total <= 0:
+            return 0
+
+        cards = max(1, (total + 15) // 16)  # 16-channel cards
+        success, card = get_io_card(io_type, min_channels=16)
+        if success and card.component_vendor:
+            price = card.component_vendor.price or 0
+            effective_date = card.component_vendor.date or "Not Found"
+            brand = card.brand
         else:
             price = 0
             effective_date = "Not Found"
             brand = ""
+
         self.add_to_panel(
-            type=label,
+            type=f"{io_type} 16 CHANNEL",
             brand=brand,
             specifications=f"Total: {total}",
-            quantity=qty,
+            quantity=cards,
             price=price,
             last_price_update=effective_date,
             note="\n".join(notes)
         )
+        return cards
 
     def calculate_instruments_io(self, instruments, total_di, total_ai, di_notes, ai_notes):
         instruments_pins = {
@@ -523,170 +545,183 @@ class PanelController:
 
     """ ------------------------------------- Wire and Cable ------------------------------------- """
 
-    def choose_signal_cable(self, motor_objects):
-        """
-        Adds signal cable entries based on motor usage and length.
-        """
-
-        length = self.project_details["bagfilter"]["cable_dimension"]
-        if length == 0:
-            return
-
-        total_length = 0
-        notes = []
-        for motor, qty in motor_objects:
-            if qty > 0:
-                seg_length = length * motor.signal_cable_7x1p5_l_cofactor * qty
-                total_length += seg_length
-                notes.append(f"{seg_length:.1f} m for {motor.usage}")
-
-        total_length = round(total_length, 1)  # round to 1 point float
-        if total_length == 0:
-            return
-
-        cable = get_general_by_name("cable_7x1p5")
-        price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doent matter in this stage
-
-        price = price_item.price if price_item.price else 0
-        effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-
-        self.add_to_panel(
-            type="SIGNAL CABLE 7x1.5",
-            quantity=total_length,
-            price=price,
-            last_price_update=effective_date,
-            note="\n".join(notes)
-        )
-
-    def choose_power_cable(self, motor_objects):
-        """
-        Adds power cable entries with sizing based on current and motor demand.
-        """
-        volt = self.project_details["project_info"]["l_voltage"]
-        length = self.project_details["bagfilter"]["cable_dimension"]
-        if length == 0:
-            return
-
-        cable_grouping = defaultdict(lambda: {"total_length": 0, "notes": []})
-        correction_factor = 1.6 / (sqrt(3) * volt * COSNUS_PI * ETA)
-
-        for motor, qty in motor_objects:
-            if qty > 0 and motor.power > 0:
-                current = motor.power * correction_factor
-                cable = cable_rating(cable_length_m=length, cable_current_a=current)
-                if cable:
-                    motor_length = length * motor.power_cable_cofactor * qty
-                    cable_grouping[cable]["total_length"] += motor_length
-                    cable_grouping[cable]["notes"].append(f"{motor_length:.1f} m for {motor.usage}")
-                else:
-                    self.add_to_panel(
-                        type=f"POWER CABLE",
-                        note="POWER CABLE For {motor.usage} Not Found"
-                    )
-
-        for size_mm, data in cable_grouping.items():
-            total_len = round(data["total_length"], 1)
-            if total_len == 0:
-                continue
-
-            cable_name = "cable_4x" + str(size_mm).replace(".", "p")
-            cable = get_general_by_name(cable_name)
-            price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
-
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-
-            self.add_to_panel(
-                type=f"POWER CABLE SIZE 4x{size_mm}mm²",
-                quantity=total_len,
-                price=price,
-                last_price_update=effective_date,
-                note="\n".join(data["notes"])
-            )
+    # def choose_signal_cable(self, motor_objects):
+    #     """
+    #     Adds signal cable entries based on motor usage and length.
+    #     """
+    #
+    #     length = self.project_details["bagfilter"]["cable_dimension"]
+    #     if length == 0:
+    #         return
+    #
+    #     total_length = 0
+    #     notes = []
+    #     for motor, qty in motor_objects:
+    #         if qty > 0:
+    #             seg_length = length * motor.signal_cable_7x1p5_l_cofactor * qty
+    #             total_length += seg_length
+    #             notes.append(f"{seg_length:.1f} m for {motor.usage}")
+    #
+    #     total_length = round(total_length, 1)  # round to 1 point float
+    #     if total_length == 0:
+    #         return
+    #
+    #     cable = get_general_by_name("cable_7x1p5")
+    #     price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doent matter in this stage
+    #
+    #     price = price_item.price if price_item.price else 0
+    #     effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+    #
+    #     self.add_to_panel(
+    #         type="SIGNAL CABLE 7x1.5",
+    #         quantity=total_length,
+    #         price=price,
+    #         last_price_update=effective_date,
+    #         note="\n".join(notes)
+    #     )
+    #
+    # def choose_power_cable(self, motor_objects):
+    #     """
+    #     Adds power cable entries with sizing based on current and motor demand.
+    #     """
+    #     volt = self.project_details["project_info"]["l_voltage"]
+    #     length = self.project_details["bagfilter"]["cable_dimension"]
+    #     if length == 0:
+    #         return
+    #
+    #     cable_grouping = defaultdict(lambda: {"total_length": 0, "notes": []})
+    #     correction_factor = 1.6 / (sqrt(3) * volt * COSNUS_PI * ETA)
+    #
+    #     for motor, qty in motor_objects:
+    #         if qty > 0 and motor.power > 0:
+    #             current = motor.power * correction_factor
+    #             cable = cable_rating(cable_length_m=length, cable_current_a=current)
+    #             if cable:
+    #                 motor_length = length * motor.power_cable_cofactor * qty
+    #                 cable_grouping[cable]["total_length"] += motor_length
+    #                 cable_grouping[cable]["notes"].append(f"{motor_length:.1f} m for {motor.usage}")
+    #             else:
+    #                 self.add_to_panel(
+    #                     type=f"POWER CABLE",
+    #                     note="POWER CABLE For {motor.usage} Not Found"
+    #                 )
+    #
+    #     for size_mm, data in cable_grouping.items():
+    #         total_len = round(data["total_length"], 1)
+    #         if total_len == 0:
+    #             continue
+    #
+    #         cable_name = "cable_4x" + str(size_mm).replace(".", "p")
+    #         cable = get_general_by_name(cable_name)
+    #         price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
+    #
+    #         price = price_item.price if price_item.price else 0
+    #         effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+    #
+    #         self.add_to_panel(
+    #             type=f"POWER CABLE SIZE 4x{size_mm}mm²",
+    #             quantity=total_len,
+    #             price=price,
+    #             last_price_update=effective_date,
+    #             note="\n".join(data["notes"])
+    #         )
+    #
+    # def choose_internal_signal_wire(self, motor_objects):
+    #     """
+    #     Adds internal signal panel wire (1x1.5) entries for each motor.
+    #     Each motor gets 4 meters of wire if its quantity isn't 0.
+    #     """
+    #     total_length = 0
+    #     notes = []
+    #
+    #     for motor, qty in motor_objects:
+    #         if qty > 0:
+    #             wire_length = 4 * qty  # 4 meters per motor
+    #             total_length += wire_length
+    #             notes.append(f"{wire_length} m for {motor.usage}")
+    #
+    #     if total_length == 0:
+    #         return
+    #
+    #     cable = get_general_by_name("cable_1x1p5")
+    #     price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
+    #
+    #     price = price_item.price if price_item.price else 0
+    #     effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+    #
+    #     self.add_to_panel(
+    #         type="INTERNAL SIGNAL PANEL WIRE 1x1.5",
+    #         specifications="Size: 1x1.5 mm²",
+    #         quantity=total_length,
+    #         price=price,
+    #         last_price_update=effective_date,
+    #         note="\n".join(notes))
+    #
+    # def choose_internal_power_wire(self, motor_objects):
+    #     """
+    #     Adds internal power panel wire or busbar based on motor power:
+    #     - For motors <= 45kW: 4 meters of 1x1.6 wire per motor
+    #     - For motors > 45kW: 5 meters of busbar per motor
+    #     """
+    #     wire_length = 0
+    #     busbar_length = 0
+    #     wire_notes = []
+    #     busbar_notes = []
+    #
+    #     for motor, qty in motor_objects:
+    #         if qty > 0:
+    #             if motor.power <= 45:
+    #                 motor_wire_length = 4 * qty
+    #                 wire_length += motor_wire_length
+    #                 wire_notes.append(f"{motor_wire_length} m for {motor.usage}")
+    #             else:
+    #                 motor_busbar_length = 5 * qty
+    #                 busbar_length += motor_busbar_length
+    #                 busbar_notes.append(f"{motor_busbar_length} m for {motor.usage}")
+    #
+    #     if wire_length > 0:
+    #         cable = get_general_by_name("cable_1x1p6")
+    #         price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
+    #
+    #         price = price_item.price if price_item.price else 0
+    #         effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+    #
+    #         self.add_to_panel(
+    #             type="INTERNAL POWER PANEL WIRE 1x1.6mm²",
+    #             specifications="Size: 1x1.6 mm²",
+    #             quantity=wire_length,
+    #             price=price,
+    #             last_price_update=effective_date,
+    #             note="\n".join(wire_notes)
+    #         )
+    #
+    #     if busbar_length > 0:
+    #         cable = get_general_by_name("busbar")
+    #         price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
+    #
+    #         price = price_item.price if price_item.price else 0
+    #         effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
+    #
+    #         self.add_to_panel(
+    #             type="INTERNAL POWER BUSBAR",
+    #             specifications="For motors > 45kW",
+    #             quantity=busbar_length,
+    #             price=price,
+    #             last_price_update=effective_date,
+    #             note="\n".join(busbar_notes))
 
     def choose_internal_signal_wire(self, motor_objects):
-        """
-        Adds internal signal panel wire (1x1.5) entries for each motor.
-        Each motor gets 4 meters of wire if its quantity isn't 0.
-        """
-        total_length = 0
-        notes = []
-
-        for motor, qty in motor_objects:
-            if qty > 0:
-                wire_length = 4 * qty  # 4 meters per motor
-                total_length += wire_length
-                notes.append(f"{wire_length} m for {motor.usage}")
-
-        if total_length == 0:
-            return
-
-        cable = get_general_by_name("cable_1x1p5")
-        price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
-
-        price = price_item.price if price_item.price else 0
-        effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-
-        self.add_to_panel(
-            type="INTERNAL SIGNAL PANEL WIRE 1x1.5",
-            specifications="Size: 1x1.5 mm²",
-            quantity=total_length,
-            price=price,
-            last_price_update=effective_date,
-            note="\n".join(notes))
-
+        pass
     def choose_internal_power_wire(self, motor_objects):
-        """
-        Adds internal power panel wire or busbar based on motor power:
-        - For motors <= 45kW: 4 meters of 1x1.6 wire per motor
-        - For motors > 45kW: 5 meters of busbar per motor
-        """
-        wire_length = 0
-        busbar_length = 0
-        wire_notes = []
-        busbar_notes = []
+        pass
 
-        for motor, qty in motor_objects:
-            if qty > 0:
-                if motor.power <= 45:
-                    motor_wire_length = 4 * qty
-                    wire_length += motor_wire_length
-                    wire_notes.append(f"{motor_wire_length} m for {motor.usage}")
-                else:
-                    motor_busbar_length = 5 * qty
-                    busbar_length += motor_busbar_length
-                    busbar_notes.append(f"{motor_busbar_length} m for {motor.usage}")
+    # ----------------------- Add Cables -----------------------
+    def choose_signal_cable(self, motor_objects):
+        pass
+    def choose_power_cable(self, motor_objects):
+        pass
 
-        if wire_length > 0:
-            cable = get_general_by_name("cable_1x1p6")
-            price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
 
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-
-            self.add_to_panel(
-                type="INTERNAL POWER PANEL WIRE 1x1.6mm²",
-                specifications="Size: 1x1.6 mm²",
-                quantity=wire_length,
-                price=price,
-                last_price_update=effective_date,
-                note="\n".join(wire_notes)
-            )
-
-        if busbar_length > 0:
-            cable = get_general_by_name("busbar")
-            price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
-
-            price = price_item.price if price_item.price else 0
-            effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-
-            self.add_to_panel(
-                type="INTERNAL POWER BUSBAR",
-                specifications="For motors > 45kW",
-                quantity=busbar_length,
-                price=price,
-                last_price_update=effective_date,
-                note="\n".join(busbar_notes))
 
     """ ------------------------------------- Calculate Motor Current ------------------------------------- """
 

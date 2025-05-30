@@ -4,7 +4,7 @@ import jdatetime
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Date
 from sqlalchemy.orm import relationship
 
-from models.items import Base
+from models import Base
 
 today_shamsi = jdatetime.date.today().strftime("%Y/%m/%d %H:%M")
 

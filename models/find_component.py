@@ -1,7 +1,6 @@
-from models.items import Component, ComponentType, ComponentAttribute, ComponentVendor, Vendor
+from models import Component, ComponentType, ComponentAttribute, ComponentVendor
 from sqlalchemy.orm import aliased
-from sqlalchemy import cast, Float, desc, and_
-from datetime import date
+from sqlalchemy import cast, Float, desc
 from utils.database import SessionLocal
 
 

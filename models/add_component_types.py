@@ -1,5 +1,5 @@
 from utils.database import SessionLocal
-from models.items import ComponentType
+from models import ComponentType
 
 
 session = SessionLocal()

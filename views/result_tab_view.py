@@ -60,8 +60,8 @@ class ResultTab(QWidget):
 
     def generate_panels(self):
 
-        bagfilter_controller = BagfilterController()
-        self.panels["bagfilter_panel"] = bagfilter_controller.build_panel()
+        #bagfilter_controller = BagfilterController()
+        #self.panels["bagfilter_panel"] = bagfilter_controller.build_panel()
         fan_damper_controller = FanDamperController()
         self.panels["fan_damper_panel"] = fan_damper_controller.build_panel()
         transport_controller = TransportController()
@@ -75,7 +75,7 @@ class ResultTab(QWidget):
         electric_motor_controller = ElectricMotorController()
         electric_motor_price_and_effective_date = electric_motor_controller.calculate_price()
 
-        self.generate_table(self.panels["bagfilter_panel"], self.tables["bagfilter_panel_table"])
+        #self.generate_table(self.panels["bagfilter_panel"], self.tables["bagfilter_panel_table"])
         self.generate_table(self.panels["fan_damper_panel"], self.tables["fan_damper_panel_table"])
         self.generate_table(self.panels["transport_panel"], self.tables["transport_panel_table"])
         self.generate_table(self.panels["fresh_air_panel"], self.tables["fresh_air_panel_table"])

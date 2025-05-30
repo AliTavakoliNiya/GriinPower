@@ -1,7 +1,7 @@
 import re
 
-from models.vendor_model import Vendor
-from models.vendor_model import get_all_vendors, save_vendor_to_db
+from models import Vendor
+from models.vendor import get_all_vendors, save_vendor_to_db
 
 
 class VendorController:

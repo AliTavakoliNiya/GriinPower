@@ -1,32 +1,31 @@
-from sqlalchemy import cast, Float, desc, and_, func
+from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models.items import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentVendor
 from utils.database import SessionLocal
+
 
 class MCCB:
 
-    def __init__(self, name, brand, model, rated_current, breaking_capacity_ka, poles, frame_size, component_vendor):
+    def __init__(self, name, brand, model, rated_current, breaking_capacity_ka, component_vendor, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
         self.rated_current = rated_current
         self.breaking_capacity_ka = breaking_capacity_ka
-        self.poles = poles
-        self.frame_size = frame_size
+        self.order_number = order_number,
         self.component_vendor = component_vendor
 
     def __repr__(self):
         return f"<MCCB(name={self.name}, rated_current={self.rated_current})>"
 
-def get_mccb_by_current(min_rated_current, min_breaking_capacity_ka=None, poles=None):
+
+def get_mccb_by_current(min_rated_current):
     session = SessionLocal()
 
     try:
         mccb_type = session.query(ComponentType).filter_by(name='MCCB').first()
-        if not mccb_type:
-            return None, "ComponentType 'MCCB' not found."
 
         rated_attr = aliased(ComponentAttribute)
 
@@ -36,35 +35,14 @@ def get_mccb_by_current(min_rated_current, min_breaking_capacity_ka=None, poles=
             .filter(
                 Component.type_id == mccb_type.id,
                 rated_attr.key == 'rated_current',
-                cast(func.replace(rated_attr.value, 'A', ''), Float) >= min_rated_current
+                cast(rated_attr.value, Float) >= min_rated_current
             )
         )
-
-        # Optional filters
-        if min_breaking_capacity_ka:
-            query = query.filter(
-                Component.attributes.any(
-                    and_(
-                        ComponentAttribute.key == 'breaking_capacity_ka',
-                        cast(func.replace(ComponentAttribute.value, 'kA', ''), Float) >= min_breaking_capacity_ka
-                    )
-                )
-            )
-
-        if poles:
-            query = query.filter(
-                Component.attributes.any(
-                    and_(
-                        ComponentAttribute.key == 'poles',
-                        ComponentAttribute.value == str(poles)
-                    )
-                )
-            )
 
         component = query.order_by(cast(rated_attr.value, Float).asc()).first()
 
         if not component:
-            return None, f"No MCCB found with rated_current >= {min_rated_current} A."
+            return False, "❌ MCCB component not found for the specified current."
 
         latest_vendor = (
             session.query(ComponentVendor)
@@ -82,16 +60,14 @@ def get_mccb_by_current(min_rated_current, min_breaking_capacity_ka=None, poles=
             model=component.model,
             rated_current=attrs.get("rated_current"),
             breaking_capacity_ka=attrs.get("breaking_capacity_ka"),
-            poles=attrs.get("poles"),
-            frame_size=attrs.get("frame_size"),
             component_vendor=latest_vendor
         )
 
-        return mccb, f"{mccb}"
+        return True, mccb, f"{mccb}"
 
     except Exception as e:
         session.rollback()
-        return None, f"❌ Failed in get_mccb_by_current:\n{str(e)}"
+        return False, f"❌ Failed in get_mccb_by_current:\n{str(e)}"
 
     finally:
         session.close()

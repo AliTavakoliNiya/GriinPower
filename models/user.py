@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime
-from models.items import Base
+from models import Base
 
 import jdatetime
 today_shamsi = jdatetime.date.today().strftime("%Y/%m/%d %H:%M")

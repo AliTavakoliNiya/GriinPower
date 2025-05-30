@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
-from models.items import Base
+from models import Base
 
 
 class ComponentAttribute(Base):

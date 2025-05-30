@@ -3,7 +3,7 @@
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
-from models.items import Base
+from models import Base
 
 class ProjectComponent(Base):
     __tablename__ = 'project_components'
