@@ -15,6 +15,7 @@ engine = create_engine(
     poolclass=None  # Prevents pool creation for non-existent database
 )
 
+
 # Create a configured "Session" class with autocommit disabled to enforce transactions
 SessionLocal = sessionmaker(
     autocommit=False,

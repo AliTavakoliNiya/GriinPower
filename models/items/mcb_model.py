@@ -5,28 +5,30 @@ from sqlalchemy.orm import joinedload
 from models.items import Component, ComponentType, ComponentAttribute, ComponentVendor
 from utils.database import SessionLocal
 
-class MCCB:
 
-    def __init__(self, name, brand, model, rated_current, breaking_capacity_ka, poles, frame_size, component_vendor):
+class MCB:
+
+    def __init__(self, name, brand, model, rated_current, breaking_capacity, curve_type, poles, component_vendor):
         self.name = name
         self.brand = brand
         self.model = model
         self.rated_current = rated_current
-        self.breaking_capacity_ka = breaking_capacity_ka
+        self.breaking_capacity = breaking_capacity
+        self.curve_type = curve_type
         self.poles = poles
-        self.frame_size = frame_size
         self.component_vendor = component_vendor
 
     def __repr__(self):
-        return f"<MCCB(name={self.name}, rated_current={self.rated_current})>"
+        return f"<MCB(name={self.name}, current={self.rated_current}A, curve={self.curve_type})>"
 
-def get_mccb_by_current(min_rated_current, min_breaking_capacity_ka=None, poles=None):
+
+def get_mcb_by_current(min_rated_current, curve_type=None, poles=None):
     session = SessionLocal()
 
     try:
-        mccb_type = session.query(ComponentType).filter_by(name='MCCB').first()
-        if not mccb_type:
-            return None, "ComponentType 'MCCB' not found."
+        mcb_type = session.query(ComponentType).filter_by(name='MCB').first()
+        if not mcb_type:
+            return None, "ComponentType 'MCB' not found."
 
         rated_attr = aliased(ComponentAttribute)
 
@@ -34,19 +36,18 @@ def get_mccb_by_current(min_rated_current, min_breaking_capacity_ka=None, poles=
             session.query(Component)
             .join(rated_attr, Component.attributes)
             .filter(
-                Component.type_id == mccb_type.id,
+                Component.type_id == mcb_type.id,
                 rated_attr.key == 'rated_current',
                 cast(func.replace(rated_attr.value, 'A', ''), Float) >= min_rated_current
             )
         )
 
-        # Optional filters
-        if min_breaking_capacity_ka:
+        if curve_type:
             query = query.filter(
                 Component.attributes.any(
                     and_(
-                        ComponentAttribute.key == 'breaking_capacity_ka',
-                        cast(func.replace(ComponentAttribute.value, 'kA', ''), Float) >= min_breaking_capacity_ka
+                        ComponentAttribute.key == 'curve_type',
+                        ComponentAttribute.value == curve_type
                     )
                 )
             )
@@ -64,7 +65,7 @@ def get_mccb_by_current(min_rated_current, min_breaking_capacity_ka=None, poles=
         component = query.order_by(cast(rated_attr.value, Float).asc()).first()
 
         if not component:
-            return None, f"No MCCB found with rated_current >= {min_rated_current} A."
+            return None, "No MCB found matching the given criteria."
 
         latest_vendor = (
             session.query(ComponentVendor)
@@ -76,22 +77,22 @@ def get_mccb_by_current(min_rated_current, min_breaking_capacity_ka=None, poles=
 
         attrs = {attr.key: attr.value for attr in component.attributes}
 
-        mccb = MCCB(
+        mcb = MCB(
             name=component.name,
             brand=component.brand,
             model=component.model,
             rated_current=attrs.get("rated_current"),
-            breaking_capacity_ka=attrs.get("breaking_capacity_ka"),
+            breaking_capacity=attrs.get("breaking_capacity"),
+            curve_type=attrs.get("curve_type"),
             poles=attrs.get("poles"),
-            frame_size=attrs.get("frame_size"),
             component_vendor=latest_vendor
         )
 
-        return mccb, f"{mccb}"
+        return mcb, f"{mcb}"
 
     except Exception as e:
         session.rollback()
-        return None, f"❌ Failed in get_mccb_by_current:\n{str(e)}"
+        return None, f"❌ Failed in get_mcb_by_current:\n{str(e)}"
 
     finally:
         session.close()

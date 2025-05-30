@@ -1,48 +1,77 @@
-from sqlalchemy import Column, Integer, Float, String, ForeignKey
-from sqlalchemy.orm import relationship
-from models import Base
+from sqlalchemy import cast, Float, desc
+from sqlalchemy.orm import aliased
+from sqlalchemy.orm import joinedload
+
+from models.items import Component, ComponentType, ComponentAttribute, ComponentVendor
 from utils.database import SessionLocal
-from views.message_box_view import show_message
 
 
-class Bimetal(Base):
-    __tablename__ = 'bimetal'
+class Bimetal:
 
-    bimetal_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
-    item_id = Column(Integer, ForeignKey('items.item_id', ondelete="CASCADE"), nullable=False, unique=True)
-
-    current_setting_min = Column(Float, nullable=False)
-    current_setting_max = Column(Float, nullable=False)
-    trip_time = Column(Float, nullable=False)
-
-    modified_by = Column(String, ForeignKey('users.username', ondelete="SET NULL"), nullable=False)
-    modified_at = Column(String, nullable=False)
-
-    # Relationships
-    item = relationship("Item", back_populates="bimetal", uselist=False)
-    modified_user = relationship("User", back_populates="bimetals_modified")
+    def __init__(self, name, brand, model, rated_current, operating_range, reset_type, component_vendor):
+        self.name = name
+        self.brand = brand
+        self.model = model
+        self.rated_current = rated_current
+        self.operating_range = operating_range
+        self.reset_type = reset_type
+        self.component_vendor = component_vendor
 
     def __repr__(self):
-        return (f"<Bimetal(current_setting_min={self.current_setting_min}, "
-                f"current_setting_max={self.current_setting_max}, trip_time={self.trip_time})>")
+        return f"<Bimetal(name={self.name}, current={self.rated_current}A, range={self.operating_range})>"
 
 
-
-def get_bimetal_by_motor_current(current_value: float):
+def get_bimetal_by_current(min_rated_current):
     session = SessionLocal()
+
     try:
-        bimetal = (
-            session.query(Bimetal)
-            .filter(Bimetal.current_setting_min <= current_value,
-                    Bimetal.current_setting_max >= current_value)
-            .order_by(Bimetal.current_setting_max.asc())
+        bimetal_type = session.query(ComponentType).filter_by(name='Bimetal').first()
+        if not bimetal_type:
+            return None, "ComponentType 'Bimetal' not found."
+
+        rated_attr = aliased(ComponentAttribute)
+
+        component = (
+            session.query(Component)
+            .join(rated_attr, Component.attributes)
+            .filter(
+                Component.type_id == bimetal_type.id,
+                rated_attr.key == 'rated_current',
+                cast(rated_attr.value, Float) >= min_rated_current
+            )
+            .order_by(cast(rated_attr.value, Float).asc())
             .first()
         )
-        return bimetal or Bimetal()
+
+        if not component:
+            return None, "No Bimetal found with sufficient rated current."
+
+        latest_vendor = (
+            session.query(ComponentVendor)
+            .options(joinedload(ComponentVendor.vendor))
+            .filter(ComponentVendor.component_id == component.id)
+            .order_by(desc(ComponentVendor.date))
+            .first()
+        )
+
+        attrs = {attr.key: attr.value for attr in component.attributes}
+
+        bimetal = Bimetal(
+            name=component.name,
+            brand=component.brand,
+            model=component.model,
+            rated_current=attrs.get("rated_current"),
+            operating_range=attrs.get("operating_range"),
+            reset_type=attrs.get("reset_type"),
+            component_vendor=latest_vendor
+        )
+
+        return bimetal, f"{bimetal}"
+
     except Exception as e:
         session.rollback()
-        show_message("bimetal_model\n" + str(e) + "\n")
-        return Bimetal()
+        return None, f"❌ Failed in get_bimetal_by_current:\n{str(e)}"
+
     finally:
         session.close()
 

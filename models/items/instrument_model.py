@@ -1,35 +1,88 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import desc, and_
+from sqlalchemy.orm import joinedload
 
+from models.items import Component, ComponentType, ComponentAttribute, ComponentVendor
 from utils.database import SessionLocal
-from views.message_box_view import show_message
-from models import Base
 
 
-class Instrument(Base):
-    __tablename__ = 'instrument'
+class Instrument:
 
-    instruments_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
-    item_id = Column(Integer, ForeignKey('items.item_id', ondelete="CASCADE"), nullable=False, unique=True)
-    type = Column(Integer, nullable=False)
-    modified_by = Column(String, ForeignKey('users.username', ondelete="SET NULL"), nullable=False)
-    modified_at = Column(String, nullable=False)
-    note = Column(String, nullable=True)
-
-    # Relationships
-    item = relationship("Item", back_populates="instrument", uselist=False)
-    modified_user = relationship("User", back_populates="instruments_modified")
+    def __init__(self, name, brand, model, instrument_type, measuring_range,
+                 signal_output, accuracy, component_vendor):
+        self.name = name
+        self.brand = brand
+        self.model = model
+        self.instrument_type = instrument_type
+        self.measuring_range = measuring_range
+        self.signal_output = signal_output
+        self.accuracy = accuracy
+        self.component_vendor = component_vendor
 
     def __repr__(self):
-        return f"<Instrument(type={self.type}')>"
+        return f"<Instrument(name={self.name}, type={self.instrument_type}, range={self.measuring_range})>"
 
-def get_instrument_by_type(type_value):
+
+def get_instrument_by_type(instrument_type=None, signal_output=None):
     session = SessionLocal()
+
     try:
-        return session.query(Instrument).filter(Instrument.type == type_value).first() or Instrument()
+        instr_type = session.query(ComponentType).filter_by(name='Instrument').first()
+        if not instr_type:
+            return None, "ComponentType 'Instrument' not found."
+
+        query = session.query(Component).filter(Component.type_id == instr_type.id)
+
+        if instrument_type:
+            query = query.filter(
+                Component.attributes.any(
+                    and_(
+                        ComponentAttribute.key == 'instrument_type',
+                        ComponentAttribute.value == instrument_type
+                    )
+                )
+            )
+
+        if signal_output:
+            query = query.filter(
+                Component.attributes.any(
+                    and_(
+                        ComponentAttribute.key == 'signal_output',
+                        ComponentAttribute.value == signal_output
+                    )
+                )
+            )
+
+        component = query.first()
+
+        if not component:
+            return None, "No Instrument found with the specified filters."
+
+        latest_vendor = (
+            session.query(ComponentVendor)
+            .options(joinedload(ComponentVendor.vendor))
+            .filter(ComponentVendor.component_id == component.id)
+            .order_by(desc(ComponentVendor.date))
+            .first()
+        )
+
+        attrs = {attr.key: attr.value for attr in component.attributes}
+
+        instrument = Instrument(
+            name=component.name,
+            brand=component.brand,
+            model=component.model,
+            instrument_type=attrs.get("instrument_type"),
+            measuring_range=attrs.get("measuring_range"),
+            signal_output=attrs.get("signal_output"),
+            accuracy=attrs.get("accuracy"),
+            component_vendor=latest_vendor
+        )
+
+        return instrument, f"{instrument}"
+
     except Exception as e:
         session.rollback()
-        show_message("instrument_model\n" + str(e) + "\n")
-        return Instrument()
+        return None, f"❌ Failed in get_instrument_by_type:\n{str(e)}"
+
     finally:
         session.close()

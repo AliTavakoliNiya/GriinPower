@@ -7,8 +7,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE_DIR = os.path.join(BASE_DIR, 'data')
 
 # Database file path
-DATABASE_DIR = os.path.join(DATABASE_DIR, 'griin_power.db')
+DATABASE_DIR = os.path.join(DATABASE_DIR, 'GriinPower.db')
 DATABASE_PATH = f'sqlite:///{DATABASE_DIR}'
+print(DATABASE_PATH)
 
 # Application settings
 APP_NAME = "Electronic Component Manager"

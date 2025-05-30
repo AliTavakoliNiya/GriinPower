@@ -852,7 +852,7 @@ def create_qss_word():
     current_user = UserSession()
     project_details = ProjectDetails()
 
-    today_shamsi = jdatetime.date.today().strftime("%Y/%m/%d")
+    today_shamsi = jdatetime.date.today().strftime("%Y/%m/%d %H:%M")
 
     fan = project_details["fan"]["motors"]["fan"]
     anti_condensation_heater = "Yes (220vAc)" if fan["space_heater"] else "No"

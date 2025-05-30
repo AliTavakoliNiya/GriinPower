@@ -1,48 +1,98 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import cast, Float, desc, and_, func
+from sqlalchemy.orm import aliased
+from sqlalchemy.orm import joinedload
 
-from models import Base
+from models.items import Component, ComponentType, ComponentAttribute, ComponentVendor
 from utils.database import SessionLocal
-from views.message_box_view import show_message
 
 
-class MPCB(Base):
-    __tablename__ = 'mpcb'
 
-    mpcb_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
-    item_id = Column(Integer, ForeignKey('items.item_id', ondelete="CASCADE"), nullable=False, unique=True)
+class MPCB:
 
-    min_current = Column(Float, nullable=False)
-    max_current = Column(Float, nullable=False)
-    breaking_capacity = Column(Float, nullable=False)
-    trip_class = Column(Integer, nullable=False)
-
-    modified_by = Column(String, ForeignKey('users.username', ondelete="SET NULL"), nullable=False)
-    modified_at = Column(String, nullable=False)
-
-    # Relationships
-    item = relationship("Item", back_populates="mpcb", uselist=False)
-    modified_user = relationship("User", back_populates="mpcbs_modified")
+    def __init__(self, name, brand, model, rated_current, breaking_capacity_ka, adjustment_range, poles, component_vendor):
+        self.name = name
+        self.brand = brand
+        self.model = model
+        self.rated_current = rated_current
+        self.breaking_capacity_ka = breaking_capacity_ka
+        self.adjustment_range = adjustment_range
+        self.poles = poles
+        self.component_vendor = component_vendor
 
     def __repr__(self):
-        return (f"<MPCB(min_current={self.min_current}, max_current={self.max_current}, "
-                f"trip_class={self.trip_class}, breaking_capacity={self.breaking_capacity})>")
+        return f"<MPCB(name={self.name}, current={self.rated_current}A, adjustment_range={self.adjustment_range})>"
 
-
-def get_mpcb_by_motor_current(current_value: float):
+def get_mpcb_by_current(min_rated_current, min_breaking_capacity_ka=None, poles=None):
     session = SessionLocal()
+
     try:
-        mpcb = (
-            session.query(MPCB)
-            .filter(MPCB.min_current <= current_value, MPCB.max_current >= current_value)
-            .order_by(MPCB.max_current.asc())
+        mpcb_type = session.query(ComponentType).filter_by(name='MPCB').first()
+        if not mpcb_type:
+            return None, "ComponentType 'MPCB' not found."
+
+        rated_attr = aliased(ComponentAttribute)
+
+        query = (
+            session.query(Component)
+            .join(rated_attr, Component.attributes)
+            .filter(
+                Component.type_id == mpcb_type.id,
+                rated_attr.key == 'rated_current',
+                cast(func.replace(rated_attr.value, 'A', ''), Float) >= min_rated_current
+            )
+        )
+
+        if min_breaking_capacity_ka:
+            query = query.filter(
+                Component.attributes.any(
+                    and_(
+                        ComponentAttribute.key == 'breaking_capacity_ka',
+                        cast(func.replace(ComponentAttribute.value, 'kA', ''), Float) >= min_breaking_capacity_ka
+                    )
+                )
+            )
+
+        if poles:
+            query = query.filter(
+                Component.attributes.any(
+                    and_(
+                        ComponentAttribute.key == 'poles',
+                        ComponentAttribute.value == str(poles)
+                    )
+                )
+            )
+
+        component = query.order_by(cast(rated_attr.value, Float).asc()).first()
+
+        if not component:
+            return None, f"No MPCB found with rated_current >= {min_rated_current} A."
+
+        latest_vendor = (
+            session.query(ComponentVendor)
+            .options(joinedload(ComponentVendor.vendor))
+            .filter(ComponentVendor.component_id == component.id)
+            .order_by(desc(ComponentVendor.date))
             .first()
         )
-        return mpcb or MPCB()
+
+        attrs = {attr.key: attr.value for attr in component.attributes}
+
+        mpcb = MPCB(
+            name=component.name,
+            brand=component.brand,
+            model=component.model,
+            rated_current=attrs.get("rated_current"),
+            breaking_capacity_ka=attrs.get("breaking_capacity_ka"),
+            adjustment_range=attrs.get("adjustment_range"),
+            poles=attrs.get("poles"),
+            component_vendor=latest_vendor
+        )
+
+        return mpcb, f"{mpcb}"
+
     except Exception as e:
         session.rollback()
-        show_message("mpcb_model\n" + str(e) + "\n")
-        return MPCB()
+        return None, f"❌ Failed in get_mpcb_by_current:\n{str(e)}"
+
     finally:
         session.close()
-

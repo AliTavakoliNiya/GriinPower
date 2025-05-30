@@ -60,7 +60,7 @@ class DataEntry(QMainWindow):
         contactor_vendor = self.vendors[self.contactor_vendor_list.currentIndex()] #??????????????
         contactor_price = self.contactor_price.text() #????????????????????
         contactor.modified_by = f"{self.user_logged.first_name} {self.user_logged.last_name}"
-        contactor.modified_at = jdatetime.date.today().strftime("%Y/%m/%d")
+        contactor.modified_at = jdatetime.date.today().strftime("%Y/%m/%d %H:%M")
 
         if contactor.current_a == 0:
             show_message("Contactor Current cant be 0", "Error")

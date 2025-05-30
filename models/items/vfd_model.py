@@ -6,30 +6,32 @@ from models.items import Component, ComponentType, ComponentAttribute, Component
 from utils.database import SessionLocal
 
 
-class ElectricMotor:
+class VFD:
 
-    def __init__(self, name, brand, model, power_kw, voltage, current_a, rpm, component_vendor):
+    def __init__(self, name, brand, model, output_power_kw, input_voltage, rated_current,
+                 output_frequency_hz, control_type, component_vendor):
         self.name = name
         self.brand = brand
         self.model = model
-        self.power_kw = power_kw
-        self.voltage = voltage
-        self.current_a = current_a
-        self.rpm = rpm
+        self.output_power_kw = output_power_kw
+        self.input_voltage = input_voltage
+        self.rated_current = rated_current
+        self.output_frequency_hz = output_frequency_hz
+        self.control_type = control_type
         self.component_vendor = component_vendor
 
     def __repr__(self):
-        return f"<ElectricMotor(name={self.name}, power_kw={self.power_kw})>"
+        return (f"<VFD(name={self.name}, power={self.output_power_kw}kW, voltage={self.input_voltage}V, "
+                f"current={self.rated_current}A, control={self.control_type})>")
 
 
-
-def get_motor_by_power(min_power_kw, voltage=None, rpm=None):
+def get_vfd_by_power(min_power_kw):
     session = SessionLocal()
 
     try:
-        motor_type = session.query(ComponentType).filter_by(name='ElectricMotor').first()
-        if not motor_type:
-            return None, "ComponentType 'ElectricMotor' not found."
+        vfd_type = session.query(ComponentType).filter_by(name='VFD').first()
+        if not vfd_type:
+            return None, "ComponentType 'VFD' not found."
 
         power_attr = aliased(ComponentAttribute)
 
@@ -37,8 +39,8 @@ def get_motor_by_power(min_power_kw, voltage=None, rpm=None):
             session.query(Component)
             .join(power_attr, Component.attributes)
             .filter(
-                Component.type_id == motor_type.id,
-                power_attr.key == 'power_kw',
+                Component.type_id == vfd_type.id,
+                power_attr.key == 'output_power_kw',
                 cast(power_attr.value, Float) >= min_power_kw
             )
             .order_by(cast(power_attr.value, Float).asc())
@@ -46,7 +48,7 @@ def get_motor_by_power(min_power_kw, voltage=None, rpm=None):
         )
 
         if not component:
-            return None, f"No motor found with power >= {min_power_kw} kW."
+            return None, "No VFD found with sufficient output power."
 
         latest_vendor = (
             session.query(ComponentVendor)
@@ -58,23 +60,23 @@ def get_motor_by_power(min_power_kw, voltage=None, rpm=None):
 
         attrs = {attr.key: attr.value for attr in component.attributes}
 
-        motor = ElectricMotor(
+        vfd = VFD(
             name=component.name,
             brand=component.brand,
             model=component.model,
-            power_kw=attrs.get("power_kw"),
-            voltage=attrs.get("voltage"),
-            current_a=attrs.get("current_a"),
-            rpm=attrs.get("rpm"),
+            output_power_kw=attrs.get("output_power_kw"),
+            input_voltage=attrs.get("input_voltage"),
+            rated_current=attrs.get("rated_current"),
+            output_frequency_hz=attrs.get("output_frequency_hz"),
+            control_type=attrs.get("control_type"),
             component_vendor=latest_vendor
         )
 
-        return motor, f"{motor}"
+        return vfd, f"{vfd}"
 
     except Exception as e:
         session.rollback()
-        return None, f"❌ Failed in get_motor_by_power:\n{str(e)}"
+        return None, f"❌ Failed in get_vfd_by_power:\n{str(e)}"
 
     finally:
         session.close()
-
