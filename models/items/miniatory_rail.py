@@ -31,7 +31,7 @@ def get_miniatory_rail():
         )
 
         if not component:
-            return False, "❌ Miniatory Rail not found."
+            return None, "❌ Miniatory Rail not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

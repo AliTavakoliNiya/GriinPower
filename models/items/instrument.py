@@ -37,6 +37,9 @@ def get_instrument_by_type(instrument_type):
         )
         component = query.first()
 
+        if not component:
+            return None, "❌ Instrument not found."
+
         latest_vendor = (
             session.query(ComponentVendor)
             .options(joinedload(ComponentVendor.vendor))

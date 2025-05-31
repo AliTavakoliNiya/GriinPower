@@ -38,7 +38,7 @@ def get_relay_by_contacts(contacts=None):
         ).first()
 
         if not component:
-            return False, "❌ Relay not found."
+            return None, "❌ Relay not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

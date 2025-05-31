@@ -31,7 +31,7 @@ def get_calibration(name=None, model=None):
 
         component = query.first()
         if not component:
-            return False, "❌ Calibration not found."
+            return None, "❌ Calibration not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

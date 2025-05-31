@@ -55,7 +55,7 @@ def get_junction_box(width=None, height=None, depth=None):
         ).first()
 
         if not component:
-            return False, "❌ Junction Box for Speed not found."
+            return None, "❌ Junction Box for Speed not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

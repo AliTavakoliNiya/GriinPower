@@ -51,7 +51,7 @@ def get_mpcb_by_current(current):
         )
 
         if not component:
-            return False, "❌ MPCB component not found for this current."
+            return None, "❌ MPCB component not found for this current."
 
         latest_vendor = (
             session.query(ComponentVendor)

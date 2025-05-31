@@ -8,22 +8,25 @@ from utils.database import SessionLocal
 
 class PLC:
 
-    def __init__(self, name, brand, model, cpu_type, digital_inputs, digital_outputs,
-                 analog_inputs, analog_outputs, communication_ports, memory_size_kb, component_vendor):
+    def __init__(self, name, brand, model, series, digital_inputs, digital_outputs,
+                 analog_inputs, analog_outputs, support_profinet, support_profibus, support_mpi,
+                 support_hard_wire, component_vendor):
         self.name = name
         self.brand = brand
         self.model = model
-        self.cpu_type = cpu_type
+        self.series = series
         self.digital_inputs = digital_inputs
         self.digital_outputs = digital_outputs
         self.analog_inputs = analog_inputs
         self.analog_outputs = analog_outputs
-        self.communication_ports = communication_ports
-        self.memory_size_kb = memory_size_kb
+        self.support_profinet = support_profinet
+        self.support_profibus = support_profibus
+        self.support_mpi = support_mpi
+        self.support_hard_wire = support_hard_wire
         self.component_vendor = component_vendor
 
     def __repr__(self):
-        return f"<PLC(name={self.name}, cpu_type={self.cpu_type}, di={self.digital_inputs}, do={self.digital_outputs})>"
+        return f"<PLC(name={self.name})>"
 
 def get_plc_by_io(min_digital_inputs, min_digital_outputs):
     session = SessionLocal()
@@ -68,13 +71,14 @@ def get_plc_by_io(min_digital_inputs, min_digital_outputs):
             name=component.name,
             brand=component.brand,
             model=component.model,
-            cpu_type=attrs.get("cpu_type"),
             digital_inputs=attrs.get("digital_inputs"),
             digital_outputs=attrs.get("digital_outputs"),
             analog_inputs=attrs.get("analog_inputs"),
             analog_outputs=attrs.get("analog_outputs"),
-            communication_ports=attrs.get("communication_ports"),
-            memory_size_kb=attrs.get("memory_size_kb"),
+            support_profinet=attrs.get("support_profinet"),
+            support_profibus=attrs.get("support_profibus"),
+            support_mpi=attrs.get("support_mpi"),
+            support_hard_wire=attrs.get("support_hard_wire"),
             component_vendor=latest_vendor
         )
 

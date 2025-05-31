@@ -41,6 +41,10 @@ def get_bimetal_by_current(min_rated_current):
             .order_by(cast(rated_attr.value, Float).asc())
             .first()
         )
+
+        if not component:
+            return None, "❌ Bimetal not found."
+
         latest_vendor = (
             session.query(ComponentVendor)
             .options(joinedload(ComponentVendor.vendor))

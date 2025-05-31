@@ -38,7 +38,7 @@ def get_manifold(ways=None):
         component = query.order_by(cast(ways_attr.value, Integer).asc()).first()
 
         if not component:
-            return False, "❌ Manifold not found."
+            return None, "❌ Manifold not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

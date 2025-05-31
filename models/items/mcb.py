@@ -27,8 +27,6 @@ def get_mcb_by_current(min_rated_current, curve_type=None, poles=None):
 
     try:
         mcb_type = session.query(ComponentType).filter_by(name='MCB').first()
-        if not mcb_type:
-            return None, "ComponentType 'MCB' not found."
 
         rated_attr = aliased(ComponentAttribute)
 
@@ -41,26 +39,6 @@ def get_mcb_by_current(min_rated_current, curve_type=None, poles=None):
                 cast(func.replace(rated_attr.value, 'A', ''), Float) >= min_rated_current
             )
         )
-
-        if curve_type:
-            query = query.filter(
-                Component.attributes.any(
-                    and_(
-                        ComponentAttribute.key == 'curve_type',
-                        ComponentAttribute.value == curve_type
-                    )
-                )
-            )
-
-        if poles:
-            query = query.filter(
-                Component.attributes.any(
-                    and_(
-                        ComponentAttribute.key == 'poles',
-                        ComponentAttribute.value == str(poles)
-                    )
-                )
-            )
 
         component = query.order_by(cast(rated_attr.value, Float).asc()).first()
 

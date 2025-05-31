@@ -46,7 +46,7 @@ def get_io_card(io_type: str, min_channels: int = 0):
                     selected_component = (comp, attrs)
 
         if not selected_component:
-            return False, f"❌ No matching IOCard found for type={io_type} and min_channels={min_channels}"
+            return None, f"❌ No matching IOCard found for type={io_type} and min_channels={min_channels}"
 
         component, attrs = selected_component
         latest_vendor = (

@@ -36,6 +36,9 @@ def get_terminal_by_current(rated_current):
             .first()
         )
 
+        if not component:
+            return None, "❌ Button not found."
+
         latest_vendor = (
             session.query(ComponentVendor)
             .options(joinedload(ComponentVendor.vendor))

@@ -57,7 +57,7 @@ def get_electrical_panel(width=None, height=None, depth=None, ip=None):
         ).first()
 
         if not component:
-            return False, "❌ Electrical Panel not found."
+            return None, "❌ Electrical Panel not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

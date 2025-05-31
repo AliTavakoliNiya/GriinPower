@@ -38,7 +38,7 @@ def get_signal_lamp(voltage=None):
         component = query.order_by(cast(voltage_attr.value, Float).asc()).first()
 
         if not component:
-            return False, "❌ Signal Lamp not found."
+            return None, "❌ Signal Lamp not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

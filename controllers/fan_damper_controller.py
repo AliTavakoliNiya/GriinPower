@@ -100,7 +100,12 @@ class FanDamperController(PanelController):
         self.choose_bimetal(damper, damper_config["qty"])
         self.choose_bimetal(fan, fan_config["qty"])
 
-        # ----------------------- Add BiMetal -----------------------
+        if fan_config["start_type"] == "VFD":
+            self.choose_vfd(fan, fan_config["qty"])
+        if fan_config["start_type"] == "Soft Starter":
+            self.choose_soft_starter(fan, fan_config["qty"])
+
+
 
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
@@ -116,8 +121,7 @@ class FanDamperController(PanelController):
         # ----------------------- Add General Accessories -----------------------
         self.choose_general(motor_objects)
 
-        # if fan_config["start_type"] == "Soft Starter": & VFD ???????????????????????
-        #     self.choose_general(motor_objects, ["soft_starter"])
+
 
 
         # ----------------------- Add Cables -----------------------

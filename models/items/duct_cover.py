@@ -31,7 +31,7 @@ def get_duct_cover():
         )
 
         if not component:
-            return False, "❌ Duct Cover not found."
+            return None, "❌ Duct Cover not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

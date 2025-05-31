@@ -8,21 +8,16 @@ from utils.database import SessionLocal
 
 class VFD:
 
-    def __init__(self, name, brand, model, output_power_kw, input_voltage, rated_current,
-                 output_frequency_hz, control_type, component_vendor):
+    def __init__(self, name, brand, model, output_power_kw, input_voltage, component_vendor):
         self.name = name
         self.brand = brand
         self.model = model
         self.output_power_kw = output_power_kw
         self.input_voltage = input_voltage
-        self.rated_current = rated_current
-        self.output_frequency_hz = output_frequency_hz
-        self.control_type = control_type
         self.component_vendor = component_vendor
 
     def __repr__(self):
-        return (f"<VFD(name={self.name}, power={self.output_power_kw}kW, voltage={self.input_voltage}V, "
-                f"current={self.rated_current}A, control={self.control_type})>")
+        return (f"<VFD(name={self.name}, power={self.output_power_kw}kW, voltage={self.input_voltage}V)>")
 
 
 def get_vfd_by_power(min_power_kw):
@@ -67,8 +62,6 @@ def get_vfd_by_power(min_power_kw):
             output_power_kw=attrs.get("output_power_kw"),
             input_voltage=attrs.get("input_voltage"),
             rated_current=attrs.get("rated_current"),
-            output_frequency_hz=attrs.get("output_frequency_hz"),
-            control_type=attrs.get("control_type"),
             component_vendor=latest_vendor
         )
 

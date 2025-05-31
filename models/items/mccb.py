@@ -42,7 +42,7 @@ def get_mccb_by_current(min_rated_current):
         component = query.order_by(cast(rated_attr.value, Float).asc()).first()
 
         if not component:
-            return False, "❌ MCCB component not found for the specified current."
+            return None, "❌ MCCB component not found for the specified current."
 
         latest_vendor = (
             session.query(ComponentVendor)

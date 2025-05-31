@@ -1,0 +1,18 @@
+self.ui.motor_gp_box (required) (groupBox)
+self.ui.motor_power (required) (spinBox)
+self.ui.motor_rpm (required) (spinBox)
+self.ui.motor_voltage (required) (spinBox)
+self.ui.motor_starting_method (optional) (comboBox)
+self.ui.motor_cooling_method (optional) (comboBox)
+self.ui.motor_ip (optional) (comboBox)
+self.ui.motor_efficiency_class (optional) (comboBox)
+self.ui.motor_thermal_protection (optional) (comboBox)
+self.ui.motor_paiting_ral (optional) (comboBox)
+self.ui.motor_brand (required) (comboBox)
+self.ui.motor_supplier (required) (comboBox)
+self.ui.motor_price (required) (lineEdit)
+self.ui.motor_list (optional) (listWidget)
+
+
+
+

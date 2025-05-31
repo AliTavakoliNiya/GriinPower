@@ -32,6 +32,9 @@ def get_mpcb_mccb_aux_contact():
             .first()
         )
 
+        if not component:
+            return None, "❌ Button not found."
+
         latest_vendor = (
             session.query(ComponentVendor)
             .options(joinedload(ComponentVendor.vendor))

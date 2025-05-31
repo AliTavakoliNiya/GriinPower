@@ -42,6 +42,9 @@ def get_contactor_by_current(rated_current):
             .first()
         )
 
+        if not component:
+            return None, "❌ Contactor not found."
+
         latest_vendor = (
             session.query(ComponentVendor)
             .options(joinedload(ComponentVendor.vendor))  # load vendor in that query

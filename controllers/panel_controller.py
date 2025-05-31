@@ -1,4 +1,3 @@
-from collections import defaultdict
 from math import sqrt
 
 from config import COSNUS_PI, ETA
@@ -8,7 +7,7 @@ from models.items.contactor_aux_contact import get_contactor_aux_contact
 from models.items.duct_cover import get_duct_cover
 from models.items.electrical_panel import get_electrical_panel
 from models.items.front_connector import get_front_connector
-from models.items.instrument_model import get_instrument_by_type
+from models.items.instrument import get_instrument_by_type
 from models.items.io_card import get_io_card
 from models.items.jb import get_junction_box
 from models.items.lcb import get_lcb
@@ -19,13 +18,14 @@ from models.items.mpcb_mccb_aux_contact import get_mpcb_mccb_aux_contact
 from models.items.relay import get_relay_by_contacts
 from models.items.selector_switch import get_selector_switch
 from models.items.signal_lamp import get_signal_lamp
+from models.items.soft_starter import get_softstarter_by_power
 from models.items.terminal import get_terminal_by_current
-from views.message_box_view import show_message
+from models.items.vfd_model import get_vfd_by_power
 
-from models.items.contactor_model import get_contactor_by_current
+from models.items.contactor import get_contactor_by_current
 from models.items.mpcb_model import get_mpcb_by_current
-from models.items.mccb_model import get_mccb_by_current
-from models.items.bimetal_model import get_bimetal_by_current
+from models.items.mccb import get_mccb_by_current
+from models.items.bimetal import get_bimetal_by_current
 
 
 class PanelController:
@@ -105,10 +105,10 @@ class PanelController:
                 specifications="",
                 quantity=total_qty,
                 price=0,
-                last_price_update="",
-                note=f"Not Found"
+                last_price_update="❌ Contactor not found",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
-            show_message(contactor, title="Error")
+            print(contactor)
 
     def choose_mpcb(self, motor, qty):
         """
@@ -142,10 +142,10 @@ class PanelController:
                 specifications="",
                 quantity=total_qty,
                 price=0,
-                last_price_update="",
-                note=f"Not Found"
+                last_price_update="❌ MPCB not found",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
-            show_message(mpcb, title="Error")
+            print(mpcb)
 
     def choose_mccb(self, motor, qty):
         """
@@ -178,10 +178,10 @@ class PanelController:
                 specifications="",
                 quantity=total_qty,
                 price=0,
-                last_price_update="",
-                note=f"Not Found"
+                last_price_update="❌ MCCB not found",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
-            show_message(mccb, title="Error")
+            print(mccb)
 
     def choose_bimetal(self, motor, qty):
         """
@@ -215,10 +215,76 @@ class PanelController:
                 specifications="",
                 quantity=total_qty,
                 price=0,
-                last_price_update="",
-                note=f"Not Found"
+                last_price_update="❌ BiMetal not found",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
-            show_message(bimetal, title="Error")
+            print(bimetal)
+
+    def choose_vfd(self, motor, total_qty):
+        """
+        Adds a VFD to the panel based on motor current specifications.
+        """
+        if total_qty == 0:
+            return
+
+        success, vfd = get_vfd_by_power(motor.power)
+
+        if success:
+            self.add_to_panel(
+                type=f"VFD FOR {motor.usage.upper()}",
+                brand=vfd.brand,
+                order_number=vfd.order_number,
+                specifications=f"power={vfd.output_power_kw}kW\nvoltage={vfd.input_voltage}V",
+                quantity=total_qty,
+                price=vfd.component_vendor.price,
+                last_price_update=f"{vfd.component_vendor.vendor.name}\n{vfd.component_vendor.date}",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+            )
+        else:
+            self.add_to_panel(
+                type=f"VFD FOR {motor.usage.upper()}",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=total_qty,
+                price=0,
+                last_price_update="❌ VFD not found",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+            )
+            print(vfd)
+
+    def choose_soft_starter(self, motor, total_qty):
+        """
+        Adds a Soft Starter to the panel based on motor current specifications.
+        """
+        if total_qty == 0:
+            return
+
+        success, soft_starter = get_softstarter_by_power(motor.power)
+
+        if success:
+            self.add_to_panel(
+                type=f"Soft Starter FOR {motor.usage.upper()}",
+                brand=soft_starter.brand,
+                order_number=soft_starter.order_number,
+                specifications=f"voltage={soft_starter.rated_voltage}V\npower={soft_starter.power_rating_kw}kW)",
+                quantity=total_qty,
+                price=soft_starter.component_vendor.price,
+                last_price_update=f"{soft_starter.component_vendor.vendor.name}\n{soft_starter.component_vendor.date}",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+            )
+        else:
+            self.add_to_panel(
+                type=f"Soft Starter FOR {motor.usage.upper()}",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=total_qty,
+                price=0,
+                last_price_update="❌ Soft Starter not found",
+                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+            )
+            print(soft_starter)
 
     """ ------------------------------------- Generals ------------------------------------- """
 
@@ -241,7 +307,7 @@ class PanelController:
                     self.add_to_panel(
                                         type=display_name,
                                         brand=item.brand,
-                                        quantity=total_qty,
+                                        quantity=round(total_qty, 2),
                                         price=item.component_vendor.price,
                                         last_price_update=f"{item.component_vendor.vendor.name}\n{item.component_vendor.date}",
                                         note="\n".join(notes)
@@ -252,10 +318,9 @@ class PanelController:
                         brand="",
                         order_number="",
                         specifications="",
-                        quantity=total_qty,
+                        quantity=round(total_qty, 2),
                         price=0,
-                        last_price_update="",
-                        note=f"Not Found"
+                        last_price_update=f"❌{display_name} not found"
                     )
 
         process_item("lcb", "LCB", get_lcb)
@@ -316,10 +381,9 @@ class PanelController:
                 brand="Not Found",
                 quantity=qty,
                 price=0,
-                last_price_update="Not Found",
-                note="❌ Panel not found"
+                last_price_update=f"❌ELECTRICAL PANEL not found",
             )
-            show_message(panel, title="Error")
+            print(panel)
 
     """ ------------------------------------- Instrument ------------------------------------- """
 
@@ -383,9 +447,9 @@ class PanelController:
                             order_number="",
                             quantity=qty,
                             price=0,
-                            last_price_update="",
+                            last_price_update=f"❌Manifold not found",
                             note=f"manifold for {instrument_name}")
-                        show_message(manifold_obj, title="Error")
+                        print(manifold_obj)
 
                 # ------------ Calibration ------------
                 if "transmitter" in name and qty != 0:
@@ -405,10 +469,9 @@ class PanelController:
                             brand="",
                             quantity=qty,
                             price=0,
-                            last_price_update="Not Found",
-                            note=f"❌ Calibration not found for {instrument_name}"
+                            last_price_update=f"❌ Calibration not found for {instrument_name}"
                         )
-                        show_message(calibration, title="Error")
+                        print(calibration)
 
 
             else:
@@ -419,10 +482,9 @@ class PanelController:
                     specifications="",
                     quantity=qty,
                     price=0,
-                    last_price_update="",
-                    note=f"Not Found"
+                    last_price_update=f"❌ Instrument not found",
                 )
-                show_message(instrument, title="Error")
+                print(instrument)
 
     def calculate_plc_io_requirements(self, motor_objects, instruments=None):
         total_di = total_do = total_ai = total_ao = 0
@@ -468,7 +530,7 @@ class PanelController:
                 brand = pin_card.brand
             else:
                 price = 0
-                effective_date = "Not Found"
+                effective_date = f"❌FRONT CONNECTOR not found"
                 brand = ""
 
             self.add_to_panel(
@@ -492,7 +554,7 @@ class PanelController:
             brand = card.brand
         else:
             price = 0
-            effective_date = "Not Found"
+            effective_date = f"❌ Channel card not found"
             brand = ""
 
         self.add_to_panel(

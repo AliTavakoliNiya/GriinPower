@@ -31,7 +31,7 @@ def get_button():
         )
 
         if not component:
-            return False, "❌ Button not found."
+            return None, "❌ Button not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

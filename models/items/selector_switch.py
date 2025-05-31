@@ -31,7 +31,7 @@ def get_selector_switch():
         )
 
         if not component:
-            return False, "❌ Selector Switch not found."
+            return None, "❌ Selector Switch not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

@@ -53,7 +53,7 @@ def get_lcb(width=None, height=None, depth=None):
         ).first()
 
         if not component:
-            return False, "❌ LCB not found."
+            return None, "❌ LCB not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

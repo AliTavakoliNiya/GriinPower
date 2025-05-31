@@ -29,6 +29,8 @@ def get_contactor_aux_contact():
             )
             .first()
         )
+        if not component:
+            return None, "❌ Contactor Auxiliary Contact not found."
 
         latest_vendor = (
             session.query(ComponentVendor)

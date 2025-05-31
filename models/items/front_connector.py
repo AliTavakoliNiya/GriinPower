@@ -34,7 +34,7 @@ def get_front_connector(pin_count):
         )
 
         if not component:
-            return False, f"❌ No front connector found for pin count ≥ {pin_count}"
+            return None, f"❌ No front connector found for pin count ≥ {pin_count}"
 
         latest_vendor = (
             session.query(ComponentVendor)

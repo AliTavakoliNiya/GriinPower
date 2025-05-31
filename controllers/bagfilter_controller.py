@@ -2,7 +2,7 @@ import math
 
 from controllers.panel_controller import PanelController
 #from models import get_general_by_name
-from models.items.mccb_model import get_mccb_by_current
+from models.items.mccb import get_mccb_by_current
 from copy import deepcopy
 import re
 

@@ -1,4 +1,4 @@
-from sqlalchemy import cast, Float, desc, and_
+from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
@@ -8,23 +8,21 @@ from utils.database import SessionLocal
 
 class SoftStarter:
 
-    def __init__(self, name, brand, model, rated_voltage, rated_current,
-                 starting_current_limit, power_rating_kw, component_vendor):
+    def __init__(self, name, brand, model, rated_voltage, power_rating_kw, component_vendor, order_number):
         self.name = name
         self.brand = brand
         self.model = model
+        self.order_number = order_number
         self.rated_voltage = rated_voltage
-        self.rated_current = rated_current
-        self.starting_current_limit = starting_current_limit
         self.power_rating_kw = power_rating_kw
         self.component_vendor = component_vendor
 
     def __repr__(self):
         return (f"<SoftStarter(name={self.name}, voltage={self.rated_voltage}V, "
-                f"current={self.rated_current}A, power={self.power_rating_kw}kW)>")
+                f"power={self.power_rating_kw}kW)>")
 
 
-def get_softstarter_by_power_and_current(min_power_kw, max_starting_current=None):
+def get_softstarter_by_power(min_power_kw):
     session = SessionLocal()
 
     try:
@@ -33,7 +31,6 @@ def get_softstarter_by_power_and_current(min_power_kw, max_starting_current=None
             return None, "ComponentType 'SoftStarter' not found."
 
         power_attr = aliased(ComponentAttribute)
-        current_attr = aliased(ComponentAttribute)
 
         query = (
             session.query(Component)
@@ -45,13 +42,6 @@ def get_softstarter_by_power_and_current(min_power_kw, max_starting_current=None
             )
         )
 
-        if max_starting_current is not None:
-            query = query.join(current_attr, Component.attributes).filter(
-                and_(
-                    current_attr.key == 'starting_current_limit',
-                    cast(current_attr.value, Float) <= max_starting_current
-                )
-            )
 
         component = query.order_by(cast(power_attr.value, Float).asc()).first()
 
@@ -72,9 +62,8 @@ def get_softstarter_by_power_and_current(min_power_kw, max_starting_current=None
             name=component.name,
             brand=component.brand,
             model=component.model,
+            order_number=component.order_number,
             rated_voltage=attrs.get("rated_voltage"),
-            rated_current=attrs.get("rated_current"),
-            starting_current_limit=attrs.get("starting_current_limit"),
             power_rating_kw=attrs.get("power_rating_kw"),
             component_vendor=latest_vendor
         )
