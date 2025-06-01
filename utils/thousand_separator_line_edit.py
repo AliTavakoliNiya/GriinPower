@@ -30,3 +30,12 @@ def format_line_edit_text(line_edit):
         line_edit.setCursorPosition(new_cursor_pos)
 
     line_edit._last_text = formatted_text
+
+
+def parse_price(price_text):
+    """Removes comma separators and converts price to int if valid"""
+    try:
+        clean_text = price_text.replace(',', '')
+        return int(clean_text)
+    except ValueError:
+        return None

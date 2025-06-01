@@ -16,7 +16,7 @@ class Component(Base):
     brand = Column(String)
     model = Column(String)
     order_number = Column(String)
-    created_at = Column(DateTime, default=today_shamsi)
+    created_at = Column(String, default=today_shamsi)
     created_by_id = Column(Integer, ForeignKey('users.id'), nullable=True)
 
     created_by = relationship('User')

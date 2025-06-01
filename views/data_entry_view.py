@@ -24,6 +24,8 @@ class DataEntry(QMainWindow):
 
         self.electro_motor_controller = ElectroMotorDataEntry(self)
 
+        self.motor_add_vendor_btn.clicked.connect(self.add_vendor)
+
         self.refresh_data()
         self.show()
 
