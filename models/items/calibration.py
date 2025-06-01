@@ -1,10 +1,10 @@
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
-from models import Component, ComponentType, ComponentVendor
+from models import Component, ComponentType, ComponentSupplier
 from utils.database import SessionLocal
 
 class Calibration:
-    def __init__(self, name, brand, model, calibration_date, calibration_due_date, calibration_lab, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, calibration_date, calibration_due_date, calibration_lab, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
@@ -12,7 +12,7 @@ class Calibration:
         self.calibration_due_date = calibration_due_date      # تاریخ انقضا یا موعد بعدی کالیبراسیون
         self.calibration_lab = calibration_lab                # آزمایشگاه یا مرکز کالیبراسیون
         self.order_number = order_number
-        self.component_vendor = component_vendor              # نمونه مشابه برای ارتباط با تامین‌کننده یا نسخه قطعه
+        self.component_supplier = component_supplier              # نمونه مشابه برای ارتباط با تامین‌کننده یا نسخه قطعه
 
     def __repr__(self):
         return f"<Calibration(name={self.name} model={self.model} calibration_date={self.calibration_date})>"
@@ -33,11 +33,11 @@ def get_calibration(name=None, model=None):
         if not component:
             return None, "❌ Calibration not found."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -49,7 +49,7 @@ def get_calibration(name=None, model=None):
             calibration_date=attrs.get("calibration_date"),
             calibration_due_date=attrs.get("calibration_due_date"),
             calibration_lab=attrs.get("calibration_lab"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
         return True, calibration
 

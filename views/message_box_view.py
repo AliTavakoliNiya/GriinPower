@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButt
 from PyQt5.QtWidgets import QMessageBox
 
 
-def show_message(message: str, title: str = ""):
+def show_message(message: str, title: str = " "):
     msg = QMessageBox()
     msg.setWindowIcon(QIcon('assets/Logo.ico'))
     msg.setText(message)

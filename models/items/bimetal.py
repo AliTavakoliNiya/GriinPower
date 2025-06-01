@@ -2,13 +2,13 @@ from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class Bimetal:
 
-    def __init__(self, name, brand, model, min_current, max_current, trip_time, class_type, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, min_current, max_current, trip_time, class_type, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
@@ -17,7 +17,7 @@ class Bimetal:
         self.max_current = max_current
         self.trip_time = trip_time
         self.class_type = class_type
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<Bimetal(name={self.name}, current= {self.min_current}A - {self.max_current}A)>"
@@ -45,11 +45,11 @@ def get_bimetal_by_current(min_rated_current):
         if not component:
             return None, "❌ Bimetal not found."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -63,7 +63,7 @@ def get_bimetal_by_current(min_rated_current):
             max_current=attrs.get("max_current"),
             trip_time=attrs.get("trip_time"),
             class_type=attrs.get("class_type"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return True, bimetal

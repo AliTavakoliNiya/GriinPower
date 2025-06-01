@@ -2,13 +2,13 @@ from sqlalchemy import cast, Float, desc, and_, func
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class MCB:
 
-    def __init__(self, name, brand, model, rated_current, breaking_capacity, curve_type, poles, component_vendor):
+    def __init__(self, name, brand, model, rated_current, breaking_capacity, curve_type, poles, component_supplier):
         self.name = name
         self.brand = brand
         self.model = model
@@ -16,7 +16,7 @@ class MCB:
         self.breaking_capacity = breaking_capacity
         self.curve_type = curve_type
         self.poles = poles
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<MCB(name={self.name}, current={self.rated_current}A, curve={self.curve_type})>"
@@ -45,11 +45,11 @@ def get_mcb_by_current(min_rated_current, curve_type=None, poles=None):
         if not component:
             return None, "No MCB found matching the given criteria."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -63,7 +63,7 @@ def get_mcb_by_current(min_rated_current, curve_type=None, poles=None):
             breaking_capacity=attrs.get("breaking_capacity"),
             curve_type=attrs.get("curve_type"),
             poles=attrs.get("poles"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return mcb, f"{mcb}"

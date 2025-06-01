@@ -1,18 +1,18 @@
 from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased, joinedload
 
-from models import ComponentType, ComponentAttribute, Component, ComponentVendor
+from models import ComponentType, ComponentAttribute, Component, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class Terminal:
-    def __init__(self, name, brand, model, current, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, current, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
         self.order_number = order_number
         self.current = current
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<Terminal(name={self.name} current={self.current} A)>"
@@ -39,11 +39,11 @@ def get_terminal_by_current(rated_current):
         if not component:
             return None, "❌ Button not found."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -52,7 +52,7 @@ def get_terminal_by_current(rated_current):
                             brand=component.brand,
                             model=component.model,
                             current=attrs.get("current"),
-                            component_vendor=latest_vendor)
+                            component_supplier=latest_supplier)
 
         return True, terminal
 

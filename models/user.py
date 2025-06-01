@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 from models import Base
 
 import jdatetime
-today_shamsi = jdatetime.date.today().strftime("%Y/%m/%d %H:%M")
+today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
 
 
 

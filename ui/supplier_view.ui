@@ -918,7 +918,7 @@ QListWidget::item:selected {
      </spacer>
     </item>
     <item row="2" column="1">
-     <widget class="QListWidget" name="vendors_list">
+     <widget class="QListWidget" name="suppliers_list">
       <property name="minimumSize">
        <size>
         <width>120</width>
@@ -934,7 +934,7 @@ QListWidget::item:selected {
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="search_vendor_field">
+     <widget class="QLineEdit" name="search_supplier_field">
       <property name="maximumSize">
        <size>
         <width>135</width>
@@ -950,9 +950,9 @@ QListWidget::item:selected {
      </widget>
     </item>
     <item row="1" column="2" rowspan="2">
-     <widget class="QGroupBox" name="vendor_gp_box">
+     <widget class="QGroupBox" name="supplier_gp_box">
       <property name="title">
-       <string>Vendor's Info</string>
+       <string>Supplier's Info</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_9">
        <item row="2" column="2">
@@ -1112,7 +1112,7 @@ QListWidget::item:selected {
         </widget>
        </item>
        <item row="10" column="2" alignment="Qt::AlignRight">
-        <widget class="QPushButton" name="save_vendor">
+        <widget class="QPushButton" name="save_supplier">
          <property name="maximumSize">
           <size>
            <width>150</width>
@@ -1120,7 +1120,7 @@ QListWidget::item:selected {
           </size>
          </property>
          <property name="text">
-          <string>💾 Save Vendor</string>
+          <string>💾 Save Supplier</string>
          </property>
         </widget>
        </item>
@@ -1186,8 +1186,8 @@ QListWidget::item:selected {
   <tabstop>phone2</tabstop>
   <tabstop>email</tabstop>
   <tabstop>address</tabstop>
-  <tabstop>search_vendor_field</tabstop>
-  <tabstop>vendors_list</tabstop>
+  <tabstop>search_supplier_field</tabstop>
+  <tabstop>suppliers_list</tabstop>
  </tabstops>
  <resources/>
  <connections/>

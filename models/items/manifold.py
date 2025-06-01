@@ -1,18 +1,18 @@
 from sqlalchemy import cast, Integer, desc
 from sqlalchemy.orm import aliased, joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class Manifold:
-    def __init__(self, name, brand, model, ways, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, ways, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
         self.order_number = order_number
         self.ways = ways
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<Manifold(name={self.name} ways={self.ways})>"
@@ -40,11 +40,11 @@ def get_manifold(ways=None):
         if not component:
             return None, "❌ Manifold not found."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -54,7 +54,7 @@ def get_manifold(ways=None):
             brand=component.brand,
             model=component.model,
             ways=attrs.get('ways'),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return True, manifold

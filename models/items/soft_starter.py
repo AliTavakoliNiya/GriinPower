@@ -2,20 +2,20 @@ from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class SoftStarter:
 
-    def __init__(self, name, brand, model, rated_voltage, power_rating_kw, component_vendor, order_number):
+    def __init__(self, name, brand, model, rated_voltage, power_rating_kw, component_supplier, order_number):
         self.name = name
         self.brand = brand
         self.model = model
         self.order_number = order_number
         self.rated_voltage = rated_voltage
         self.power_rating_kw = power_rating_kw
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return (f"<SoftStarter(name={self.name}, voltage={self.rated_voltage}V, "
@@ -48,11 +48,11 @@ def get_softstarter_by_power(min_power_kw):
         if not component:
             return None, "No SoftStarter found matching criteria."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -65,7 +65,7 @@ def get_softstarter_by_power(min_power_kw):
             order_number=component.order_number,
             rated_voltage=attrs.get("rated_voltage"),
             power_rating_kw=attrs.get("power_rating_kw"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return softstarter, f"{softstarter}"

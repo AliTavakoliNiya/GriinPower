@@ -2,19 +2,19 @@ from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class VFD:
 
-    def __init__(self, name, brand, model, output_power_kw, input_voltage, component_vendor):
+    def __init__(self, name, brand, model, output_power_kw, input_voltage, component_supplier):
         self.name = name
         self.brand = brand
         self.model = model
         self.output_power_kw = output_power_kw
         self.input_voltage = input_voltage
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return (f"<VFD(name={self.name}, power={self.output_power_kw}kW, voltage={self.input_voltage}V)>")
@@ -45,11 +45,11 @@ def get_vfd_by_power(min_power_kw):
         if not component:
             return None, "No VFD found with sufficient output power."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -62,7 +62,7 @@ def get_vfd_by_power(min_power_kw):
             output_power_kw=attrs.get("output_power_kw"),
             input_voltage=attrs.get("input_voltage"),
             rated_current=attrs.get("rated_current"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return vfd, f"{vfd}"

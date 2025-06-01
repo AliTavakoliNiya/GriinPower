@@ -2,7 +2,7 @@ from sqlalchemy import cast, desc, Integer
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
@@ -10,7 +10,7 @@ class PLC:
 
     def __init__(self, name, brand, model, series, digital_inputs, digital_outputs,
                  analog_inputs, analog_outputs, support_profinet, support_profibus, support_mpi,
-                 support_hard_wire, component_vendor):
+                 support_hard_wire, component_supplier):
         self.name = name
         self.brand = brand
         self.model = model
@@ -23,7 +23,7 @@ class PLC:
         self.support_profibus = support_profibus
         self.support_mpi = support_mpi
         self.support_hard_wire = support_hard_wire
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<PLC(name={self.name})>"
@@ -57,11 +57,11 @@ def get_plc_by_io(min_digital_inputs, min_digital_outputs):
         if not component:
             return None, "No PLC found with sufficient digital I/O."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -79,7 +79,7 @@ def get_plc_by_io(min_digital_inputs, min_digital_outputs):
             support_profibus=attrs.get("support_profibus"),
             support_mpi=attrs.get("support_mpi"),
             support_hard_wire=attrs.get("support_hard_wire"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return plc, f"{plc}"

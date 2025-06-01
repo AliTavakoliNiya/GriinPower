@@ -2,14 +2,14 @@ from sqlalchemy import cast, Float, desc, and_, func
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
 
 class MPCB:
 
-    def __init__(self, name, brand, model, min_current, max_current, breaking_capacity_ka, trip_class, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, min_current, max_current, breaking_capacity_ka, trip_class, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
@@ -18,7 +18,7 @@ class MPCB:
         self.max_current = max_current
         self.breaking_capacity_ka = breaking_capacity_ka
         self.trip_class = trip_class
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
 
     def __repr__(self):
@@ -53,11 +53,11 @@ def get_mpcb_by_current(current):
         if not component:
             return None, "❌ MPCB component not found for this current."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -71,7 +71,7 @@ def get_mpcb_by_current(current):
             max_current=attrs.get("max_current"),
             breaking_capacity_ka=attrs.get("breaking_capacity_ka"),
             trip_class=attrs.get("trip_class"),  # اصلاح نام کلید
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return True, mpcb

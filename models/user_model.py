@@ -23,15 +23,6 @@ class User(Base):
     email = Column(String, unique=True, nullable=True)
     role = Column(String, nullable=False)
     created_at = Column(String, nullable=False, default=now_jalali)
-    #
-    # contactors_modified = relationship("Contactor", back_populates="modified_user")
-    # mpcbs_modified = relationship("MPCB", back_populates="modified_user")
-    # mccbs_modified = relationship("MCCB", back_populates="modified_user")
-    # bimetals_modified = relationship("Bimetal", back_populates="modified_user")
-    # generals_modified = relationship("General", back_populates="modified_user")
-    # instruments_modified = relationship("Instrument", back_populates="modified_user")
-    # item_prices_created = relationship("ItemPrice", back_populates="creator")
-    # plcs_modified = relationship("PLC", back_populates="modified_user")
 
     def __repr__(self):
         return f"<User(username='{self.username}', role='{self.role}')>"
@@ -43,7 +34,6 @@ def get_user_by_username(username: str, password: str):
         user = session.query(User).filter_by(username=username).first()
         if user:
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
-            # print(hashed_password)
             if user.password == hashed_password:
                 return user
             else:

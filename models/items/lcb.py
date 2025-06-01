@@ -2,11 +2,11 @@ from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 class LCB:
-    def __init__(self, name, brand, model, width, height, depth, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, width, height, depth, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
@@ -14,7 +14,7 @@ class LCB:
         self.width = width
         self.height = height
         self.depth = depth
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<LCB(name={self.name} size={self.width}x{self.height}x{self.depth})>"
@@ -55,11 +55,11 @@ def get_lcb(width=None, height=None, depth=None):
         if not component:
             return None, "❌ LCB not found."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -71,7 +71,7 @@ def get_lcb(width=None, height=None, depth=None):
             width=attrs.get("width"),
             height=attrs.get("height"),
             depth=attrs.get("depth"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return True, lcb

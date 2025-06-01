@@ -1,4 +1,4 @@
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from sqlalchemy.orm import aliased
 from sqlalchemy import cast, Float, desc
 from utils.database import SessionLocal
@@ -16,7 +16,7 @@ if not contactor_type:
 
 # ALIAS برای attribute
 rated_attr = aliased(ComponentAttribute)
-vendor_link = aliased(ComponentVendor)
+supplier_link = aliased(ComponentSupplier)
 
 # استعلام کنتاکتورهایی با جریان نامی بالای 8 آمپر
 components = (
@@ -32,10 +32,10 @@ components = (
 
 # چاپ اطلاعات همراه با بروزترین قیمت و فروشنده
 for c in components:
-    latest_vendor = (
-        session.query(ComponentVendor)
-        .filter(ComponentVendor.component_id == c.id)
-        .order_by(desc(ComponentVendor.date))
+    latest_supplier = (
+        session.query(ComponentSupplier)
+        .filter(ComponentSupplier.component_id == c.id)
+        .order_by(desc(ComponentSupplier.date))
         .first()
     )
 
@@ -45,11 +45,11 @@ for c in components:
     for attr in c.attributes:
         print(f"  ویژگی: {attr.key} = {attr.value}")
 
-    if latest_vendor:
-        v = latest_vendor.vendor
+    if latest_supplier:
+        v = latest_supplier.supplier
         print("  📦 قیمت و تأمین‌کننده:")
-        print(f"    قیمت: {latest_vendor.price} {latest_vendor.currency}")
-        print(f"    تاریخ: {latest_vendor.date}")
+        print(f"    قیمت: {latest_supplier.price} {latest_supplier.currency}")
+        print(f"    تاریخ: {latest_supplier.date}")
         print(f"    فروشنده: {v.name}")
         print(f"    تماس: {v.contact_info}")
         print(f"    وب‌سایت: {v.website}")

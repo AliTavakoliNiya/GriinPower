@@ -8,6 +8,7 @@ class UserSession:
     def __new__(cls):
         if cls._instance is None:  # new loggin
             cls._instance = super(UserSession, cls).__new__(cls)
+            cls._instance.id = None
             cls._instance.username = None
             cls._instance.password = None
             cls._instance.first_name = None
@@ -18,6 +19,7 @@ class UserSession:
         return cls._instance
 
     def set_user(self, user):
+        self.id = user.id
         self.username = user.username
         self.password = user.password
         self.first_name = user.first_name

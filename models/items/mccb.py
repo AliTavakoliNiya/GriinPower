@@ -2,20 +2,20 @@ from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class MCCB:
 
-    def __init__(self, name, brand, model, rated_current, breaking_capacity_ka, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, rated_current, breaking_capacity_ka, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
         self.rated_current = rated_current
         self.breaking_capacity_ka = breaking_capacity_ka
         self.order_number = order_number,
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<MCCB(name={self.name}, rated_current={self.rated_current})>"
@@ -44,11 +44,11 @@ def get_mccb_by_current(min_rated_current):
         if not component:
             return None, "❌ MCCB component not found for the specified current."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -60,7 +60,7 @@ def get_mccb_by_current(min_rated_current):
             model=component.model,
             rated_current=attrs.get("rated_current"),
             breaking_capacity_ka=attrs.get("breaking_capacity_ka"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return True, mccb, f"{mccb}"

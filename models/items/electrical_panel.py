@@ -1,10 +1,10 @@
 from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased, joinedload
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 class ElectricalPanel:
-    def __init__(self, name, brand, model, width, height, depth, ip, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, width, height, depth, ip, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
@@ -13,7 +13,7 @@ class ElectricalPanel:
         self.height = height
         self.depth = depth
         self.ip = ip
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<ElectricalPanel(name={self.name}, size={self.width}x{self.height}x{self.depth}, ip={self.ip})>"
@@ -59,11 +59,11 @@ def get_electrical_panel(width=None, height=None, depth=None, ip=None):
         if not component:
             return None, "❌ Electrical Panel not found."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -76,7 +76,7 @@ def get_electrical_panel(width=None, height=None, depth=None, ip=None):
             height=attrs.get("height"),
             depth=attrs.get("depth"),
             ip=attrs.get("ip"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return True, panel

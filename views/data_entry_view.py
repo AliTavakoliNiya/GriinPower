@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QMainWindow
 
 from controllers.user_session import UserSession
 from views.data_entry.data_entry_electro_motor import ElectroMotorDataEntry
-from views.vendor_view import VendorEntry
+from views.supplier_view import SupplierEntry
 
 
 class DataEntry(QMainWindow):
@@ -24,7 +24,7 @@ class DataEntry(QMainWindow):
 
         self.electro_motor_controller = ElectroMotorDataEntry(self)
 
-        self.motor_add_vendor_btn.clicked.connect(self.add_vendor)
+        self.motor_add_supplier_btn.clicked.connect(self.add_supplier)
 
         self.refresh_data()
         self.show()
@@ -36,8 +36,8 @@ class DataEntry(QMainWindow):
     def display_entry(self, index):
         self.item_stack.setCurrentIndex(index)
 
-    def add_vendor(self):
-        self.venor_application_window = VendorEntry(parent=self)
+    def add_supplier(self):
+        self.venor_application_window = SupplierEntry(parent=self)
 
 
 

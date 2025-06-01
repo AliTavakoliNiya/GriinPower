@@ -2,13 +2,13 @@ from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class Contactor:
 
-    def __init__(self, name, brand, model, rated_current, coil_voltage, power_cutting_kw, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, rated_current, coil_voltage, power_cutting_kw, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
@@ -16,7 +16,7 @@ class Contactor:
         self.rated_current = rated_current
         self.coil_voltage = coil_voltage
         self.power_cutting_kw = power_cutting_kw
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<Contactor(name={self.name} current_a={self.rated_current})>"
@@ -45,11 +45,11 @@ def get_contactor_by_current(rated_current):
         if not component:
             return None, "❌ Contactor not found."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))  # load vendor in that query
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))  # load supplier in that query
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -60,7 +60,7 @@ def get_contactor_by_current(rated_current):
                               rated_current=attrs.get("rated_current"),
                               coil_voltage=attrs.get("coil_voltage"),
                               power_cutting_kw=attrs.get("power_cutting_kw"),
-                              component_vendor=latest_vendor
+                              component_supplier=latest_supplier
                               )
         return True, contactor
 

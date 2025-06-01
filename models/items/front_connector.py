@@ -1,15 +1,15 @@
 from sqlalchemy import cast, Integer, desc
 from sqlalchemy.orm import joinedload
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 class FrontConnector:
-    def __init__(self, name, brand, model, pin_count, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, pin_count, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
         self.pin_count = pin_count
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
         self.order_number = order_number
 
     def __repr__(self):
@@ -36,11 +36,11 @@ def get_front_connector(pin_count):
         if not component:
             return None, f"❌ No front connector found for pin count ≥ {pin_count}"
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
             .filter_by(component_id=component.id)
-            .order_by(desc(ComponentVendor.date))
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -50,7 +50,7 @@ def get_front_connector(pin_count):
             brand=component.brand,
             model=component.model,
             pin_count=attrs.get("pin_count"),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return True, connector

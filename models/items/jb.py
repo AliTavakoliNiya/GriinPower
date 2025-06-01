@@ -2,12 +2,12 @@ from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentVendor
+from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class JunctionBox:
-    def __init__(self, name, brand, model, width, height, depth, component_vendor, order_number=""):
+    def __init__(self, name, brand, model, width, height, depth, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
@@ -15,7 +15,7 @@ class JunctionBox:
         self.height=height,
         self.depth=depth,
         self.order_number = order_number
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
 
     def __repr__(self):
         return f"<JunctionBox(name={self.name})>"
@@ -57,11 +57,11 @@ def get_junction_box(width=None, height=None, depth=None):
         if not component:
             return None, "❌ Junction Box for Speed not found."
 
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -70,7 +70,7 @@ def get_junction_box(width=None, height=None, depth=None):
             name=component.name,
             brand=component.brand,
             model=component.model,
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return True, junction_box

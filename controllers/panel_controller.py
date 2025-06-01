@@ -93,8 +93,8 @@ class PanelController:
                 order_number=contactor.order_number,
                 specifications=f"Current: {contactor.rated_current} A",
                 quantity=total_qty,
-                price=contactor.component_vendor.price,
-                last_price_update=f"{contactor.component_vendor.vendor.name}\n{contactor.component_vendor.date}",
+                price=contactor.component_supplier.price,
+                last_price_update=f"{contactor.component_supplier.supplier.name}\n{contactor.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -130,8 +130,8 @@ class PanelController:
                     f"Trip Class: {mpcb.trip_class}"
                 ),
                 quantity=total_qty,
-                price=mpcb.component_vendor.price,
-                last_price_update=f"{mpcb.component_vendor.vendor.name}\n{mpcb.component_vendor.date}",
+                price=mpcb.component_supplier.price,
+                last_price_update=f"{mpcb.component_supplier.supplier.name}\n{mpcb.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -166,8 +166,8 @@ class PanelController:
                     f"Breaking Capacity: {mccb.breaking_capacity} A"
                 ),
                 quantity=total_qty,
-                price=mccb.component_vendor.price,
-                last_price_update=f"{mccb.component_vendor.vendor.name}\n{mccb.component_vendor.date}",
+                price=mccb.component_supplier.price,
+                last_price_update=f"{mccb.component_supplier.supplier.name}\n{mccb.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -203,8 +203,8 @@ class PanelController:
                     f"Trip Time: {bimetal.trip_time} sec"
                 ),
                 quantity=total_qty,
-                price=bimetal.component_vendor.price,
-                last_price_update=f"{bimetal.component_vendor.vendor.name}\n{bimetal.component_vendor.date}",
+                price=bimetal.component_supplier.price,
+                last_price_update=f"{bimetal.component_supplier.supplier.name}\n{bimetal.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -236,8 +236,8 @@ class PanelController:
                 order_number=vfd.order_number,
                 specifications=f"power={vfd.output_power_kw}kW\nvoltage={vfd.input_voltage}V",
                 quantity=total_qty,
-                price=vfd.component_vendor.price,
-                last_price_update=f"{vfd.component_vendor.vendor.name}\n{vfd.component_vendor.date}",
+                price=vfd.component_supplier.price,
+                last_price_update=f"{vfd.component_supplier.supplier.name}\n{vfd.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -269,8 +269,8 @@ class PanelController:
                 order_number=soft_starter.order_number,
                 specifications=f"voltage={soft_starter.rated_voltage}V\npower={soft_starter.power_rating_kw}kW)",
                 quantity=total_qty,
-                price=soft_starter.component_vendor.price,
-                last_price_update=f"{soft_starter.component_vendor.vendor.name}\n{soft_starter.component_vendor.date}",
+                price=soft_starter.component_supplier.price,
+                last_price_update=f"{soft_starter.component_supplier.supplier.name}\n{soft_starter.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -308,8 +308,8 @@ class PanelController:
                                         type=display_name,
                                         brand=item.brand,
                                         quantity=round(total_qty, 2),
-                                        price=item.component_vendor.price,
-                                        last_price_update=f"{item.component_vendor.vendor.name}\n{item.component_vendor.date}",
+                                        price=item.component_supplier.price,
+                                        last_price_update=f"{item.component_supplier.supplier.name}\n{item.component_supplier.date}",
                                         note="\n".join(notes)
                                     )
                 else:
@@ -371,8 +371,8 @@ class PanelController:
                 type=f"ELECTRICAL PANEL {label}",
                 brand=panel.brand,
                 quantity=qty,
-                price=panel.component_vendor.price,
-                last_price_update=f"{panel.component_vendor.vendor.name}\n{panel.component_vendor.date}",
+                price=panel.component_supplier.price,
+                last_price_update=f"{panel.component_supplier.supplier.name}\n{panel.component_supplier.date}",
                 note=f"{panel.name} ({panel.model})"
             )
         else:
@@ -415,8 +415,8 @@ class PanelController:
                     order_number=instrument.order_number,
                     specifications="",
                     quantity=qty,
-                    price=instrument.component_vendor.price,
-                    last_price_update=f"{instrument.component_vendor.vendor.name}\n{instrument.component_vendor.date}",
+                    price=instrument.component_supplier.price,
+                    last_price_update=f"{instrument.component_supplier.supplier.name}\n{instrument.component_supplier.date}",
                 )
                 # ------------ Choose Manifold ------------
                 manifold_qty = 0
@@ -431,14 +431,14 @@ class PanelController:
                 if manifold_qty > 0 and manifold_ways is not None:
                     formatted_name = f"{manifold_ways} WAYS MANIFOLD"
                     success, manifold_obj = get_manifold(manifold_ways)
-                    if success and manifold_obj.component_vendor and manifold_obj.component_vendor.item_id:
+                    if success and manifold_obj.component_supplier and manifold_obj.component_supplier.item_id:
                         self.add_to_panel(
                             type=formatted_name,
                             brand=manifold_obj.brand,
                             order_number=manifold_obj.order_number,
                             quantity=qty,
-                            price=manifold_obj.component_vendor.price,
-                            last_price_update=f"{manifold_obj.component_vendor.vendor.name}\n{manifold_obj.component_vendor.date}",
+                            price=manifold_obj.component_supplier.price,
+                            last_price_update=f"{manifold_obj.component_supplier.supplier.name}\n{manifold_obj.component_supplier.date}",
                             note=f"manifold for {instrument_name}")
                     else:
                         self.add_to_panel(
@@ -459,8 +459,8 @@ class PanelController:
                             type="CALIBRATION",
                             brand=calibration.brand,
                             quantity=qty,
-                            price=calibration.component_vendor.price,
-                            last_price_update=f"{calibration.component_vendor.vendor.name}\n{calibration.component_vendor.date}",
+                            price=calibration.component_supplier.price,
+                            last_price_update=f"{calibration.component_supplier.supplier.name}\n{calibration.component_supplier.date}",
                             note=f"calibration for {instrument_name}"
                         )
                     else:
@@ -524,9 +524,9 @@ class PanelController:
         total_20pin = di_cards + do_cards + ai_cards + ao_cards
         if total_20pin > 0:
             success, pin_card = get_front_connector(20)
-            if success and pin_card.component_vendor:
-                price = pin_card.component_vendor.price or 0
-                effective_date = pin_card.component_vendor.date or "Not Found"
+            if success and pin_card.component_supplier:
+                price = pin_card.component_supplier.price or 0
+                effective_date = pin_card.component_supplier.date or "Not Found"
                 brand = pin_card.brand
             else:
                 price = 0
@@ -548,9 +548,9 @@ class PanelController:
 
         cards = max(1, (total + 15) // 16)  # 16-channel cards
         success, card = get_io_card(io_type, min_channels=16)
-        if success and card.component_vendor:
-            price = card.component_vendor.price or 0
-            effective_date = card.component_vendor.date or "Not Found"
+        if success and card.component_supplier:
+            price = card.component_supplier.price or 0
+            effective_date = card.component_supplier.date or "Not Found"
             brand = card.brand
         else:
             price = 0

@@ -11,4 +11,4 @@ class ComponentAttribute(Base):
     key = Column(String)
     value = Column(String)
 
-    component = relationship('Component', back_populates='attributes')
+    component = relationship('Component', back_populates='attributes', lazy="joined")

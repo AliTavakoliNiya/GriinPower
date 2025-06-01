@@ -1,4 +1,4 @@
-from models import Component, ComponentAttribute, ComponentType, ComponentVendor, Vendor
+from models import Component, ComponentAttribute, ComponentType, ComponentSupplier, Supplier
 from utils.database import SessionLocal
 from datetime import date
 
@@ -12,11 +12,11 @@ if not contactor_type:
     session.add(contactor_type)
     session.commit()
 
-# 2. یافتن یا افزودن Vendor
-vendor = session.query(Vendor).filter_by(name='KalaBargh Co').first()
-if not vendor:
-    vendor = Vendor(name='KalaBargh Co', contact_info='021-12345678', website='https://kalabargh.example.com')
-    session.add(vendor)
+# 2. یافتن یا افزودن Supplier
+supplier = session.query(Supplier).filter_by(name='KalaBargh Co').first()
+if not supplier:
+    supplier = Supplier(name='KalaBargh Co', contact_info='021-12345678', website='https://kalabargh.example.com')
+    session.add(supplier)
     session.commit()
 
 # 3. ساخت قطعه جدید
@@ -32,16 +32,16 @@ contactor = Component(
     ]
 )
 
-# 4. افزودن Vendor به قطعه
-vendor_link = ComponentVendor(
-    vendor=vendor,
+# 4. افزودن Supplier به قطعه
+supplier_link = ComponentSupplier(
+    supplier=supplier,
     component=contactor,
     price=2_850_000,
     currency='IRR',
     date=date.today()
 )
 
-contactor.vendors.append(vendor_link)
+contactor.suppliers.append(supplier_link)
 
 # 5. ذخیره در دیتابیس
 session.add(contactor)

@@ -1,18 +1,18 @@
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentVendor, ComponentAttribute
+from models import Component, ComponentType, ComponentSupplier, ComponentAttribute
 from utils.database import SessionLocal
 
 
 class IOCard:
-    def __init__(self, name, io_type, brand, model, channels, component_vendor, order_number=""):
+    def __init__(self, name, io_type, brand, model, channels, component_supplier, order_number=""):
         self.name = name
         self.io_type = io_type  # DI, DO, AI, AO
         self.brand = brand
         self.model = model
         self.channels = channels
-        self.component_vendor = component_vendor
+        self.component_supplier = component_supplier
         self.order_number = order_number
 
     def __repr__(self):
@@ -49,11 +49,11 @@ def get_io_card(io_type: str, min_channels: int = 0):
             return None, f"❌ No matching IOCard found for type={io_type} and min_channels={min_channels}"
 
         component, attrs = selected_component
-        latest_vendor = (
-            session.query(ComponentVendor)
-            .options(joinedload(ComponentVendor.vendor))
-            .filter(ComponentVendor.component_id == component.id)
-            .order_by(desc(ComponentVendor.date))
+        latest_supplier = (
+            session.query(ComponentSupplier)
+            .options(joinedload(ComponentSupplier.supplier))
+            .filter(ComponentSupplier.component_id == component.id)
+            .order_by(desc(ComponentSupplier.date))
             .first()
         )
 
@@ -63,7 +63,7 @@ def get_io_card(io_type: str, min_channels: int = 0):
             brand=component.brand,
             model=component.model,
             channels=int(attrs.get("channels", 0)),
-            component_vendor=latest_vendor
+            component_supplier=latest_supplier
         )
 
         return True, card
