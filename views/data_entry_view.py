@@ -3,8 +3,8 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
+from controllers.data_entry_electro_motor_controller import ElectroMotorDataEntryController
 from controllers.user_session import UserSession
-from views.data_entry.data_entry_electro_motor import ElectroMotorDataEntry
 from views.supplier_view import SupplierEntry
 
 
@@ -22,15 +22,11 @@ class DataEntry(QMainWindow):
 
         self.item_list.currentRowChanged.connect(self.display_entry)  # this match QListWidget to QStackWidget
 
-        self.electro_motor_controller = ElectroMotorDataEntry(self)
+        self.electro_motor_data_entry = ElectroMotorDataEntryController(self)
 
         self.motor_add_supplier_btn.clicked.connect(self.add_supplier)
 
-        self.refresh_data()
         self.show()
-
-    def refresh_data(self):
-        pass
 
 
     def display_entry(self, index):

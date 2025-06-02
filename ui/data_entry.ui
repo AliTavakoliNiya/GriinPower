@@ -941,6 +941,9 @@ QListWidget::item:selected {
         <height>16777215</height>
        </size>
       </property>
+      <property name="toolTip">
+       <string>Show/Hide Add New Motor</string>
+      </property>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
@@ -955,12 +958,12 @@ QListWidget::item:selected {
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
+        <item row="1" column="0">
          <widget class="QGroupBox" name="motor_gp_box">
           <property name="minimumSize">
            <size>
             <width>540</width>
-            <height>600</height>
+            <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -1709,12 +1712,31 @@ QListWidget::item:selected {
           </layout>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QTableWidget" name="motor_list">
+        <item row="1" column="2" rowspan="2">
+         <widget class="QTableView" name="motor_list">
           <property name="minimumSize">
            <size>
             <width>540</width>
-            <height>600</height>
+            <height>540</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="3">
+         <widget class="QPushButton" name="hide_show_motor_gp_box_btn">
+          <property name="maximumSize">
+           <size>
+            <width>17</width>
+            <height>17</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>⏪</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>17</width>
+            <height>17</height>
            </size>
           </property>
          </widget>

@@ -20,6 +20,6 @@ class Component(Base):
     created_by_id = Column(Integer, ForeignKey('users.id'), nullable=True)
 
     created_by = relationship('User')
-    type = relationship('ComponentType', back_populates='components')
+    type = relationship('ComponentType', back_populates='components', lazy="joined")
     attributes = relationship('ComponentAttribute', back_populates='component', cascade="all, delete-orphan", lazy="joined")
     suppliers = relationship('ComponentSupplier', back_populates='component', cascade='all, delete-orphan', lazy="joined")

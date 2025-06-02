@@ -1,6 +1,5 @@
-from sqlalchemy import cast
+from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
-from sqlalchemy.types import Float
 
 from controllers.user_session import UserSession
 from models import Component, ComponentAttribute, ComponentType
@@ -42,56 +41,43 @@ class ElectricMotor:
         return f"<ElectricMotor(Brand={self.brand}, power={self.power:.2f}kW, rpm={self.rpm}, voltage={self.voltage})>"
 
 
-def get_all_motor():
+def get_all_motors():
     session = SessionLocal()
-    motors = []
-    try:
-        motor_type = session.query(ComponentType).filter(ComponentType.name == 'Motor').first()
-        if not motor_type:
-            return []
 
-        components = session.query(Component)\
-            .filter(Component.type_id == motor_type.id)\
-            .options(joinedload(Component.attributes))\
-            .all()
+    attribute_keys = [
+        "power", "rpm", "voltage", "brand",
+        "start_type", "cooling_method", "ip_rating", "efficiency_class",
+        "painting_ral", "thermal_protection", "is_official", "is_routine"
+    ]
 
-        for comp in components:
-            attr_dict = {attr.key: attr.value for attr in comp.attributes}
+    motors = (
+        session.query(Component)
+        .join(ComponentType)
+        .filter(ComponentType.name == "Motor")
+        .options(joinedload(Component.attributes), joinedload(Component.suppliers))
+        .all()
+    )
 
-            def get_attr(name):
-                return attr_dict.get(name)
-
-            def to_float(val):
-                try:
-                    return float(val)
-                except (TypeError, ValueError):
-                    return None
-
-            def to_int(val):
-                try:
-                    return int(val)
-                except (TypeError, ValueError):
-                    return None
-
-            motor = ElectricMotor(
-                power=to_float(get_attr('power')) or 0.0,
-                rpm=to_int(get_attr('rpm')) or 0,
-                voltage=to_int(get_attr('voltage')) or 0,
-                brand=comp.brand or '',
-                start_type=get_attr('start_type'),
-                cooling_method=get_attr('cooling_method'),
-                ip_rating=get_attr('ip_rating'),
-                efficiency_class=get_attr('efficiency_class'),
-                painting_ral=get_attr('painting_ral'),
-                thermal_protection=get_attr('thermal_protection'),
-                is_official=(get_attr('is_official') == 'True'),
-                is_routine=(get_attr('is_routine') == 'True'),
-            )
-            motors.append(motor)
-
-        return motors
-    finally:
-        session.close()
+    motor_list = []
+    for motor in motors:
+        attr_dict = {attr.key: attr.value for attr in motor.attributes}
+        for supplier in motor.suppliers:
+            motor_data = {
+                "id": motor.id,
+                "name": motor.name,
+                "brand": motor.brand,
+                "model": motor.model,
+                "order_number": motor.order_number,
+                "created_at": str(motor.created_at),
+                "supplier_name": supplier.supplier.name,
+                "price": supplier.price,
+                "currency": supplier.currency,
+                "date": str(supplier.date),
+            }
+            for key in attribute_keys:
+                motor_data[key] = attr_dict.get(key, "")
+            motor_list.append(motor_data)
+    return motor_list, attribute_keys
 
 
 def get_motor(
@@ -112,37 +98,52 @@ def get_motor(
     try:
         motor_type = session.query(ComponentType).filter_by(name="Motor").first()
 
-        query = session.query(Component).filter(
-            Component.type_id == motor_type.id,
-            cast(Component.power, Float) == float(power),
-            Component.rpm == int(rpm),
-            Component.voltage == int(voltage)
-        )
+        query = session.query(Component).filter(Component.type_id == motor_type.id)
 
+        query = query.filter(Component.brand == brand)
+
+        # Apply required attributes using aliases
+        required_filters = {
+            "power": power,
+            "rpm": rpm,
+            "voltage": voltage,
+        }
+
+        for i, (key, value) in enumerate(required_filters.items()):
+            attr_alias = aliased(ComponentAttribute, name=f"required_attr_{i}")
+            query = query.join(attr_alias, Component.id == attr_alias.component_id)
+            query = query.filter(attr_alias.key == key, attr_alias.value == str(value))
+
+        # Fetch all candidates that match required attributes
+        candidates = query.options(
+            joinedload(Component.attributes)
+        ).all()
+
+        if not candidates:
+            return False, "❌ No motor found matching required attributes."
+
+        # Define optional filters
         optional_filters = {
-            "brand": brand,
             "start_type": start_type,
             "cooling_method": cooling_method,
             "ip_rating": ip_rating,
             "efficiency_class": efficiency_class,
             "painting_ral": painting_ral,
             "thermal_protection": thermal_protection,
-            "is_official": is_official,
-            "is_routine": is_routine
+            "is_official": str(is_official) if is_official is not None else None,
+            "is_routine": str(is_routine) if is_routine is not None else None
         }
 
-        for key, value in optional_filters.items():
-            if value is not None:
-                query = query.join(ComponentAttribute).filter(
-                    ComponentAttribute.key == key,
-                    ComponentAttribute.value == str(value)
-                )
+        # Rank candidates by number of matching optional attributes
+        def count_optional_matches(component):
+            attr_dict = {attr.key: attr.value for attr in component.attributes}
+            return sum(
+                1 for key, val in optional_filters.items()
+                if val is not None and attr_dict.get(key) == val
+            )
 
-        motor = query.first()
-        if not motor:
-            return False, "❌ No matching electric motor found."
-
-        attrs = {attr.key: attr.value for attr in motor.attributes}
+        best_match = max(candidates, key=count_optional_matches)
+        attrs = {attr.key: attr.value for attr in best_match.attributes}
 
         motor_obj = ElectricMotor(
             power=power,

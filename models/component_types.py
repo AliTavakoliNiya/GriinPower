@@ -12,5 +12,5 @@ class ComponentType(Base):
     description = Column(String, nullable=True)
     created_by_id = Column(Integer, ForeignKey('users.id'), nullable=True)
 
-    components = relationship('Component', back_populates='type')
-    created_by = relationship('User')
+    components = relationship('Component', back_populates='type', lazy="joined")
+    created_by = relationship('User', lazy="joined")

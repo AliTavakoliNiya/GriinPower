@@ -46,7 +46,9 @@ class SupplierEntry(QMainWindow):
         self.clear_form_btn()
         self.suppliers_list.clear()
 
-        self.controller.load_suppliers()
+        success, msg = self.controller.load_suppliers()
+        if not success:
+            show_message(msg, title="Error")
         for supplier in self.controller.suppliers:
             self.suppliers_list.addItem(supplier.name)
 

@@ -16,14 +16,14 @@ class ElectricMotorController():
         success, electric_motor = get_motor(
             power=motor["power"],
             rpm=motor["rpm"],
+            brand=brand,
             start_type=motor["start_type"],
             cooling_method=motor["cooling_method"],
-            ip=motor["ip_rating"],
+            ip_rating=motor["ip_rating"],
             efficiency_class=motor["efficiency_class"],
             voltage=voltage,
             painting_ral=motor["painting_ral"],
             thermal_protection=motor["thermal_protection"],
-            space_heater=motor["space_heater"]
         )
         if success:
             return electric_motor.component_supplier.price, f"{electric_motor.component_supplier.supplier.name}\n{electric_motor.component_supplier.date}",

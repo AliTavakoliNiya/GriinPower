@@ -10,8 +10,12 @@ class SupplierController:
         self.selected_supplier = None
 
     def load_suppliers(self):
-        self.suppliers = get_all_suppliers()
-        return self.suppliers
+        success, suppliers = get_all_suppliers()
+        if success:
+            self.suppliers = suppliers
+            return True, ""
+        else:
+            return False, suppliers
 
     def select_supplier_by_name(self, name):
         self.selected_supplier = next((v for v in self.suppliers if v.name == name), None)

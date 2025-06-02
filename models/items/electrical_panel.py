@@ -4,7 +4,7 @@ from models import Component, ComponentType, ComponentAttribute, ComponentSuppli
 from utils.database import SessionLocal
 
 class ElectricalPanel:
-    def __init__(self, name, brand, model, width, height, depth, ip, component_supplier, order_number=""):
+    def __init__(self, name, brand, model, width, height, depth, ip_rating, component_supplier, order_number=""):
         self.name = name
         self.brand = brand
         self.model = model
@@ -12,13 +12,13 @@ class ElectricalPanel:
         self.width = width
         self.height = height
         self.depth = depth
-        self.ip = ip
+        self.ip_rating = ip_rating
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<ElectricalPanel(name={self.name}, size={self.width}x{self.height}x{self.depth}, ip={self.ip})>"
+        return f"<ElectricalPanel(name={self.name}, size={self.width}x{self.height}x{self.depth}, ip_rating={self.ip_rating})>"
 
-def get_electrical_panel(width=None, height=None, depth=None, ip=None):
+def get_electrical_panel(width=None, height=None, depth=None, ip_rating=None):
     session = SessionLocal()
     try:
         panel_type = session.query(ComponentType).filter_by(name="Electrical Panel").first()
@@ -38,7 +38,7 @@ def get_electrical_panel(width=None, height=None, depth=None, ip=None):
             .filter(width_attr.key == "width")
             .filter(height_attr.key == "height")
             .filter(depth_attr.key == "depth")
-            .filter(ip_attr.key == "ip")
+            .filter(ip_attr.key == "ip_rating")
         )
 
         if width is not None:
@@ -47,8 +47,8 @@ def get_electrical_panel(width=None, height=None, depth=None, ip=None):
             query = query.filter(cast(height_attr.value, Float) >= height)
         if depth is not None:
             query = query.filter(cast(depth_attr.value, Float) >= depth)
-        if ip is not None:
-            query = query.filter(ip_attr.value == str(ip))
+        if ip_rating is not None:
+            query = query.filter(ip_attr.value == str(ip_rating))
 
         component = query.order_by(
             cast(width_attr.value, Float).asc(),
@@ -75,7 +75,7 @@ def get_electrical_panel(width=None, height=None, depth=None, ip=None):
             width=attrs.get("width"),
             height=attrs.get("height"),
             depth=attrs.get("depth"),
-            ip=attrs.get("ip"),
+            ip_rating=attrs.get("ip_rating"),
             component_supplier=latest_supplier
         )
 
