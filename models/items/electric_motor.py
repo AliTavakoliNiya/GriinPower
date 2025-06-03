@@ -45,7 +45,7 @@ def get_all_motors():
     session = SessionLocal()
 
     attribute_keys = [
-        "power", "rpm", "voltage", "brand",
+        "power", "rpm", "voltage",
         "start_type", "cooling_method", "ip_rating", "efficiency_class",
         "painting_ral", "thermal_protection", "is_official", "is_routine"
     ]

@@ -26,6 +26,9 @@ class DataEntry(QMainWindow):
 
         self.motor_add_supplier_btn.clicked.connect(self.add_supplier)
 
+        self.hide_show_motor_gp_box_btn.clicked.connect(self.hide_show_motor_gp_box_btn_func)
+
+
         self.show()
 
 
@@ -34,6 +37,16 @@ class DataEntry(QMainWindow):
 
     def add_supplier(self):
         self.venor_application_window = SupplierEntry(parent=self)
+
+    def hide_show_motor_gp_box_btn_func(self):
+        # Toggle visibility of motor_list table view
+        is_visible = self.motor_gp_box.isVisible()
+        self.motor_gp_box.setVisible(not is_visible)
+
+        # Optionally update the button text
+        self.hide_show_motor_gp_box_btn.setText(
+            "⏩" if is_visible else "⏪"
+        )
 
 
 

@@ -11,7 +11,6 @@ class ElectroMotorDataEntryView:
     def __init__(self, ui):
         self.ui = ui
 
-        self.ui.hide_show_motor_gp_box_btn.clicked.connect(self.hide_show_motor_gp_box_btn_func)
 
         self.ui.motor_list.setAlternatingRowColors(True)
         self.ui.motor_list.setHorizontalScrollMode(QTableView.ScrollPerPixel)
@@ -25,15 +24,6 @@ class ElectroMotorDataEntryView:
         self.ui.motor_list.setSelectionMode(QTableView.SingleSelection)
         self.ui.motor_list.setSortingEnabled(True)
 
-    def hide_show_motor_gp_box_btn_func(self):
-        # Toggle visibility of motor_list table view
-        is_visible = self.ui.motor_gp_box.isVisible()
-        self.ui.motor_gp_box.setVisible(not is_visible)
-
-        # Optionally update the button text
-        self.ui.hide_show_motor_gp_box_btn.setText(
-            "⏩" if is_visible else "⏪"
-        )
 
     def format_price_fields(self):
         # Format price fields with thousand separator on text change
