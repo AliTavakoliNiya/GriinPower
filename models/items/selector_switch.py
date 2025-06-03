@@ -6,15 +6,14 @@ from utils.database import SessionLocal
 
 
 class SelectorSwitch:
-    def __init__(self, name, brand, model, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<SelectorSwitch(name={self.name})>"
+        return f"<SelectorSwitch>"
 
 
 def get_selector_switch():
@@ -43,7 +42,6 @@ def get_selector_switch():
 
         attrs = {attr.key: attr.value for attr in component.attributes}
         selector_switch = SelectorSwitch(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             component_supplier=latest_supplier

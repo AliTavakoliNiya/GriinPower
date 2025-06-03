@@ -6,8 +6,7 @@ from utils.database import SessionLocal
 
 
 class SignalLamp:
-    def __init__(self, name, brand, model, voltage, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, voltage, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
@@ -15,7 +14,7 @@ class SignalLamp:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<SignalLamp24V(name={self.name} voltage={self.voltage}V)>"
+        return f"<SignalLamp24V(voltage={self.voltage}V)>"
 
 
 def get_signal_lamp(voltage=None):
@@ -50,7 +49,6 @@ def get_signal_lamp(voltage=None):
 
         attrs = {attr.key: attr.value for attr in component.attributes}
         lamp = SignalLamp(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             voltage=attrs.get('voltage'),

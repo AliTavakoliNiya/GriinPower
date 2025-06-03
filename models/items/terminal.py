@@ -6,8 +6,7 @@ from utils.database import SessionLocal
 
 
 class Terminal:
-    def __init__(self, name, brand, model, current, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, current, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
@@ -15,7 +14,7 @@ class Terminal:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<Terminal(name={self.name} current={self.current} A)>"
+        return f"<Terminal(current={self.current} A)>"
 
 
 def get_terminal_by_current(rated_current):
@@ -48,7 +47,7 @@ def get_terminal_by_current(rated_current):
         )
 
         attrs = {attr.key: attr.value for attr in component.attributes}
-        terminal = Terminal(name=component.name,
+        terminal = Terminal(
                             brand=component.brand,
                             model=component.model,
                             current=attrs.get("current"),

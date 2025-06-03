@@ -6,15 +6,14 @@ from utils.database import SessionLocal
 
 
 class MPCB_MCCB_AuxContact:
-    def __init__(self, name, brand, model, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<MPCB-MCCB AuxContact(name={self.name})>"
+        return f"<MPCB-MCCB AuxContact>"
 
 
 def get_mpcb_mccb_aux_contact():
@@ -43,10 +42,10 @@ def get_mpcb_mccb_aux_contact():
             .first()
         )
 
-        aux_contact = MPCB_MCCB_AuxContact(name=component.name,
-                                          brand=component.brand,
-                                          model=component.model,
-                                          component_supplier=latest_supplier)
+        aux_contact = MPCB_MCCB_AuxContact(
+                                           brand=component.brand,
+                                           model=component.model,
+                                           component_supplier=latest_supplier)
 
         return True, aux_contact
 

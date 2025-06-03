@@ -26,7 +26,7 @@ class ElectricMotorController():
             thermal_protection=motor["thermal_protection"],
         )
         if success:
-            return electric_motor.component_supplier.price, f"{electric_motor.component_supplier.supplier.name}\n{electric_motor.component_supplier.date}",
+            return electric_motor.component_supplier.price, f"{electric_motor.component_supplier.supplier.name_c_to_del}\n{electric_motor.component_supplier.date}",
         elif success == False:
             show_message(electric_motor, title="Error")
             return 0, ""

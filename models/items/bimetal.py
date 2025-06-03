@@ -8,8 +8,7 @@ from utils.database import SessionLocal
 
 class Bimetal:
 
-    def __init__(self, name, brand, model, min_current, max_current, trip_time, class_type, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, min_current, max_current, trip_time, class_type, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
@@ -20,7 +19,7 @@ class Bimetal:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<Bimetal(name={self.name}, current= {self.min_current}A - {self.max_current}A)>"
+        return f"<Bimetal(current= {self.min_current}A - {self.max_current}A)>"
 
 
 def get_bimetal_by_current(min_rated_current):
@@ -56,7 +55,6 @@ def get_bimetal_by_current(min_rated_current):
         attrs = {attr.key: attr.value for attr in component.attributes}
 
         bimetal = Bimetal(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             min_current=attrs.get("min_current"),

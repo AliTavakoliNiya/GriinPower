@@ -8,10 +8,9 @@ from utils.database import SessionLocal
 
 class PLC:
 
-    def __init__(self, name, brand, model, series, digital_inputs, digital_outputs,
+    def __init__(self, brand, model, series, digital_inputs, digital_outputs,
                  analog_inputs, analog_outputs, support_profinet, support_profibus, support_mpi,
                  support_hard_wire, component_supplier):
-        self.name = name
         self.brand = brand
         self.model = model
         self.series = series
@@ -26,7 +25,7 @@ class PLC:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<PLC(name={self.name})>"
+        return f""
 
 def get_plc_by_io(min_digital_inputs, min_digital_outputs):
     session = SessionLocal()
@@ -68,7 +67,6 @@ def get_plc_by_io(min_digital_inputs, min_digital_outputs):
         attrs = {attr.key: attr.value for attr in component.attributes}
 
         plc = PLC(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             digital_inputs=attrs.get("digital_inputs"),

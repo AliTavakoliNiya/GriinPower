@@ -1,6 +1,5 @@
 import jdatetime
 from sqlalchemy import Column, String, Integer
-from sqlalchemy.orm import relationship
 from utils.database import SessionLocal
 from views.message_box_view import show_message
 from models import Base

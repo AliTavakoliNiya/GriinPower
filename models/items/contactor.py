@@ -8,8 +8,7 @@ from utils.database import SessionLocal
 
 class Contactor:
 
-    def __init__(self, name, brand, model, rated_current, coil_voltage, power_cutting_kw, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, rated_current, coil_voltage, power_cutting_kw, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
@@ -19,7 +18,7 @@ class Contactor:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<Contactor(name={self.name} current_a={self.rated_current})>"
+        return f"<Contactor(current_a={self.rated_current})>"
 
 
 def get_contactor_by_current(rated_current):
@@ -54,7 +53,7 @@ def get_contactor_by_current(rated_current):
         )
 
         attrs = {attr.key: attr.value for attr in component.attributes}
-        contactor = Contactor(name=component.name,
+        contactor = Contactor(
                               brand=component.brand,
                               model=component.model,
                               rated_current=attrs.get("rated_current"),

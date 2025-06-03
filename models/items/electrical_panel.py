@@ -4,8 +4,7 @@ from models import Component, ComponentType, ComponentAttribute, ComponentSuppli
 from utils.database import SessionLocal
 
 class ElectricalPanel:
-    def __init__(self, name, brand, model, width, height, depth, ip_rating, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, width, height, depth, ip_rating, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
@@ -16,7 +15,7 @@ class ElectricalPanel:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<ElectricalPanel(name={self.name}, size={self.width}x{self.height}x{self.depth}, ip_rating={self.ip_rating})>"
+        return f"<ElectricalPanel(size={self.width}x{self.height}x{self.depth}, ip_rating={self.ip_rating})>"
 
 def get_electrical_panel(width=None, height=None, depth=None, ip_rating=None):
     session = SessionLocal()
@@ -69,7 +68,6 @@ def get_electrical_panel(width=None, height=None, depth=None, ip_rating=None):
 
         attrs = {attr.key: attr.value for attr in component.attributes}
         panel = ElectricalPanel(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             width=attrs.get("width"),

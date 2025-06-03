@@ -16,7 +16,7 @@ from views.message_box_view import show_message
 class ElectricalTab(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/electrical_tab.ui", self)
+        uic.loadUi("ui/project/electrical_tab.ui", self)
         self.project_details = ProjectDetails()
         self._initialize_components()
 

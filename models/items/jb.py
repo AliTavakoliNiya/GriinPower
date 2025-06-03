@@ -7,18 +7,17 @@ from utils.database import SessionLocal
 
 
 class JunctionBox:
-    def __init__(self, name, brand, model, width, height, depth, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, width, height, depth, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
-        self.width=width,
-        self.height=height,
-        self.depth=depth,
+        self.width = width,
+        self.height = height,
+        self.depth = depth,
         self.order_number = order_number
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<JunctionBox(name={self.name})>"
+        return f"JunctionBox"
 
 
 def get_junction_box(width=None, height=None, depth=None):
@@ -67,7 +66,6 @@ def get_junction_box(width=None, height=None, depth=None):
 
         attrs = {attr.key: attr.value for attr in component.attributes}
         junction_box = JunctionBox(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             component_supplier=latest_supplier

@@ -7,8 +7,7 @@ from utils.database import SessionLocal
 
 class Instrument:
 
-    def __init__(self, name, brand, model, instrument_type, hart_support, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, instrument_type, hart_support, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number,
@@ -17,7 +16,7 @@ class Instrument:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<Instrument(name={self.name}, type={self.instrument_type}, hart support={self.hart_support})>"
+        return f"<Instrument(type={self.instrument_type}, hart support={self.hart_support})>"
 
 
 def get_instrument_by_type(instrument_type):
@@ -51,7 +50,6 @@ def get_instrument_by_type(instrument_type):
         attrs = {attr.key: attr.value for attr in component.attributes}
 
         instrument = Instrument(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             instrument_type=attrs.get("instrument_type"),

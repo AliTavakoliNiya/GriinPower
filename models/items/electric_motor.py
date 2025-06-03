@@ -64,7 +64,6 @@ def get_all_motors():
         for supplier in motor.suppliers:
             motor_data = {
                 "id": motor.id,
-                "name": motor.name,
                 "brand": motor.brand,
                 "model": motor.model,
                 "order_number": motor.order_number,
@@ -77,7 +76,7 @@ def get_all_motors():
             for key in attribute_keys:
                 motor_data[key] = attr_dict.get(key, "")
             motor_list.append(motor_data)
-    return motor_list, attribute_keys
+    return motor_list
 
 
 def get_motor(
@@ -189,7 +188,6 @@ def insert_motor_to_db(
         motor_type = session.query(ComponentType).filter_by(name="Motor").first()
 
         new_motor = Component(
-            name=f"Electro Motor {int(power)}kW {rpm}rpm",
             type_id=motor_type.id,
             brand=brand,
             created_by_id=current_user.id,

@@ -4,8 +4,7 @@ from models import Component, ComponentType, ComponentSupplier
 from utils.database import SessionLocal
 
 class Calibration:
-    def __init__(self, name, brand, model, calibration_date, calibration_due_date, calibration_lab, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, calibration_date, calibration_due_date, calibration_lab, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.calibration_date = calibration_date              # تاریخ انجام کالیبراسیون
@@ -15,17 +14,15 @@ class Calibration:
         self.component_supplier = component_supplier              # نمونه مشابه برای ارتباط با تامین‌کننده یا نسخه قطعه
 
     def __repr__(self):
-        return f"<Calibration(name={self.name} model={self.model} calibration_date={self.calibration_date})>"
+        return f"<Calibration(model={self.model} calibration_date={self.calibration_date})>"
 
 
-def get_calibration(name=None, model=None):
+def get_calibration(model=None):
     session = SessionLocal()
     try:
         calibration_type = session.query(ComponentType).filter_by(name='Calibration').first()
         query = session.query(Component).filter(Component.type_id == calibration_type.id)
 
-        if name:
-            query = query.filter(Component.name == name)
         if model:
             query = query.filter(Component.model == model)
 
@@ -43,7 +40,6 @@ def get_calibration(name=None, model=None):
 
         attrs = {attr.key: attr.value for attr in component.attributes}
         calibration = Calibration(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             calibration_date=attrs.get("calibration_date"),

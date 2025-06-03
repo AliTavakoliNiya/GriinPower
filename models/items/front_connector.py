@@ -4,8 +4,7 @@ from models import Component, ComponentType, ComponentAttribute, ComponentSuppli
 from utils.database import SessionLocal
 
 class FrontConnector:
-    def __init__(self, name, brand, model, pin_count, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, pin_count, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.pin_count = pin_count
@@ -13,7 +12,7 @@ class FrontConnector:
         self.order_number = order_number
 
     def __repr__(self):
-        return f"<FrontConnector(name={self.name}, pins={self.pin_count})>"
+        return f"<FrontConnector(pins={self.pin_count})>"
 
 def get_front_connector(pin_count):
     session = SessionLocal()
@@ -46,7 +45,6 @@ def get_front_connector(pin_count):
 
         attrs = {attr.key: attr.value for attr in component.attributes}
         connector = FrontConnector(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             pin_count=attrs.get("pin_count"),

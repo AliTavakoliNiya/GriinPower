@@ -8,8 +8,7 @@ from utils.database import SessionLocal
 
 class VFD:
 
-    def __init__(self, name, brand, model, output_power_kw, input_voltage, component_supplier):
-        self.name = name
+    def __init__(self, brand, model, output_power_kw, input_voltage, component_supplier):
         self.brand = brand
         self.model = model
         self.output_power_kw = output_power_kw
@@ -17,7 +16,7 @@ class VFD:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return (f"<VFD(name={self.name}, power={self.output_power_kw}kW, voltage={self.input_voltage}V)>")
+        return (f"<VFD(power={self.output_power_kw}kW, voltage={self.input_voltage}V)>")
 
 
 def get_vfd_by_power(min_power_kw):
@@ -56,7 +55,6 @@ def get_vfd_by_power(min_power_kw):
         attrs = {attr.key: attr.value for attr in component.attributes}
 
         vfd = VFD(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             output_power_kw=attrs.get("output_power_kw"),

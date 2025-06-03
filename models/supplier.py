@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import relationship
 from models import Base
-from utils.database import SessionLocal
 from sqlalchemy.exc import SQLAlchemyError
 from utils.database import SessionLocal
 

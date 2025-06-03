@@ -1,4 +1,4 @@
-from sqlalchemy import cast, Float, desc, and_, func
+from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
@@ -9,8 +9,7 @@ from utils.database import SessionLocal
 
 class MPCB:
 
-    def __init__(self, name, brand, model, min_current, max_current, breaking_capacity_ka, trip_class, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, min_current, max_current, breaking_capacity_ka, trip_class, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
@@ -22,7 +21,7 @@ class MPCB:
 
 
     def __repr__(self):
-        return f"<MPCB(name={self.name}, current={self.min_current}A - {self.max_current}A)"
+        return f"<MPCB(current={self.min_current}A - {self.max_current}A)"
 
 def get_mpcb_by_current(current):
     session = SessionLocal()
@@ -64,7 +63,6 @@ def get_mpcb_by_current(current):
         attrs = {attr.key: attr.value for attr in component.attributes}
 
         mpcb = MPCB(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             min_current=attrs.get("min_current"),

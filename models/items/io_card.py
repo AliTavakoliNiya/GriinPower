@@ -6,8 +6,7 @@ from utils.database import SessionLocal
 
 
 class IOCard:
-    def __init__(self, name, io_type, brand, model, channels, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, io_type, brand, model, channels, component_supplier, order_number=""):
         self.io_type = io_type  # DI, DO, AI, AO
         self.brand = brand
         self.model = model
@@ -16,7 +15,7 @@ class IOCard:
         self.order_number = order_number
 
     def __repr__(self):
-        return f"<IOCard(name={self.name}, type={self.io_type}, channels={self.channels})>"
+        return f"<IOCard(type={self.io_type}, channels={self.channels})>"
 
 
 def get_io_card(io_type: str, min_channels: int = 0):
@@ -58,7 +57,6 @@ def get_io_card(io_type: str, min_channels: int = 0):
         )
 
         card = IOCard(
-            name=component.name,
             io_type=attrs.get("io_type"),
             brand=component.brand,
             model=component.model,

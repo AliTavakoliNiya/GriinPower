@@ -1,20 +1,19 @@
 from sqlalchemy import desc
-from sqlalchemy.orm import aliased, joinedload
+from sqlalchemy.orm import joinedload
 
-from models import ComponentType, ComponentAttribute, Component, ComponentSupplier
+from models import ComponentType, Component, ComponentSupplier
 from utils.database import SessionLocal
 
 
 class ContactorAuxContact:
-    def __init__(self, name, brand, model, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<ContactorAuxContact(name={self.name})>"
+        return ""
 
 
 def get_contactor_aux_contact():
@@ -40,7 +39,7 @@ def get_contactor_aux_contact():
             .first()
         )
 
-        aux_contact = ContactorAuxContact(name=component.name,
+        aux_contact = ContactorAuxContact(
                                           brand=component.brand,
                                           model=component.model,
                                           component_supplier=latest_supplier)

@@ -50,14 +50,14 @@ class SupplierEntry(QMainWindow):
         if not success:
             show_message(msg, title="Error")
         for supplier in self.controller.suppliers:
-            self.suppliers_list.addItem(supplier.name)
+            self.suppliers_list.addItem(supplier.name_c_to_del)
 
     def on_supplier_selected(self, item):
         supplier = self.controller.select_supplier_by_name(item.text())
         if supplier:
             self.selected_supplier = supplier
-            self.supplier_gp_box.setTitle(supplier.name)
-            self.name.setText(supplier.name or "")
+            self.supplier_gp_box.setTitle(supplier.name_c_to_del)
+            self.name.setText(supplier.name_c_to_del or "")
             self.contact_person.setText(supplier.contact_person or "")
             self.phone1.setText(supplier.phone1 or "")
             self.phone2.setText(supplier.phone2 or "")

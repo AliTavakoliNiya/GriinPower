@@ -7,11 +7,9 @@ from models import Base
 
 today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
 
-
 class Component(Base):
     __tablename__ = 'components'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
     type_id = Column(Integer, ForeignKey('component_types.id'))
     brand = Column(String)
     model = Column(String, default="")

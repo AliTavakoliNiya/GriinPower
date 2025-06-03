@@ -7,7 +7,7 @@ from views.message_box_view import show_message
 class ProjectInformationTab(QWidget):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/project_information_tab.ui", self)
+        uic.loadUi("ui/project/project_information_tab.ui", self)
 
         self.project_details = ProjectDetails()
         self._initialize_info()

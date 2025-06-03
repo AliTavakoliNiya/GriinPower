@@ -8,10 +8,10 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 
 from controllers.user_session import UserSession
 from utils.database import SessionLocal
-from views.data_entry_view import DataEntry
+from views.data_entry.data_entry_view import DataEntry
 from views.login_view import LoginView
 from views.message_box_view import show_message
-from views.tender_application_view import TenderApplication
+from views.project.tender_application_view import TenderApplication
 from views.supplier_view import SupplierEntry
 
 
@@ -20,7 +20,7 @@ class GriinPower(QMainWindow):
         super().__init__()
 
         # Load the main window UI (with the QTabWidget)
-        uic.loadUi("ui/GrrinPower.ui", self)
+        uic.loadUi("ui/main.ui", self)
         self.setWindowIcon(QIcon('assets/Logo.ico'))
         self.setWindowTitle("GriinPower")
         self.settings = QSettings("Griin", "GriinPower")

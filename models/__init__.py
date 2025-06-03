@@ -14,13 +14,13 @@ __all__ = [
     "ComponentSupplier"
 ]
 
-from models.component_types import ComponentType
-from models.components import Component
-from models.component_attributes import ComponentAttribute
-from models.component_suppliers import ComponentSupplier
-from models.user_model import User
-from models.supplier import Supplier
-from models.projects import Project
-from models.project_components import ProjectComponent
+from .component_types import ComponentType
+from .components import Component
+from .component_attributes import ComponentAttribute
+from .projects import Project
+from .project_components import ProjectComponent
+from .user_model import User
+from .supplier import Supplier
+from .component_suppliers import ComponentSupplier
 
 

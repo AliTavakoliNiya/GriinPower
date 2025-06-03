@@ -8,8 +8,7 @@ from utils.database import SessionLocal
 
 class SoftStarter:
 
-    def __init__(self, name, brand, model, rated_voltage, power_rating_kw, component_supplier, order_number):
-        self.name = name
+    def __init__(self, brand, model, rated_voltage, power_rating_kw, component_supplier, order_number):
         self.brand = brand
         self.model = model
         self.order_number = order_number
@@ -18,7 +17,7 @@ class SoftStarter:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return (f"<SoftStarter(name={self.name}, voltage={self.rated_voltage}V, "
+        return (f"<SoftStarter(voltage={self.rated_voltage}V, "
                 f"power={self.power_rating_kw}kW)>")
 
 
@@ -59,7 +58,6 @@ def get_softstarter_by_power(min_power_kw):
         attrs = {attr.key: attr.value for attr in component.attributes}
 
         softstarter = SoftStarter(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             order_number=component.order_number,

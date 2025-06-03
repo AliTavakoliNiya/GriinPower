@@ -8,8 +8,7 @@ from utils.database import SessionLocal
 
 class MCCB:
 
-    def __init__(self, name, brand, model, rated_current, breaking_capacity_ka, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, rated_current, breaking_capacity_ka, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.rated_current = rated_current
@@ -18,7 +17,7 @@ class MCCB:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<MCCB(name={self.name}, rated_current={self.rated_current})>"
+        return f"<MCCB(rated_current={self.rated_current})>"
 
 
 def get_mccb_by_current(min_rated_current):
@@ -55,7 +54,6 @@ def get_mccb_by_current(min_rated_current):
         attrs = {attr.key: attr.value for attr in component.attributes}
 
         mccb = MCCB(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             rated_current=attrs.get("rated_current"),

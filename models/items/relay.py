@@ -5,8 +5,7 @@ from models import Component, ComponentType, ComponentAttribute, ComponentSuppli
 from utils.database import SessionLocal
 
 class Relay:
-    def __init__(self, name, brand, model, no_nc_contacts, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, no_nc_contacts, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
@@ -14,7 +13,7 @@ class Relay:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<Relay(name={self.name}, NO/NC={self.no_nc_contacts})>"
+        return f"<Relay(NO/NC={self.no_nc_contacts})>"
 
 def get_relay_by_contacts(contacts=None):
     session = SessionLocal()
@@ -50,7 +49,6 @@ def get_relay_by_contacts(contacts=None):
 
         attrs = {attr.key: attr.value for attr in component.attributes}
         relay = Relay(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             no_nc_contacts=attrs.get("no_nc_contacts"),

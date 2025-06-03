@@ -1,15 +1,13 @@
-from sqlalchemy import cast, Float, desc, and_, func
+from sqlalchemy import cast, Float, desc, func
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
 from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
-
 class MCB:
 
-    def __init__(self, name, brand, model, rated_current, breaking_capacity, curve_type, poles, component_supplier):
-        self.name = name
+    def __init__(self, brand, model, rated_current, breaking_capacity, curve_type, poles, component_supplier):
         self.brand = brand
         self.model = model
         self.rated_current = rated_current
@@ -19,10 +17,10 @@ class MCB:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<MCB(name={self.name}, current={self.rated_current}A, curve={self.curve_type})>"
+        return f"<MCB(current={self.rated_current}A, curve={self.curve_type})>"
 
 
-def get_mcb_by_current(min_rated_current, curve_type=None, poles=None):
+def get_mcb_by_current(min_rated_current):
     session = SessionLocal()
 
     try:
@@ -56,7 +54,6 @@ def get_mcb_by_current(min_rated_current, curve_type=None, poles=None):
         attrs = {attr.key: attr.value for attr in component.attributes}
 
         mcb = MCB(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             rated_current=attrs.get("rated_current"),

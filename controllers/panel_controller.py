@@ -2,7 +2,9 @@ from math import sqrt
 
 from config import COSNUS_PI, ETA
 from controllers.project_details import ProjectDetails
+from models.items.bimetal import get_bimetal_by_current
 from models.items.button import get_button
+from models.items.contactor import get_contactor_by_current
 from models.items.contactor_aux_contact import get_contactor_aux_contact
 from models.items.duct_cover import get_duct_cover
 from models.items.electrical_panel import get_electrical_panel
@@ -12,20 +14,17 @@ from models.items.io_card import get_io_card
 from models.items.jb import get_junction_box
 from models.items.lcb import get_lcb
 from models.items.manifold import get_manifold
-from models.items.calibration import get_calibration
+from models.items.mccb import get_mccb_by_current
 from models.items.miniatory_rail import get_miniatory_rail
 from models.items.mpcb_mccb_aux_contact import get_mpcb_mccb_aux_contact
+from models.items.mpcb_model import get_mpcb_by_current
 from models.items.relay import get_relay_by_contacts
 from models.items.selector_switch import get_selector_switch
 from models.items.signal_lamp import get_signal_lamp
 from models.items.soft_starter import get_softstarter_by_power
 from models.items.terminal import get_terminal_by_current
 from models.items.vfd_model import get_vfd_by_power
-
-from models.items.contactor import get_contactor_by_current
-from models.items.mpcb_model import get_mpcb_by_current
-from models.items.mccb import get_mccb_by_current
-from models.items.bimetal import get_bimetal_by_current
+from models.items.calibration import get_calibration
 
 
 class PanelController:
@@ -94,7 +93,7 @@ class PanelController:
                 specifications=f"Current: {contactor.rated_current} A",
                 quantity=total_qty,
                 price=contactor.component_supplier.price,
-                last_price_update=f"{contactor.component_supplier.supplier.name}\n{contactor.component_supplier.date}",
+                last_price_update=f"{contactor.component_supplier.supplier.name_c_to_del}\n{contactor.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -131,7 +130,7 @@ class PanelController:
                 ),
                 quantity=total_qty,
                 price=mpcb.component_supplier.price,
-                last_price_update=f"{mpcb.component_supplier.supplier.name}\n{mpcb.component_supplier.date}",
+                last_price_update=f"{mpcb.component_supplier.supplier.name_c_to_del}\n{mpcb.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -167,7 +166,7 @@ class PanelController:
                 ),
                 quantity=total_qty,
                 price=mccb.component_supplier.price,
-                last_price_update=f"{mccb.component_supplier.supplier.name}\n{mccb.component_supplier.date}",
+                last_price_update=f"{mccb.component_supplier.supplier.name_c_to_del}\n{mccb.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -204,7 +203,7 @@ class PanelController:
                 ),
                 quantity=total_qty,
                 price=bimetal.component_supplier.price,
-                last_price_update=f"{bimetal.component_supplier.supplier.name}\n{bimetal.component_supplier.date}",
+                last_price_update=f"{bimetal.component_supplier.supplier.name_c_to_del}\n{bimetal.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -237,7 +236,7 @@ class PanelController:
                 specifications=f"power={vfd.output_power_kw}kW\nvoltage={vfd.input_voltage}V",
                 quantity=total_qty,
                 price=vfd.component_supplier.price,
-                last_price_update=f"{vfd.component_supplier.supplier.name}\n{vfd.component_supplier.date}",
+                last_price_update=f"{vfd.component_supplier.supplier.name_c_to_del}\n{vfd.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -270,7 +269,7 @@ class PanelController:
                 specifications=f"voltage={soft_starter.rated_voltage}V\npower={soft_starter.power_rating_kw}kW)",
                 quantity=total_qty,
                 price=soft_starter.component_supplier.price,
-                last_price_update=f"{soft_starter.component_supplier.supplier.name}\n{soft_starter.component_supplier.date}",
+                last_price_update=f"{soft_starter.component_supplier.supplier.name_c_to_del}\n{soft_starter.component_supplier.date}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -309,7 +308,7 @@ class PanelController:
                                         brand=item.brand,
                                         quantity=round(total_qty, 2),
                                         price=item.component_supplier.price,
-                                        last_price_update=f"{item.component_supplier.supplier.name}\n{item.component_supplier.date}",
+                                        last_price_update=f"{item.component_supplier.supplier.name_c_to_del}\n{item.component_supplier.date}",
                                         note="\n".join(notes)
                                     )
                 else:
@@ -372,8 +371,8 @@ class PanelController:
                 brand=panel.brand,
                 quantity=qty,
                 price=panel.component_supplier.price,
-                last_price_update=f"{panel.component_supplier.supplier.name}\n{panel.component_supplier.date}",
-                note=f"{panel.name} ({panel.model})"
+                last_price_update=f"{panel.component_supplier.supplier.name_c_to_del}\n{panel.component_supplier.date}",
+                note=f"{panel.name_c_to_del} ({panel.model})"
             )
         else:
             self.add_to_panel(
@@ -416,7 +415,7 @@ class PanelController:
                     specifications="",
                     quantity=qty,
                     price=instrument.component_supplier.price,
-                    last_price_update=f"{instrument.component_supplier.supplier.name}\n{instrument.component_supplier.date}",
+                    last_price_update=f"{instrument.component_supplier.supplier.name_c_to_del}\n{instrument.component_supplier.date}",
                 )
                 # ------------ Choose Manifold ------------
                 manifold_qty = 0
@@ -438,7 +437,7 @@ class PanelController:
                             order_number=manifold_obj.order_number,
                             quantity=qty,
                             price=manifold_obj.component_supplier.price,
-                            last_price_update=f"{manifold_obj.component_supplier.supplier.name}\n{manifold_obj.component_supplier.date}",
+                            last_price_update=f"{manifold_obj.component_supplier.supplier.name_c_to_del}\n{manifold_obj.component_supplier.date}",
                             note=f"manifold for {instrument_name}")
                     else:
                         self.add_to_panel(
@@ -460,7 +459,7 @@ class PanelController:
                             brand=calibration.brand,
                             quantity=qty,
                             price=calibration.component_supplier.price,
-                            last_price_update=f"{calibration.component_supplier.supplier.name}\n{calibration.component_supplier.date}",
+                            last_price_update=f"{calibration.component_supplier.supplier.name_c_to_del}\n{calibration.component_supplier.date}",
                             note=f"calibration for {instrument_name}"
                         )
                     else:

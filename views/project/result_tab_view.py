@@ -24,7 +24,7 @@ from utils.pandas_model import PandasModel
 class ResultTab(QWidget):
     def __init__(self, main_view):
         super().__init__()
-        uic.loadUi("ui/results_tab.ui", self)
+        uic.loadUi("ui/project/results_tab.ui", self)
 
         self.main_view = main_view
         self.project_details = ProjectDetails()

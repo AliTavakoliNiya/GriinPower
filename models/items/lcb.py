@@ -6,8 +6,7 @@ from models import Component, ComponentType, ComponentAttribute, ComponentSuppli
 from utils.database import SessionLocal
 
 class LCB:
-    def __init__(self, name, brand, model, width, height, depth, component_supplier, order_number=""):
-        self.name = name
+    def __init__(self, brand, model, width, height, depth, component_supplier, order_number=""):
         self.brand = brand
         self.model = model
         self.order_number = order_number
@@ -17,7 +16,7 @@ class LCB:
         self.component_supplier = component_supplier
 
     def __repr__(self):
-        return f"<LCB(name={self.name} size={self.width}x{self.height}x{self.depth})>"
+        return f"<LCB(size={self.width}x{self.height}x{self.depth})>"
 
 def get_lcb(width=None, height=None, depth=None):
     session = SessionLocal()
@@ -65,7 +64,6 @@ def get_lcb(width=None, height=None, depth=None):
 
         attrs = {attr.key: attr.value for attr in component.attributes}
         lcb = LCB(
-            name=component.name,
             brand=component.brand,
             model=component.model,
             width=attrs.get("width"),
