@@ -17,7 +17,7 @@ from models.items.manifold import get_manifold
 from models.items.mccb import get_mccb_by_current
 from models.items.miniatory_rail import get_miniatory_rail
 from models.items.mpcb_mccb_aux_contact import get_mpcb_mccb_aux_contact
-from models.items.mpcb_model import get_mpcb_by_current
+from models.items.mpcb import get_mpcb_by_current
 from models.items.relay import get_relay_by_contacts
 from models.items.selector_switch import get_selector_switch
 from models.items.signal_lamp import get_signal_lamp
@@ -121,16 +121,13 @@ class PanelController:
         if success:
             self.add_to_panel(
                 type=f"MPCB FOR {motor.usage.upper()}",
-                brand=mpcb.brand,
-                order_number=mpcb.order_number,
-                specifications=(
-                    f"Current Range: {mpcb.min_current}A - {mpcb.max_current}A\n"
-                    f"Breaking Capacity: {mpcb.breaking_capacity} A\n"
-                    f"Trip Class: {mpcb.trip_class}"
-                ),
+                brand=mpcb["brand"],
+                order_number=mpcb["order_number"],
+                specifications = f"Current: {mpcb['min_current']}A ~ {mpcb['max_current']}A\n"
+                                 f"Breaking Capacity: {mpcb['breaking_capacity']}, Trip Class: {mpcb['trip_class']}",
                 quantity=total_qty,
-                price=mpcb.component_supplier.price,
-                last_price_update=f"{mpcb.component_supplier.supplier.name}\n{mpcb.component_supplier.date}",
+                price=mpcb['price'],
+                last_price_update=f"{mpcb['supplier_name']}\n{mpcb['date']}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -158,15 +155,12 @@ class PanelController:
         if success:
             self.add_to_panel(
                 type=f"MCCB FOR {motor.usage.upper()}",
-                brand=mccb.brand,
-                order_number=mccb.order_number,
-                specifications=(
-                    f"Rated Current: {mccb.rated_current} A\n"
-                    f"Breaking Capacity: {mccb.breaking_capacity} A"
-                ),
+                brand=mccb["brand"],
+                order_number=mccb["order_number"],
+                specifications=f"Current: {mccb['rated_current']}A\n{mccb['breaking_capacity']}",
                 quantity=total_qty,
-                price=mccb.component_supplier.price,
-                last_price_update=f"{mccb.component_supplier.supplier.name}\n{mccb.component_supplier.date}",
+                price=mccb['price'],
+                last_price_update=f"{mccb['supplier_name']}\n{mccb['date']}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:

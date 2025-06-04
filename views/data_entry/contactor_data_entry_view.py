@@ -59,12 +59,11 @@ class ContactorDataEntryView:
         brand = self.ui.contactor_brand.currentText().strip() if self.ui.contactor_brand.currentIndex() else None
         supplier = self.ui.contactor_supplier_list.currentText().strip() if self.ui.contactor_supplier_list.currentIndex() else None
         price = parse_price(self.ui.contactor_price.text())
+        order_number = self.ui.contactor_order_number.text().strip() if self.ui.contactor_order_number.text().strip() else None
 
-        if not all([voltage, brand, supplier, price]):
+        if not all([current, voltage, brand, supplier, price, order_number]):
             show_message("Please fill in all required fields.", title="Error")
             return
-
-        order_number = self.optional_text(self.ui.contactor_order_number)
 
         contactor_details = {"current": current,
                              "voltage": voltage,
@@ -81,5 +80,3 @@ class ContactorDataEntryView:
         else:
             show_message(msg, "Error")
 
-    def optional_text(self, widget):
-        return None if widget.text() == 0 else widget.text().strip()

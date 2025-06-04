@@ -1,6 +1,6 @@
 import pandas as pd
 
-from controllers.data_entry.data_entry_electro_motor_controller import ElectroMotorDataEntryController
+from controllers.data_entry.electro_motor_data_entry_controller import ElectroMotorDataEntryController
 from utils.pandas_model import PandasModel  # Ensure this exists and is imported
 from utils.thousand_separator_line_edit import format_line_edit_text
 from utils.thousand_separator_line_edit import parse_price
@@ -59,7 +59,7 @@ class ElectroMotorDataEntryView:
         self.ui.history_list.resizeColumnsToContents()
 
     def save_motor_to_db_func(self):
-        power = self.ui.motor_power.value()
+        power = self.ui.motor_power.value() * 1000
         rpm = self.ui.motor_rpm.value()
         voltage = self.ui.motor_voltage.value()
         brand = self.ui.motor_brand.currentText().strip() if self.ui.motor_brand.currentIndex() else None

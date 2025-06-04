@@ -9,24 +9,24 @@ from models.user_model import User
 attribute_keys:
     min_current --> required
     max_current --> required
-    class --> required
-    trip_time --> required
+    breaking_capacity --> required
+    trip_class --> required
     brand --> required
     order_number --> required
     created_by_id --> required
 """
 
-def get_all_bimetals():
+def get_all_mpcbs():
     session = SessionLocal()
 
     attribute_keys = [
-        "min_current", "max_current", "class", "trip_time",
+        "min_current", "max_current", "breaking_capacity", "trip_class",
         "brand", "order_number", "created_by_id"
     ]
 
-    bimetals = (
+    mpcbs = (
         session.query(Component)
-        .filter(Component.type == "Bimetal")
+        .filter(Component.type == "MPCB")
         .options(
             joinedload(Component.attributes),
             joinedload(Component.suppliers).joinedload(ComponentSupplier.supplier)
@@ -34,9 +34,9 @@ def get_all_bimetals():
         .all()
     )
 
-    bimetal_list = []
-    for bimetal in bimetals:
-        attr_dict = {attr.key: attr.value for attr in bimetal.attributes}
+    mpcb_list = []
+    for mpcb in mpcbs:
+        attr_dict = {attr.key: attr.value for attr in mpcb.attributes}
         created_by_id = attr_dict.get("created_by_id")
 
         created_by = ""
@@ -45,9 +45,9 @@ def get_all_bimetals():
             if user:
                 created_by = f"{user.first_name} {user.last_name}"
 
-        for supplier in bimetal.suppliers:
-            bimetal_data = {
-                "id": bimetal.id,
+        for supplier in mpcb.suppliers:
+            mpcb_data = {
+                "id": mpcb.id,
                 "supplier_name": supplier.supplier.name,
                 "price": supplier.price,
                 "currency": supplier.currency,
@@ -56,21 +56,21 @@ def get_all_bimetals():
             }
             for key in attribute_keys:
                 if key != "created_by_id":
-                    bimetal_data[key] = attr_dict.get(key, "")
-            bimetal_list.append(bimetal_data)
+                    mpcb_data[key] = attr_dict.get(key, "")
+            mpcb_list.append(mpcb_data)
 
     session.close()
-    return bimetal_list
+    return mpcb_list
 
 
-def get_bimetal_by_current(rated_current, brand=None, order_number=None):
+def get_mpcb_by_current(rated_current, brand=None, order_number=None):
     session = SessionLocal()
     try:
         current_val = float(rated_current)
 
-        bimetals = (
+        mpcbs = (
             session.query(Component)
-            .filter(Component.type == "Bimetal")
+            .filter(Component.type == "MPCB")
             .options(
                 joinedload(Component.attributes),
                 joinedload(Component.suppliers).joinedload(ComponentSupplier.supplier)
@@ -78,10 +78,10 @@ def get_bimetal_by_current(rated_current, brand=None, order_number=None):
             .all()
         )
 
-        matching_bimetals = []
+        matching_mpcbs = []
 
-        for bimetal in bimetals:
-            attr_dict = {attr.key: attr.value for attr in bimetal.attributes}
+        for mpcb in mpcbs:
+            attr_dict = {attr.key: attr.value for attr in mpcb.attributes}
 
             try:
                 min_c = float(attr_dict.get("min_current", -1))
@@ -97,17 +97,17 @@ def get_bimetal_by_current(rated_current, brand=None, order_number=None):
             if order_number and attr_dict.get("order_number") != order_number:
                 continue
 
-            matching_bimetals.append({
-                "component": bimetal,
+            matching_mpcbs.append({
+                "component": mpcb,
                 "attr_dict": attr_dict,
-                "latest_supplier": max(bimetal.suppliers, key=lambda s: s.date if s.date else "", default=None)
+                "latest_supplier": max(mpcb.suppliers, key=lambda s: s.date if s.date else "", default=None)
             })
 
-        if not matching_bimetals:
-            return False, "❌ Bimetal not found"
+        if not matching_mpcbs:
+            return False, "❌ MPCB not found"
 
         latest = max(
-            matching_bimetals,
+            matching_mpcbs,
             key=lambda item: item["latest_supplier"].date if item["latest_supplier"] else ""
         )
 
@@ -117,8 +117,8 @@ def get_bimetal_by_current(rated_current, brand=None, order_number=None):
             "id": latest["component"].id,
             "min_current": attr.get("min_current"),
             "max_current": attr.get("max_current"),
-            "class": attr.get("class"),
-            "trip_time": attr.get("trip_time"),
+            "breaking_capacity": attr.get("breaking_capacity"),
+            "trip_class": attr.get("trip_class"),
             "brand": attr.get("brand"),
             "order_number": attr.get("order_number"),
             "supplier_name": supplier.supplier.name if supplier else "",
@@ -130,27 +130,27 @@ def get_bimetal_by_current(rated_current, brand=None, order_number=None):
 
     except Exception as e:
         session.rollback()
-        print(str(e))
-        return False, f"failed in get bimetal\n{str(e)}"
+        return False, f"get mpcb error:\n{str(e)}"
     finally:
         session.close()
 
 
-def insert_bimetal_to_db(
+def insert_mpcb_to_db(
         brand,
         order_number,
         min_current,
         max_current,
-        _class,
-        trip_time,
+        breaking_capacity,
+        trip_class,
         ):
+
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()
     try:
         existing_components = (
             session.query(Component)
-            .filter(Component.type == "Bimetal")
+            .filter(Component.type == "MPCB")
             .options(joinedload(Component.attributes))
             .all()
         )
@@ -162,33 +162,32 @@ def insert_bimetal_to_db(
                 attr_dict.get("order_number") == order_number and
                 attr_dict.get("min_current") == min_current and
                 attr_dict.get("max_current") == max_current and
-                attr_dict.get("class") == _class and
-                attr_dict.get("trip_time") == trip_time
+                attr_dict.get("breaking_capacity") == breaking_capacity and
+                attr_dict.get("trip_class") == trip_class
             ):
-                return True, component.id
+                return True, component.id  # Already exists
 
-        new_bimetal = Component(
-            type="Bimetal",
+        new_mpcb = Component(
+            type="MPCB",
             attributes=[
                 ComponentAttribute(key='brand', value=brand),
                 ComponentAttribute(key='order_number', value=order_number),
                 ComponentAttribute(key='min_current', value=min_current),
                 ComponentAttribute(key='max_current', value=max_current),
-                ComponentAttribute(key='class', value=_class),
-                ComponentAttribute(key='trip_time', value=trip_time),
+                ComponentAttribute(key='breaking_capacity', value=breaking_capacity),
+                ComponentAttribute(key='trip_class', value=trip_class),
                 ComponentAttribute(key='created_by_id', value=str(current_user.id)),
                 ComponentAttribute(key='created_at', value=today_shamsi),
             ]
         )
-        session.add(new_bimetal)
+        session.add(new_mpcb)
         session.flush()
         session.commit()
-        return True, new_bimetal.id
+        return True, new_mpcb.id
 
     except Exception as e:
         session.rollback()
         print(str(e))
-        return False, f"❌ Error inserting Bimetal: {str(e)}"
+        return False, f"❌ Error inserting MPCB: {str(e)}"
     finally:
         session.close()
-
