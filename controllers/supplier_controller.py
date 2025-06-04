@@ -18,7 +18,7 @@ class SupplierController:
             return False, suppliers
 
     def select_supplier_by_name(self, name):
-        self.selected_supplier = next((v for v in self.suppliers if v.name_c_to_del == name), None)
+        self.selected_supplier = next((v for v in self.suppliers if v.name == name), None)
         return self.selected_supplier
 
     def save_supplier(self, supplier: Supplier):
@@ -38,4 +38,4 @@ class SupplierController:
 
     def filter_supplier_names(self, suppliers, filter_text):
         text = filter_text.lower().strip()
-        return [v.name_c_to_del for v in suppliers if text in v.name_c_to_del.lower()]
+        return [v.name for v in suppliers if text in v.name.lower()]

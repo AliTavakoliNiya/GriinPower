@@ -1,7 +1,7 @@
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentSupplier, ComponentAttribute
+from models import Component, ComponentSupplier, ComponentAttribute
 from utils.database import SessionLocal
 
 

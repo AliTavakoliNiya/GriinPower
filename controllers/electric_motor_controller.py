@@ -1,5 +1,5 @@
 from controllers.project_details import ProjectDetails
-from models.items.electric_motor import get_motor
+from models.items.electric_motor import get_motor_by_spec
 from views.message_box_view import show_message
 
 
@@ -13,7 +13,7 @@ class ElectricMotorController():
         voltage = self.project_details["project_info"]["l_voltage"]
         brand = motor["brand"]
 
-        success, electric_motor = get_motor(
+        success, electric_motor = get_motor_by_spec(
             power=motor["power"],
             rpm=motor["rpm"],
             brand=brand,
@@ -26,7 +26,7 @@ class ElectricMotorController():
             thermal_protection=motor["thermal_protection"],
         )
         if success:
-            return electric_motor.component_supplier.price, f"{electric_motor.component_supplier.supplier.name_c_to_del}\n{electric_motor.component_supplier.date}",
+            return electric_motor.component_supplier.price, f"{electric_motor.component_supplier.supplier.name}\n{electric_motor.component_supplier.date}",
         elif success == False:
             show_message(electric_motor, title="Error")
             return 0, ""

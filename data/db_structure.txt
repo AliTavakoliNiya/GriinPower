@@ -1,0 +1,42 @@
+class Component(Base):
+    __tablename__ = 'components'
+    id = Column(Integer, primary_key=True)
+    type = Column(String)
+
+    attributes = relationship('ComponentAttribute', back_populates='component', cascade="all, delete-orphan", lazy="joined")
+    suppliers = relationship('ComponentSupplier', back_populates='component', cascade='all, delete-orphan', lazy="joined")
+
+class ComponentAttribute(Base):
+    __tablename__ = 'component_attributes'
+    id = Column(Integer, primary_key=True)
+    component_id = Column(Integer, ForeignKey('components.id'))
+    key = Column(String)
+    value = Column(String)
+
+    component = relationship('Component', back_populates='attributes', lazy="joined")
+
+class Supplier(Base):
+    __tablename__ = 'supplier'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True)
+    contact_person = Column(Text, nullable=True)
+    phone1 = Column(Text, nullable=True)
+    phone2 = Column(Text, nullable=True)
+    email = Column(Text, nullable=True)
+    address = Column(Text, nullable=True)
+
+    components = relationship('ComponentSupplier', back_populates='supplier', lazy="joined")
+
+class ComponentSupplier(Base):
+    __tablename__ = 'component_supplier'
+    id = Column(Integer, primary_key=True)
+    component_id = Column(Integer, ForeignKey('components.id'))
+    supplier_id = Column(Integer, ForeignKey('supplier.id'))
+    price = Column(Float)
+    currency = Column(String, default='IRR')
+    date = Column(String, default=today_shamsi)
+
+    supplier = relationship('Supplier', back_populates='components', lazy="joined")
+    component = relationship('Component', back_populates='suppliers', lazy="joined")
+
+

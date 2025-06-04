@@ -2,7 +2,7 @@ from sqlalchemy import cast, Float, desc
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm import joinedload
 
-from models import Component, ComponentType, ComponentAttribute, ComponentSupplier
+from models import Component, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 
 

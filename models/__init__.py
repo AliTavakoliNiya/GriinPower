@@ -4,7 +4,6 @@ Base = declarative_base()
 
 __all__ = [
     "Base",
-    "ComponentType",
     "Component",
     "ComponentAttribute",
     "Project",
@@ -14,7 +13,6 @@ __all__ = [
     "ComponentSupplier"
 ]
 
-from .component_types import ComponentType
 from .components import Component
 from .component_attributes import ComponentAttribute
 from .projects import Project

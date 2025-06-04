@@ -6,7 +6,8 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QTableView
 
 from controllers.user_session import UserSession
-from views.data_entry.data_entry_electro_motor_view import ElectroMotorDataEntryView
+from views.data_entry.contactor_data_entry_view import ContactorDataEntryView
+from views.data_entry.electro_motor_data_entry_view import ElectroMotorDataEntryView
 from views.supplier_view import SupplierEntry
 
 
@@ -23,8 +24,7 @@ class DataEntry(QMainWindow):
         self.user_logged = UserSession()
 
         self.item_list.currentRowChanged.connect(self.display_entry)  # this match QListWidget to QStackWidget
-        self.motor_add_supplier_btn.clicked.connect(self.add_supplier)
-        self.hide_show_motor_item_stack_btn.clicked.connect(self.hide_show_motor_item_stack_btn_func)
+        self.hide_show_item_stack_btn.clicked.connect(self.hide_show_item_stack_btn_func)
 
         self.history_list.setAlternatingRowColors(True)
         self.history_list.setHorizontalScrollMode(QTableView.ScrollPerPixel)
@@ -38,8 +38,9 @@ class DataEntry(QMainWindow):
         self.history_list.setSelectionMode(QTableView.SingleSelection)
         self.history_list.setSortingEnabled(True)
 
-        self.history_table_headers = ["brand", "model", "order_number", "created_at",
-                   "supplier_name", "price", "currency", "date"]
+        self.history_table_headers = ["brand", "order_number", "supplier_name","price", "currency", "date", "created_by"]
+
+        self.load_suppliers()
 
         self.display_entry(0)
         self.show()
@@ -48,17 +49,24 @@ class DataEntry(QMainWindow):
         self.item_stack.setCurrentIndex(index)
         if index == 0:
             self.electro_motor_data_entry = ElectroMotorDataEntryView(self)
+        if index == 3:
+            self.contactor_data_entry = ContactorDataEntryView(self)
 
 
     def add_supplier(self):
         self.venor_application_window = SupplierEntry(parent=self)
 
-    def hide_show_motor_item_stack_btn_func(self):
+    def load_suppliers(self):
+        suppliers = ["--------", "Elica electric", "Asam kala"]
+        self.contactor_supplier_list.addItems(suppliers)
+
+
+    def hide_show_item_stack_btn_func(self):
         # Toggle visibility of motor_list table view
         is_visible = self.item_stack.isVisible()
         self.item_stack.setVisible(not is_visible)
 
         # Optionally update the button text
-        self.hide_show_motor_item_stack_btn.setText(
+        self.hide_show_item_stack_btn.setText(
             "⏩" if is_visible else "⏪"
         )

@@ -71,8 +71,9 @@ class ResultTab(QWidget):
         self.panels["vibration_panel"] = vibration_controller.build_panel()
         hopper_heater_controller = HopperHeaterController()
         self.panels["hopper_heater_panel"] = hopper_heater_controller.build_panel()
-        electric_motor_controller = ElectricMotorController()
-        electric_motor_price_and_effective_date = electric_motor_controller.calculate_price()
+        if self.main_view.electrical_tab.fan_checkbox.isChecked():
+            electric_motor_controller = ElectricMotorController()
+            electric_motor_price_and_effective_date = electric_motor_controller.calculate_price()
 
         #self.generate_table(self.panels["bagfilter_panel"], self.tables["bagfilter_panel_table"])
         self.generate_table(self.panels["fan_damper_panel"], self.tables["fan_damper_panel_table"])
@@ -80,7 +81,10 @@ class ResultTab(QWidget):
         self.generate_table(self.panels["fresh_air_panel"], self.tables["fresh_air_panel_table"])
         self.generate_table(self.panels["vibration_panel"], self.tables["vibration_panel_table"])
         self.generate_table(self.panels["hopper_heater_panel"], self.tables["hopper_heater_panel_table"])
-        summary_data = self.generate_summary_panel(electric_motor_price_and_effective_date)
+        if self.main_view.electrical_tab.fan_checkbox.isChecked():
+            summary_data = self.generate_summary_panel(electric_motor_price_and_effective_date)
+        else:
+            summary_data = self.generate_summary_panel()
         self.generate_table(summary_data, self.tables["summary_panel_table"])
 
     def generate_table(self, panel, table):
@@ -116,7 +120,7 @@ class ResultTab(QWidget):
         }
         return pd.concat([df, pd.DataFrame([summary], index=["Total"])])
 
-    def generate_summary_panel(self, electric_motor_price_and_effective_date):
+    def generate_summary_panel(self, electric_motor_price_and_effective_date=None):
         summary = {
             "title": [],
             "Price": [],

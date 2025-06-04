@@ -1,6 +1,6 @@
 import pandas as pd
 
-from controllers.data_entry_electro_motor_controller import ElectroMotorDataEntryController
+from controllers.data_entry.data_entry_electro_motor_controller import ElectroMotorDataEntryController
 from utils.pandas_model import PandasModel  # Ensure this exists and is imported
 from utils.thousand_separator_line_edit import format_line_edit_text
 from utils.thousand_separator_line_edit import parse_price
@@ -14,12 +14,12 @@ class ElectroMotorDataEntryView:
         self.currency = "IRR"
 
         self.format_price_fields()
+        self.ui.motor_add_supplier_btn.clicked.connect(self.ui.add_supplier)
         self.ui.motor_save_btn.clicked.connect(self.save_motor_to_db_func)
 
-        self.ui.history_table_headers = (self.ui.history_table_headers +
-                                         ["power", "rpm", "voltage", "start_type", "cooling_method", "ip_rating",
+        self.history_table_headers = (["power", "rpm", "voltage", "start_type", "cooling_method", "ip_rating",
                                           "efficiency_class", "painting_ral", "thermal_protection", "is_official",
-                                          "is_routine"])
+                                          "is_routine"] + self.ui.history_table_headers)
         self.refresh_page()
 
     def refresh_page(self):
@@ -47,7 +47,7 @@ class ElectroMotorDataEntryView:
         """
         Populate QTableView with motor data using a Pandas DataFrame and PandasModel.
         """
-        headers = self.ui.history_table_headers
+        headers = self.history_table_headers
 
         # Convert list of dicts to a pandas DataFrame
         df = pd.DataFrame(motor_list, columns=headers)

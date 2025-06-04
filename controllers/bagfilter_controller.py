@@ -112,7 +112,7 @@ class BagfilterController(PanelController):
                         brand=item.brand,
                         quantity=round(qty, 2),
                         price=item.component_supplier.price,
-                        last_price_update=f"{item.component_supplier.supplier.name_c_to_del}\n{item.component_supplier.date}",
+                        last_price_update=f"{item.component_supplier.supplier.name}\n{item.component_supplier.date}",
                         note=""
                     )
                 else:
@@ -176,7 +176,7 @@ class BagfilterController(PanelController):
                 ),
                 quantity=1,
                 price=mccb.component_supplier.price,
-                last_price_update=f"{mccb.component_supplier.supplier.name_c_to_del}\n{mccb.component_supplier.date}",
+                last_price_update=f"{mccb.component_supplier.supplier.name}\n{mccb.component_supplier.date}",
                 note=""
             )
         else:
