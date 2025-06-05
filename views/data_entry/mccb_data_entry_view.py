@@ -26,8 +26,8 @@ class MCCBDataEntryView:
 
     def refresh_page(self):
         self.clear_mccb_form()
-        motors = self.mccb_data_entry_controller.get_all_mccbs()
-        self.show_mccbs_in_table(motors)
+        all_items = self.mccb_data_entry_controller.get_all_mccbs()
+        self.show_mccbs_in_table(all_items)
 
     def clear_mccb_form(self):
         # Reset form fields to default

@@ -27,8 +27,8 @@ class BimetalDataEntryView:
 
     def refresh_page(self):
         self.clear_bimetal_form()
-        motors = self.bimetal_data_entry_controller.get_all_bimetals()
-        self.show_bimetals_in_table(motors)
+        all_items = self.bimetal_data_entry_controller.get_all_bimetals()
+        self.show_bimetals_in_table(all_items)
 
     def clear_bimetal_form(self):
         # Reset form fields to default

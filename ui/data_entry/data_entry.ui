@@ -901,22 +901,6 @@ QListWidget::item:selected {
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_11">
-    <item row="0" column="1">
-     <spacer name="verticalSpacer_8">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="0" column="2">
      <spacer name="verticalSpacer_12">
       <property name="orientation">
@@ -933,7 +917,23 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="1" column="1" rowspan="2">
+    <item row="0" column="1">
+     <spacer name="verticalSpacer_8">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="1" rowspan="2">
      <widget class="QListWidget" name="item_list">
       <property name="minimumSize">
        <size>
@@ -997,7 +997,7 @@ QListWidget::item:selected {
       </item>
      </widget>
     </item>
-    <item row="1" column="2" colspan="2">
+    <item row="2" column="2" colspan="2">
      <widget class="QPushButton" name="hide_show_item_stack_btn">
       <property name="maximumSize">
        <size>
@@ -1019,7 +1019,55 @@ QListWidget::item:selected {
       </property>
      </widget>
     </item>
-    <item row="2" column="2">
+    <item row="3" column="4">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="3" column="0">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="2">
+     <spacer name="verticalSpacer_9">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="3" column="2">
      <widget class="QStackedWidget" name="item_stack">
       <property name="maximumSize">
        <size>
@@ -1040,7 +1088,7 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>8</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -2080,9 +2128,9 @@ QListWidget::item:selected {
             </widget>
            </item>
            <item row="7" column="5">
-            <widget class="QCheckBox" name="has_hard_wire">
+            <widget class="QCheckBox" name="has_hart">
              <property name="text">
-              <string>Hard Wire</string>
+              <string>Hart</string>
              </property>
             </widget>
            </item>
@@ -2171,64 +2219,62 @@ QListWidget::item:selected {
       <widget class="QWidget" name="instrument">
        <layout class="QGridLayout" name="gridLayout_8">
         <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox_4">
+         <widget class="QGroupBox" name="groupBox_10">
           <property name="title">
            <string>Instrument</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_7">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_37">
-             <property name="text">
-              <string>Instrument Type</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_33">
-             <property name="text">
-              <string>Brand</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="2" colspan="2">
-            <widget class="QLineEdit" name="lineEdit_16">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2" colspan="2">
-            <widget class="QComboBox" name="comboBox_6"/>
-           </item>
-           <item row="9" column="2">
-            <spacer name="verticalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
+          <layout class="QGridLayout" name="gridLayout_20">
+           <item row="5" column="3">
+            <widget class="QComboBox" name="instrument_supplier_list">
+             <property name="maximumSize">
               <size>
-               <width>20</width>
-               <height>40</height>
+               <width>184</width>
+               <height>16777215</height>
               </size>
              </property>
-            </spacer>
+            </widget>
            </item>
-           <item row="6" column="1">
-            <widget class="QLabel" name="label_36">
+           <item row="1" column="0" colspan="2">
+            <widget class="QLabel" name="label_71">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <property name="text">
-              <string>Vendor</string>
+              <string>*Type</string>
              </property>
             </widget>
            </item>
-           <item row="8" column="0" colspan="2">
-            <widget class="QLabel" name="label_34">
+           <item row="5" column="1">
+            <widget class="QLabel" name="label_72">
+             <property name="maximumSize">
+              <size>
+               <width>51</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Supplier</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0" colspan="2">
+            <widget class="QLabel" name="label_73">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <property name="text">
               <string>*Price (IRR)</string>
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
-            <widget class="QPushButton" name="add_vendor_btn6">
+           <item row="5" column="0">
+            <widget class="QPushButton" name="instrument_add_supplier_btn">
              <property name="maximumSize">
               <size>
                <width>16</width>
@@ -2244,8 +2290,180 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="10" column="0" colspan="4" alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="pushButton_9">
+           <item row="3" column="0" colspan="2">
+            <widget class="QLabel" name="label_74">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Brand</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QComboBox" name="instrument_type">
+             <property name="maximumSize">
+              <size>
+               <width>184</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Delta Pressure Transmitter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Delta Pressure Switch</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Pressure Transmitter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Pressure Switch</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Pressure Gauge</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Temperature Transmitter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Proximity Switch</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Speed Detector</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Vibration Transmitter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Level Switch</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Level Transmitter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2 Ways Manifold</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3 Ways Manifold</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Calibration</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <spacer name="verticalSpacer_27">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="4" column="3">
+            <spacer name="verticalSpacer_26">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="7" column="3">
+            <widget class="QLineEdit" name="instrument_price">
+             <property name="maximumSize">
+              <size>
+               <width>184</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="4" colspan="2">
+            <spacer name="horizontalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="9" column="3">
+            <spacer name="verticalSpacer_25">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="10" column="5" alignment="Qt::AlignRight">
+            <widget class="QPushButton" name="instrument_save_btn">
              <property name="maximumSize">
               <size>
                <width>150</width>
@@ -2257,37 +2475,70 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="0" column="2">
-            <widget class="QLineEdit" name="lineEdit_15">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="2" colspan="2">
-            <widget class="QLineEdit" name="lineEdit_7">
-             <property name="minimumSize">
+           <item row="3" column="3">
+            <widget class="QComboBox" name="instrument_brand">
+             <property name="maximumSize">
               <size>
-               <width>0</width>
-               <height>0</height>
+               <width>184</width>
+               <height>16777215</height>
               </size>
              </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>United Electric</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Rosemount</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ABB</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>WIKA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Danfoss</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>JUMO</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Telemecanique</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IFM</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Endress Hauser</string>
+              </property>
+             </item>
             </widget>
            </item>
-           <item row="6" column="2" colspan="2">
-            <widget class="QComboBox" name="comboBox_5"/>
-           </item>
-           <item row="5" column="0" colspan="2">
-            <widget class="QLabel" name="label_30">
+           <item row="1" column="4" colspan="2">
+            <widget class="QCheckBox" name="instrument_has_hart">
              <property name="text">
-              <string>Refrence Number</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="checkBox_5">
-             <property name="text">
-              <string>Hart Support</string>
+              <string>Hart Comminucation</string>
              </property>
             </widget>
            </item>
@@ -3863,55 +4114,7 @@ QListWidget::item:selected {
       </widget>
      </widget>
     </item>
-    <item row="2" column="4">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="3" column="2">
-     <spacer name="verticalSpacer_9">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="0">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="3">
+    <item row="3" column="3">
      <widget class="QTableView" name="history_list">
       <property name="minimumSize">
        <size>
@@ -3946,14 +4149,6 @@ QListWidget::item:selected {
   <tabstop>motor_eur</tabstop>
   <tabstop>motor_save_btn</tabstop>
   <tabstop>motor_add_supplier_btn</tabstop>
-  <tabstop>lineEdit_16</tabstop>
-  <tabstop>comboBox_6</tabstop>
-  <tabstop>add_vendor_btn6</tabstop>
-  <tabstop>pushButton_9</tabstop>
-  <tabstop>lineEdit_15</tabstop>
-  <tabstop>lineEdit_7</tabstop>
-  <tabstop>comboBox_5</tabstop>
-  <tabstop>checkBox_5</tabstop>
   <tabstop>history_list</tabstop>
   <tabstop>mpcb_add_supplier_btn</tabstop>
   <tabstop>mccb_add_supplier_btn</tabstop>

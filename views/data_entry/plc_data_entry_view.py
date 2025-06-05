@@ -16,7 +16,7 @@ attribute_keys:
     ao_pins --> required
     comminucation_type:has_profinet --> required
     comminucation_type:has_profibus --> required
-    comminucation_type:has_hard_wire --> required
+    comminucation_type:has_hart --> required
     has_mpi --> required
     brand --> required
     order_number --> required
@@ -34,7 +34,7 @@ class PLCDataEntryView:
 
         self.history_table_headers = (
                     ["series", "model", "di_pins", "do_pins", "ai_pins", "ao_pins",
-                     "has_profinet", "has_profibus", "has_hard_wire", "has_mpi"] + self.ui.history_table_headers)
+                     "has_profinet", "has_profibus", "has_hart", "has_mpi"] + self.ui.history_table_headers)
 
         self.refresh_page()
 
@@ -45,8 +45,8 @@ class PLCDataEntryView:
 
     def refresh_page(self):
         self.clear_plc_form()
-        motors = self.plc_data_entry_controller.get_all_plcs()
-        self.show_plcs_in_table(motors)
+        all_items = self.plc_data_entry_controller.get_all_plcs()
+        self.show_plcs_in_table(all_items)
 
     def clear_plc_form(self):
         # Reset form fields to default
@@ -54,7 +54,7 @@ class PLCDataEntryView:
             spin.setValue(0)
         for combo in [self.ui.plc_series, self.ui.plc_supplier_list]:
             combo.setCurrentIndex(0)
-        for checkbox in [self.ui.has_profinet, self.ui.has_profibus, self.ui.has_mpi, self.ui.has_hard_wire]:
+        for checkbox in [self.ui.has_profinet, self.ui.has_profibus, self.ui.has_mpi, self.ui.has_hart]:
             checkbox.setChecked(False)
 
         self.ui.plc_order_number.setText("")
@@ -87,7 +87,7 @@ class PLCDataEntryView:
 
         has_profinet = True if self.ui.has_profinet.isChecked() else False
         has_profibus = True if self.ui.has_profibus.isChecked() else False
-        has_hard_wire = True if self.ui.has_hard_wire.isChecked() else False
+        has_hart = True if self.ui.has_hart.isChecked() else False
         has_mpi = True if self.ui.has_mpi.isChecked() else False
 
         brand = self.ui.plc_brand.currentText().strip() if self.ui.plc_brand.currentIndex() else None
@@ -108,7 +108,7 @@ class PLCDataEntryView:
             "ao_pins": ao_pins,
             "has_profinet": has_profinet,
             "has_profibus": has_profibus,
-            "has_hard_wire": has_hard_wire,
+            "has_hart": has_hart,
             "has_mpi": has_mpi,
             "brand": brand,
             "supplier": supplier,

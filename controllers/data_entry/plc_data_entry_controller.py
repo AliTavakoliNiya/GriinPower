@@ -19,7 +19,7 @@ class PLCDataEntryController:
             ao_pins=plc_details["ao_pins"],
             has_profinet=plc_details["has_profinet"],
             has_profibus=plc_details["has_profibus"],
-            has_hard_wire=plc_details["has_hard_wire"],
+            has_hart=plc_details["has_hart"],
             has_mpi=plc_details["has_mpi"],
             brand=plc_details["brand"],
             order_number=plc_details["order_number"],

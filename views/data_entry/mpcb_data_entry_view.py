@@ -27,8 +27,8 @@ class MPCBDataEntryView:
 
     def refresh_page(self):
         self.clear_mpcb_form()
-        motors = self.mpcb_data_entry_controller.get_all_mpcbs()
-        self.show_mpcbs_in_table(motors)
+        all_items = self.mpcb_data_entry_controller.get_all_mpcbs()
+        self.show_mpcbs_in_table(all_items)
 
     def clear_mpcb_form(self):
         # Reset form fields to default

@@ -26,8 +26,8 @@ class ContactorDataEntryView:
 
     def refresh_page(self):
         self.clear_contactor_form()
-        motors = self.contactor_data_entry_controller.get_all_contactors()
-        self.show_contactors_in_table(motors)
+        all_items = self.contactor_data_entry_controller.get_all_contactors()
+        self.show_contactors_in_table(all_items)
 
     def clear_contactor_form(self):
         # Reset form fields to default

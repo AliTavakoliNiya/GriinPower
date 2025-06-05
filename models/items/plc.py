@@ -15,7 +15,7 @@ attribute_keys:
     ao_pins --> required
     comminucation_type:has_profinet --> required
     comminucation_type:has_profibus --> required
-    comminucation_type:has_hard_wire --> required
+    comminucation_type:has_hart --> required
     has_mpi --> required
     brand --> required
     order_number --> required
@@ -29,7 +29,7 @@ def get_all_plcs():
         "series", "model", "di_pins", "do_pins", "ai_pins", "ao_pins",
         "has_profinet",
         "has_profibus",
-        "has_hard_wire",
+        "has_hart",
         "has_mpi",
         "brand", "order_number", "created_by_id"
     ]
@@ -131,7 +131,7 @@ def get_plc_by_spec(series, model, comminucation_type=None, brand="siemens", ord
             "ao_pins": attr.get("ao_pins"),
             "has_profinet": attr.get("has_profinet"),
             "has_profibus": attr.get("has_profibus"),
-            "has_hard_wire": attr.get("has_hard_wire"),
+            "has_hart": attr.get("has_hart"),
             "has_mpi": attr.get("has_mpi"),
             "brand": attr.get("brand"),
             "order_number": attr.get("order_number"),
@@ -160,7 +160,7 @@ def insert_plc_to_db(
         ao_pins,
         has_profinet,
         has_profibus,
-        has_hard_wire,
+        has_hart,
         has_mpi,
         brand,
         order_number
@@ -196,7 +196,7 @@ def insert_plc_to_db(
                 ComponentAttribute(key="ao_pins", value=ao_pins),
                 ComponentAttribute(key="has_profinet", value=str(has_profinet).lower()),
                 ComponentAttribute(key="has_profibus", value=str(has_profibus).lower()),
-                ComponentAttribute(key="has_hard_wire", value=str(has_hard_wire).lower()),
+                ComponentAttribute(key="has_hart", value=str(has_hart).lower()),
                 ComponentAttribute(key="has_mpi", value=str(has_mpi).lower()),
                 ComponentAttribute(key="brand", value=brand),
                 ComponentAttribute(key="order_number", value=order_number),

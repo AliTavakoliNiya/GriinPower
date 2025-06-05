@@ -24,8 +24,8 @@ class ElectroMotorDataEntryView:
 
     def refresh_page(self):
         self.clear_motor_form()
-        motors = self.electro_motor_data_entry_controller.get_all_motors()
-        self.show_motors_in_table(motors)
+        all_items = self.electro_motor_data_entry_controller.get_all_motors()
+        self.show_motors_in_table(all_items)
 
     def format_price_fields(self):
         # Format price fields with thousand separator on text change

@@ -4,7 +4,7 @@ from config import COSNUS_PI, ETA
 from controllers.project_details import ProjectDetails
 from models.items.bimetal import get_bimetal_by_current
 from models.items.contactor import get_contactor_by_current
-from models.items.instrument import get_instrument_by_type
+from models.items.instrument import get_instrument_by_spec
 from models.items.manifold import get_manifold
 from models.items.mccb import get_mccb_by_current
 from models.items.mpcb import get_mpcb_by_current
@@ -383,7 +383,7 @@ class PanelController:
                 else instrument_name
             name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
-            success, instrument = get_instrument_by_type(name)
+            success, instrument = get_instrument_by_spec(name)
 
             if success:
                 self.add_to_panel(

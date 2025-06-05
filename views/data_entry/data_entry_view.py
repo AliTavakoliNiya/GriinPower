@@ -10,6 +10,7 @@ from views.data_entry.bimetal_data_entry_view import BimetalDataEntryView
 from views.data_entry.contactor_data_entry_view import ContactorDataEntryView
 from views.data_entry.electro_motor_data_entry_view import ElectroMotorDataEntryView
 from views.data_entry.general_data_entry_view import GeneralDataEntryView
+from views.data_entry.instrument_data_entry_view import InstrumentDataEntryView
 from views.data_entry.mccb_data_entry_view import MCCBDataEntryView
 from views.data_entry.mpcb_data_entry_view import MPCBDataEntryView
 from views.data_entry.plc_data_entry_view import PLCDataEntryView
@@ -58,8 +59,10 @@ class DataEntry(QMainWindow):
         self.item_stack.setCurrentIndex(index)
         if index == 0:
             ElectroMotorDataEntryView(self)
-        if index == 1:
+        elif index == 1:
             PLCDataEntryView(self)
+        elif index == 2:
+            InstrumentDataEntryView(self)
         elif index == 3:
             ContactorDataEntryView(self)
         elif index == 4:
@@ -79,6 +82,7 @@ class DataEntry(QMainWindow):
     def load_suppliers(self):
         suppliers = ["--------", "Elica electric", "Asam kala"]
         self.plc_supplier_list.addItems(suppliers)
+        self.instrument_supplier_list.addItems(suppliers)
         self.contactor_supplier_list.addItems(suppliers)
         self.mccb_supplier_list.addItems(suppliers)
         self.mpcb_supplier_list.addItems(suppliers)
