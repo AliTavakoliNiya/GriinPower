@@ -22,6 +22,13 @@ class PandasModel(QAbstractTableModel):
         value = self._data.iat[index.row(), index.column()]
         column_name = self._data.columns[index.column()]
 
+        # Convert boolean strings to "Yes" or "No"
+        if str(value).lower() == "true":
+            return "Yes"
+        elif str(value).lower() == "false":
+            return "No"
+
+        # Existing formatting logic for price columns
         if column_name.lower() in {"price", "total_price"} and pd.notnull(value):
             try:
                 value = float(value)

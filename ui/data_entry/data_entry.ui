@@ -901,7 +901,7 @@ QListWidget::item:selected {
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_11">
-    <item row="4" column="2">
+    <item row="3" column="2">
      <spacer name="verticalSpacer_9">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -917,7 +917,7 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="3" column="3">
+    <item row="2" column="3">
      <widget class="QTableView" name="history_list">
       <property name="minimumSize">
        <size>
@@ -943,7 +943,7 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="3" column="2">
+    <item row="2" column="2">
      <widget class="QStackedWidget" name="item_stack">
       <property name="maximumSize">
        <size>
@@ -964,7 +964,7 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -1709,28 +1709,112 @@ QListWidget::item:selected {
            <string>PLC</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_6">
-           <item row="1" column="0" colspan="3">
-            <widget class="QLabel" name="label_16">
+           <item row="15" column="0">
+            <spacer name="verticalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="12" column="0">
+            <widget class="QPushButton" name="plc_add_supplier_btn">
+             <property name="maximumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
              <property name="text">
-              <string>series</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
-           <item row="11" column="3" colspan="3">
-            <widget class="QLineEdit" name="lineEdit_6">
+           <item row="7" column="0" colspan="2">
+            <widget class="QLabel" name="label_50">
+             <property name="text">
+              <string>Comminucation Type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="1" alignment="Qt::AlignLeft">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>*Supplier</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0" colspan="2">
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>*Brand</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0" colspan="2">
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>*Order Number</string>
+             </property>
+            </widget>
+           </item>
+           <item row="14" column="0" colspan="2">
+            <widget class="QLabel" name="label_17">
+             <property name="text">
+              <string>*Price(IRR)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4" colspan="2">
+            <widget class="QLineEdit" name="plc_model">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
-           <item row="1" column="3">
-            <widget class="QComboBox" name="comboBox_10">
+           <item row="3" column="0" colspan="2">
+            <widget class="QLabel" name="label_19">
+             <property name="text">
+              <string>DI Pins</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" colspan="2">
+            <widget class="QLabel" name="label_27">
+             <property name="text">
+              <string>AI Pins</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>*Series</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QComboBox" name="plc_series">
              <property name="minimumSize">
               <size>
                <width>120</width>
                <height>0</height>
               </size>
              </property>
+             <item>
+              <property name="text">
+               <string>-------------------</string>
+              </property>
+             </item>
              <item>
               <property name="text">
                <string>LOGO!</string>
@@ -1748,25 +1832,8 @@ QListWidget::item:selected {
              </item>
             </widget>
            </item>
-           <item row="9" column="0">
-            <widget class="QPushButton" name="add_vendor_btn5">
-             <property name="maximumSize">
-              <size>
-               <width>16</width>
-               <height>16</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="5">
-            <widget class="QSpinBox" name="spinBox_6">
+           <item row="3" column="4">
+            <widget class="QSpinBox" name="plc_do_pins">
              <property name="maximumSize">
               <size>
                <width>50</width>
@@ -1784,36 +1851,183 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="5" column="4">
-            <widget class="QCheckBox" name="checkBox_2">
+           <item row="1" column="3">
+            <widget class="QLabel" name="label_18">
              <property name="text">
-              <string>Profibus</string>
+              <string>*Model</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="6">
-            <widget class="QCheckBox" name="checkBox_4">
-             <property name="text">
-              <string>Hard Wire</string>
+           <item row="5" column="2">
+            <widget class="QSpinBox" name="plc_ai_pins">
+             <property name="maximumSize">
+              <size>
+               <width>50</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <number>999</number>
              </property>
             </widget>
            </item>
-           <item row="11" column="0" colspan="3">
-            <widget class="QLabel" name="label_17">
-             <property name="text">
-              <string>Price</string>
+           <item row="3" column="2">
+            <widget class="QSpinBox" name="plc_di_pins">
+             <property name="maximumSize">
+              <size>
+               <width>50</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <number>999</number>
              </property>
             </widget>
            </item>
-           <item row="4" column="4">
+           <item row="7" column="2" alignment="Qt::AlignRight">
+            <widget class="QCheckBox" name="has_profinet">
+             <property name="text">
+              <string>Profinet</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="2">
+            <widget class="QLineEdit" name="plc_order_number">
+             <property name="minimumSize">
+              <size>
+               <width>140</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="2">
+            <widget class="QComboBox" name="plc_brand">
+             <item>
+              <property name="text">
+               <string>-------------------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Siemens</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="3">
             <widget class="QLabel" name="label_28">
              <property name="text">
               <string>Ao Pins</string>
              </property>
             </widget>
            </item>
-           <item row="13" column="0" colspan="6" alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="pushButton_7">
+           <item row="3" column="3">
+            <widget class="QLabel" name="label_26">
+             <property name="text">
+              <string>Do Pins</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="3">
+            <widget class="QCheckBox" name="has_profibus">
+             <property name="text">
+              <string>Profibus</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="2">
+            <widget class="QComboBox" name="plc_supplier_list"/>
+           </item>
+           <item row="14" column="2">
+            <widget class="QLineEdit" name="plc_price">
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <spacer name="horizontalSpacer_7">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="7" column="4">
+            <widget class="QCheckBox" name="has_mpi">
+             <property name="text">
+              <string>MPI</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="4">
+            <widget class="QSpinBox" name="plc_ao_pins">
+             <property name="maximumSize">
+              <size>
+               <width>50</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <number>999</number>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="5">
+            <widget class="QCheckBox" name="has_hard_wire">
+             <property name="text">
+              <string>Hard Wire</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <spacer name="verticalSpacer_19">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="16" column="5" colspan="2">
+            <widget class="QPushButton" name="plc_save_btn">
              <property name="maximumSize">
               <size>
                <width>150</width>
@@ -1825,10 +2039,13 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="12" column="0">
-            <spacer name="verticalSpacer_5">
+           <item row="11" column="2">
+            <spacer name="verticalSpacer_17">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -1838,159 +2055,37 @@ QListWidget::item:selected {
              </property>
             </spacer>
            </item>
-           <item row="2" column="3">
-            <widget class="QSpinBox" name="spinBox_2">
-             <property name="maximumSize">
+           <item row="8" column="2">
+            <spacer name="verticalSpacer_18">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
               <size>
-               <width>50</width>
-               <height>16777215</height>
+               <width>20</width>
+               <height>40</height>
               </size>
              </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::NoButtons</enum>
-             </property>
-             <property name="maximum">
-              <number>999</number>
-             </property>
-            </widget>
+            </spacer>
            </item>
-           <item row="4" column="0" colspan="3">
-            <widget class="QLabel" name="label_27">
-             <property name="text">
-              <string>AI Pins</string>
+           <item row="2" column="2">
+            <spacer name="verticalSpacer_20">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
              </property>
-            </widget>
-           </item>
-           <item row="9" column="3" colspan="3">
-            <widget class="QComboBox" name="comboBox_4"/>
-           </item>
-           <item row="4" column="5">
-            <widget class="QSpinBox" name="spinBox_8">
-             <property name="maximumSize">
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
               <size>
-               <width>50</width>
-               <height>16777215</height>
+               <width>20</width>
+               <height>40</height>
               </size>
              </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::NoButtons</enum>
-             </property>
-             <property name="maximum">
-              <number>999</number>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="3">
-            <widget class="QCheckBox" name="checkBox">
-             <property name="text">
-              <string>Profinet</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="5">
-            <widget class="QLineEdit" name="lineEdit_12">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="3" colspan="3">
-            <widget class="QLineEdit" name="lineEdit_4">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="4">
-            <widget class="QLabel" name="label_18">
-             <property name="text">
-              <string>model</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" colspan="3">
-            <widget class="QLabel" name="label_19">
-             <property name="text">
-              <string>DI Pins</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="3" colspan="3">
-            <widget class="QLineEdit" name="lineEdit_10">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="3">
-            <widget class="QSpinBox" name="spinBox_7">
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::NoButtons</enum>
-             </property>
-             <property name="maximum">
-              <number>999</number>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="1" alignment="Qt::AlignLeft">
-            <widget class="QLabel" name="label_8">
-             <property name="text">
-              <string>Vendor</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="5">
-            <widget class="QCheckBox" name="checkBox_3">
-             <property name="text">
-              <string>MPI</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="4">
-            <widget class="QLabel" name="label_26">
-             <property name="text">
-              <string>Do Pins</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0" colspan="2">
-            <widget class="QLabel" name="label_50">
-             <property name="text">
-              <string>Comminucation Type</string>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="0" colspan="2">
-            <widget class="QLabel" name="label_14">
-             <property name="text">
-              <string>Order Number</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="0" colspan="2">
-            <widget class="QLabel" name="label_15">
-             <property name="text">
-              <string>Brand</string>
-             </property>
-            </widget>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -2052,7 +2147,7 @@ QListWidget::item:selected {
            <item row="8" column="0" colspan="2">
             <widget class="QLabel" name="label_34">
              <property name="text">
-              <string>Price</string>
+              <string>*Price(IRR)</string>
              </property>
             </widget>
            </item>
@@ -2584,7 +2679,7 @@ QListWidget::item:selected {
            <item row="8" column="0" colspan="2">
             <widget class="QLabel" name="label_38">
              <property name="text">
-              <string>*Price</string>
+              <string>*Price(IRR)</string>
              </property>
             </widget>
            </item>
@@ -2731,7 +2826,7 @@ QListWidget::item:selected {
            <item row="6" column="1">
             <widget class="QLabel" name="label_52">
              <property name="text">
-              <string>*Suppliers</string>
+              <string>*Supplier</string>
              </property>
             </widget>
            </item>
@@ -2759,7 +2854,7 @@ QListWidget::item:selected {
            <item row="8" column="0" colspan="2">
             <widget class="QLabel" name="label_57">
              <property name="text">
-              <string>*Price</string>
+              <string>*Price(IRR)</string>
              </property>
             </widget>
            </item>
@@ -2950,7 +3045,7 @@ QListWidget::item:selected {
            <item row="8" column="0" colspan="2">
             <widget class="QLabel" name="label_49">
              <property name="text">
-              <string>*Price</string>
+              <string>*Price(IRR)</string>
              </property>
             </widget>
            </item>
@@ -3305,7 +3400,23 @@ QListWidget::item:selected {
       </widget>
      </widget>
     </item>
-    <item row="2" column="2" colspan="2">
+    <item row="2" column="4">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="2" colspan="2">
      <widget class="QPushButton" name="hide_show_item_stack_btn">
       <property name="maximumSize">
        <size>
@@ -3327,7 +3438,7 @@ QListWidget::item:selected {
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="2" column="0">
      <spacer name="horizontalSpacer_2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -3343,23 +3454,23 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="3" column="4">
-     <spacer name="horizontalSpacer">
+    <item row="0" column="2">
+     <spacer name="verticalSpacer_12">
       <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+       <enum>Qt::Vertical</enum>
       </property>
       <property name="sizeType">
        <enum>QSizePolicy::Minimum</enum>
       </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>40</width>
-        <height>20</height>
+        <width>20</width>
+        <height>40</height>
        </size>
       </property>
      </spacer>
     </item>
-    <item row="2" column="1" rowspan="2">
+    <item row="1" column="1" rowspan="2">
      <widget class="QListWidget" name="item_list">
       <property name="minimumSize">
        <size>
@@ -3423,22 +3534,6 @@ QListWidget::item:selected {
       </item>
      </widget>
     </item>
-    <item row="0" column="2">
-     <spacer name="verticalSpacer_12">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -3464,15 +3559,6 @@ QListWidget::item:selected {
   <tabstop>motor_eur</tabstop>
   <tabstop>motor_save_btn</tabstop>
   <tabstop>motor_add_supplier_btn</tabstop>
-  <tabstop>spinBox_2</tabstop>
-  <tabstop>comboBox_4</tabstop>
-  <tabstop>spinBox_8</tabstop>
-  <tabstop>checkBox</tabstop>
-  <tabstop>lineEdit_12</tabstop>
-  <tabstop>lineEdit_4</tabstop>
-  <tabstop>lineEdit_10</tabstop>
-  <tabstop>spinBox_7</tabstop>
-  <tabstop>checkBox_3</tabstop>
   <tabstop>lineEdit_16</tabstop>
   <tabstop>comboBox_6</tabstop>
   <tabstop>add_vendor_btn6</tabstop>
@@ -3500,13 +3586,7 @@ QListWidget::item:selected {
   <tabstop>lineEdit_27</tabstop>
   <tabstop>lineEdit_28</tabstop>
   <tabstop>lineEdit_29</tabstop>
-  <tabstop>checkBox_4</tabstop>
-  <tabstop>lineEdit_6</tabstop>
-  <tabstop>comboBox_10</tabstop>
-  <tabstop>add_vendor_btn5</tabstop>
-  <tabstop>spinBox_6</tabstop>
-  <tabstop>checkBox_2</tabstop>
-  <tabstop>pushButton_7</tabstop>
+  <tabstop>plc_add_supplier_btn</tabstop>
   <tabstop>hide_show_item_stack_btn</tabstop>
   <tabstop>contactor_brand</tabstop>
   <tabstop>contactor_order_number</tabstop>
