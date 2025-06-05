@@ -3,27 +3,11 @@ from math import sqrt
 from config import COSNUS_PI, ETA
 from controllers.project_details import ProjectDetails
 from models.items.bimetal import get_bimetal_by_current
-from models.items.button import get_button
 from models.items.contactor import get_contactor_by_current
-from models.items.contactor_aux_contact import get_contactor_aux_contact
-from models.items.duct_cover import get_duct_cover
-from models.items.electrical_panel import get_electrical_panel
-from models.items.front_connector import get_front_connector
 from models.items.instrument import get_instrument_by_type
-from models.items.io_card import get_io_card
-from models.items.jb import get_junction_box
-from models.items.lcb import get_lcb
 from models.items.manifold import get_manifold
 from models.items.mccb import get_mccb_by_current
-from models.items.miniatory_rail import get_miniatory_rail
-from models.items.mpcb_mccb_aux_contact import get_mpcb_mccb_aux_contact
 from models.items.mpcb import get_mpcb_by_current
-from models.items.relay import get_relay_by_contacts
-from models.items.selector_switch import get_selector_switch
-from models.items.signal_lamp import get_signal_lamp
-from models.items.soft_starter import get_softstarter_by_power
-from models.items.terminal import get_terminal_by_current
-from models.items.vfd_model import get_vfd_by_power
 from models.items.calibration import get_calibration
 
 

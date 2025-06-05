@@ -901,32 +901,6 @@ QListWidget::item:selected {
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_11">
-    <item row="3" column="2">
-     <spacer name="verticalSpacer_9">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="3">
-     <widget class="QTableView" name="history_list">
-      <property name="minimumSize">
-       <size>
-        <width>540</width>
-        <height>540</height>
-       </size>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="1">
      <spacer name="verticalSpacer_8">
       <property name="orientation">
@@ -942,6 +916,108 @@ QListWidget::item:selected {
        </size>
       </property>
      </spacer>
+    </item>
+    <item row="0" column="2">
+     <spacer name="verticalSpacer_12">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="1" rowspan="2">
+     <widget class="QListWidget" name="item_list">
+      <property name="minimumSize">
+       <size>
+        <width>120</width>
+        <height>600</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>135</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="currentRow">
+       <number>0</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>Electrical Motor</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>PLC</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Instrument</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Contactor</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MPCB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MCCB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>BiMetal</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Wire &amp; Cable</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Generals</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="1" column="2" colspan="2">
+     <widget class="QPushButton" name="hide_show_item_stack_btn">
+      <property name="maximumSize">
+       <size>
+        <width>17</width>
+        <height>17</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Show/Hide Add New Motor</string>
+      </property>
+      <property name="text">
+       <string>⏪</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>17</width>
+        <height>17</height>
+       </size>
+      </property>
+     </widget>
     </item>
     <item row="2" column="2">
      <widget class="QStackedWidget" name="item_stack">
@@ -964,7 +1040,7 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>8</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -1770,7 +1846,7 @@ QListWidget::item:selected {
            <item row="14" column="0" colspan="2">
             <widget class="QLabel" name="label_17">
              <property name="text">
-              <string>*Price(IRR)</string>
+              <string>*Price (IRR)</string>
              </property>
             </widget>
            </item>
@@ -2147,7 +2223,7 @@ QListWidget::item:selected {
            <item row="8" column="0" colspan="2">
             <widget class="QLabel" name="label_34">
              <property name="text">
-              <string>*Price(IRR)</string>
+              <string>*Price (IRR)</string>
              </property>
             </widget>
            </item>
@@ -2244,7 +2320,7 @@ QListWidget::item:selected {
            <item row="7" column="0" colspan="2">
             <widget class="QLabel" name="label_3">
              <property name="text">
-              <string>*Price(IRR)</string>
+              <string>*Price (IRR)</string>
              </property>
             </widget>
            </item>
@@ -2679,7 +2755,7 @@ QListWidget::item:selected {
            <item row="8" column="0" colspan="2">
             <widget class="QLabel" name="label_38">
              <property name="text">
-              <string>*Price(IRR)</string>
+              <string>*Price (IRR)</string>
              </property>
             </widget>
            </item>
@@ -2854,7 +2930,7 @@ QListWidget::item:selected {
            <item row="8" column="0" colspan="2">
             <widget class="QLabel" name="label_57">
              <property name="text">
-              <string>*Price(IRR)</string>
+              <string>*Price (IRR)</string>
              </property>
             </widget>
            </item>
@@ -3045,7 +3121,7 @@ QListWidget::item:selected {
            <item row="8" column="0" colspan="2">
             <widget class="QLabel" name="label_49">
              <property name="text">
-              <string>*Price(IRR)</string>
+              <string>*Price (IRR)</string>
              </property>
             </widget>
            </item>
@@ -3239,10 +3315,10 @@ QListWidget::item:selected {
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="generals">
-       <layout class="QGridLayout" name="gridLayout_17">
+      <widget class="QWidget" name="wire_cable">
+       <layout class="QGridLayout" name="gridLayout_19">
         <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox_8">
+         <widget class="QGroupBox" name="groupBox_9">
           <property name="minimumSize">
            <size>
             <width>360</width>
@@ -3250,58 +3326,46 @@ QListWidget::item:selected {
            </size>
           </property>
           <property name="title">
-           <string>Genral</string>
+           <string>Wire And Cable</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_16">
-           <item row="9" column="4">
-            <spacer name="verticalSpacer_10">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="4" column="3" colspan="2">
-            <widget class="QLineEdit" name="lineEdit_24">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="3" colspan="2">
-            <widget class="QComboBox" name="comboBox_12"/>
-           </item>
-           <item row="8" column="0" colspan="2">
-            <widget class="QLabel" name="label_63">
+          <layout class="QGridLayout" name="gridLayout_18">
+           <item row="4" column="0" colspan="2">
+            <widget class="QLabel" name="label_51">
              <property name="text">
-              <string>Price</string>
+              <string>*Order Number</string>
              </property>
             </widget>
            </item>
-           <item row="8" column="3" colspan="2">
-            <widget class="QLineEdit" name="lineEdit_26">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+           <item row="1" column="4">
+            <widget class="QLabel" name="label_58">
+             <property name="text">
+              <string>*Max Current (A)</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="3" colspan="2">
-            <widget class="QLineEdit" name="lineEdit_25">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
+           <item row="2" column="0" colspan="2">
+            <widget class="QLabel" name="label_61">
+             <property name="text">
+              <string>*Trip Time</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="2">
+            <widget class="QLabel" name="label_66">
+             <property name="text">
+              <string>*Brand</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QLabel" name="label_67">
+             <property name="text">
+              <string>*Supplier</string>
              </property>
             </widget>
            </item>
            <item row="6" column="0">
-            <widget class="QPushButton" name="add_vendor_btn3_2">
+            <widget class="QPushButton" name="bimetal_add_supplier_btn_2">
              <property name="maximumSize">
               <size>
                <width>16</width>
@@ -3317,29 +3381,194 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
-            <widget class="QLabel" name="label_60">
-             <property name="text">
-              <string>Vendor</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="0" colspan="2">
-            <widget class="QLabel" name="label_62">
+            <widget class="QLabel" name="label_68">
              <property name="text">
-              <string>Name</string>
+              <string>*Min Current (A)</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="0" colspan="2">
-            <widget class="QLabel" name="label_59">
+           <item row="8" column="0" colspan="2">
+            <widget class="QLabel" name="label_69">
              <property name="text">
-              <string>Refrence Number</string>
+              <string>*Price(IRR)</string>
              </property>
             </widget>
            </item>
-           <item row="10" column="0" colspan="5" alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="pushButton_14">
+           <item row="9" column="5">
+            <spacer name="verticalSpacer_23">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="4">
+            <widget class="QLabel" name="label_70">
+             <property name="text">
+              <string>*Class</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QDoubleSpinBox" name="bimetal_min_current_2">
+             <property name="minimumSize">
+              <size>
+               <width>62</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="5">
+            <widget class="QDoubleSpinBox" name="bimetal_max_current_2">
+             <property name="minimumSize">
+              <size>
+               <width>62</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QDoubleSpinBox" name="bimetal_trip_time_2">
+             <property name="minimumSize">
+              <size>
+               <width>62</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="5">
+            <widget class="QLineEdit" name="bimetal_class_2">
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="3">
+            <widget class="QLineEdit" name="bimetal_order_number_2">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="3">
+            <widget class="QComboBox" name="bimetal_supplier_list_2"/>
+           </item>
+           <item row="3" column="3">
+            <widget class="QComboBox" name="bimetal_brand_2">
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Schneider Electric</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Siemens</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Hyundai</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="8" column="3">
+            <widget class="QLineEdit" name="bimetal_price_2">
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3">
+            <spacer name="verticalSpacer_24">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="4" colspan="3">
+            <spacer name="horizontalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="10" column="5" alignment="Qt::AlignRight">
+            <widget class="QPushButton" name="bimetal_save_btn_2">
              <property name="maximumSize">
               <size>
                <width>150</width>
@@ -3351,47 +3580,281 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="2" column="0" colspan="2">
-            <widget class="QLabel" name="label_51">
-             <property name="text">
-              <string>Property</string>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="generals">
+       <layout class="QGridLayout" name="gridLayout_17">
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="groupBox_8">
+          <property name="title">
+           <string>Generals</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_16">
+           <item row="7" column="3">
+            <widget class="QLineEdit" name="general_price">
+             <property name="maximumSize">
+              <size>
+               <width>184</width>
+               <height>16777215</height>
+              </size>
              </property>
-            </widget>
-           </item>
-           <item row="4" column="0" colspan="2">
-            <widget class="QLabel" name="label_61">
              <property name="text">
-              <string>Brand</string>
+              <string>0</string>
              </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_58">
-             <property name="text">
-              <string>Note</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="3">
-            <widget class="QLineEdit" name="lineEdit_27">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLabel" name="general_spec_label">
+             <property name="text">
+              <string>*specification</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3">
+            <widget class="QComboBox" name="general_supplier">
+             <property name="maximumSize">
+              <size>
+               <width>184</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QLabel" name="label_60">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QLabel" name="label_59">
+             <property name="maximumSize">
+              <size>
+               <width>51</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Supplier</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0" colspan="2">
+            <widget class="QLabel" name="label_63">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Price (IRR)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="2">
+            <widget class="QLabel" name="label_62">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Brand</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QPushButton" name="general_add_supplier_btn">
+             <property name="maximumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="4">
+            <spacer name="verticalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="4" column="3">
+            <spacer name="verticalSpacer_21">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="3">
+            <widget class="QComboBox" name="general_type">
+             <property name="maximumSize">
+              <size>
+               <width>184</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Signal Lamp</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Selector Switch</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Button</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Terminal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Contactor Aux Contact</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MCCB Aux Contact</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MPCB Aux Contact</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Relay</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item row="2" column="3">
-            <widget class="QLineEdit" name="lineEdit_28">
+            <spacer name="verticalSpacer_22">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="3">
+            <widget class="QLineEdit" name="general_brand">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>184</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
-           <item row="1" column="3">
-            <widget class="QLineEdit" name="lineEdit_29">
+           <item row="1" column="5">
+            <widget class="QLineEdit" name="general_spec_entry">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
             </widget>
+           </item>
+           <item row="9" column="5" colspan="2" alignment="Qt::AlignRight">
+            <widget class="QPushButton" name="general_save_btn">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>💾 Save To Database</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="4" colspan="2">
+            <spacer name="horizontalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -3416,27 +3879,21 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="1" column="2" colspan="2">
-     <widget class="QPushButton" name="hide_show_item_stack_btn">
-      <property name="maximumSize">
+    <item row="3" column="2">
+     <spacer name="verticalSpacer_9">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
        <size>
-        <width>17</width>
-        <height>17</height>
+        <width>20</width>
+        <height>40</height>
        </size>
       </property>
-      <property name="toolTip">
-       <string>Show/Hide Add New Motor</string>
-      </property>
-      <property name="text">
-       <string>⏪</string>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>17</width>
-        <height>17</height>
-       </size>
-      </property>
-     </widget>
+     </spacer>
     </item>
     <item row="2" column="0">
      <spacer name="horizontalSpacer_2">
@@ -3454,84 +3911,14 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="0" column="2">
-     <spacer name="verticalSpacer_12">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="1" column="1" rowspan="2">
-     <widget class="QListWidget" name="item_list">
+    <item row="2" column="3">
+     <widget class="QTableView" name="history_list">
       <property name="minimumSize">
        <size>
-        <width>120</width>
-        <height>600</height>
+        <width>540</width>
+        <height>540</height>
        </size>
       </property>
-      <property name="maximumSize">
-       <size>
-        <width>135</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="currentRow">
-       <number>0</number>
-      </property>
-      <item>
-       <property name="text">
-        <string>Electrical Motor</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>PLC</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Instrument</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Contactor</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>MPCB</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>MCCB</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>BiMetal</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Wire &amp; Cable</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Generals</string>
-       </property>
-      </item>
      </widget>
     </item>
    </layout>
@@ -3577,15 +3964,6 @@ QListWidget::item:selected {
   <tabstop>bimetal_order_number</tabstop>
   <tabstop>bimetal_add_supplier_btn</tabstop>
   <tabstop>bimetal_price</tabstop>
-  <tabstop>lineEdit_24</tabstop>
-  <tabstop>comboBox_12</tabstop>
-  <tabstop>lineEdit_26</tabstop>
-  <tabstop>lineEdit_25</tabstop>
-  <tabstop>add_vendor_btn3_2</tabstop>
-  <tabstop>pushButton_14</tabstop>
-  <tabstop>lineEdit_27</tabstop>
-  <tabstop>lineEdit_28</tabstop>
-  <tabstop>lineEdit_29</tabstop>
   <tabstop>plc_add_supplier_btn</tabstop>
   <tabstop>hide_show_item_stack_btn</tabstop>
   <tabstop>contactor_brand</tabstop>

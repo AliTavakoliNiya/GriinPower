@@ -9,6 +9,7 @@ from controllers.user_session import UserSession
 from views.data_entry.bimetal_data_entry_view import BimetalDataEntryView
 from views.data_entry.contactor_data_entry_view import ContactorDataEntryView
 from views.data_entry.electro_motor_data_entry_view import ElectroMotorDataEntryView
+from views.data_entry.general_data_entry_view import GeneralDataEntryView
 from views.data_entry.mccb_data_entry_view import MCCBDataEntryView
 from views.data_entry.mpcb_data_entry_view import MPCBDataEntryView
 from views.data_entry.plc_data_entry_view import PLCDataEntryView
@@ -68,6 +69,9 @@ class DataEntry(QMainWindow):
         elif index == 6:
             BimetalDataEntryView(self)
 
+        elif index == 8:
+            GeneralDataEntryView(self)
+
 
     def add_supplier(self):
         self.venor_application_window = SupplierEntry(parent=self)
@@ -79,6 +83,7 @@ class DataEntry(QMainWindow):
         self.mccb_supplier_list.addItems(suppliers)
         self.mpcb_supplier_list.addItems(suppliers)
         self.bimetal_supplier_list.addItems(suppliers)
+        self.general_supplier.addItems(suppliers)
 
     def hide_show_item_stack_btn_func(self):
         # Toggle visibility of motor_list table view
