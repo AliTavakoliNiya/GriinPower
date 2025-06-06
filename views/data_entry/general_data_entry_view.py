@@ -62,7 +62,33 @@ class GeneralDataEntryView:
                 'label': "*NO/NC",
                 'entry': ""
             },
-        }
+            'Front Connector': {
+                    'show': True,
+                    'label': "*Pins",
+                    'entry': ""
+                },
+            'DO Module': {
+                    'show': True,
+                    'label': "*Output Channels",
+                    'entry': ""
+                },
+            'DI Module': {
+                    'show': True,
+                    'label': "*Input Channels",
+                    'entry': ""
+                },
+            'AO Module': {
+                    'show': True,
+                    'label': "*Output Channels",
+                    'entry': ""
+                },
+            'AI Module': {
+                    'show': True,
+                    'label': "*Input Channels",
+                    'entry': ""
+                },
+
+            }
 
         current_type = self.ui.general_type.currentText()
         config = type_config.get(current_type, {'show': False, 'label': "", 'entry': ""})

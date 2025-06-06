@@ -14,6 +14,7 @@ from views.data_entry.instrument_data_entry_view import InstrumentDataEntryView
 from views.data_entry.mccb_data_entry_view import MCCBDataEntryView
 from views.data_entry.mpcb_data_entry_view import MPCBDataEntryView
 from views.data_entry.plc_data_entry_view import PLCDataEntryView
+from views.data_entry.vfd_softstarter_data_entry_view import VFDSoftStarterDataEntryView
 from views.supplier_view import SupplierEntry
 
 
@@ -71,7 +72,8 @@ class DataEntry(QMainWindow):
             MCCBDataEntryView(self)
         elif index == 6:
             BimetalDataEntryView(self)
-
+        elif index == 7:
+            VFDSoftStarterDataEntryView(self)
         elif index == 8:
             GeneralDataEntryView(self)
 
@@ -88,6 +90,7 @@ class DataEntry(QMainWindow):
         self.mpcb_supplier_list.addItems(suppliers)
         self.bimetal_supplier_list.addItems(suppliers)
         self.general_supplier.addItems(suppliers)
+        self.vfd_softstarter_supplier.addItems(suppliers)
 
     def hide_show_item_stack_btn_func(self):
         # Toggle visibility of motor_list table view

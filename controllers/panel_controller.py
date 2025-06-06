@@ -4,11 +4,13 @@ from config import COSNUS_PI, ETA
 from controllers.project_details import ProjectDetails
 from models.items.bimetal import get_bimetal_by_current
 from models.items.contactor import get_contactor_by_current
+from models.items.general import get_general_by_spec
 from models.items.instrument import get_instrument_by_spec
 from models.items.manifold import get_manifold
 from models.items.mccb import get_mccb_by_current
 from models.items.mpcb import get_mpcb_by_current
 from models.items.calibration import get_calibration
+from models.items.vfd_softstarter import get_vfd_softstarter_by_power
 
 
 class PanelController:
@@ -74,7 +76,7 @@ class PanelController:
                 type=f"CONTACTOR FOR {motor.usage.upper()}",
                 brand=contactor["brand"],
                 order_number=contactor["order_number"],
-                specifications = f"Current: {contactor['rated_current']} A",
+                specifications=f"Current: {contactor['rated_current']} A",
                 quantity=total_qty,
                 price=contactor['price'],
                 last_price_update=f"{contactor['supplier_name']}\n{contactor['date']}",
@@ -107,8 +109,8 @@ class PanelController:
                 type=f"MPCB FOR {motor.usage.upper()}",
                 brand=mpcb["brand"],
                 order_number=mpcb["order_number"],
-                specifications = f"Current: {mpcb['min_current']}A ~ {mpcb['max_current']}A\n"
-                                 f"Breaking Capacity: {mpcb['breaking_capacity']}, Trip Class: {mpcb['trip_class']}",
+                specifications=f"Current: {mpcb['min_current']}A ~ {mpcb['max_current']}A\n"
+                               f"Breaking Capacity: {mpcb['breaking_capacity']}, Trip Class: {mpcb['trip_class']}",
                 quantity=total_qty,
                 price=mpcb['price'],
                 last_price_update=f"{mpcb['supplier_name']}\n{mpcb['date']}",
@@ -173,15 +175,14 @@ class PanelController:
         if success:
             self.add_to_panel(
                 type=f"BIMETAL FOR {motor.usage.upper()}",
-                brand=bimetal.brand,
-                order_number=bimetal.order_number,
+                brand=bimetal["brand"],
+                order_number=bimetal["order_number"],
                 specifications=(
-                    f"Current: {bimetal.min_current} A - {bimetal.max_current} A\n"
-                    f"Trip Time: {bimetal.trip_time} sec"
-                ),
+                    f"Current: {bimetal['min_current']}A ~ {bimetal['max_current''']}A\n"
+                    f"Trip Time: {bimetal['trip_time']} sec"),
                 quantity=total_qty,
-                price=bimetal.component_supplier.price,
-                last_price_update=f"{bimetal.component_supplier.supplier.name}\n{bimetal.component_supplier.date}",
+                price=bimetal['price'],
+                last_price_update=f"{bimetal['supplier_name']}\n{bimetal['date']}",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
         else:
@@ -192,7 +193,7 @@ class PanelController:
                 specifications="",
                 quantity=total_qty,
                 price=0,
-                last_price_update="❌ BiMetal not found",
+                last_price_update="❌ BIMETAL not found",
                 note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
             )
             print(bimetal)
@@ -204,31 +205,32 @@ class PanelController:
         if total_qty == 0:
             return
 
-        success, vfd = get_vfd_by_power(motor.power)
+        success, vfd = get_vfd_softstarter_by_power(type="VFD", power=motor.power)
 
         if success:
-            self.add_to_panel(
-                type=f"VFD FOR {motor.usage.upper()}",
-                brand=vfd.brand,
-                order_number=vfd.order_number,
-                specifications=f"power={vfd.output_power_kw}kW\nvoltage={vfd.input_voltage}V",
-                quantity=total_qty,
-                price=vfd.component_supplier.price,
-                last_price_update=f"{vfd.component_supplier.supplier.name}\n{vfd.component_supplier.date}",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
-            )
-        else:
-            self.add_to_panel(
-                type=f"VFD FOR {motor.usage.upper()}",
-                brand="",
-                order_number="",
-                specifications="",
-                quantity=total_qty,
-                price=0,
-                last_price_update="❌ VFD not found",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
-            )
-            print(vfd)
+            if success:
+                self.add_to_panel(
+                    type=f"VFD FOR {motor.usage.upper()}",
+                    brand=vfd["brand"],
+                    order_number=vfd["order_number"],
+                    specifications= f"Power: {vfd['power']}",
+                    quantity=total_qty,
+                    price=vfd['price'],
+                    last_price_update=f"{vfd['supplier_name']}\n{vfd['date']}",
+                    note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                )
+            else:
+                self.add_to_panel(
+                    type=f"VFD FOR {motor.usage.upper()}",
+                    brand="",
+                    order_number="",
+                    specifications="",
+                    quantity=total_qty,
+                    price=0,
+                    last_price_update="❌ VFD not found",
+                    note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                )
+                print(vfd)
 
     def choose_soft_starter(self, motor, total_qty):
         """
@@ -237,85 +239,100 @@ class PanelController:
         if total_qty == 0:
             return
 
-        success, soft_starter = get_softstarter_by_power(motor.power)
-
+        success, soft_starter = get_vfd_softstarter_by_power(type="SoftStarter", power=motor.power)
         if success:
-            self.add_to_panel(
-                type=f"Soft Starter FOR {motor.usage.upper()}",
-                brand=soft_starter.brand,
-                order_number=soft_starter.order_number,
-                specifications=f"voltage={soft_starter.rated_voltage}V\npower={soft_starter.power_rating_kw}kW)",
-                quantity=total_qty,
-                price=soft_starter.component_supplier.price,
-                last_price_update=f"{soft_starter.component_supplier.supplier.name}\n{soft_starter.component_supplier.date}",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
-            )
-        else:
-            self.add_to_panel(
-                type=f"Soft Starter FOR {motor.usage.upper()}",
-                brand="",
-                order_number="",
-                specifications="",
-                quantity=total_qty,
-                price=0,
-                last_price_update="❌ Soft Starter not found",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
-            )
-            print(soft_starter)
+            if success:
+                self.add_to_panel(
+                    type=f"SoftStarter FOR {motor.usage.upper()}",
+                    brand=soft_starter["brand"],
+                    order_number=soft_starter["order_number"],
+                    specifications=f"Power: {soft_starter['power']}",
+                    quantity=total_qty,
+                    price=soft_starter['price'],
+                    last_price_update=f"{soft_starter['supplier_name']}\n{soft_starter['date']}",
+                    note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                )
+            else:
+                self.add_to_panel(
+                    type=f"SoftStarter FOR {motor.usage.upper()}",
+                    brand="",
+                    order_number="",
+                    specifications="",
+                    quantity=total_qty,
+                    price=0,
+                    last_price_update="❌ VFD not found",
+                    note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                )
+                print(soft_starter)
 
     """ ------------------------------------- Generals ------------------------------------- """
+
+    def process_item(self, motor_objects, attr_name, comp_type, specification=""):
+        success, item = get_general_by_spec(comp_type, specification)
+
+        total_qty = 0
+        notes = []
+        for motor, qty in motor_objects:
+            if qty > 0:
+                item_qty = getattr(motor, f"{attr_name}_qty", 0)
+                total_qty += qty * item_qty
+                notes.append(f"{qty}x{item_qty} for {motor.usage}")
+
+        if total_qty > 0:
+            if success:
+                self.add_to_panel(
+                    type=comp_type,
+                    brand=item.get("brand", ""),
+                    order_number=item.get("order_number", ""),
+                    specifications=item.get("specification", ""),
+                    quantity=round(total_qty, 2),
+                    price=item.get("price", 0),
+                    last_price_update=f"{item.get('supplier_name', '')}\n{item.get('date', '')}",
+                    note="\n".join(notes)
+                )
+            else:
+                self.add_to_panel(
+                    type=comp_type,
+                    brand="",
+                    order_number="",
+                    specifications="",
+                    quantity=round(total_qty, 2),
+                    price=0,
+                    last_price_update=f"❌ {comp_type} not found",
+                    note="\n".join(notes)
+                )
 
     def choose_general(self, motor_objects):
         """
         Adds general accessories like terminals, buttons, etc. based on motor needs.
         """
 
-        def process_item(attr_name, display_name, get_func, value=None):
-            total_qty = 0
-            notes = []
-            for motor, qty in motor_objects:
-                if qty > 0:
-                    item_qty = getattr(motor, f"{attr_name}_qty")
-                    total_qty += qty * item_qty
-                    notes.append(f"{qty}x{item_qty} for {motor.usage}")
-            if total_qty > 0:
-                success, item = get_func(value) if value else get_func()
-                if success:
-                    self.add_to_panel(
-                                        type=display_name,
-                                        brand=item.brand,
-                                        quantity=round(total_qty, 2),
-                                        price=item.component_supplier.price,
-                                        last_price_update=f"{item.component_supplier.supplier.name}\n{item.component_supplier.date}",
-                                        note="\n".join(notes)
-                                    )
-                else:
-                    self.add_to_panel(
-                        type=display_name,
-                        brand="",
-                        order_number="",
-                        specifications="",
-                        quantity=round(total_qty, 2),
-                        price=0,
-                        last_price_update=f"❌{display_name} not found"
-                    )
+        # Example usage
+        self.process_item(motor_objects=motor_objects, attr_name="terminal_4_qty", comp_type="Terminal",
+                          specification="4")
+        self.process_item(motor_objects=motor_objects, attr_name="terminal_6_qty", comp_type="Terminal",
+                          specification="6")
+        self.process_item(motor_objects=motor_objects, attr_name="contactor_aux_contact_qty",
+                          comp_type="Contactor Aux Contact")
+        self.process_item(motor_objects=motor_objects, attr_name="mpcb_mccb_aux_contact_qty",
+                          comp_type="MCCB Aux Contact")
+        self.process_item(motor_objects=motor_objects, attr_name="mpcb_mccb_aux_contact_qty",
+                          comp_type="MPCB Aux Contact")
+        self.process_item(motor_objects=motor_objects, attr_name="relay_1no_1nc_qty", comp_type="Relay",
+                          specification="1")
+        self.process_item(motor_objects=motor_objects, attr_name="relay_2no_2nc_qty", comp_type="Relay",
+                          specification="2")
+        self.process_item(motor_objects=motor_objects, attr_name="button_qty", comp_type="Button")
+        self.process_item(motor_objects=motor_objects, attr_name="selector_switch_qty", comp_type="Selector Switch")
 
-        process_item("lcb", "LCB", get_lcb)
-        process_item("terminal_4", "TERMINAL 4", get_terminal_by_current, 4)
-        process_item("terminal_6", "TERMINAL 6", get_terminal_by_current, 6)
-        process_item("contactor_aux_contact", "CONTACTOR AUX CONTACT", get_contactor_aux_contact)
-        process_item("mpcb_mccb_aux_contact", "MPCB/MCCB AUX CONTACT", get_mpcb_mccb_aux_contact)
-        process_item("relay_1no_1nc", "RELAY 1NO 1NC", get_relay_by_contacts, 1)
-        process_item("relay_2no_2nc", "RELAY 2NO 2NC", get_relay_by_contacts, 2)
-        process_item("button", "BUTTON", get_button)
-        process_item("selector_switch", "SELECTOR SWITCH", get_selector_switch)
-        process_item("duct_cover", "DUCT COVER", get_duct_cover)
-        process_item("miniatory_rail", "MINIATORY RAIL", get_miniatory_rail)
-        process_item("junction_box_for_speed", "JUNCTION BOX FOR SPEED", get_junction_box)
-
+        # process_item("duct_cover", "DUCT COVER", get_general_by_spec)
+        # process_item("miniatory_rail", "MINIATORY RAIL", get_general_by_spec)
+        # process_item("junction_box_for_speed", "JUNCTION BOX FOR SPEED", get_general_by_spec)
+        #
         has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
-            process_item("signal_lamp_24v", "SIGNAL LAMP 24V", get_signal_lamp, 24)
+            self.process_item(motor_objects=motor_objects, attr_name="signal_lamp_24v_qty", comp_type="Signal Lamp",
+                              specification="24")
 
     def choose_electrical_panel(self, total_motors):
         """
@@ -341,26 +358,26 @@ class PanelController:
             label = "1.2x2 (x2)"
             qty = 2
 
-        success, panel = get_electrical_panel(width=width, height=height, depth=depth)
-
-        if success:
-            self.add_to_panel(
-                type=f"ELECTRICAL PANEL {label}",
-                brand=panel.brand,
-                quantity=qty,
-                price=panel.component_supplier.price,
-                last_price_update=f"{panel.component_supplier.supplier.name}\n{panel.component_supplier.date}",
-                note=f"{panel.model}"
-            )
-        else:
-            self.add_to_panel(
-                type=f"ELECTRICAL PANEL {label}",
-                brand="Not Found",
-                quantity=qty,
-                price=0,
-                last_price_update=f"❌ELECTRICAL PANEL not found",
-            )
-            print(panel)
+        # success, panel = get_electrical_panel(width=width, height=height, depth=depth)
+        #
+        # if success:
+        #     self.add_to_panel(
+        #         type=f"ELECTRICAL PANEL {label}",
+        #         brand=panel.brand,
+        #         quantity=qty,
+        #         price=panel.component_supplier.price,
+        #         last_price_update=f"{panel.component_supplier.supplier.name}\n{panel.component_supplier.date}",
+        #         note=f"{panel.model}"
+        #     )
+        # else:
+        #     self.add_to_panel(
+        #         type=f"ELECTRICAL PANEL {label}",
+        #         brand="Not Found",
+        #         quantity=qty,
+        #         price=0,
+        #         last_price_update=f"❌ELECTRICAL PANEL not found",
+        #     )
+        #     print(panel)
 
     """ ------------------------------------- Instrument ------------------------------------- """
 
@@ -500,31 +517,43 @@ class PanelController:
 
         total_20pin = di_cards + do_cards + ai_cards + ao_cards
         if total_20pin > 0:
-            success, pin_card = get_front_connector(20)
-            if success and pin_card.component_supplier:
-                price = pin_card.component_supplier.price or 0
-                effective_date = pin_card.component_supplier.date or "Not Found"
-                brand = pin_card.brand
+            success, pin_card = get_general_by_spec(type="Front Connector", specification="20")
+            if success:
+                self.add_to_panel(
+                    type=f"FRONT CONNECTOR 20PIN FOR {motor.usage.upper()}",
+                    brand=pin_card["brand"],
+                    order_number=pin_card["order_number"],
+                    quantity=total_20pin,
+                    price=pin_card['price'],
+                    last_price_update=f"{pin_card['supplier_name']}\n{pin_card['date']}",
+                    note="Total connectors for all 16CH cards"
+                )
             else:
-                price = 0
-                effective_date = f"❌FRONT CONNECTOR not found"
-                brand = ""
-
-            self.add_to_panel(
-                type="FRONT CONNECTOR 20PIN",
-                brand=brand,
-                quantity=total_20pin,
-                price=price,
-                last_price_update=effective_date,
-                note="Total connectors for all 16CH cards"
-            )
+                self.add_to_panel(
+                    type=f"FRONT CONNECTOR 20PIN FOR {motor.usage.upper()}",
+                    brand="",
+                    order_number="",
+                    specifications="",
+                    quantity=total_20pin,
+                    price=0,
+                    last_price_update="❌ FRONT CONNECTOR not found",
+                    note="Total connectors for all 16CH cards"
+                )
 
     def _calculate_and_add_io(self, io_type, total, notes):
         if total <= 0:
             return 0
 
         cards = max(1, (total + 15) // 16)  # 16-channel cards
-        success, card = get_io_card(io_type, min_channels=16)
+        if io_type == "DI":
+            success, card = get_general_by_spec(type="DI Module", specification="16")
+        elif io_type == "DO":
+            success, card = get_general_by_spec(type="DO Module", specification="16")
+        elif io_type == "AI":
+            success, card = get_general_by_spec(type="AI Module", specification="16")
+        elif io_type == "AO":
+            success, card = get_general_by_spec(type="AO Module", specification="16")
+
         if success and card.component_supplier:
             price = card.component_supplier.price or 0
             effective_date = card.component_supplier.date or "Not Found"
@@ -751,16 +780,16 @@ class PanelController:
 
     def choose_internal_signal_wire(self, motor_objects):
         pass
+
     def choose_internal_power_wire(self, motor_objects):
         pass
 
     # ----------------------- Add Cables -----------------------
     def choose_signal_cable(self, motor_objects):
         pass
+
     def choose_power_cable(self, motor_objects):
         pass
-
-
 
     """ ------------------------------------- Calculate Motor Current ------------------------------------- """
 
