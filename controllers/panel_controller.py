@@ -4,6 +4,7 @@ from config import COSNUS_PI, ETA
 from controllers.project_details import ProjectDetails
 from models.items.bimetal import get_bimetal_by_current
 from models.items.contactor import get_contactor_by_current
+from models.items.electrical_panel import get_electrical_panel_by_spec
 from models.items.general import get_general_by_spec
 from models.items.instrument import get_instrument_by_spec
 from models.items.manifold import get_manifold
@@ -267,21 +268,21 @@ class PanelController:
 
     """ ------------------------------------- Generals ------------------------------------- """
 
-    def process_item(self, motor_objects, attr_name, comp_type, specification=""):
-        success, item = get_general_by_spec(comp_type, specification)
+    def process_panels(self, motor_objects, type):
+
+        success, item = get_electrical_panel_by_spec(type=type)
 
         total_qty = 0
         notes = []
         for motor, qty in motor_objects:
             if qty > 0:
-                item_qty = getattr(motor, f"{attr_name}_qty", 0)
-                total_qty += qty * item_qty
-                notes.append(f"{qty}x{item_qty} for {motor.usage}")
+                total_qty += qty * 1
+                notes.append(f"{qty} for {motor.usage}")
 
         if total_qty > 0:
             if success:
                 self.add_to_panel(
-                    type=comp_type,
+                    type=f"{type}",
                     brand=item.get("brand", ""),
                     order_number=item.get("order_number", ""),
                     specifications=item.get("specification", ""),
@@ -292,7 +293,41 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type=comp_type,
+                    type=f"{type}",
+                    brand="",
+                    order_number="",
+                    specifications="",
+                    quantity=round(total_qty, 2),
+                    price=0,
+                    last_price_update=f"❌ {type} not found",
+                    note="\n".join(notes)
+                )
+    def process_item(self, motor_objects, attr_name, comp_type, specification=""):
+        success, item = get_general_by_spec(comp_type, specification)
+
+        total_qty = 0
+        notes = []
+        for motor, qty in motor_objects:
+            if qty > 0:
+                item_qty = getattr(motor, attr_name, 0)
+                total_qty += qty * item_qty
+                notes.append(f"{qty}x{item_qty} for {motor.usage}")
+
+        if total_qty > 0:
+            if success:
+                self.add_to_panel(
+                    type=f"{comp_type} {specification}",
+                    brand=item.get("brand", ""),
+                    order_number=item.get("order_number", ""),
+                    specifications=item.get("specification", ""),
+                    quantity=round(total_qty, 2),
+                    price=item.get("price", 0),
+                    last_price_update=f"{item.get('supplier_name', '')}\n{item.get('date', '')}",
+                    note="\n".join(notes)
+                )
+            else:
+                self.add_to_panel(
+                    type=f"{comp_type} {specification}",
                     brand="",
                     order_number="",
                     specifications="",
@@ -327,7 +362,8 @@ class PanelController:
 
         # process_item("duct_cover", "DUCT COVER", get_general_by_spec)
         # process_item("miniatory_rail", "MINIATORY RAIL", get_general_by_spec)
-        # process_item("junction_box_for_speed", "JUNCTION BOX FOR SPEED", get_general_by_spec)
+        self.process_panels(motor_objects=motor_objects, type="Junction Box")
+
         #
         has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
@@ -340,44 +376,43 @@ class PanelController:
         """
         if total_motors == 0:
             return
-
-        if total_motors < 3:
+        elif total_motors < 3:
             width, height, depth = 80, 100, 25
-            label = "0.8x1"
             qty = 1
         elif total_motors < 4:
             width, height, depth = 80, 160, 25
-            label = "0.8x1.6"
             qty = 1
         elif total_motors < 8:
             width, height, depth = 120, 220, 30
-            label = "1.2x2.2"
             qty = 1
         else:
             width, height, depth = 120, 200, 30
-            label = "1.2x2 (x2)"
             qty = 2
 
-        # success, panel = get_electrical_panel(width=width, height=height, depth=depth)
-        #
-        # if success:
-        #     self.add_to_panel(
-        #         type=f"ELECTRICAL PANEL {label}",
-        #         brand=panel.brand,
-        #         quantity=qty,
-        #         price=panel.component_supplier.price,
-        #         last_price_update=f"{panel.component_supplier.supplier.name}\n{panel.component_supplier.date}",
-        #         note=f"{panel.model}"
-        #     )
-        # else:
-        #     self.add_to_panel(
-        #         type=f"ELECTRICAL PANEL {label}",
-        #         brand="Not Found",
-        #         quantity=qty,
-        #         price=0,
-        #         last_price_update=f"❌ELECTRICAL PANEL not found",
-        #     )
-        #     print(panel)
+        success, electrical_panel = get_electrical_panel_by_spec(type="Electrical Panel", width=width, height=height,
+                                                                 depth=depth)
+        if success:
+            self.add_to_panel(
+                type="Electrical Panel",
+                brand=electrical_panel.get("brand", ""),
+                order_number="",
+                specifications=f"{width}mm x {height}mm x {depth}mm",
+                quantity=qty,
+                price=electrical_panel.get("price", 0),
+                last_price_update=f"{electrical_panel.get('supplier_name', '')}\n{electrical_panel.get('date', '')}",
+                note=f"total motors: {total_motors}"
+            )
+        else:
+            self.add_to_panel(
+                type="Electrical Panel",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=qty,
+                price=0,
+                last_price_update="❌ Electrical Panel not found",
+                note=f"total motors: {total_motors}"
+            )
 
     """ ------------------------------------- Instrument ------------------------------------- """
 

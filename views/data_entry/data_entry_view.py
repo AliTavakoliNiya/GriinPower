@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QTableView
 from controllers.user_session import UserSession
 from views.data_entry.bimetal_data_entry_view import BimetalDataEntryView
 from views.data_entry.contactor_data_entry_view import ContactorDataEntryView
+from views.data_entry.electrical_panel_data_entry_view import ElectricalPanelDataEntryView
 from views.data_entry.electro_motor_data_entry_view import ElectroMotorDataEntryView
 from views.data_entry.general_data_entry_view import GeneralDataEntryView
 from views.data_entry.instrument_data_entry_view import InstrumentDataEntryView
@@ -74,7 +75,9 @@ class DataEntry(QMainWindow):
             BimetalDataEntryView(self)
         elif index == 7:
             VFDSoftStarterDataEntryView(self)
-        elif index == 8:
+        elif index == 9:
+            ElectricalPanelDataEntryView(self)
+        elif index == 10:
             GeneralDataEntryView(self)
 
 
@@ -82,7 +85,7 @@ class DataEntry(QMainWindow):
         self.venor_application_window = SupplierEntry(parent=self)
 
     def load_suppliers(self):
-        suppliers = ["--------", "Elica electric", "Asam kala"]
+        suppliers = ["--------", "Elica electric", "Asam kala", "Arman control tajhiz part"]
         self.plc_supplier_list.addItems(suppliers)
         self.instrument_supplier_list.addItems(suppliers)
         self.contactor_supplier_list.addItems(suppliers)
@@ -91,6 +94,7 @@ class DataEntry(QMainWindow):
         self.bimetal_supplier_list.addItems(suppliers)
         self.general_supplier.addItems(suppliers)
         self.vfd_softstarter_supplier.addItems(suppliers)
+        self.electrical_panel_supplier.addItems(suppliers)
 
     def hide_show_item_stack_btn_func(self):
         # Toggle visibility of motor_list table view

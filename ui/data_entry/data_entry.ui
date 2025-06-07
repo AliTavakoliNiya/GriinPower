@@ -901,77 +901,7 @@ QListWidget::item:selected {
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_11">
-    <item row="2" column="2" colspan="2">
-     <widget class="QPushButton" name="hide_show_item_stack_btn">
-      <property name="maximumSize">
-       <size>
-        <width>17</width>
-        <height>17</height>
-       </size>
-      </property>
-      <property name="toolTip">
-       <string>Show/Hide Add New Motor</string>
-      </property>
-      <property name="text">
-       <string>⏪</string>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>17</width>
-        <height>17</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="4">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="3" column="0">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="4" column="2">
-     <spacer name="verticalSpacer_9">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="1" rowspan="2">
+    <item row="1" column="1" rowspan="2">
      <widget class="QListWidget" name="item_list">
       <property name="minimumSize">
        <size>
@@ -1030,6 +960,16 @@ QListWidget::item:selected {
       </item>
       <item>
        <property name="text">
+        <string>New Item</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>EL.Panel/LCB/JB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Generals</string>
        </property>
       </item>
@@ -1051,8 +991,8 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="0" column="1">
-     <spacer name="verticalSpacer_8">
+    <item row="3" column="2">
+     <spacer name="verticalSpacer_9">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -1067,17 +1007,7 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="3" column="3">
-     <widget class="QTableView" name="history_list">
-      <property name="minimumSize">
-       <size>
-        <width>540</width>
-        <height>540</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
+    <item row="2" column="2">
      <widget class="QStackedWidget" name="item_stack">
       <property name="maximumSize">
        <size>
@@ -1098,7 +1028,7 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>7</number>
+       <number>9</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -1120,150 +1050,6 @@ QListWidget::item:selected {
            <string>Electrical Motor</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
-           <item row="19" column="6">
-            <widget class="QLabel" name="label_65">
-             <property name="text">
-              <string>*Special/Routine</string>
-             </property>
-            </widget>
-           </item>
-           <item row="16" column="7">
-            <widget class="QComboBox" name="motor_phone_email">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Calibri</family>
-               <pointsize>10</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <item>
-              <property name="text">
-               <string>----------</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>By Phone</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>By Email</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="16" column="0">
-            <widget class="QPushButton" name="motor_add_supplier_btn">
-             <property name="maximumSize">
-              <size>
-               <width>16</width>
-               <height>16</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0" colspan="2">
-            <widget class="QLabel" name="label_13">
-             <property name="text">
-              <string>Starting Method</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="6">
-            <widget class="QLabel" name="label_22">
-             <property name="text">
-              <string>Efficiency Class</string>
-             </property>
-            </widget>
-           </item>
-           <item row="16" column="6">
-            <widget class="QLabel" name="label_64">
-             <property name="text">
-              <string>*Phone/Email</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QSpinBox" name="motor_power">
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::NoButtons</enum>
-             </property>
-             <property name="maximum">
-              <number>999</number>
-             </property>
-            </widget>
-           </item>
-           <item row="19" column="0" colspan="2">
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>*Price</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="6">
-            <widget class="QLabel" name="label_20">
-             <property name="text">
-              <string>Cooling Method</string>
-             </property>
-            </widget>
-           </item>
-           <item row="23" column="0">
-            <spacer name="verticalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="6" column="0" colspan="2">
-            <widget class="QLabel" name="label_21">
-             <property name="text">
-              <string>IP</string>
-             </property>
-            </widget>
-           </item>
-           <item row="16" column="1">
-            <widget class="QLabel" name="label_10">
-             <property name="text">
-              <string>*Supplier</string>
-             </property>
-            </widget>
-           </item>
            <item row="4" column="7">
             <widget class="QComboBox" name="motor_cooling_method">
              <property name="minimumSize">
@@ -1300,51 +1086,6 @@ QListWidget::item:selected {
              </item>
             </widget>
            </item>
-           <item row="8" column="7">
-            <widget class="QComboBox" name="motor_paiting_ral">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <item>
-              <property name="text">
-               <string>----------</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>7032</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>7030</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="3" column="0" colspan="2">
-            <widget class="QLabel" name="label_23">
-             <property name="text">
-              <string>*Rated Voltage</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="6">
-            <widget class="QLabel" name="label_12">
-             <property name="text">
-              <string>*R.P.M.</string>
-             </property>
-            </widget>
-           </item>
            <item row="8" column="6">
             <widget class="QLabel" name="label_24">
              <property name="text">
@@ -1352,21 +1093,8 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="1" column="0" colspan="2">
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>*Power (KW)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="7">
-            <widget class="QSpinBox" name="motor_rpm">
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>16777215</height>
-              </size>
-             </property>
+           <item row="1" column="2">
+            <widget class="QDoubleSpinBox" name="motor_power">
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
@@ -1374,245 +1102,8 @@ QListWidget::item:selected {
               <enum>QAbstractSpinBox::NoButtons</enum>
              </property>
              <property name="maximum">
-              <number>9999</number>
+              <double>999.000000000000000</double>
              </property>
-            </widget>
-           </item>
-           <item row="24" column="0" colspan="10" alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="motor_save_btn">
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>💾 Save To Database</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="7">
-            <widget class="QComboBox" name="motor_efficiency_class">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <item>
-              <property name="text">
-               <string>----------</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>IE1</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>IE2</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>IE3</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>IE4</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="8" column="0" colspan="2">
-            <widget class="QLabel" name="label_25">
-             <property name="text">
-              <string>Thermal Protection</string>
-             </property>
-            </widget>
-           </item>
-           <item row="20" column="2">
-            <widget class="QRadioButton" name="motor_irr">
-             <property name="text">
-              <string>IRR</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-             <attribute name="buttonGroup">
-              <string notr="true">motor_currency</string>
-             </attribute>
-            </widget>
-           </item>
-           <item row="19" column="7">
-            <widget class="QComboBox" name="motor_special_routine">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Calibri</family>
-               <pointsize>10</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <item>
-              <property name="text">
-               <string>----------</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Special</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Routine</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="20" column="3">
-            <widget class="QRadioButton" name="motor_usd">
-             <property name="text">
-              <string>USD</string>
-             </property>
-             <attribute name="buttonGroup">
-              <string notr="true">motor_currency</string>
-             </attribute>
-            </widget>
-           </item>
-           <item row="20" column="4">
-            <widget class="QRadioButton" name="motor_eur">
-             <property name="text">
-              <string>EUR</string>
-             </property>
-             <attribute name="buttonGroup">
-              <string notr="true">motor_currency</string>
-             </attribute>
-            </widget>
-           </item>
-           <item row="13" column="2">
-            <spacer name="verticalSpacer_11">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Minimum</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="3" column="2">
-            <widget class="QSpinBox" name="motor_voltage">
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::NoButtons</enum>
-             </property>
-             <property name="maximum">
-              <number>9999</number>
-             </property>
-            </widget>
-           </item>
-           <item row="16" column="2" colspan="3">
-            <widget class="QComboBox" name="motor_supplier">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Calibri</family>
-               <pointsize>10</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <item>
-              <property name="text">
-               <string>----------</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Jemco</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Roshd Sanaat</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Motogen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Electrogen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Siemens</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>ABB</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>VEM</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Helmeck</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="8" column="2" colspan="3">
@@ -1659,8 +1150,140 @@ QListWidget::item:selected {
              </item>
             </widget>
            </item>
-           <item row="6" column="2" colspan="3">
-            <widget class="QComboBox" name="motor_ip">
+           <item row="8" column="7">
+            <widget class="QComboBox" name="motor_paiting_ral">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>7032</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>7030</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="16" column="1">
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>*Supplier</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="6">
+            <widget class="QLabel" name="label_20">
+             <property name="text">
+              <string>Cooling Method</string>
+             </property>
+            </widget>
+           </item>
+           <item row="19" column="7">
+            <widget class="QComboBox" name="motor_special_routine">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Calibri</family>
+               <pointsize>10</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Special</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Routine</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="6" column="7">
+            <widget class="QComboBox" name="motor_efficiency_class">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IE1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IE2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IE3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IE4</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="9" column="0" colspan="2">
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>*Brand</string>
+             </property>
+            </widget>
+           </item>
+           <item row="19" column="2" colspan="3">
+            <widget class="QLineEdit" name="motor_price">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1673,22 +1296,124 @@ QListWidget::item:selected {
                <height>16777215</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>----------</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>55</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>54</string>
-              </property>
-             </item>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
+           </item>
+           <item row="20" column="2">
+            <widget class="QRadioButton" name="motor_irr">
+             <property name="text">
+              <string>IRR</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">motor_currency</string>
+             </attribute>
+            </widget>
+           </item>
+           <item row="6" column="6">
+            <widget class="QLabel" name="label_22">
+             <property name="text">
+              <string>Efficiency Class</string>
+             </property>
+            </widget>
+           </item>
+           <item row="19" column="0" colspan="2">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>*Price</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QDoubleSpinBox" name="motor_voltage">
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <double>999.990000000000009</double>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>*R.P.M.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>*Power (KW)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="24" column="0" colspan="10" alignment="Qt::AlignRight">
+            <widget class="QPushButton" name="motor_save_btn">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>💾 Save To Database</string>
+             </property>
+            </widget>
+           </item>
+           <item row="16" column="0">
+            <widget class="QPushButton" name="motor_add_supplier_btn">
+             <property name="maximumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0" colspan="2">
+            <widget class="QLabel" name="label_25">
+             <property name="text">
+              <string>Thermal Protection</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0" colspan="2">
+            <widget class="QLabel" name="label_21">
+             <property name="text">
+              <string>IP</string>
+             </property>
+            </widget>
+           </item>
+           <item row="23" column="0">
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
            <item row="4" column="2" colspan="3">
             <widget class="QComboBox" name="motor_starting_method">
@@ -1726,25 +1451,10 @@ QListWidget::item:selected {
              </item>
             </widget>
            </item>
-           <item row="19" column="2" colspan="3">
-            <widget class="QLineEdit" name="motor_price">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
-             </property>
+           <item row="4" column="0" colspan="2">
+            <widget class="QLabel" name="label_13">
              <property name="text">
-              <string>0</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <string>Starting Method</string>
              </property>
             </widget>
            </item>
@@ -1817,11 +1527,248 @@ QListWidget::item:selected {
              </item>
             </widget>
            </item>
-           <item row="9" column="0" colspan="2">
-            <widget class="QLabel" name="label_11">
+           <item row="20" column="4">
+            <widget class="QRadioButton" name="motor_eur">
              <property name="text">
-              <string>*Brand</string>
+              <string>EUR</string>
              </property>
+             <attribute name="buttonGroup">
+              <string notr="true">motor_currency</string>
+             </attribute>
+            </widget>
+           </item>
+           <item row="1" column="7">
+            <widget class="QSpinBox" name="motor_rpm">
+             <property name="maximumSize">
+              <size>
+               <width>50</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <number>9999</number>
+             </property>
+            </widget>
+           </item>
+           <item row="20" column="3">
+            <widget class="QRadioButton" name="motor_usd">
+             <property name="text">
+              <string>USD</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">motor_currency</string>
+             </attribute>
+            </widget>
+           </item>
+           <item row="16" column="6">
+            <widget class="QLabel" name="label_64">
+             <property name="text">
+              <string>*Phone/Email</string>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="2">
+            <spacer name="verticalSpacer_11">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="0" colspan="2">
+            <widget class="QLabel" name="label_23">
+             <property name="text">
+              <string>*Rated Voltage(KV)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="16" column="2" colspan="3">
+            <widget class="QComboBox" name="motor_supplier">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Calibri</family>
+               <pointsize>10</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Jemco</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Roshd Sanaat</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Motogen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Electrogen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Siemens</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ABB</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>VEM</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Helmeck</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="16" column="7">
+            <widget class="QComboBox" name="motor_phone_email">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Calibri</family>
+               <pointsize>10</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>By Phone</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>By Email</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="19" column="6">
+            <widget class="QLabel" name="label_65">
+             <property name="text">
+              <string>*Special/Routine</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2" colspan="3">
+            <widget class="QComboBox" name="motor_ip">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP20</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP31</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP44</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP54</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP55</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP65</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP66</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP67</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP68</string>
+              </property>
+             </item>
             </widget>
            </item>
           </layout>
@@ -3865,6 +3812,404 @@ QListWidget::item:selected {
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="wire_cable"/>
+      <widget class="QWidget" name="electrical_panels">
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="groupBox_11">
+          <property name="title">
+           <string>ElectricalPanel_LCB_JB</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_21">
+           <item row="8" column="0">
+            <widget class="QPushButton" name="electrical_panel_add_supplier_btn">
+             <property name="maximumSize">
+              <size>
+               <width>16</width>
+               <height>16</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="3" colspan="6" alignment="Qt::AlignRight">
+            <widget class="QPushButton" name="electrical_panel_save_btn">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>💾 Save To Database</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0" colspan="2">
+            <widget class="QLabel" name="label_75">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Price (IRR)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QLabel" name="label_69">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
+            <widget class="QLabel" name="general_spec_label_4">
+             <property name="text">
+              <string>*height (mm)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="3" colspan="6">
+            <widget class="QLineEdit" name="electrical_panel_price">
+             <property name="maximumSize">
+              <size>
+               <width>120</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <widget class="QLabel" name="general_spec_label_3">
+             <property name="text">
+              <string>*Width (mm)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QLabel" name="label_70">
+             <property name="maximumSize">
+              <size>
+               <width>51</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Supplier</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="6">
+            <widget class="QDoubleSpinBox" name="electrical_panel_height">
+             <property name="minimumSize">
+              <size>
+               <width>62</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <double>9999.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" colspan="2">
+            <widget class="QLabel" name="label_76">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Brand</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="4">
+            <spacer name="verticalSpacer_28">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="8">
+            <widget class="QDoubleSpinBox" name="electrical_panel_depth">
+             <property name="minimumSize">
+              <size>
+               <width>62</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <double>9999.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="3">
+            <spacer name="verticalSpacer_29">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="3" colspan="2">
+            <widget class="QComboBox" name="electrical_panel_type">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Electrical Panel</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Junction Box</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Local Box</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="6" alignment="Qt::AlignRight">
+            <widget class="QLabel" name="label_77">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>IP</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="3" colspan="6">
+            <widget class="QComboBox" name="electrical_panel_supplier">
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="7">
+            <widget class="QLabel" name="general_spec_label_5">
+             <property name="text">
+              <string>*depth (mm)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="4">
+            <widget class="QDoubleSpinBox" name="electrical_panel_width">
+             <property name="minimumSize">
+              <size>
+               <width>62</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <double>9999.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="3">
+            <spacer name="verticalSpacer_31">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="7">
+            <widget class="QComboBox" name="electrical_panel_ip_rating">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP20</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP31</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP44</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP54</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP55</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP65</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP66</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP67</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>IP68</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <spacer name="verticalSpacer_32">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="5" column="3" colspan="3">
+            <widget class="QLineEdit" name="electrical_panel_brand">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>184</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="generals">
        <layout class="QGridLayout" name="gridLayout_17">
         <item row="0" column="0">
@@ -4168,18 +4513,95 @@ QListWidget::item:selected {
       </widget>
      </widget>
     </item>
+    <item row="2" column="0">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="2" colspan="2">
+     <widget class="QPushButton" name="hide_show_item_stack_btn">
+      <property name="maximumSize">
+       <size>
+        <width>17</width>
+        <height>17</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Show/Hide Add New Motor</string>
+      </property>
+      <property name="text">
+       <string>⏪</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>17</width>
+        <height>17</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QTableView" name="history_list">
+      <property name="minimumSize">
+       <size>
+        <width>540</width>
+        <height>540</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="1">
+     <spacer name="verticalSpacer_8">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
   <tabstop>item_list</tabstop>
-  <tabstop>motor_power</tabstop>
   <tabstop>motor_rpm</tabstop>
-  <tabstop>motor_voltage</tabstop>
   <tabstop>motor_starting_method</tabstop>
   <tabstop>motor_cooling_method</tabstop>
-  <tabstop>motor_ip</tabstop>
   <tabstop>motor_efficiency_class</tabstop>
   <tabstop>motor_thermal_protection</tabstop>
   <tabstop>motor_paiting_ral</tabstop>

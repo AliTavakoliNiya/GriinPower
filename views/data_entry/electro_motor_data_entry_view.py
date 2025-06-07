@@ -61,7 +61,7 @@ class ElectroMotorDataEntryView:
     def save_motor_to_db_func(self):
         power = self.ui.motor_power.value() * 1000
         rpm = self.ui.motor_rpm.value()
-        voltage = self.ui.motor_voltage.value()
+        voltage = self.ui.motor_voltage.value() * 1000
         brand = self.ui.motor_brand.currentText().strip() if self.ui.motor_brand.currentIndex() else None
         supplier = self.ui.motor_supplier.currentText().strip() if self.ui.motor_supplier.currentIndex() else None
         phone_email = self.ui.motor_phone_email.currentText().strip() if self.ui.motor_phone_email.currentIndex() else None
