@@ -1,16 +1,22 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox
-from controllers.project_details import ProjectDetails
+from controllers.project_datas import ProjectDatas
 from views.message_box_view import show_message
 
 
 class ProjectInformationTab(QWidget):
-    def __init__(self):
+    def __init__(self, main_view):
         super().__init__()
         uic.loadUi("ui/project/project_information_tab.ui", self)
+        self.main_view = main_view
 
-        self.project_details = ProjectDetails()
+        self.electrical_specs = ProjectDatas().project_electrical_specs
         self._initialize_info()
+        self.rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
+
+    def on_selection_rev_hint_change(self, index):
+        if index != 0: # rev 00 has no hint
+            self.main_view.set_rev_hint(rev_specs=self.electrical_specs, rev_number=self.rev_hint_combo.currentText())
 
     def _initialize_info(self):
         """ --------------------------- Project Information --------------------------- """
@@ -73,7 +79,7 @@ class ProjectInformationTab(QWidget):
                 return
 
         # Navigate to the right location in the dictionary
-        target = self.project_details
+        target = self.electrical_specs
         for key in path_list[:-1]:
             target = target[key]
 
@@ -173,7 +179,7 @@ class ProjectInformationTab(QWidget):
             return False
 
         """ Project AVL"""
-        proj_avl = self.project_details["project_info"]["proj_avl"]
+        proj_avl = self.electrical_specs["project_info"]["proj_avl"]
         for name, checkbox in [("Siemens", self.proj_avl_siemens), ("Schneider Electric", self.proj_avl_schneider), ("Hyundai", self.proj_avl_hyundai)]:
             if checkbox.isChecked() and name not in proj_avl:
                 proj_avl.append(name)

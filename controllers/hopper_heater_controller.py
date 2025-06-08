@@ -13,7 +13,7 @@ class HopperHeaterController(PanelController):
         Main controller for building a hopper heater panel from project specifications.
         """
         # ----------------------- Initialize Motors -----------------------
-        motors_config = self.project_details["hopper_heater"]["motors"]
+        motors_config = self.electrical_specs["hopper_heater"]["motors"]
         hopper_heater = Motor(motors_config["elements"]["power"],
                    usage="Hopper Heater",
                    plc_di=4,
@@ -27,7 +27,7 @@ class HopperHeaterController(PanelController):
                    selector_switch_qty=0,
                    signal_lamp_24v_qty=0)
         hopper_heater.current = self.calculate_motor_current(power=hopper_heater.power)
-        self.project_details["hopper_heater"]["motors"]["elements"]["motor"] = hopper_heater
+        self.electrical_specs["hopper_heater"]["motors"]["elements"]["motor"] = hopper_heater
         motor_objects = [(hopper_heater, motors_config["elements"]["qty"])]
         motor_objects[0][0].temperature_meter = 2
 
@@ -39,7 +39,7 @@ class HopperHeaterController(PanelController):
         # bi_metal???
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        instruments = self.project_details["hopper_heater"]["instruments"]
+        instruments = self.electrical_specs["hopper_heater"]["instruments"]
         self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------
@@ -59,7 +59,7 @@ class HopperHeaterController(PanelController):
             self.choose_electrical_panel(total_motors)
 
         # ----------------------- Add instruments -----------------------
-        instruments = self.project_details["hopper_heater"]["instruments"]
+        instruments = self.electrical_specs["hopper_heater"]["instruments"]
         self.choose_instruments(instruments)
 
         return self.panel

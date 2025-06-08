@@ -1028,7 +1028,7 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>9</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -3841,19 +3841,6 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="12" column="3" colspan="6" alignment="Qt::AlignRight">
-            <widget class="QPushButton" name="electrical_panel_save_btn">
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>💾 Save To Database</string>
-             </property>
-            </widget>
-           </item>
            <item row="10" column="0" colspan="2">
             <widget class="QLabel" name="label_75">
              <property name="maximumSize">
@@ -3880,14 +3867,7 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="3" column="5">
-            <widget class="QLabel" name="general_spec_label_4">
-             <property name="text">
-              <string>*height (mm)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="3" colspan="6">
+           <item row="10" column="5" colspan="6">
             <widget class="QLineEdit" name="electrical_panel_price">
              <property name="maximumSize">
               <size>
@@ -3903,27 +3883,21 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="3" column="3">
+           <item row="3" column="7">
+            <widget class="QLabel" name="general_spec_label_4">
+             <property name="text">
+              <string>*height (mm)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
             <widget class="QLabel" name="general_spec_label_3">
              <property name="text">
               <string>*Width (mm)</string>
              </property>
             </widget>
            </item>
-           <item row="8" column="1">
-            <widget class="QLabel" name="label_70">
-             <property name="maximumSize">
-              <size>
-               <width>51</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>*Supplier</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="6">
+           <item row="3" column="8">
             <widget class="QDoubleSpinBox" name="electrical_panel_height">
              <property name="minimumSize">
               <size>
@@ -3948,58 +3922,20 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="5" column="0" colspan="2">
-            <widget class="QLabel" name="label_76">
+           <item row="8" column="1">
+            <widget class="QLabel" name="label_70">
              <property name="maximumSize">
               <size>
-               <width>73</width>
+               <width>51</width>
                <height>16777215</height>
               </size>
              </property>
              <property name="text">
-              <string>*Brand</string>
+              <string>*Supplier</string>
              </property>
             </widget>
            </item>
-           <item row="11" column="4">
-            <spacer name="verticalSpacer_28">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="3" column="8">
-            <widget class="QDoubleSpinBox" name="electrical_panel_depth">
-             <property name="minimumSize">
-              <size>
-               <width>62</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>100</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::NoButtons</enum>
-             </property>
-             <property name="maximum">
-              <double>9999.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="3">
+           <item row="7" column="5">
             <spacer name="verticalSpacer_29">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -4015,7 +3951,7 @@ QListWidget::item:selected {
              </property>
             </spacer>
            </item>
-           <item row="1" column="3" colspan="2">
+           <item row="1" column="5" colspan="2">
             <widget class="QComboBox" name="electrical_panel_type">
              <property name="maximumSize">
               <size>
@@ -4045,8 +3981,8 @@ QListWidget::item:selected {
              </item>
             </widget>
            </item>
-           <item row="1" column="6" alignment="Qt::AlignRight">
-            <widget class="QLabel" name="label_77">
+           <item row="5" column="0" colspan="2">
+            <widget class="QLabel" name="label_76">
              <property name="maximumSize">
               <size>
                <width>73</width>
@@ -4054,29 +3990,25 @@ QListWidget::item:selected {
               </size>
              </property>
              <property name="text">
-              <string>IP</string>
+              <string>*Brand</string>
              </property>
             </widget>
            </item>
-           <item row="8" column="3" colspan="6">
-            <widget class="QComboBox" name="electrical_panel_supplier">
-             <property name="maximumSize">
+           <item row="11" column="6">
+            <spacer name="verticalSpacer_28">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
               <size>
-               <width>180</width>
-               <height>16777215</height>
+               <width>20</width>
+               <height>40</height>
               </size>
              </property>
-            </widget>
+            </spacer>
            </item>
-           <item row="3" column="7">
-            <widget class="QLabel" name="general_spec_label_5">
-             <property name="text">
-              <string>*depth (mm)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="4">
-            <widget class="QDoubleSpinBox" name="electrical_panel_width">
+           <item row="3" column="10">
+            <widget class="QDoubleSpinBox" name="electrical_panel_depth">
              <property name="minimumSize">
               <size>
                <width>62</width>
@@ -4100,23 +4032,37 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="4" column="3">
-            <spacer name="verticalSpacer_31">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
+           <item row="3" column="9">
+            <widget class="QLabel" name="general_spec_label_5">
+             <property name="text">
+              <string>*depth (mm)</string>
              </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Minimum</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
+            </widget>
+           </item>
+           <item row="1" column="8" alignment="Qt::AlignRight">
+            <widget class="QLabel" name="label_77">
+             <property name="maximumSize">
               <size>
-               <width>20</width>
-               <height>40</height>
+               <width>73</width>
+               <height>16777215</height>
               </size>
              </property>
-            </spacer>
+             <property name="text">
+              <string>IP</string>
+             </property>
+            </widget>
            </item>
-           <item row="1" column="7">
+           <item row="8" column="5" colspan="6">
+            <widget class="QComboBox" name="electrical_panel_supplier">
+             <property name="maximumSize">
+              <size>
+               <width>180</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="9">
             <widget class="QComboBox" name="electrical_panel_ip_rating">
              <property name="maximumSize">
               <size>
@@ -4176,7 +4122,23 @@ QListWidget::item:selected {
              </item>
             </widget>
            </item>
-           <item row="2" column="3">
+           <item row="4" column="5">
+            <spacer name="verticalSpacer_31">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="5">
             <spacer name="verticalSpacer_32">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -4192,7 +4154,32 @@ QListWidget::item:selected {
              </property>
             </spacer>
            </item>
-           <item row="5" column="3" colspan="3">
+           <item row="3" column="6">
+            <widget class="QDoubleSpinBox" name="electrical_panel_width">
+             <property name="minimumSize">
+              <size>
+               <width>62</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <double>9999.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="5" colspan="3">
             <widget class="QLineEdit" name="electrical_panel_brand">
              <property name="minimumSize">
               <size>
@@ -4205,6 +4192,48 @@ QListWidget::item:selected {
                <width>184</width>
                <height>16777215</height>
               </size>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="0" colspan="2">
+            <widget class="QLabel" name="label_78">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Date</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="9" colspan="2">
+            <widget class="QPushButton" name="electrical_panel_save_btn">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>💾 Save To Database</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="5">
+            <widget class="QLineEdit" name="electrical_electrical_date">
+             <property name="maximumSize">
+              <size>
+               <width>120</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>1404/03/30</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>

@@ -16,13 +16,13 @@ class VibrationController(PanelController):
         Main controller for building a vibration panel from project specifications.
         """
         # ----------------------- Initialize Motors -----------------------
-        motors_config = self.project_details["vibration"]["motors"]
+        motors_config = self.electrical_specs["vibration"]["motors"]
         vibration = Motor(motors_config["vibration"]["power"],
                    usage="Vibration Motor",
                    plc_di=4,
                    junction_box_for_speed_qty=0)
         vibration.current = self.calculate_motor_current(power=vibration.power)
-        self.project_details["vibration"]["motors"]["vibration"]["motor"] = vibration
+        self.electrical_specs["vibration"]["motors"]["vibration"]["motor"] = vibration
         motor_objects = [(vibration, motors_config["vibration"]["qty"])]
 
         # ----------------------- Add Components for Motors -----------------------
@@ -36,7 +36,7 @@ class VibrationController(PanelController):
             self.choose_bimetal(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        instruments = self.project_details["vibration"]["instruments"]
+        instruments = self.electrical_specs["vibration"]["instruments"]
         self.calculate_plc_io_requirements(motor_objects, instruments)
 
 

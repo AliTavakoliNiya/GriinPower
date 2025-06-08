@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QWidget, QSpinBox, QComboBox, QLineEdit, QCheckBox
 from docx import Document
 import jdatetime
 
-from controllers.project_details import ProjectDetails
+from controllers.project_datas import ProjectDatas
 from controllers.user_session import UserSession
 from views.message_box_view import show_message
 
@@ -17,7 +17,7 @@ class ElectricalTab(QWidget):
     def __init__(self):
         super().__init__()
         uic.loadUi("ui/project/electrical_tab.ui", self)
-        self.project_details = ProjectDetails()
+        self.electrical_specs = ProjectDatas().project_electrical_specs
         self._initialize_components()
 
     def _initialize_components(self):
@@ -199,10 +199,10 @@ class ElectricalTab(QWidget):
             required_switches = value * 2
             if self.transport_zs_qty.value() < required_switches:
                 self.transport_zs_qty.setValue(required_switches)
-                self.project_details["transport"]["instruments"]["proximity_switch"]["qty"] = required_switches
+                self.electrical_specs["transport"]["instruments"]["proximity_switch"]["qty"] = required_switches
         else:
             self.transport_zs_qty.setValue(0)
-            self.project_details["transport"]["instruments"]["proximity_switch"]["qty"] = 0
+            self.electrical_specs["transport"]["instruments"]["proximity_switch"]["qty"] = 0
 
     def _handle_slide_gate_kw_changed(self):
         self._handle_combobox_float_kilo(["transport", "motors", "slide_gate", "power"])
@@ -262,7 +262,7 @@ class ElectricalTab(QWidget):
             required_switches = self.freshair_motor_qty.value() * 2
             if self.freshair_zs_qty.value() < required_switches:
                 self.freshair_zs_qty.setValue(required_switches)
-                self.project_details["fresh_air"]["instruments"]["proximity_switch"]["qty"] = required_switches
+                self.electrical_specs["fresh_air"]["instruments"]["proximity_switch"]["qty"] = required_switches
 
     def _handle_freshair_motor_kw_changed(self):
         self._handle_combobox_float_kilo(["fresh_air", "motors", "freshair_motor", "power"])
@@ -309,7 +309,7 @@ class ElectricalTab(QWidget):
 
         """ ------------Update PTC qty based on heater qty ------------ """
         ptc_qty = value * 2
-        self.project_details["hopper_heater"]["instruments"]["ptc"]["qty"] = ptc_qty
+        self.electrical_specs["hopper_heater"]["instruments"]["ptc"]["qty"] = ptc_qty
         self.hopper_heater_ptc_qty.setText(f"Qty: {ptc_qty}")
 
     def _handle_hopper_heater_kw_changed(self):
@@ -442,7 +442,7 @@ class ElectricalTab(QWidget):
             return
 
         """ ------------Update the project details ------------ """
-        self.project_details["transport"]["motors"][motor_type]["qty"] = widget.value()
+        self.electrical_specs["transport"]["motors"][motor_type]["qty"] = widget.value()
 
         """ ------------Calculate total rotary/screw motors ------------ """
         total_motors = (self.rotary_qty.value() +
@@ -452,18 +452,18 @@ class ElectricalTab(QWidget):
         """ ------------Update speed detector quantity based on total motors ------------ """
         if total_motors == 0:
             self.transport_spd_qty.setValue(0)
-            self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = 0
+            self.electrical_specs["transport"]["instruments"]["speed_detector"]["qty"] = 0
         elif self.transport_spd_qty.value() < total_motors:
             self.transport_spd_qty.setValue(total_motors)
-            self.project_details["transport"]["instruments"]["speed_detector"]["qty"] = total_motors
+            self.electrical_specs["transport"]["instruments"]["speed_detector"]["qty"] = total_motors
 
     def _handle_transport_checkbox_changed(self, state):
         """Handle transport section enabling/disabling"""
         enabled = state == Qt.Checked
-        self.project_details["transport"]["status"] = enabled
+        self.electrical_specs["transport"]["status"] = enabled
 
         if not enabled:
-            self._reset_qtys(self.project_details["transport"])
+            self._reset_qtys(self.electrical_specs["transport"])
 
         self._reset_section_widgets(self.transport_gbox, enabled)
         self.transport_checkbox.setEnabled(True)
@@ -471,10 +471,10 @@ class ElectricalTab(QWidget):
     def _handle_vibration_checkbox_changed(self, state):
         """Handle vibration section enabling/disabling"""
         enabled = state == Qt.Checked
-        self.project_details["vibration"]["status"] = enabled
+        self.electrical_specs["vibration"]["status"] = enabled
 
         if not enabled:
-            self._reset_qtys(self.project_details["vibration"])
+            self._reset_qtys(self.electrical_specs["vibration"])
 
         self._reset_section_widgets(self.vibration_gbox, enabled)
         self.vibration_checkbox.setEnabled(True)
@@ -482,10 +482,10 @@ class ElectricalTab(QWidget):
     def _handle_freshair_checkbox_changed(self, state):
         """Handle fresh air section enabling/disabling"""
         enabled = state == Qt.Checked
-        self.project_details["fresh_air"]["status"] = enabled
+        self.electrical_specs["fresh_air"]["status"] = enabled
 
         if not enabled:
-            self._reset_qtys(self.project_details["fresh_air"])
+            self._reset_qtys(self.electrical_specs["fresh_air"])
 
         self._reset_section_widgets(self.freshair_gbox, enabled)
         self.freshair_checkbox.setEnabled(True)
@@ -493,10 +493,10 @@ class ElectricalTab(QWidget):
     def _handle_hopper_heater_checkbox_changed(self, state):
         """Handle hopper heater section enabling/disabling"""
         enabled = state == Qt.Checked
-        self.project_details["hopper_heater"]["status"] = enabled
+        self.electrical_specs["hopper_heater"]["status"] = enabled
 
         if not enabled:
-            self._reset_qtys(self.project_details["hopper_heater"])
+            self._reset_qtys(self.electrical_specs["hopper_heater"])
 
         self._reset_section_widgets(self.hopper_heater_gbox, enabled)
         self.hopper_heater_checkbox.setEnabled(True)
@@ -504,11 +504,11 @@ class ElectricalTab(QWidget):
     def _handle_damper_checkbox_changed(self, state):
         """Handle damper section enabling/disabling"""
         enabled = state == Qt.Checked
-        self.project_details["damper"]["status"] = enabled
-        self.project_details["damper"]["motors"]["damper"]["qty"] = 1 if enabled else 0
+        self.electrical_specs["damper"]["status"] = enabled
+        self.electrical_specs["damper"]["motors"]["damper"]["qty"] = 1 if enabled else 0
 
         if not enabled:
-            self._reset_qtys(self.project_details["damper"])
+            self._reset_qtys(self.electrical_specs["damper"])
 
         """ ------------Enable/disable individual damper widgets ------------ """
         self.damper_kw.setEnabled(enabled)
@@ -530,11 +530,11 @@ class ElectricalTab(QWidget):
     def _handle_fan_checkbox_changed(self, state):
         """Handle fan section enabling/disabling"""
         enabled = state == Qt.Checked
-        self.project_details["fan"]["status"] = enabled
-        self.project_details["fan"]["motors"]["fan"]["qty"] = 1 if enabled else 0
+        self.electrical_specs["fan"]["status"] = enabled
+        self.electrical_specs["fan"]["motors"]["fan"]["qty"] = 1 if enabled else 0
 
         if not enabled:
-            self._reset_qtys(self.project_details["fan"])
+            self._reset_qtys(self.electrical_specs["fan"])
 
         """ ------------Enable/disable individual fan widgets ------------ """
         fan_widgets = [
@@ -716,7 +716,7 @@ class ElectricalTab(QWidget):
                 return
 
         """ ------------Navigate to the right location in the dictionary ------------ """
-        target = self.project_details
+        target = self.electrical_specs
         for key in path_list[:-1]:
             target = target[key]
 
@@ -792,13 +792,13 @@ class ElectricalTab(QWidget):
 
         if self.bagfilter_type.currentIndex() == 1:
             griin_pattern = r"^\d+(\.\d+)?x\d+\.?\(\d+(\.\d+)?m\)\.\d+$"
-            match = re.fullmatch(griin_pattern, self.project_details["bagfilter"]["order"])
+            match = re.fullmatch(griin_pattern, self.electrical_specs["bagfilter"]["order"])
             if not match:  # Griin/China
                 show_message("Please Follow Pattern Like 8.96×5.(2.7m).10 for Griin/China Model", "Error")
                 return False
         if self.bagfilter_type.currentIndex() == 2:
             beth_pattern = r"^(\d+)\.\d+x(\d+)\.\d+x\d+$"
-            match = re.fullmatch(beth_pattern, self.project_details["bagfilter"]["order"])
+            match = re.fullmatch(beth_pattern, self.electrical_specs["bagfilter"]["order"])
             if not match:  # BETH
                 show_message("Please Follow Pattern Like 6.78x2.3x10 for BETH Model", "Error")
                 return False
@@ -850,7 +850,7 @@ def create_qss_word():
     doc = Document(template_path)
 
     current_user = UserSession()
-    project_details = ProjectDetails()
+    project_details = ProjectDatas().project_electrical_specs
 
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
 

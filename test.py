@@ -1,6 +1,2 @@
-t = "2"
-
-
-if t:
-    print("yes")
-
+import sqlite3
+print(sqlite3.sqlite_version)

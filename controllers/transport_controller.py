@@ -17,11 +17,11 @@ class TransportController(PanelController):
         Main controller for building a transport panel from project specifications.
         """
         # ----------------------- Initialize Motors -----------------------
-        motors_config = self.project_details["transport"]["motors"]
+        motors_config = self.electrical_specs["transport"]["motors"]
 
         rotary = Motor(motors_config["rotary"]["power"], usage="Rotary")
         rotary.current = self.calculate_motor_current(power=rotary.power)
-        self.project_details["transport"]["motors"]["rotary"]["motor"] = rotary
+        self.electrical_specs["transport"]["motors"]["rotary"]["motor"] = rotary
 
         telescopic_chute = Motor(motors_config["telescopic_chute"]["power"],
                    usage="Telescopic Chute",
@@ -30,7 +30,7 @@ class TransportController(PanelController):
                    plc_di=7,
                    plc_do=2)
         telescopic_chute.current = self.calculate_motor_current(power=telescopic_chute.power)
-        self.project_details["transport"]["motors"]["telescopic_chute"]["motor"] = telescopic_chute
+        self.electrical_specs["transport"]["motors"]["telescopic_chute"]["motor"] = telescopic_chute
 
         slide_gate = Motor(motors_config["slide_gate"]["power"],
                    usage="Slide Gate",
@@ -39,15 +39,15 @@ class TransportController(PanelController):
                    plc_di=7,
                    plc_do=2)
         slide_gate.current = self.calculate_motor_current(power=slide_gate.power)
-        self.project_details["transport"]["motors"]["slide_gate"]["motor"] = slide_gate
+        self.electrical_specs["transport"]["motors"]["slide_gate"]["motor"] = slide_gate
 
         screw1 = Motor(motors_config["screw1"]["power"], usage="Screw1")
         screw1.current = self.calculate_motor_current(power=screw1.power)
-        self.project_details["transport"]["motors"]["screw1"]["motor"] = screw1
+        self.electrical_specs["transport"]["motors"]["screw1"]["motor"] = screw1
 
         screw2 = Motor(motors_config["screw2"]["power"], usage="Screw2")
         screw2.current = self.calculate_motor_current(power=screw2.power)
-        self.project_details["transport"]["motors"]["screw2"]["motor"] = screw2
+        self.electrical_specs["transport"]["motors"]["screw2"]["motor"] = screw2
 
         motor_objects = [
                             (rotary, motors_config["rotary"]["qty"]),
@@ -68,7 +68,7 @@ class TransportController(PanelController):
             self.choose_bimetal(motor, qty)
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        instruments = self.project_details["transport"]["instruments"]
+        instruments = self.electrical_specs["transport"]["instruments"]
         self.calculate_plc_io_requirements(motor_objects, instruments)
 
         # ----------------------- Add internal wiring -----------------------

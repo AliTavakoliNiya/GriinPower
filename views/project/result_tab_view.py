@@ -16,7 +16,7 @@ from controllers.electric_motor_controller import ElectricMotorController
 from controllers.fan_damper_controller import FanDamperController
 from controllers.fresh_air_controller import FreshAirController
 from controllers.hopper_heater_controller import HopperHeaterController
-from controllers.project_details import ProjectDetails
+from controllers.project_datas import ProjectDatas
 from controllers.transport_controller import TransportController
 from controllers.vibration_controller import VibrationController
 from utils.pandas_model import PandasModel
@@ -28,7 +28,7 @@ class ResultTab(QWidget):
         uic.loadUi("ui/project/results_tab.ui", self)
 
         self.main_view = main_view
-        self.project_details = ProjectDetails()
+        self.electrical_specs = ProjectDatas().project_electrical_specs
 
         self.tables = {
             "bagfilter_panel_table": self.bagfilter_panel_table,
@@ -139,7 +139,7 @@ class ResultTab(QWidget):
             summary["Note"].append("")
             total_sum += panel_total
 
-        if self.project_details["fan"]["status"]:
+        if self.electrical_specs["fan"]["status"]:
             summary["title"].append("ELECTRIC MOTOR")
             motor_price = electric_motor_price_and_effective_date[0]
             total_sum += motor_price
@@ -229,7 +229,7 @@ class ResultTab(QWidget):
                 worksheet.freeze_panes = worksheet["A3"]
 
     def show_datail_btn_handler(self):
-        self.show_datail_window = DictionaryViewer(data=self.project_details, parent=self.main_view)
+        self.show_datail_window = DictionaryViewer(data=self.electrical_specs, parent=self.main_view)
 
 
 class DictionaryViewer(QMainWindow):

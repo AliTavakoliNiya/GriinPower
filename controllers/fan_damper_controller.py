@@ -17,10 +17,10 @@ class FanDamperController(PanelController):
         Main controller for building a fan_damper panel from project specifications.
         """
         # ----------------------- Initialize Motors -----------------------
-        damper_config = self.project_details["damper"]["motors"]["damper"]
+        damper_config = self.electrical_specs["damper"]["motors"]["damper"]
         damper = Motor(damper_config["power"], usage="Damper")
         damper.current = self.calculate_motor_current(power=damper.power)
-        self.project_details["damper"]["motors"]["damper"]["motor"] = damper
+        self.electrical_specs["damper"]["motors"]["damper"]["motor"] = damper
 
         if damper_config["start_type"] == "Pneumatic":
             damper.mpcb_qty = 0
@@ -46,15 +46,15 @@ class FanDamperController(PanelController):
         motor_objects = [(damper, damper_config["qty"])]
 
 
-        fan_config = self.project_details["fan"]["motors"]["fan"]
+        fan_config = self.electrical_specs["fan"]["motors"]["fan"]
         fan = Motor(power=fan_config["power"], usage="Fan")
-        if self.project_details["fan"]["motors"]["fan"]["voltage_type"] == "LV":
-            fan_voltage = self.project_details["project_info"]["l_voltage"]
+        if self.electrical_specs["fan"]["motors"]["fan"]["voltage_type"] == "LV":
+            fan_voltage = self.electrical_specs["project_info"]["l_voltage"]
         else:
-            fan_voltage = self.project_details["project_info"]["m_voltage"]
+            fan_voltage = self.electrical_specs["project_info"]["m_voltage"]
         fan.current = self.calculate_motor_current(power=fan.power, volt=fan_voltage)
 
-        self.project_details["fan"]["motors"]["fan"]["motor"] = fan
+        self.electrical_specs["fan"]["motors"]["fan"]["motor"] = fan
         fan.start_type=fan_config["start_type"]
         if fan_config["start_type"] == "Delta/Star":
             fan.contactor_qty = 3
@@ -109,8 +109,8 @@ class FanDamperController(PanelController):
 
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
-        fan_instruments = self.project_details["fan"]["instruments"]
-        damper_instruments = self.project_details["damper"]["instruments"]
+        fan_instruments = self.electrical_specs["fan"]["instruments"]
+        damper_instruments = self.electrical_specs["damper"]["instruments"]
         instruments = {**fan_instruments, **damper_instruments}
         self.calculate_plc_io_requirements(motor_objects, instruments)
 

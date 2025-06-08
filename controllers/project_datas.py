@@ -1,16 +1,16 @@
 from models.abs_motor import Motor
 
-class ProjectDetails:
+class ProjectDatas:
     _instance = None
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(ProjectDetails, cls).__new__(cls)
-            cls._instance.project_details = cls._instance.get_default_project_details()
-        return cls._instance.project_details
+            cls._instance = super(ProjectDatas, cls).__new__(cls)
+            cls._instance.project_electrical_specs = cls._instance.get_default_electrical_specs()
+        return cls._instance
 
 
-    def get_default_project_details(self):
+    def get_default_electrical_specs(self):
         return {"project_info": {"proj_avl":[],
                                  "project_name": "",
                                  "project_code": "",
@@ -19,7 +19,7 @@ class ProjectDetails:
                                  "owner_name":"",
                                  "consultant_name":"",
                                  "employer_name":"",
-                                 "rev": 1,
+                                 "rev": 0,
                                  "el_contact_name": "",
                                  "el_contact_position": "",
                                  "el_contact_phone": "",

@@ -1,7 +1,7 @@
 from math import sqrt
 
 from config import COSNUS_PI, ETA
-from controllers.project_details import ProjectDetails
+from controllers.project_datas import ProjectDatas
 from models.items.bimetal import get_bimetal_by_current
 from models.items.contactor import get_contactor_by_current
 from models.items.electrical_panel import get_electrical_panel_by_spec
@@ -25,7 +25,7 @@ class PanelController:
         """
         self.panel_type = panel_type
         self.panel = self._create_empty_panel()
-        self.project_details = ProjectDetails()
+        self.electrical_specs = ProjectDatas().project_electrical_specs
 
     def _create_empty_panel(self):
         """
@@ -71,7 +71,7 @@ class PanelController:
             return
         total_qty = qty * motor.contactor_qty
 
-        success, contactor = get_contactor_by_current(rated_current=motor.current, brands=self.project_details["project_info"]["proj_avl"])
+        success, contactor = get_contactor_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type=f"CONTACTOR FOR {motor.usage.upper()}",
@@ -104,7 +104,7 @@ class PanelController:
             return
         total_qty = qty * motor.mpcb_qty
 
-        success, mpcb = get_mpcb_by_current(rated_current=motor.current, brands=self.project_details["project_info"]["proj_avl"])
+        success, mpcb = get_mpcb_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type=f"MPCB FOR {motor.usage.upper()}",
@@ -138,7 +138,7 @@ class PanelController:
             return
         total_qty = qty * motor.mccb_qty
 
-        success, mccb = get_mccb_by_current(rated_current=motor.current, brands=self.project_details["project_info"]["proj_avl"])
+        success, mccb = get_mccb_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type=f"MCCB FOR {motor.usage.upper()}",
@@ -171,7 +171,7 @@ class PanelController:
             return
         total_qty = qty * motor.bimetal_qty
 
-        success, bimetal = get_bimetal_by_current(rated_current=motor.current, brands=self.project_details["project_info"]["proj_avl"])
+        success, bimetal = get_bimetal_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
 
         if success:
             self.add_to_panel(
@@ -206,7 +206,7 @@ class PanelController:
         if total_qty == 0:
             return
 
-        success, vfd = get_vfd_softstarter_by_power(type="VFD", power=motor.power, brands=self.project_details["project_info"]["proj_avl"])
+        success, vfd = get_vfd_softstarter_by_power(type="VFD", power=motor.power, brands=self.electrical_specs["project_info"]["proj_avl"])
 
         if success:
             if success:
@@ -240,7 +240,7 @@ class PanelController:
         if total_qty == 0:
             return
 
-        success, soft_starter = get_vfd_softstarter_by_power(type="SoftStarter", power=motor.power, brands=self.project_details["project_info"]["proj_avl"])
+        success, soft_starter = get_vfd_softstarter_by_power(type="SoftStarter", power=motor.power, brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             if success:
                 self.add_to_panel(
@@ -328,7 +328,7 @@ class PanelController:
         # process_item("duct_cover", "DUCT COVER", get_general_by_spec)
         # process_item("miniatory_rail", "MINIATORY RAIL", get_general_by_spec)
 
-        has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
+        has_hmi = False if self.electrical_specs["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
             self.process_item(motor_objects=motor_objects, attr_name="signal_lamp_24v_qty", comp_type="Signal Lamp",
                               specification="24")
@@ -613,7 +613,7 @@ class PanelController:
     #     Adds signal cable entries based on motor usage and length.
     #     """
     #
-    #     length = self.project_details["bagfilter"]["cable_dimension"]
+    #     length = self.electrical_specs["bagfilter"]["cable_dimension"]
     #     if length == 0:
     #         return
     #
@@ -647,8 +647,8 @@ class PanelController:
     #     """
     #     Adds power cable entries with sizing based on current and motor demand.
     #     """
-    #     volt = self.project_details["project_info"]["l_voltage"]
-    #     length = self.project_details["bagfilter"]["cable_dimension"]
+    #     volt = self.electrical_specs["project_info"]["l_voltage"]
+    #     length = self.electrical_specs["bagfilter"]["cable_dimension"]
     #     if length == 0:
     #         return
     #
@@ -790,7 +790,7 @@ class PanelController:
 
     def calculate_motor_current(self, power, volt=None):
         if volt is None:
-            volt = self.project_details["project_info"]["l_voltage"]
+            volt = self.electrical_specs["project_info"]["l_voltage"]
 
         return round(power / (sqrt(3) * volt * COSNUS_PI * ETA), 2)
 

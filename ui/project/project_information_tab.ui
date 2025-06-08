@@ -606,6 +606,114 @@ Contact Person</string>
           </property>
          </spacer>
         </item>
+        <item>
+         <widget class="QLabel" name="project_no_label_3">
+          <property name="font">
+           <font>
+            <family>Calibri</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::RightToLeft</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Current Rev. Number</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="project_no_label_4">
+          <property name="font">
+           <font>
+            <family>Calibri</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::RightToLeft</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>01</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_18">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="p_no_label_4">
+          <property name="font">
+           <font>
+            <family>Calibri</family>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::RightToLeft</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Revision Hint</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="rev_hint_combo">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>00</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>01</string>
+           </property>
+          </item>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
@@ -614,7 +722,7 @@ Contact Person</string>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>200</height>
+         <height>140</height>
         </size>
        </property>
        <property name="title">
@@ -632,7 +740,7 @@ Contact Person</string>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>150</height>
+            <height>80</height>
            </size>
           </property>
           <property name="styleSheet">
@@ -1236,8 +1344,65 @@ Contact Person</string>
         <string>Related Documents</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_12">
+        <item row="0" column="6">
+         <widget class="QComboBox" name="electro_motor_start_type_10">
+          <property name="minimumSize">
+           <size>
+            <width>40</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>--</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QLabel" name="label_56">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Date Modified</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <spacer name="horizontalSpacer_32">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="8">
+         <spacer name="horizontalSpacer_30">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
         <item row="1" column="1">
-         <widget class="QPushButton" name="pushButton_9">
+         <widget class="QPushButton" name="upload_p_id_btn">
           <property name="maximumSize">
            <size>
             <width>20</width>
@@ -1276,22 +1441,9 @@ QPushButton:pressed{
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>../assets/upload.png</normaloff>../assets/upload.png</iconset>
+            <normaloff>../../assets/upload.png</normaloff>../../assets/upload.png</iconset>
           </property>
          </widget>
-        </item>
-        <item row="3" column="8">
-         <spacer name="horizontalSpacer_30">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
         <item row="3" column="0">
          <spacer name="horizontalSpacer_31">
@@ -1306,36 +1458,23 @@ QPushButton:pressed{
           </property>
          </spacer>
         </item>
-        <item row="1" column="5">
-         <widget class="QLabel" name="label_56">
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Date Modified:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <spacer name="horizontalSpacer_32">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="6">
+        <item row="0" column="5">
          <widget class="QLabel" name="label_57">
           <property name="styleSheet">
            <string notr="true"/>
           </property>
           <property name="text">
            <string>2024-Aug</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4">
+         <widget class="QLabel" name="label_58">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>Date Modified</string>
           </property>
          </widget>
         </item>
@@ -1379,30 +1518,17 @@ QPushButton:pressed{
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>../assets/upload.png</normaloff>../assets/upload.png</iconset>
+            <normaloff>../../assets/upload.png</normaloff>../../assets/upload.png</iconset>
           </property>
          </widget>
         </item>
-        <item row="1" column="4">
-         <spacer name="horizontalSpacer_33">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="2" column="5">
-         <widget class="QLabel" name="label_58">
+         <widget class="QLabel" name="label_60">
           <property name="styleSheet">
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Date Modified:</string>
+           <string>2024-Aug</string>
           </property>
          </widget>
         </item>
@@ -1446,7 +1572,7 @@ QPushButton:pressed{
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>../assets/download.png</normaloff>../assets/download.png</iconset>
+            <normaloff>../../assets/download.png</normaloff>../../assets/download.png</iconset>
           </property>
          </widget>
         </item>
@@ -1473,59 +1599,6 @@ QPushButton:pressed{
           </property>
          </widget>
         </item>
-        <item row="2" column="6">
-         <widget class="QLabel" name="label_60">
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>2024-Aug</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="4">
-         <spacer name="horizontalSpacer_35">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="3">
-         <widget class="QComboBox" name="electro_motor_start_type_9">
-          <property name="minimumSize">
-           <size>
-            <width>70</width>
-            <height>0</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>RV04</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV03</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV02</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV01</string>
-           </property>
-          </item>
-         </widget>
-        </item>
         <item row="3" column="2">
          <widget class="QLabel" name="label_61">
           <property name="styleSheet">
@@ -1536,37 +1609,7 @@ QPushButton:pressed{
           </property>
          </widget>
         </item>
-        <item row="0" column="3">
-         <widget class="QComboBox" name="electro_motor_start_type_10">
-          <property name="minimumSize">
-           <size>
-            <width>70</width>
-            <height>0</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>RV04</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV03</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV02</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV01</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="3" column="6">
+        <item row="3" column="5">
          <widget class="QLabel" name="label_62">
           <property name="styleSheet">
            <string notr="true"/>
@@ -1574,36 +1617,6 @@ QPushButton:pressed{
           <property name="text">
            <string>2024-Aug</string>
           </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QComboBox" name="electro_motor_start_type_11">
-          <property name="minimumSize">
-           <size>
-            <width>70</width>
-            <height>0</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>RV04</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV03</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV02</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV01</string>
-           </property>
-          </item>
          </widget>
         </item>
         <item row="0" column="0">
@@ -1659,38 +1672,12 @@ QPushButton:pressed{
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>../assets/upload.png</normaloff>../assets/upload.png</iconset>
+            <normaloff>../../assets/upload.png</normaloff>../../assets/upload.png</iconset>
           </property>
          </widget>
         </item>
-        <item row="2" column="4">
-         <spacer name="horizontalSpacer_37">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="1" column="0">
          <spacer name="horizontalSpacer_38">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="8">
-         <spacer name="horizontalSpacer_39">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -1742,91 +1729,30 @@ QPushButton:pressed{
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>../assets/download.png</normaloff>../assets/download.png</iconset>
+            <normaloff>../../assets/download.png</normaloff>../../assets/download.png</iconset>
           </property>
          </widget>
         </item>
-        <item row="3" column="5">
+        <item row="0" column="8">
+         <spacer name="horizontalSpacer_39">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="4">
          <widget class="QLabel" name="label_63">
           <property name="styleSheet">
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Date Modified:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QComboBox" name="electro_motor_start_type_12">
-          <property name="minimumSize">
-           <size>
-            <width>70</width>
-            <height>0</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>RV04</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV03</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV02</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RV01</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="1" column="7">
-         <widget class="QPushButton" name="pushButton_14">
-          <property name="maximumSize">
-           <size>
-            <width>20</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Download</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-    background: transparent;
-    border: none;
-}
-QPushButton:hover{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #1c1f1f;
-}
-QPushButton:pressed{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #2c2f2f;
-}</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset>
-            <normaloff>../assets/download.png</normaloff>../assets/download.png</iconset>
+           <string>Date Modified</string>
           </property>
          </widget>
         </item>
@@ -1870,11 +1796,11 @@ QPushButton:pressed{
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>../assets/download.png</normaloff>../assets/download.png</iconset>
+            <normaloff>../../assets/download.png</normaloff>../../assets/download.png</iconset>
           </property>
          </widget>
         </item>
-        <item row="1" column="6">
+        <item row="1" column="5">
          <widget class="QLabel" name="label_64">
           <property name="styleSheet">
            <string notr="true"/>
@@ -1897,18 +1823,52 @@ QPushButton:pressed{
           </property>
          </spacer>
         </item>
-        <item row="0" column="5">
-         <widget class="QLabel" name="label_65">
+        <item row="1" column="7">
+         <widget class="QPushButton" name="pushButton_14">
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Download</string>
+          </property>
           <property name="styleSheet">
-           <string notr="true"/>
+           <string notr="true">QPushButton {
+    background: transparent;
+    border: none;
+}
+QPushButton:hover{
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #1c1f1f;
+}
+QPushButton:pressed{
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
           </property>
           <property name="text">
-           <string>Date Modified:</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>../../assets/download.png</normaloff>../../assets/download.png</iconset>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QPushButton" name="pushButton_16">
+         <widget class="QPushButton" name="upload_technical_data_btn">
           <property name="maximumSize">
            <size>
             <width>20</width>
@@ -1947,22 +1907,19 @@ QPushButton:pressed{
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>../assets/upload.png</normaloff>../assets/upload.png</iconset>
+            <normaloff>../../assets/upload.png</normaloff>../../assets/upload.png</iconset>
           </property>
          </widget>
         </item>
-        <item row="3" column="4">
-         <spacer name="horizontalSpacer_41">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+        <item row="0" column="4">
+         <widget class="QLabel" name="label_65">
+          <property name="styleSheet">
+           <string notr="true"/>
           </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
+          <property name="text">
+           <string>Date Modified</string>
           </property>
-         </spacer>
+         </widget>
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_66">
@@ -1984,13 +1941,140 @@ QPushButton:pressed{
           </property>
          </widget>
         </item>
+        <item row="1" column="6">
+         <widget class="QComboBox" name="electro_motor_start_type_11">
+          <property name="minimumSize">
+           <size>
+            <width>40</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>--</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="6">
+         <widget class="QComboBox" name="electro_motor_start_type_12">
+          <property name="minimumSize">
+           <size>
+            <width>40</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>--</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="6">
+         <widget class="QComboBox" name="electro_motor_start_type_13">
+          <property name="minimumSize">
+           <size>
+            <width>40</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>--</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <spacer name="horizontalSpacer_41">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="3">
+         <spacer name="horizontalSpacer_42">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="3">
+         <spacer name="horizontalSpacer_43">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="3">
+         <spacer name="horizontalSpacer_44">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
       </widget>
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox_2">
        <property name="title">
-        <string>Internal Part Of Electrical Panel AVL</string>
+        <string>Internal Part Of Electrical Panel Approved Vendors List (AVL)</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_7">
         <item row="2" column="2">

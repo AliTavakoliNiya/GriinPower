@@ -26,13 +26,13 @@ class BagfilterController(PanelController):
         """
 
         n_valves = 0
-        if self.project_details["bagfilter"]["type"] == "Griin/China":
-            match = re.search(r"×(.*?)\.", self.project_details["bagfilter"]["order"])
+        if self.electrical_specs["bagfilter"]["type"] == "Griin/China":
+            match = re.search(r"×(.*?)\.", self.electrical_specs["bagfilter"]["order"])
             if match:
                 n_valves = int(match.group(1))
 
-        if self.project_details["bagfilter"]["type"] == "BETH":
-            match = re.fullmatch(r"^(\d+)\.\d+x(\d+)\.\d+x\d+$", self.project_details["bagfilter"]["order"])
+        if self.electrical_specs["bagfilter"]["type"] == "BETH":
+            match = re.fullmatch(r"^(\d+)\.\d+x(\d+)\.\d+x\d+$", self.electrical_specs["bagfilter"]["order"])
             if match:
                 num1 = int(match.group(1))
                 num2 = int(match.group(2))
@@ -57,7 +57,7 @@ class BagfilterController(PanelController):
             do_bagfilter_card += math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digist use in binary
         total_do += do_bagfilter_card
 
-        has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
+        has_hmi = False if self.electrical_specs["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
             total_di += 4
             total_do = 1
@@ -65,10 +65,10 @@ class BagfilterController(PanelController):
             bagfilter_general_items["selector_switch"] = 1
             bagfilter_general_items["signal_lamp_24v"] = 6
         else:
-            hmi_type = self.project_details["bagfilter"]["touch_panel"]
+            hmi_type = self.electrical_specs["bagfilter"]["touch_panel"]
             bagfilter_general_items[hmi_type] = 1
 
-        bagfilter_general_items["olm"] = 1 if self.project_details["bagfilter"]["olm"] else 0
+        bagfilter_general_items["olm"] = 1 if self.electrical_specs["bagfilter"]["olm"] else 0
 
         """ ----------------------- Add Components for Motors ----------------------- """
         self.choose_mccb()
@@ -189,7 +189,7 @@ class BagfilterController(PanelController):
         #process_item("power_outlet", "POWER OUTLET", get_power_outlet)  # Ensure get_power_outlet exists
 
         # Handle dynamic HMI
-        has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
+        has_hmi = False if self.electrical_specs["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
             self.process_item(attr_name="signal_lamp_24v_qty", comp_type="Signal Lamp", specification="24")
 
@@ -203,7 +203,7 @@ class BagfilterController(PanelController):
         """
         total_current = 0.0
 
-        for section in self.project_details.values():
+        for section in self.electrical_specs.values():
             motors = section.get("motors", {})
             for motor_name, motor_data in motors.items():
                 try:
@@ -216,7 +216,7 @@ class BagfilterController(PanelController):
         if total_current == 0:
             return
 
-        success, mccb = get_mccb_by_current( rated_current=total_current, brands=self.project_details["project_info"]["proj_avl"])
+        success, mccb = get_mccb_by_current( rated_current=total_current, brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type="MCCB INPUT PANEL",
@@ -278,7 +278,7 @@ class BagfilterController(PanelController):
         )
         return cards
     def calculate_plc_io_requirements(self, total_do, total_di, total_ao, total_ai):
-        instruments = deepcopy(self.project_details["bagfilter"]["instruments"])
+        instruments = deepcopy(self.electrical_specs["bagfilter"]["instruments"])
 
         di_notes = [f"Initial DI: {total_di}"] if total_di else []
         ai_notes = [f"Initial AI: {total_ai}"] if total_ai else []
@@ -349,7 +349,7 @@ class BagfilterController(PanelController):
         Adds instrument entries to panel.
         """
 
-        instruments = self.project_details["bagfilter"]["instruments"]
+        instruments = self.electrical_specs["bagfilter"]["instruments"]
         for instrument_name, properties in instruments.items():
             qty = properties["qty"]
             if qty == 0:
