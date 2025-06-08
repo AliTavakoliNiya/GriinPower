@@ -1996,7 +1996,7 @@ QPushButton:pressed{
         <item row="2" column="2">
          <widget class="QCheckBox" name="proj_avl_schneider">
           <property name="text">
-           <string>SCHNEIDER</string>
+           <string>Schneider Electric</string>
           </property>
          </widget>
         </item>
@@ -2148,14 +2148,14 @@ QPushButton:pressed{
         <item row="2" column="3">
          <widget class="QCheckBox" name="proj_avl_hyundai">
           <property name="text">
-           <string>HYUNDAI</string>
+           <string>Hyundai</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
          <widget class="QCheckBox" name="proj_avl_siemens">
           <property name="text">
-           <string>SIEMENS</string>
+           <string>Siemens</string>
           </property>
          </widget>
         </item>

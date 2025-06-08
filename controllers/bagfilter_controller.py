@@ -216,7 +216,7 @@ class BagfilterController(PanelController):
         if total_current == 0:
             return
 
-        success, mccb = get_mccb_by_current(total_current)
+        success, mccb = get_mccb_by_current( rated_current=total_current, brands=self.project_details["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type="MCCB INPUT PANEL",

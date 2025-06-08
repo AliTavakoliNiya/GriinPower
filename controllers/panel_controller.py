@@ -71,7 +71,7 @@ class PanelController:
             return
         total_qty = qty * motor.contactor_qty
 
-        success, contactor = get_contactor_by_current(motor.current)
+        success, contactor = get_contactor_by_current(rated_current=motor.current, brands=self.project_details["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type=f"CONTACTOR FOR {motor.usage.upper()}",
@@ -104,7 +104,7 @@ class PanelController:
             return
         total_qty = qty * motor.mpcb_qty
 
-        success, mpcb = get_mpcb_by_current(motor.current)
+        success, mpcb = get_mpcb_by_current(rated_current=motor.current, brands=self.project_details["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type=f"MPCB FOR {motor.usage.upper()}",
@@ -138,7 +138,7 @@ class PanelController:
             return
         total_qty = qty * motor.mccb_qty
 
-        success, mccb = get_mccb_by_current(motor.current)
+        success, mccb = get_mccb_by_current(rated_current=motor.current, brands=self.project_details["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type=f"MCCB FOR {motor.usage.upper()}",
@@ -171,7 +171,7 @@ class PanelController:
             return
         total_qty = qty * motor.bimetal_qty
 
-        success, bimetal = get_bimetal_by_current(motor.current)
+        success, bimetal = get_bimetal_by_current(rated_current=motor.current, brands=self.project_details["project_info"]["proj_avl"])
 
         if success:
             self.add_to_panel(
@@ -206,7 +206,7 @@ class PanelController:
         if total_qty == 0:
             return
 
-        success, vfd = get_vfd_softstarter_by_power(type="VFD", power=motor.power)
+        success, vfd = get_vfd_softstarter_by_power(type="VFD", power=motor.power, brands=self.project_details["project_info"]["proj_avl"])
 
         if success:
             if success:
@@ -240,7 +240,7 @@ class PanelController:
         if total_qty == 0:
             return
 
-        success, soft_starter = get_vfd_softstarter_by_power(type="SoftStarter", power=motor.power)
+        success, soft_starter = get_vfd_softstarter_by_power(type="SoftStarter", power=motor.power, brands=self.project_details["project_info"]["proj_avl"])
         if success:
             if success:
                 self.add_to_panel(

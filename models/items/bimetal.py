@@ -63,7 +63,7 @@ def get_all_bimetals():
     return bimetal_list
 
 
-def get_bimetal_by_current(rated_current, brand=None, order_number=None):
+def get_bimetal_by_current(rated_current, brands=[], order_number=None):
     session = SessionLocal()
     try:
         current_val = float(rated_current)
@@ -89,32 +89,39 @@ def get_bimetal_by_current(rated_current, brand=None, order_number=None):
             except ValueError:
                 continue
 
+            # بررسی تطابق جریان با بازه
             if not (min_c <= current_val <= max_c):
                 continue
 
-            if brand and attr_dict.get("brand") != brand:
+            # بررسی برند
+            brand = attr_dict.get("brand")
+            if brands and brand not in brands:
                 continue
+
+            # بررسی شماره سفارش
             if order_number and attr_dict.get("order_number") != order_number:
                 continue
 
             matching_bimetals.append({
                 "component": bimetal,
                 "attr_dict": attr_dict,
+                "range": max_c - min_c,
                 "latest_supplier": max(bimetal.suppliers, key=lambda s: s.date if s.date else "", default=None)
             })
 
         if not matching_bimetals:
             return False, "❌ Bimetal not found"
 
-        latest = max(
+        # انتخاب بی‌متال با کمترین بازه جریان
+        best_match = min(
             matching_bimetals,
-            key=lambda item: item["latest_supplier"].date if item["latest_supplier"] else ""
+            key=lambda item: item["range"]
         )
 
-        supplier = latest["latest_supplier"]
-        attr = latest["attr_dict"]
+        supplier = best_match["latest_supplier"]
+        attr = best_match["attr_dict"]
         result = {
-            "id": latest["component"].id,
+            "id": best_match["component"].id,
             "min_current": attr.get("min_current"),
             "max_current": attr.get("max_current"),
             "class": attr.get("class"),
@@ -130,8 +137,7 @@ def get_bimetal_by_current(rated_current, brand=None, order_number=None):
 
     except Exception as e:
         session.rollback()
-        print(str(e))
-        return False, f"failed in get bimetal\n{str(e)}"
+        return False, f"❌ Failed in get_bimetal_by_current:\n{str(e)}"
     finally:
         session.close()
 

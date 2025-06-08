@@ -61,7 +61,7 @@ def get_all_instruments():
     return instrument_list
 
 
-def get_instrument_by_spec(type, hart_comminucation=None, brand=None, order_number=None):
+def get_instrument_by_spec(type, hart_comminucation=None, brands=[], order_number=None):
     session = SessionLocal()
     try:
         instruments = (

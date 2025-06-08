@@ -1028,7 +1028,7 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>9</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -2754,6 +2754,9 @@ QListWidget::item:selected {
              </property>
              <property name="buttonSymbols">
               <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <double>999.000000000000000</double>
              </property>
             </widget>
            </item>

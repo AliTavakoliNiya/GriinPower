@@ -61,12 +61,11 @@ def get_all_mccbs():
     return mccb_list
 
 
-def get_mccb_by_current(rated_current, brand=None, order_number=None):
+def get_mccb_by_current(rated_current, brands=[], order_number=None):
     session = SessionLocal()
     try:
         current_val = float(rated_current)
-        min_val = current_val
-        max_val = current_val * 1.2
+        min_val = current_val * 1.25
 
         mccbs = (
             session.query(Component)
@@ -83,34 +82,44 @@ def get_mccb_by_current(rated_current, brand=None, order_number=None):
         for mccb in mccbs:
             attr_dict = {attr.key: attr.value for attr in mccb.attributes}
 
-            rc = float(attr_dict.get("rated_current", -1))
-
-            if not (min_val <= rc <= max_val):
+            try:
+                rc = float(attr_dict.get("rated_current", -1))
+            except ValueError:
                 continue
 
-            if brand and attr_dict.get("brand") != brand:
+            # شرط جریان
+            if rc < min_val:
                 continue
+
+            # شرط برند
+            brand = attr_dict.get("brand")
+            if brands and brand not in brands:
+                continue
+
+            # شرط شماره سفارش
             if order_number and attr_dict.get("order_number") != order_number:
                 continue
 
             matching_mccbs.append({
                 "component": mccb,
                 "attr_dict": attr_dict,
+                "rated_current": rc,
                 "latest_supplier": max(mccb.suppliers, key=lambda s: s.date if s.date else "", default=None)
             })
 
         if not matching_mccbs:
             return False, "❌ MCCB not found"
 
-        latest = max(
+        # انتخاب MCCB با کمترین جریان مجاز
+        best_match = min(
             matching_mccbs,
-            key=lambda item: item["latest_supplier"].date if item["latest_supplier"] else ""
+            key=lambda item: item["rated_current"]
         )
 
-        supplier = latest["latest_supplier"]
-        attr = latest["attr_dict"]
+        supplier = best_match["latest_supplier"]
+        attr = best_match["attr_dict"]
         result = {
-            "id": latest["component"].id,
+            "id": best_match["component"].id,
             "rated_current": attr.get("rated_current"),
             "breaking_capacity": attr.get("breaking_capacity"),
             "brand": attr.get("brand"),

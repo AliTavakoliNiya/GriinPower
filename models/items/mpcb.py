@@ -63,7 +63,7 @@ def get_all_mpcbs():
     return mpcb_list
 
 
-def get_mpcb_by_current(rated_current, brand=None, order_number=None):
+def get_mpcb_by_current(rated_current, brands=[], order_number=None):
     session = SessionLocal()
     try:
         current_val = float(rated_current)
@@ -89,32 +89,39 @@ def get_mpcb_by_current(rated_current, brand=None, order_number=None):
             except ValueError:
                 continue
 
+            # بررسی تطابق جریان
             if not (min_c <= current_val <= max_c):
                 continue
 
-            if brand and attr_dict.get("brand") != brand:
+            # بررسی برند
+            brand = attr_dict.get("brand")
+            if brands and brand not in brands:
                 continue
+
+            # بررسی شماره سفارش
             if order_number and attr_dict.get("order_number") != order_number:
                 continue
 
             matching_mpcbs.append({
                 "component": mpcb,
                 "attr_dict": attr_dict,
+                "range": max_c - min_c,
                 "latest_supplier": max(mpcb.suppliers, key=lambda s: s.date if s.date else "", default=None)
             })
 
         if not matching_mpcbs:
             return False, "❌ MPCB not found"
 
-        latest = max(
+        # انتخاب MPCB با کوچک‌ترین بازه جریان (بیشترین دقت)
+        best_match = min(
             matching_mpcbs,
-            key=lambda item: item["latest_supplier"].date if item["latest_supplier"] else ""
+            key=lambda item: item["range"]
         )
 
-        supplier = latest["latest_supplier"]
-        attr = latest["attr_dict"]
+        supplier = best_match["latest_supplier"]
+        attr = best_match["attr_dict"]
         result = {
-            "id": latest["component"].id,
+            "id": best_match["component"].id,
             "min_current": attr.get("min_current"),
             "max_current": attr.get("max_current"),
             "breaking_capacity": attr.get("breaking_capacity"),

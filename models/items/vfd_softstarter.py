@@ -60,7 +60,7 @@ def get_all_vfds_softstarters():
     return general_list
 
 
-def get_vfd_softstarter_by_power(type, power, brand=None, order_number=None):
+def get_vfd_softstarter_by_power(type, power, brands=[], order_number=None):
     session = SessionLocal()
     try:
         components = (
@@ -78,12 +78,20 @@ def get_vfd_softstarter_by_power(type, power, brand=None, order_number=None):
         for component in components:
             attr_dict = {attr.key: attr.value for attr in component.attributes}
 
+            # تطابق نوع
             if attr_dict.get("type") != type:
                 continue
+
+            # تطابق توان
             if attr_dict.get("power") != power:
                 continue
-            if brand and attr_dict.get("brand") != brand:
+
+            # تطابق برند (در صورت وجود لیست برند)
+            brand = attr_dict.get("brand")
+            if brands and brand not in brands:
                 continue
+
+            # تطابق شماره سفارش
             if order_number and attr_dict.get("order_number") != order_number:
                 continue
 
@@ -94,17 +102,18 @@ def get_vfd_softstarter_by_power(type, power, brand=None, order_number=None):
             })
 
         if not matching_items:
-            return False, "❌ Component not found"
+            return False, f"❌ {type} not found"
 
-        latest = max(
+        # انتخاب با جدیدترین تأمین‌کننده
+        best_match = max(
             matching_items,
             key=lambda item: item["latest_supplier"].date if item["latest_supplier"] else ""
         )
 
-        supplier = latest["latest_supplier"]
-        attr = latest["attr_dict"]
+        supplier = best_match["latest_supplier"]
+        attr = best_match["attr_dict"]
         result = {
-            "id": latest["component"].id,
+            "id": best_match["component"].id,
             "type": attr.get("type"),
             "power": attr.get("power"),
             "brand": attr.get("brand"),
@@ -118,7 +127,7 @@ def get_vfd_softstarter_by_power(type, power, brand=None, order_number=None):
 
     except Exception as e:
         session.rollback()
-        return {"error": str(e)}
+        return False, f"get {type} error:\n{str(e)}"
     finally:
         session.close()
 
