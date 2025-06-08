@@ -47,6 +47,7 @@ class ResultTab(QWidget):
         self.excel_btn.clicked.connect(self._export_to_excel)
         self.show_datail_btn.clicked.connect(self.show_datail_btn_handler)
 
+
     def _setup_result_table(self):
         for table in self.tables.values():
             table.setAlternatingRowColors(True)

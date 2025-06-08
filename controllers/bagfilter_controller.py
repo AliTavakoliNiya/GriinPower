@@ -121,7 +121,6 @@ class BagfilterController(PanelController):
                 note=""
             )
 
-
     def process_item(self, attr_name, comp_type, specification=""):
         success, item = get_general_by_spec(comp_type, specification)
         if success:

@@ -11,7 +11,8 @@ class ProjectDetails:
 
 
     def get_default_project_details(self):
-        return {"project_info": {"project_name": "",
+        return {"project_info": {"proj_avl":[],
+                                 "project_name": "",
                                  "project_code": "",
                                  "project_unique_code":"",
                                  "project_site_location":"",

@@ -172,4 +172,12 @@ class ProjectInformationTab(QWidget):
             show_message("Please Choose L Voltage", "Error")
             return False
 
+        """ Project AVL"""
+        proj_avl = self.project_details["project_info"]["proj_avl"]
+        for name, checkbox in [("siemens", self.proj_avl_siemens), ("schneider", self.proj_avl_schneider), ("hyundai", self.proj_avl_hyundai)]:
+            if checkbox.isChecked() and name not in proj_avl:
+                proj_avl.append(name)
+            elif not checkbox.isChecked() and name in proj_avl:
+                proj_avl.remove(name)
+
         return True
