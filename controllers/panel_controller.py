@@ -77,11 +77,11 @@ class PanelController:
                 type=f"CONTACTOR FOR {motor.usage.upper()}",
                 brand=contactor["brand"],
                 order_number=contactor["order_number"],
-                specifications=f"Current: {contactor['rated_current']} A",
+                specifications=f"Current: {contactor['rated_current']}A",
                 quantity=total_qty,
                 price=contactor['price'],
                 last_price_update=f"{contactor['supplier_name']}\n{contactor['date']}",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
         else:
             self.add_to_panel(
@@ -92,7 +92,7 @@ class PanelController:
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ Contactor not found",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
             print(contactor)
 
@@ -115,7 +115,7 @@ class PanelController:
                 quantity=total_qty,
                 price=mpcb['price'],
                 last_price_update=f"{mpcb['supplier_name']}\n{mpcb['date']}",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
         else:
             self.add_to_panel(
@@ -126,7 +126,7 @@ class PanelController:
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ MPCB not found",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
             print(mpcb)
 
@@ -148,7 +148,7 @@ class PanelController:
                 quantity=total_qty,
                 price=mccb['price'],
                 last_price_update=f"{mccb['supplier_name']}\n{mccb['date']}",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
         else:
             self.add_to_panel(
@@ -159,7 +159,7 @@ class PanelController:
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ MCCB not found",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
             print(mccb)
 
@@ -184,7 +184,7 @@ class PanelController:
                 quantity=total_qty,
                 price=bimetal['price'],
                 last_price_update=f"{bimetal['supplier_name']}\n{bimetal['date']}",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
         else:
             self.add_to_panel(
@@ -195,7 +195,7 @@ class PanelController:
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ BIMETAL not found",
-                note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
             print(bimetal)
 
@@ -218,7 +218,7 @@ class PanelController:
                     quantity=total_qty,
                     price=vfd['price'],
                     last_price_update=f"{vfd['supplier_name']}\n{vfd['date']}",
-                    note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                    note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
                 )
             else:
                 self.add_to_panel(
@@ -229,7 +229,7 @@ class PanelController:
                     quantity=total_qty,
                     price=0,
                     last_price_update="❌ VFD not found",
-                    note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                    note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
                 )
                 print(vfd)
 
@@ -251,7 +251,7 @@ class PanelController:
                     quantity=total_qty,
                     price=soft_starter['price'],
                     last_price_update=f"{soft_starter['supplier_name']}\n{soft_starter['date']}",
-                    note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                    note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
                 )
             else:
                 self.add_to_panel(
@@ -262,46 +262,12 @@ class PanelController:
                     quantity=total_qty,
                     price=0,
                     last_price_update="❌ VFD not found",
-                    note=f"{total_qty} x Motor Current: {motor.current} A {motor.usage}"
+                    note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
                 )
                 print(soft_starter)
 
     """ ------------------------------------- Generals ------------------------------------- """
 
-    def process_panels(self, motor_objects, type):
-
-        success, item = get_electrical_panel_by_spec(type=type)
-
-        total_qty = 0
-        notes = []
-        for motor, qty in motor_objects:
-            if qty > 0:
-                total_qty += qty * 1
-                notes.append(f"{qty} for {motor.usage}")
-
-        if total_qty > 0:
-            if success:
-                self.add_to_panel(
-                    type=f"{type}",
-                    brand=item.get("brand", ""),
-                    order_number=item.get("order_number", ""),
-                    specifications=item.get("specification", ""),
-                    quantity=round(total_qty, 2),
-                    price=item.get("price", 0),
-                    last_price_update=f"{item.get('supplier_name', '')}\n{item.get('date', '')}",
-                    note="\n".join(notes)
-                )
-            else:
-                self.add_to_panel(
-                    type=f"{type}",
-                    brand="",
-                    order_number="",
-                    specifications="",
-                    quantity=round(total_qty, 2),
-                    price=0,
-                    last_price_update=f"❌ {type} not found",
-                    note="\n".join(notes)
-                )
     def process_item(self, motor_objects, attr_name, comp_type, specification=""):
         success, item = get_general_by_spec(comp_type, specification)
 
@@ -342,7 +308,6 @@ class PanelController:
         Adds general accessories like terminals, buttons, etc. based on motor needs.
         """
 
-        # Example usage
         self.process_item(motor_objects=motor_objects, attr_name="terminal_4_qty", comp_type="Terminal",
                           specification="4")
         self.process_item(motor_objects=motor_objects, attr_name="terminal_6_qty", comp_type="Terminal",
@@ -362,9 +327,7 @@ class PanelController:
 
         # process_item("duct_cover", "DUCT COVER", get_general_by_spec)
         # process_item("miniatory_rail", "MINIATORY RAIL", get_general_by_spec)
-        self.process_panels(motor_objects=motor_objects, type="Junction Box")
 
-        #
         has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
             self.process_item(motor_objects=motor_objects, attr_name="signal_lamp_24v_qty", comp_type="Signal Lamp",
@@ -424,9 +387,6 @@ class PanelController:
             qty = properties["qty"]
             if qty == 0:
                 continue
-
-            # calibration fee
-            # manifolds fee
 
             name = "temperature_transmitter" if instrument_name == "inlet_temperature_transmitter" \
                                                 or instrument_name == "outlet_temperature_transmitter" \
@@ -545,10 +505,10 @@ class PanelController:
             total_di, total_ai = self.calculate_instruments_io(instruments, total_di, total_ai, di_notes, ai_notes)
 
         # Cards calculation
-        di_cards = self._calculate_and_add_io("DI", total_di, di_notes)
-        do_cards = self._calculate_and_add_io("DO", total_do, do_notes)
-        ai_cards = self._calculate_and_add_io("AI", total_ai, ai_notes)
-        ao_cards = self._calculate_and_add_io("AO", total_ao, ao_notes)
+        di_cards = self.calculate_and_add_io("DI", total_di, di_notes)
+        do_cards = self.calculate_and_add_io("DO", total_do, do_notes)
+        ai_cards = self.calculate_and_add_io("AI", total_ai, ai_notes)
+        ao_cards = self.calculate_and_add_io("AO", total_ao, ao_notes)
 
         total_20pin = di_cards + do_cards + ai_cards + ao_cards
         if total_20pin > 0:
@@ -575,7 +535,7 @@ class PanelController:
                     note="Total connectors for all 16CH cards"
                 )
 
-    def _calculate_and_add_io(self, io_type, total, notes):
+    def calculate_and_add_io(self, io_type, total, notes):
         if total <= 0:
             return 0
 

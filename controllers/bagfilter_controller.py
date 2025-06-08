@@ -3,15 +3,13 @@ import re
 from copy import deepcopy
 
 from controllers.panel_controller import PanelController
-from models.items.button import get_button
-from models.items.duct_cover import get_duct_cover
+from models.items.calibration import get_calibration
+
+from models.items.electrical_panel import get_electrical_panel_by_spec
+from models.items.general import get_general_by_spec
+from models.items.instrument import get_instrument_by_spec
+from models.items.manifold import get_manifold
 from models.items.mccb import get_mccb_by_current
-from models.items.miniatory_rail import get_miniatory_rail
-from models.items.mpcb_mccb_aux_contact import get_mpcb_mccb_aux_contact
-from models.items.relay import get_relay_by_contacts
-from models.items.selector_switch import get_selector_switch
-from models.items.signal_lamp import get_signal_lamp
-from models.items.terminal import get_terminal_by_current
 
 
 class BagfilterController(PanelController):
@@ -88,14 +86,66 @@ class BagfilterController(PanelController):
         # # ----------------------- Add Cables -----------------------
         # self.choose_signal_cable(motor_objects)
         # self.choose_power_cable(motor_objects)
-        #
+
         # # ----------------------- Add Electrical Panel -----------------------
-        # self.choose_electrical_panel(total_motors)
-        #
+        self.choose_electrical_panel()
+
         # # ----------------------- Add instruments -----------------------
-        self.choose_instruments(instruments=self.project_details["bagfilter"]["instruments"])
+        self.choose_instruments()
 
         return self.panel
+
+    def choose_electrical_panel(self):
+
+        success, electrical_panel = get_electrical_panel_by_spec(type="Electrical Panel")
+        if success:
+            self.add_to_panel(
+                type="Electrical Panel",
+                brand=electrical_panel.get("brand", ""),
+                order_number="",
+                specifications=f"{electrical_panel.width}mm x {electrical_panel.height}mm x {electrical_panel.depth}mm",
+                quantity=1,
+                price=electrical_panel.get("price", 0),
+                last_price_update=f"{electrical_panel.get('supplier_name', '')}\n{electrical_panel.get('date', '')}",
+                note=""
+            )
+        else:
+            self.add_to_panel(
+                type="Electrical Panel",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=1,
+                price=0,
+                last_price_update="❌ Electrical Panel not found",
+                note=""
+            )
+
+
+    def process_item(self, attr_name, comp_type, specification=""):
+        success, item = get_general_by_spec(comp_type, specification)
+        if success:
+            self.add_to_panel(
+                type=f"{comp_type} {specification}",
+                brand=item.get("brand", ""),
+                order_number="",
+                specifications=item.get("specification", ""),
+                quantity=1,
+                price=item.get("price", 0),
+                last_price_update=f"{item.get('supplier_name', '')}\n{item.get('date', '')}",
+                note=""
+            )
+        else:
+            self.add_to_panel(
+                type=f"{comp_type} {specification}",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=1,
+                price=0,
+                last_price_update=f"❌ {comp_type} not found",
+                note=""
+            )
 
     def choose_general(self, general_items):
         """
@@ -126,25 +176,27 @@ class BagfilterController(PanelController):
                         last_price_update=f"❌{display_name} not found"
                     )
 
-        process_item("relay_1no_1nc", "RELAY 1NO 1NC", get_relay_by_contacts, 1)
-        process_item("relay_2no_2nc", "RELAY 2NO 2NC", get_relay_by_contacts, 2)
-        process_item("terminal_4", "TERMINAL 4", get_terminal_by_current, 4)
-        process_item("mpcb_mccb_aux_contact", "MPCB/MCCB AUX CONTACT", get_mpcb_mccb_aux_contact)
-        process_item("duct_cover", "DUCT COVER", get_duct_cover)
-        process_item("miniatory_rail", "MINIATORY RAIL", get_miniatory_rail)
+        self.process_item(attr_name="terminal_4_qty", comp_type="Terminal", specification="4")
+        self.process_item(attr_name="mpcb_mccb_aux_contact_qty", comp_type="MCCB Aux Contact")
+        self.process_item(attr_name="relay_1no_1nc_qty", comp_type="Relay", specification="1")
+        self.process_item(attr_name="relay_2no_2nc_qty", comp_type="Relay", specification="2")
+        self.process_item(attr_name="button_qty", comp_type="Button")
+        self.process_item(attr_name="selector_switch_qty", comp_type="Selector Switch")
+
+
+
+        # process_item("duct_cover", "DUCT COVER", get_duct_cover)
+        # process_item("miniatory_rail", "MINIATORY RAIL", get_miniatory_rail)
         #process_item("power_outlet", "POWER OUTLET", get_power_outlet)  # Ensure get_power_outlet exists
-        process_item("button", "BUTTON", get_button)
-        process_item("selector_switch", "SELECTOR SWITCH", get_selector_switch)
-        process_item("signal_lamp_24v", "SIGNAL LAMP 24V", get_signal_lamp, 24)
 
         # Handle dynamic HMI
-        hmi_type = self.project_details["bagfilter"]["touch_panel"]
-        # if hmi_type != "None":
-        #     process_item(hmi_type, hmi_type.upper().replace("_", " "), get_touch_panel_by_type, hmi_type)
+        has_hmi = False if self.project_details["bagfilter"]["touch_panel"] == "None" else True
+        if not has_hmi:
+            self.process_item(attr_name="signal_lamp_24v_qty", comp_type="Signal Lamp", specification="24")
 
         # Optional OLM
-        # if "olm" in general_items:
-        #     process_item("olm", "OLM", get_olm)
+        if "olm" in general_items:
+            self.process_item(attr_name="olm", comp_type="OLM")
 
     def choose_mccb(self):
         """
@@ -172,7 +224,7 @@ class BagfilterController(PanelController):
                 brand=mccb.brand,
                 order_number=mccb.order_number,
                 specifications=(
-                    f"Total Motor Current: {total_current:.2f} A\n"
+                    f"Total Motor Current: {total_current:.2f}A"
                 ),
                 quantity=1,
                 price=mccb.component_supplier.price,
@@ -185,7 +237,7 @@ class BagfilterController(PanelController):
                 brand="",
                 order_number="",
                 specifications=(
-                    f"Total Motor Current: {total_current:.2f} A\n"
+                    f"Total Motor Current: {total_current:.2f}A"
                 ),
                 quantity=1,
                 price=0,
@@ -193,6 +245,39 @@ class BagfilterController(PanelController):
                 note=""
             )
 
+    def calculate_and_add_io(self, io_type, total, notes):
+        if total <= 0:
+            return 0
+
+        cards = max(1, (total + 15) // 16)  # 16-channel cards
+        if io_type == "DI":
+            success, card = get_general_by_spec(type="DI Module", specification="16")
+        elif io_type == "DO":
+            success, card = get_general_by_spec(type="DO Module", specification="16")
+        elif io_type == "AI":
+            success, card = get_general_by_spec(type="AI Module", specification="16")
+        elif io_type == "AO":
+            success, card = get_general_by_spec(type="AO Module", specification="16")
+
+        if success and card.component_supplier:
+            price = card.component_supplier.price or 0
+            effective_date = card.component_supplier.date or "Not Found"
+            brand = card.brand
+        else:
+            price = 0
+            effective_date = f"❌ Channel card not found"
+            brand = ""
+
+        self.add_to_panel(
+            type=f"{io_type} 16 CHANNEL",
+            brand=brand,
+            specifications=f"Total: {total}",
+            quantity=cards,
+            price=price,
+            last_price_update=effective_date,
+            note="\n".join(notes)
+        )
+        return cards
     def calculate_plc_io_requirements(self, total_do, total_di, total_ao, total_ai):
         instruments = deepcopy(self.project_details["bagfilter"]["instruments"])
 
@@ -209,80 +294,151 @@ class BagfilterController(PanelController):
         io_config = [
             {
                 "count": total_di,
-                "label": "DI 16 CHANNEL",
-                "general_name": "di_16_channel",
+                "general_name": "DI",
                 "notes": di_notes
             },
             {
                 "count": total_do,
-                "label": "DO 16 CHANNEL",
-                "general_name": "do_16_channel",
+                "general_name": "DO",
                 "notes": do_notes
             },
             {
                 "count": total_ai,
-                "label": "AI 16 CHANNEL",
-                "general_name": "ai_16_channel",
+                "general_name": "AI",
                 "notes": ai_notes
             },
             {
                 "count": total_ao,
-                "label": "AO 16 CHANNEL",
-                "general_name": "ao_16_channel",
+                "general_name": "AO",
                 "notes": ao_notes
             }
         ]
 
-        # total_20pin = 0
-        # for io in io_config:
-        #     if io["count"] > 0:
-        #         cards = (io["count"] + 15) // 16
-        #         total_20pin += cards
-        #         self.add_io_card_to_panel(io["label"], io["general_name"], cards, io["count"], io["notes"])
-        #
-        # if total_20pin > 0:
-        #     pin_card = get_general_by_name("front_connector_20_pin")
-        #     if pin_card.item_id:
-        #         price_item = get_price(pin_card.item_id, brand=False, item_brand=False)
-        #         price = price_item.price or 0
-        #         effective_date = price_item.effective_date or "Not Found"
-        #         brand = price_item.brand
-        #     else:
-        #         price = 0
-        #         effective_date = "Not Found"
-        #         brand = ""
-        #     self.add_to_panel(
-        #         type="FRONT CONNECTOR 20PIN",
-        #         brand=brand,
-        #         quantity=total_20pin,
-        #         price=price,
-        #         last_price_update=effective_date,
-        #         note="Total connectors for all 16CH cards"
-        #     )
+        total_20pin = 0
+        for io in io_config:
+            if io["count"] > 0:
+                cards = (io["count"] + 15) // 16
+                total_20pin += cards
+                self.calculate_and_add_io(io["general_name"], io["count"], io["notes"])
 
-    # def choose_instruments(self):
-    #     """
-    #     Adds instrument entries to panel.
-    #     """
-    #
-    #     instruments = self.project_details["bagfilter"]["instruments"]
-    #     for instrument_name, properties in instruments.items():
-    #         # calibration fee
-    #         # manifolds fee
-    #
-    #         instrument = get_instrument_by_type(instrument_name)
-    #         price_item = get_price(instrument.item_id, properties["brand"])
-    #
-    #         price = price_item.price if price_item.price else 0
-    #         effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-    #
-    #         qty = properties["qty"]
-    #         if qty > 0:
-    #             self.add_to_panel(
-    #                 type=instrument.type,
-    #                 brand=properties["brand"],
-    #                 specifications="",
-    #                 quantity=qty,
-    #                 price=price,
-    #                 last_price_update=effective_date,
-    #                 note=str(instrument.note) + " <calibration fee & manifolds fee>")
+        if total_20pin > 0:
+            success, pin_card = get_general_by_spec(type="Front Connector", specification="20")
+            if success:
+                self.add_to_panel(
+                    type="FRONT CONNECTOR 20PIN",
+                    brand=pin_card["brand"],
+                    order_number=pin_card["order_number"],
+                    quantity=total_20pin,
+                    price=pin_card['price'],
+                    last_price_update=f"{pin_card['supplier_name']}\n{pin_card['date']}",
+                    note="Total connectors for all 16CH cards"
+                )
+            else:
+                self.add_to_panel(
+                    type="FRONT CONNECTOR 20PIN",
+                    brand="",
+                    order_number="",
+                    specifications="",
+                    quantity=total_20pin,
+                    price=0,
+                    last_price_update="❌ FRONT CONNECTOR not found",
+                    note="Total connectors for all 16CH cards"
+                )
+
+    def choose_instruments(self):
+        """
+        Adds instrument entries to panel.
+        """
+
+        instruments = self.project_details["bagfilter"]["instruments"]
+        for instrument_name, properties in instruments.items():
+            qty = properties["qty"]
+            if qty == 0:
+                continue
+
+            name = "temperature_transmitter" if instrument_name == "inlet_temperature_transmitter" \
+                                                or instrument_name == "outlet_temperature_transmitter" \
+                                                or instrument_name == "bearing_temperature_transmitter" \
+                                                or instrument_name == "pt100" \
+                else instrument_name
+            name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
+
+            success, instrument = get_instrument_by_spec(name)
+
+            if success:
+                self.add_to_panel(
+                    type=instrument_name.upper().replace("_", " "),
+                    brand=instrument.brand,
+                    order_number=instrument.order_number,
+                    specifications="",
+                    quantity=qty,
+                    price=instrument.component_supplier.price,
+                    last_price_update=f"{instrument.component_supplier.supplier.name}\n{instrument.component_supplier.date}",
+                )
+                # ------------ Choose Manifold ------------
+                manifold_qty = 0
+                manifold_ways = None
+                if "delta" in name.lower():
+                    manifold_ways = 3
+                    manifold_qty = qty
+                elif "pressure" in name.lower():
+                    manifold_ways = 2
+                    manifold_qty = qty
+
+                if manifold_qty > 0 and manifold_ways is not None:
+                    formatted_name = f"{manifold_ways} WAYS MANIFOLD"
+                    success, manifold_obj = get_manifold(manifold_ways)
+                    if success and manifold_obj.component_supplier and manifold_obj.component_supplier.item_id:
+                        self.add_to_panel(
+                            type=formatted_name,
+                            brand=manifold_obj.brand,
+                            order_number=manifold_obj.order_number,
+                            quantity=qty,
+                            price=manifold_obj.component_supplier.price,
+                            last_price_update=f"{manifold_obj.component_supplier.supplier.name}\n{manifold_obj.component_supplier.date}",
+                            note=f"manifold for {instrument_name}")
+                    else:
+                        self.add_to_panel(
+                            type=formatted_name,
+                            brand="",
+                            order_number="",
+                            quantity=qty,
+                            price=0,
+                            last_price_update=f"❌Manifold not found",
+                            note=f"manifold for {instrument_name}")
+                        print(manifold_obj)
+
+                # ------------ Calibration ------------
+                if "transmitter" in name and qty != 0:
+                    success, calibration = get_calibration()
+                    if success:
+                        self.add_to_panel(
+                            type="CALIBRATION",
+                            brand=calibration.brand,
+                            quantity=qty,
+                            price=calibration.component_supplier.price,
+                            last_price_update=f"{calibration.component_supplier.supplier.name}\n{calibration.component_supplier.date}",
+                            note=f"calibration for {instrument_name}"
+                        )
+                    else:
+                        self.add_to_panel(
+                            type="CALIBRATION",
+                            brand="",
+                            quantity=qty,
+                            price=0,
+                            last_price_update=f"❌ Calibration not found for {instrument_name}"
+                        )
+                        print(calibration)
+
+
+            else:
+                self.add_to_panel(
+                    type=instrument_name.upper().replace("_", " "),
+                    brand="",
+                    order_number="",
+                    specifications="",
+                    quantity=qty,
+                    price=0,
+                    last_price_update=f"❌ Instrument not found",
+                )
+                print(instrument)

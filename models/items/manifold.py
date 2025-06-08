@@ -1,5 +1,5 @@
 from sqlalchemy import cast, Integer, desc
-from sqlalchemy.orm import aliased, joinedload
+from sqlalchemy.orm import joinedload
 
 from models import Component, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
@@ -20,21 +20,28 @@ class Manifold:
 def get_manifold(ways=None):
     session = SessionLocal()
     try:
-        manifold_type = session.query(ComponentType).filter_by(name='Manifold').first()
+        # Subquery to find ComponentAttribute with key='ways'
+        ways_subquery = (
+            session.query(ComponentAttribute.component_id, cast(ComponentAttribute.value, Integer).label("ways"))
+            .filter(ComponentAttribute.key == "ways")
+            .subquery()
+        )
 
-        ways_attr = aliased(ComponentAttribute)
-
+        # Join with Component and filter by type and optional 'ways' value
         query = (
             session.query(Component)
-            .join(ways_attr, Component.attributes)
-            .filter(Component.type_id == manifold_type.id)
-            .filter(ways_attr.key == 'ways')
+            .join(ways_subquery, Component.id == ways_subquery.c.component_id)
+            .filter(Component.type == "Manifold")
+            .options(
+                joinedload(Component.attributes),
+                joinedload(Component.suppliers).joinedload(ComponentSupplier.supplier)
+            )
         )
 
         if ways is not None:
-            query = query.filter(cast(ways_attr.value, Integer) >= ways)
+            query = query.filter(ways_subquery.c.ways >= ways)
 
-        component = query.order_by(cast(ways_attr.value, Integer).asc()).first()
+        component = query.order_by(ways_subquery.c.ways.asc()).first()
 
         if not component:
             return None, "❌ Manifold not found."
@@ -51,7 +58,7 @@ def get_manifold(ways=None):
         manifold = Manifold(
             brand=component.brand,
             model=component.model,
-            ways=attrs.get('ways'),
+            ways=attrs.get("ways"),
             component_supplier=latest_supplier
         )
 
@@ -59,7 +66,7 @@ def get_manifold(ways=None):
 
     except Exception as e:
         session.rollback()
-        return False, f"❌ Failed in get Manifold:\n{str(e)}"
+        return False, f"❌ Failed in get_manifold:\n{str(e)}"
 
     finally:
         session.close()
