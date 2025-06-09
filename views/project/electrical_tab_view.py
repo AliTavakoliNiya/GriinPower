@@ -14,11 +14,14 @@ from views.message_box_view import show_message
 
 
 class ElectricalTab(QWidget):
-    def __init__(self):
+    def __init__(self, main_view):
         super().__init__()
         uic.loadUi("ui/project/electrical_tab.ui", self)
+        self.main_view = main_view
         self.electrical_specs = ProjectDatas().project_electrical_specs
         self._initialize_components()
+        self.el_tab_rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
+
 
     def _initialize_components(self):
         """Initialize all UI components with their event handlers"""
@@ -115,7 +118,7 @@ class ElectricalTab(QWidget):
 
         self.emergency_flap_motor_qty.valueChanged.connect(self._handle_emergency_flap_motor_qty_changed)
         self.emergency_flap_motor_kw.currentIndexChanged.connect(self._handle_emergency_flap_motor_kw_changed)
-        self.emergency_flap_start_type.currentIndexChanged.connect(self._handle_emergency_flap_start_type_changed)
+        self.emergency_flap_motor_start_type.currentIndexChanged.connect(self._handle_emergency_flap_start_type_changed)
 
         """ ------------Fresh air instruments ------------ """
         self.freshair_tt_qty.valueChanged.connect(self._handle_freshair_tt_qty_changed)
@@ -177,6 +180,10 @@ class ElectricalTab(QWidget):
 
         self.fan_tt_qty.valueChanged.connect(self._handle_fan_tt_qty_changed)
         self.fan_tt_brand.currentIndexChanged.connect(self._handle_fan_tt_brand_changed)
+
+    def on_selection_rev_hint_change(self, index):
+        if index != 0:
+            self.main_view.set_rev_hint(rev_number=self.el_tab_rev_hint_combo.currentText())
 
     """ ------------Transport motor handlers ------------ """
 
@@ -619,8 +626,8 @@ class ElectricalTab(QWidget):
     def _handle_bagfilter_order_changed(self, value):
         self._update_project_value(["bagfilter", "order"], value)
 
-    def _handle_plc_series_changed(self, value):
-        self._update_project_value(["bagfilter", "plc_series"], value)
+    def _handle_plc_series_changed(self, index):
+        self._update_project_value(["bagfilter", "plc_series"], self.plc_series.currentText())
 
     def _handle_plc_protocol_changed(self):
         self._update_project_value(["bagfilter", "plc_protocol"])
@@ -654,45 +661,44 @@ class ElectricalTab(QWidget):
     def _handle_bagfilter_dpt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "qty"], value)
 
-    def _handle_bagfilter_dpt_brand_changed(self, value):
-        self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "brand"], value)
+    def _handle_bagfilter_dpt_brand_changed(self, index):
+        self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "brand"], self.bagfilter_dpt_brand.currentText())
 
     def _handle_bagfilter_dps_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "delta_pressure_switch", "qty"], value)
 
-    def _handle_bagfilter_dps_brand_changed(self, value):
-        self._update_project_value(["bagfilter", "instruments", "delta_pressure_switch", "brand"], value)
+    def _handle_bagfilter_dps_brand_changed(self, index):
+        self._update_project_value(["bagfilter", "instruments", "delta_pressure_switch", "brand"], self.bagfilter_dps_brand.currentText())
 
     def _handle_bagfilter_pt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "pressure_transmitter", "qty"], value)
 
-    def _handle_bagfilter_pt_brand_changed(self, value):
-        self._update_project_value(["bagfilter", "instruments", "pressure_transmitter", "brand"], value)
+    def _handle_bagfilter_pt_brand_changed(self, index):
+        self._update_project_value(["bagfilter", "instruments", "pressure_transmitter", "brand"], self.bagfilter_pt_brand.currentText())
 
     def _handle_bagfilter_ps_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "pressure_switch", "qty"], value)
 
-    def _handle_bagfilter_ps_brand_changed(self, value):
-        self._update_project_value(["bagfilter", "instruments", "pressure_switch", "brand"], value)
+    def _handle_bagfilter_ps_brand_changed(self, index):
+        self._update_project_value(["bagfilter", "instruments", "pressure_switch", "brand"], self.bagfilter_ps_brand.currentText())
 
     def _handle_bagfilter_pg_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "pressure_gauge", "qty"], value)
 
-    def _handle_bagfilter_pg_brand_changed(self, value):
-        self._update_project_value(["bagfilter", "instruments", "pressure_gauge", "brand"], value)
+    def _handle_bagfilter_pg_brand_changed(self, index):
+        self._update_project_value(["bagfilter", "instruments", "pressure_gauge", "brand"], self.bagfilter_pg_brand.currentText())
 
     def _handle_bagfilter_inlet_tt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "inlet_temperature_transmitter", "qty"], value)
 
-    def _handle_bagfilter_inlet_tt_brand_changed(self, value):
-        self._update_project_value(["bagfilter", "instruments", "inlet_temperature_transmitter", "brand"], value)
+    def _handle_bagfilter_inlet_tt_brand_changed(self, index):
+        self._update_project_value(["bagfilter", "instruments", "inlet_temperature_transmitter", "brand"], self.bagfilter_inlet_tt_brand.currentText())
 
     def _handle_bagfilter_outlet_tt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "outlet_temperature_transmitter", "qty"], value)
 
-    def _handle_bagfilter_outlet_tt_brand_changed(self, value):
-        print(value)
-        self._update_project_value(["bagfilter", "instruments", "outlet_temperature_transmitter", "brand"], value)
+    def _handle_bagfilter_outlet_tt_brand_changed(self, index):
+        self._update_project_value(["bagfilter", "instruments", "outlet_temperature_transmitter", "brand"], self.bagfilter_outlet_tt_brand.currentText())
 
     def _update_project_value(self, path_list, value=None):
         """Update project details dictionary value at the specified path

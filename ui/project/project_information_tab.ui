@@ -598,6 +598,9 @@ Contact Person</string>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
@@ -657,6 +660,9 @@ Contact Person</string>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
@@ -689,7 +695,7 @@ Contact Person</string>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="rev_hint_combo">
+         <widget class="QComboBox" name="info_tab_rev_hint_combo">
           <property name="minimumSize">
            <size>
             <width>50</width>

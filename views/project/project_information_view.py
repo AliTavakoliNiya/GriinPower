@@ -12,11 +12,11 @@ class ProjectInformationTab(QWidget):
 
         self.electrical_specs = ProjectDatas().project_electrical_specs
         self._initialize_info()
-        self.rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
+        self.info_tab_rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
 
     def on_selection_rev_hint_change(self, index):
-        if index != 0: # rev 00 has no hint
-            self.main_view.set_rev_hint(rev_specs=self.electrical_specs, rev_number=self.rev_hint_combo.currentText())
+        if index != 0:  # rev 00 has no hint
+            self.main_view.set_rev_hint(rev_number=self.info_tab_rev_hint_combo.currentText())
 
     def _initialize_info(self):
         """ --------------------------- Project Information --------------------------- """
@@ -56,6 +56,10 @@ class ProjectInformationTab(QWidget):
         self.co_contact_position.textChanged.connect(self._handle_co_contact_position_changed)
         self.co_contact_phone.textChanged.connect(self._handle_co_contact_phone_changed)
 
+        """ --------------------------- Approve Vendor List --------------------------- """
+        self.proj_avl_siemens.stateChanged.connect(self._handle_proj_avl_siemens_changed)
+        self.proj_avl_schneider.stateChanged.connect(self._handle_proj_avl_schneider_changed)
+        self.proj_avl_hyundai.stateChanged.connect(self._handle_proj_avl_hyundai_changed)
 
     def _update_project_value(self, path_list, value=None):
         """Update project details dictionary value at the specified path
@@ -87,6 +91,7 @@ class ProjectInformationTab(QWidget):
         target[path_list[-1]] = value
 
     """ --------------------------- Project Information --------------------------- """
+
     def _handle_project_name_changed(self):
         self._update_project_value(["project_info", "project_name"], str(self.project_name.text()))
 
@@ -97,12 +102,13 @@ class ProjectInformationTab(QWidget):
         self._update_project_value(["project_info", "project_unique_code"], str(self.project_unique_code.text()))
 
     def _handle_project_site_location_changed(self):
-        self._update_project_value(["project_info", "project_site_location"], str(self.project_site_location.toPlainText()))
-
+        self._update_project_value(["project_info", "project_site_location"],
+                                   str(self.project_site_location.toPlainText()))
 
     """ --------------------------- Site Condition --------------------------- """
+
     def _handle_m_voltage_changed(self):
-        self._update_project_value(["project_info", "m_voltage"], float(self.project_m_voltage.currentText())*1000)
+        self._update_project_value(["project_info", "m_voltage"], float(self.project_m_voltage.currentText()) * 1000)
 
     def _handle_l_voltage_changed(self):
         self._update_project_value(["project_info", "l_voltage"], float(self.project_l_voltage.currentText()))
@@ -114,7 +120,8 @@ class ProjectInformationTab(QWidget):
         self._update_project_value(["project_info", "minimum_temprature"], value)
 
     def _handle_voltage_variation_changed(self):
-        self._update_project_value(["project_info", "voltage_variation"], float(self.project_voltage_variation.currentText()))
+        self._update_project_value(["project_info", "voltage_variation"],
+                                   float(self.project_voltage_variation.currentText()))
 
     def _handle_altitude_changed(self, value):
         self._update_project_value(["project_info", "altitude_elevation"], value)
@@ -126,9 +133,11 @@ class ProjectInformationTab(QWidget):
         self._update_project_value(["project_info", "voltage_frequency"], float(self.project_frequency.currentText()))
 
     def _handle_frequency_variation_changed(self):
-        self._update_project_value(["project_info", "frequency_variation"], float(self.project_frequency_variation.currentText()))
+        self._update_project_value(["project_info", "frequency_variation"],
+                                   float(self.project_frequency_variation.currentText()))
 
     """ --------------------------- Electrical Contact Person --------------------------- """
+
     def _handle_el_contact_name_changed(self):
         self._update_project_value(["project_info", "el_contact_name"], str(self.el_contact_name.text()))
 
@@ -139,6 +148,7 @@ class ProjectInformationTab(QWidget):
         self._update_project_value(["project_info", "el_contact_phone"], str(self.el_contact_phone.text()))
 
     """ --------------------------- Mechanical Contact Person --------------------------- """
+
     def _handle_me_contact_name_changed(self):
         self._update_project_value(["project_info", "me_contact_name"], str(self.me_contact_name.text()))
 
@@ -149,16 +159,18 @@ class ProjectInformationTab(QWidget):
         self._update_project_value(["project_info", "me_contact_phone"], str(self.me_contact_phone.text()))
 
     """ --------------------------- Commercial Contact Person --------------------------- """
+
     def _handle_co_contact_name_changed(self):
         self._update_project_value(["project_info", "co_contact_name"], str(self.co_contact_name.text()))
 
     def _handle_co_contact_position_changed(self):
-        self._update_project_value(["project_info", "co_contact_position"],str(self.co_contact_position.text()))
+        self._update_project_value(["project_info", "co_contact_position"], str(self.co_contact_position.text()))
 
     def _handle_co_contact_phone_changed(self):
         self._update_project_value(["project_info", "co_contact_phone"], str(self.co_contact_phone.text()))
 
     """ --------------------------- Owner --------------------------- """
+
     def _handle_owner_changed(self):
         self._update_project_value(["project_info", "owner_name"], str(self.owner_name.text()))
 
@@ -168,6 +180,25 @@ class ProjectInformationTab(QWidget):
     def _handle_employer_name_changed(self):
         self._update_project_value(["project_info", "employer_name"], str(self.employer_name.text()))
 
+    """ --------------------------- Approve Vendor List --------------------------- """
+
+    def _handle_proj_avl_siemens_changed(self):  # value = sender.isChecked()
+        if self.proj_avl_siemens.isChecked() and "siemens" not in self.electrical_specs["project_info"]["proj_avl"]:
+            self.electrical_specs["project_info"]["proj_avl"].append("siemens")
+        elif not self.proj_avl_siemens.isChecked() and "siemens" in self.electrical_specs["project_info"]["proj_avl"]:
+            self.electrical_specs["project_info"]["proj_avl"].remove("siemens")
+
+    def _handle_proj_avl_schneider_changed(self):
+        if self.proj_avl_schneider.isChecked() and "Schneider Electric" not in self.electrical_specs["project_info"]["proj_avl"]:
+            self.electrical_specs["project_info"]["proj_avl"].append("Schneider Electric")
+        elif not self.proj_avl_schneider.isChecked() and "Schneider Electric" in self.electrical_specs["project_info"]["proj_avl"]:
+            self.electrical_specs["project_info"]["proj_avl"].remove("Schneider Electric")
+
+    def _handle_proj_avl_hyundai_changed(self):
+        if self.proj_avl_hyundai.isChecked() and "Hyundai" not in self.electrical_specs["project_info"]["proj_avl"]:
+            self.electrical_specs["project_info"]["proj_avl"].append("Hyundai")
+        elif not self.proj_avl_hyundai.isChecked() and "Hyundai" in self.electrical_specs["project_info"]["proj_avl"]:
+            self.electrical_specs["project_info"]["proj_avl"].remove("Hyundai")
 
     def check_info_tab_ui_rules(self):
         if self.project_m_voltage.currentIndex() == 0:
@@ -177,13 +208,5 @@ class ProjectInformationTab(QWidget):
         if self.project_l_voltage.currentIndex() == 0:
             show_message("Please Choose L Voltage", "Error")
             return False
-
-        """ Project AVL"""
-        proj_avl = self.electrical_specs["project_info"]["proj_avl"]
-        for name, checkbox in [("Siemens", self.proj_avl_siemens), ("Schneider Electric", self.proj_avl_schneider), ("Hyundai", self.proj_avl_hyundai)]:
-            if checkbox.isChecked() and name not in proj_avl:
-                proj_avl.append(name)
-            elif not checkbox.isChecked() and name in proj_avl:
-                proj_avl.remove(name)
 
         return True
