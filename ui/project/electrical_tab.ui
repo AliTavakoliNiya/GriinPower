@@ -2253,7 +2253,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+              <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
             </property>
             <property name="flat">
              <bool>false</bool>
@@ -2276,7 +2276,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../assets/minus.png</normaloff>../assets/minus.png</iconset>
+              <normaloff>../../assets/minus.png</normaloff>../../assets/minus.png</iconset>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -2625,7 +2625,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../assets/setting.png</normaloff>../assets/setting.png</iconset>
+              <normaloff>../../assets/setting.png</normaloff>../../assets/setting.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -3071,6 +3071,11 @@
             <item>
              <property name="text">
               <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Manual</string>
              </property>
             </item>
             <item>
@@ -3694,7 +3699,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+              <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
             </property>
             <property name="flat">
              <bool>false</bool>
@@ -4022,7 +4027,7 @@
           <item row="7" column="2" colspan="4">
            <widget class="QCheckBox" name="me">
             <property name="text">
-             <string>Mechanical Erection</string>
+             <string>Material Erection</string>
             </property>
            </widget>
           </item>

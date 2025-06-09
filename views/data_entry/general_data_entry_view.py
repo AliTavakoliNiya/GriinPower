@@ -87,6 +87,16 @@ class GeneralDataEntryView:
                     'label': "*Input Channels",
                     'entry': ""
                 },
+            'MCB': {
+                'show': True,
+                'label': "*4DC/2AC",
+                'entry': ""
+            },
+            'Power Outlet': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
 
             }
 

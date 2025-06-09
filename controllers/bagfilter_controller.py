@@ -38,13 +38,17 @@ class BagfilterController(PanelController):
                 num2 = int(match.group(2))
                 n_valves = num1 * num2
 
-        bagfilter_general_items = {"relay_1no_1nc": 3,
-                                   "relay_2no_2nc": 3,
-                                   "terminal_4": n_valves * 2 + 20,
-                                   "mpcb_mccb_aux_contact": 1,
-                                   "duct_cover": round(n_valves * 0.1, 2),
-                                   "miniatory_rail": round(n_valves * 0.3, 2),
-                                   "power_outlet ": 1}
+        self.bagfilter_general_items = {
+                                        "relay_1no_1nc": 3,
+                                        "relay_2no_2nc": 3,
+                                        "terminal_4": n_valves * 2 + 20,
+                                        "mpcb_mccb_aux_contact": 1,
+                                        "duct_cover": round(n_valves * 0.1, 2),
+                                        "miniatory_rail": round(n_valves * 0.3, 2),
+                                        "power_outlet": 1,
+                                        "mcb_4DC": 2,
+                                        "mcb_2AC": 1,
+                                        }
 
         total_do = 3
         total_di = 3
@@ -61,14 +65,14 @@ class BagfilterController(PanelController):
         if not has_hmi:
             total_di += 4
             total_do = 1
-            bagfilter_general_items["button"] = 3
-            bagfilter_general_items["selector_switch"] = 1
-            bagfilter_general_items["signal_lamp_24v"] = 6
+            self.bagfilter_general_items["button"] = 3
+            self.bagfilter_general_items["selector_switch"] = 1
+            self.bagfilter_general_items["signal_lamp_24v"] = 6
         else:
             hmi_type = self.electrical_specs["bagfilter"]["touch_panel"]
-            bagfilter_general_items[hmi_type] = 1
+            self.bagfilter_general_items[hmi_type] = 1
 
-        bagfilter_general_items["olm"] = 1 if self.electrical_specs["bagfilter"]["olm"] else 0
+        self.bagfilter_general_items["olm"] = 1 if self.electrical_specs["bagfilter"]["olm"] else 0
 
         """ ----------------------- Add Components for Motors ----------------------- """
         self.choose_mccb()
@@ -81,14 +85,14 @@ class BagfilterController(PanelController):
         # self.choose_internal_power_wire(motor_objects)
         #
         # # ----------------------- Add General Accessories -----------------------
-        self.choose_general(bagfilter_general_items)
+        self.choose_general(self.bagfilter_general_items)
 
         # # ----------------------- Add Cables -----------------------
         # self.choose_signal_cable(motor_objects)
         # self.choose_power_cable(motor_objects)
 
         # # ----------------------- Add Electrical Panel -----------------------
-        self.choose_electrical_panel()
+        # self.choose_electrical_panel()
 
         # # ----------------------- Add instruments -----------------------
         self.choose_instruments()
@@ -121,81 +125,55 @@ class BagfilterController(PanelController):
                 note=""
             )
 
-    def process_item(self, attr_name, comp_type, specification=""):
+    def process_item(self, comp_type, qty, specification=""):
+        if qty <= 0:
+            return
+
         success, item = get_general_by_spec(comp_type, specification)
+        display_type = f"{comp_type} {specification}".strip()
+
         if success:
             self.add_to_panel(
-                type=f"{comp_type} {specification}",
+                type=display_type,
                 brand=item.get("brand", ""),
                 order_number="",
                 specifications=item.get("specification", ""),
-                quantity=1,
+                quantity=qty,
                 price=item.get("price", 0),
                 last_price_update=f"{item.get('supplier_name', '')}\n{item.get('date', '')}",
                 note=""
             )
         else:
             self.add_to_panel(
-                type=f"{comp_type} {specification}",
+                type=display_type,
                 brand="",
                 order_number="",
-                specifications="",
-                quantity=1,
+                specifications=specification,
+                quantity=qty,
                 price=0,
-                last_price_update=f"❌ {comp_type} not found",
+                last_price_update=f"❌ {display_type} not found",
                 note=""
             )
 
     def choose_general(self, general_items):
-        """
-        Adds general accessories like relays, terminals, buttons, etc. based on the bagfilter general items dictionary.
-        """
+        self.process_item(comp_type="Terminal", specification="4", qty=general_items.get("terminal_4", 0))
+        self.process_item(comp_type="Relay", specification="1", qty=general_items.get("relay_1no_1nc", 0))
+        self.process_item(comp_type="Relay", specification="2", qty=general_items.get("relay_2no_2nc", 0))
+        self.process_item(comp_type="Button", qty=general_items.get("button", 0))
+        self.process_item(comp_type="Selector Switch", qty=general_items.get("selector_switch", 0))
+        self.process_item(comp_type="Power Outlet", qty=general_items.get("power_outlet", 0))
+        self.process_item(comp_type="MCB", specification="4DC", qty=general_items.get("mcb_4DC", 0))
+        self.process_item(comp_type="MCB", specification="2AC", qty=general_items.get("mcb_2AC", 0))
 
-        def process_item(attr_name, display_name, get_func, value=None):
-            qty = general_items.get(attr_name, 0)
-            if qty > 0:
-                success, item = get_func(value) if value else get_func()
-                if success:
-                    self.add_to_panel(
-                        type=display_name,
-                        brand=item.brand,
-                        quantity=round(qty, 2),
-                        price=item.component_supplier.price,
-                        last_price_update=f"{item.component_supplier.supplier.name}\n{item.component_supplier.date}",
-                        note=""
-                    )
-                else:
-                    self.add_to_panel(
-                        type=display_name,
-                        brand="",
-                        order_number="",
-                        specifications="",
-                        quantity=round(qty, 2),
-                        price=0,
-                        last_price_update=f"❌{display_name} not found"
-                    )
-
-        self.process_item(attr_name="terminal_4_qty", comp_type="Terminal", specification="4")
-        self.process_item(attr_name="mpcb_mccb_aux_contact_qty", comp_type="MCCB Aux Contact")
-        self.process_item(attr_name="relay_1no_1nc_qty", comp_type="Relay", specification="1")
-        self.process_item(attr_name="relay_2no_2nc_qty", comp_type="Relay", specification="2")
-        self.process_item(attr_name="button_qty", comp_type="Button")
-        self.process_item(attr_name="selector_switch_qty", comp_type="Selector Switch")
-
-
-
-        # process_item("duct_cover", "DUCT COVER", get_duct_cover)
-        # process_item("miniatory_rail", "MINIATORY RAIL", get_miniatory_rail)
-        #process_item("power_outlet", "POWER OUTLET", get_power_outlet)  # Ensure get_power_outlet exists
 
         # Handle dynamic HMI
         has_hmi = False if self.electrical_specs["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
-            self.process_item(attr_name="signal_lamp_24v_qty", comp_type="Signal Lamp", specification="24")
+            self.process_item(comp_type="Signal Lamp", specification="24", qty=general_items.get("signal_lamp_24v", 0))
 
         # Optional OLM
         if "olm" in general_items:
-            self.process_item(attr_name="olm", comp_type="OLM")
+            self.process_item(comp_type="OLM", qty=self.bagfilter_general_items["olm"])
 
     def choose_mccb(self):
         """
@@ -216,7 +194,8 @@ class BagfilterController(PanelController):
         if total_current == 0:
             return
 
-        success, mccb = get_mccb_by_current( rated_current=total_current, brands=self.electrical_specs["project_info"]["proj_avl"])
+        success, mccb = get_mccb_by_current(rated_current=total_current,
+                                            brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type="MCCB INPUT PANEL",
@@ -236,7 +215,7 @@ class BagfilterController(PanelController):
                 brand="",
                 order_number="",
                 specifications=(
-                    f"Total Motor Current: {total_current:.2f}A"
+                    f"At Least: {total_current * 1.25:.2f}A"
                 ),
                 quantity=1,
                 price=0,
@@ -277,6 +256,7 @@ class BagfilterController(PanelController):
             note="\n".join(notes)
         )
         return cards
+
     def calculate_plc_io_requirements(self, total_do, total_di, total_ao, total_ai):
         instruments = deepcopy(self.electrical_specs["bagfilter"]["instruments"])
 
@@ -428,8 +408,6 @@ class BagfilterController(PanelController):
                             last_price_update=f"❌ Calibration not found for {instrument_name}"
                         )
                         print(calibration)
-
-
             else:
                 self.add_to_panel(
                     type=instrument_name.upper().replace("_", " "),

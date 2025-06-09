@@ -960,7 +960,7 @@ QListWidget::item:selected {
       </item>
       <item>
        <property name="text">
-        <string>New Item</string>
+        <string>Wire &amp; Cable</string>
        </property>
       </item>
       <item>
@@ -1028,7 +1028,7 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>9</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -1384,7 +1384,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
@@ -1816,7 +1816,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
@@ -2243,7 +2243,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
@@ -2545,7 +2545,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
@@ -2938,7 +2938,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
@@ -3158,7 +3158,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
@@ -3311,7 +3311,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
@@ -3703,7 +3703,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
@@ -3837,7 +3837,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
@@ -4350,17 +4350,7 @@ QListWidget::item:selected {
              </item>
              <item>
               <property name="text">
-               <string>Signal Lamp</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Selector Switch</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Button</string>
+               <string>MCB</string>
               </property>
              </item>
              <item>
@@ -4410,6 +4400,26 @@ QListWidget::item:selected {
              </item>
              <item>
               <property name="text">
+               <string>Button</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Selector Switch</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Signal Lamp</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Power Outlet</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>Relay</string>
               </property>
              </item>
@@ -4444,7 +4454,7 @@ QListWidget::item:selected {
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>../assets/plus.png</normaloff>../assets/plus.png</iconset>
+               <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
              </property>
             </widget>
            </item>
