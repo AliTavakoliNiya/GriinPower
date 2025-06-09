@@ -16,10 +16,12 @@ from controllers.electric_motor_controller import ElectricMotorController
 from controllers.fan_damper_controller import FanDamperController
 from controllers.fresh_air_controller import FreshAirController
 from controllers.hopper_heater_controller import HopperHeaterController
-from controllers.project_datas import ProjectDatas
+from controllers.project_datas_controller import ProjectDatasController
 from controllers.transport_controller import TransportController
 from controllers.vibration_controller import VibrationController
 from utils.pandas_model import PandasModel
+from models import projects
+from views.message_box_view import show_message
 
 
 class ResultTab(QWidget):
@@ -28,7 +30,9 @@ class ResultTab(QWidget):
         uic.loadUi("ui/project/results_tab.ui", self)
 
         self.main_view = main_view
-        self.electrical_specs = ProjectDatas().project_electrical_specs
+        self.electrical_specs = ProjectDatasController().project_electrical_specs
+        self.tabWidget.setCurrentIndex(0)
+
 
         self.tables = {
             "bagfilter_panel_table": self.bagfilter_panel_table,
@@ -46,7 +50,21 @@ class ResultTab(QWidget):
 
         self.excel_btn.clicked.connect(self._export_to_excel)
         self.show_datail_btn.clicked.connect(self.show_datail_btn_handler)
+        self.save_current_rev_btn.clicked.connect(self.save_current_rev_btn_handler)
 
+    def save_current_rev_btn_handler(self):
+        current_project = projects.Project()
+        current_project.name = self.electrical_specs["project_info"]["project_name"]
+        current_project.code = self.electrical_specs["project_info"]["project_code"]
+        current_project.unique_no = self.electrical_specs["project_info"]["project_unique_code"]
+        current_project.revison = self.electrical_specs["project_info"]["rev"]
+        current_project.set_data(self.electrical_specs)
+
+        success, msg = projects.save_project(current_project)
+        if success:
+            show_message(msg, title="Saved")
+        else:
+            show_message(msg, title="Error")
 
     def _setup_result_table(self):
         for table in self.tables.values():

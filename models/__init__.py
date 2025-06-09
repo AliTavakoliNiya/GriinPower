@@ -7,7 +7,6 @@ __all__ = [
     "Component",
     "ComponentAttribute",
     "Project",
-    "ProjectComponent",
     "User",
     "Supplier",
     "ComponentSupplier"
@@ -16,7 +15,6 @@ __all__ = [
 from .components import Component
 from .component_attributes import ComponentAttribute
 from .projects import Project
-from .project_components import ProjectComponent
 from .user_model import User
 from .supplier import Supplier
 from .component_suppliers import ComponentSupplier

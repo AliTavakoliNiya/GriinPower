@@ -6,7 +6,9 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 
+from controllers.project_datas_controller import ProjectDatasController
 from controllers.user_session import UserSession
+from models.projects import get_project
 from utils.database import SessionLocal
 from views.data_entry.data_entry_view import DataEntry
 from views.login_view import LoginView
@@ -25,7 +27,8 @@ class GriinPower(QMainWindow):
         self.setWindowTitle("GriinPower")
         self.settings = QSettings("Griin", "GriinPower")
 
-        self.new_project_btn.clicked.connect(self.open_new_project_func)
+        self.new_project_btn.clicked.connect(self.open_project_func)
+        self.open_project_btn.clicked.connect(lambda: self.open_project_func(True))
         self.data_entry_btn.clicked.connect(self.open_data_entry_func)
         self.supplier_btn.clicked.connect(self.open_suppliers_func)
 
@@ -57,8 +60,18 @@ class GriinPower(QMainWindow):
         else:
             show_message(f"file {path} not found.", "Details")
 
-    def open_new_project_func(self):
-        self.tender_application_window = TenderApplication(parent=self)
+    def open_project_func(self, load_proj=False):
+        if load_proj:
+            self.tender_application_window = TenderApplication(parent=self)
+            project_datas = ProjectDatasController()
+            success, datas = get_project(project_id=None)
+            if success:
+                project_datas.load_data(datas)
+            else:
+                show_message(datas, title="Error")
+        else:
+            self.tender_application_window = TenderApplication(parent=self)
+
 
     def open_data_entry_func(self):
         self.data_entry_window = DataEntry(parent=self)

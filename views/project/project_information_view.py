@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox
-from controllers.project_datas import ProjectDatas
+from controllers.project_datas_controller import ProjectDatasController
 from views.message_box_view import show_message
 
 
@@ -10,7 +10,7 @@ class ProjectInformationTab(QWidget):
         uic.loadUi("ui/project/project_information_tab.ui", self)
         self.main_view = main_view
 
-        self.electrical_specs = ProjectDatas().project_electrical_specs
+        self.electrical_specs = ProjectDatasController().project_electrical_specs
         self._initialize_info()
         self.info_tab_rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
 

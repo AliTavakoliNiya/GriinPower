@@ -25,7 +25,7 @@
         <enum>QTabWidget::South</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>6</number>
        </property>
        <widget class="QWidget" name="bagfilter_panel_tab">
         <attribute name="title">
@@ -170,7 +170,7 @@
          <string>Final</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_7">
-         <item row="0" column="0">
+         <item row="1" column="0" colspan="3">
           <widget class="QTableView" name="summary_panel_table">
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>
@@ -184,6 +184,26 @@
            <attribute name="verticalHeaderCascadingSectionResizes">
             <bool>true</bool>
            </attribute>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="1">
+          <widget class="QPushButton" name="save_current_rev_btn">
+           <property name="text">
+            <string>Save Current Rev.</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -239,7 +259,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../assets/check-list.png</normaloff>../assets/check-list.png</iconset>
+         <normaloff>../../assets/check-list.png</normaloff>../../assets/check-list.png</iconset>
        </property>
       </widget>
      </item>
@@ -275,7 +295,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../assets/excel.png</normaloff>../assets/excel.png</iconset>
+         <normaloff>../../assets/excel.png</normaloff>../../assets/excel.png</iconset>
        </property>
       </widget>
      </item>

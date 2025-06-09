@@ -1,13 +1,18 @@
 from models.abs_motor import Motor
+import json
 
-class ProjectDatas:
+class ProjectDatasController:
     _instance = None
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(ProjectDatas, cls).__new__(cls)
+            cls._instance = super(ProjectDatasController, cls).__new__(cls)
             cls._instance.project_electrical_specs = cls._instance.get_default_electrical_specs()
         return cls._instance
+
+    def load_data(self, data: dict):
+        """Replace data if given, else reset to default."""
+        self.project_electrical_specs = data
 
 
     def get_default_electrical_specs(self):
@@ -31,13 +36,13 @@ class ProjectDatas:
                                  "co_contact_phone": "",
                                  "m_voltage":0,
                                  "l_voltage":0,
-                                 "voltage_variation": 10,
+                                 "voltage_variation": 0,
                                  "minimum_temprature":0,
                                  "maximum_temprature":0,
                                  "humidity":0,
                                  "altitude_elevation":0,
-                                 "voltage_frequency":50,
-                                 "frequency_variation":2},
+                                 "voltage_frequency":0,
+                                 "frequency_variation":0},
                 "bagfilter": {"type": None,
                               "order": "",
                               "plc_series": None,

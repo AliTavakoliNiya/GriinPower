@@ -1,4 +1,4 @@
-from controllers.project_datas import ProjectDatas
+from controllers.project_datas_controller import ProjectDatasController
 from models.items.electric_motor import get_motor_by_spec
 from views.message_box_view import show_message
 
@@ -6,7 +6,7 @@ from views.message_box_view import show_message
 class ElectricMotorController():
 
     def __init__(self):
-        self.electrical_specs = ProjectDatas().project_electrical_specs
+        self.electrical_specs = ProjectDatasController().project_electrical_specs
 
     def calculate_price(self):
         motor = self.electrical_specs["fan"]["motors"]["fan"]

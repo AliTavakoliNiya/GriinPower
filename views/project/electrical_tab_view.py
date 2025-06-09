@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QWidget, QSpinBox, QComboBox, QLineEdit, QCheckBox
 from docx import Document
 import jdatetime
 
-from controllers.project_datas import ProjectDatas
+from controllers.project_datas_controller import ProjectDatasController
 from controllers.user_session import UserSession
 from views.message_box_view import show_message
 
@@ -18,7 +18,7 @@ class ElectricalTab(QWidget):
         super().__init__()
         uic.loadUi("ui/project/electrical_tab.ui", self)
         self.main_view = main_view
-        self.electrical_specs = ProjectDatas().project_electrical_specs
+        self.electrical_specs = ProjectDatasController().project_electrical_specs
         self._initialize_components()
         self.el_tab_rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
 
@@ -856,7 +856,7 @@ def create_qss_word():
     doc = Document(template_path)
 
     current_user = UserSession()
-    project_details = ProjectDatas().project_electrical_specs
+    project_details = ProjectDatasController().project_electrical_specs
 
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
 

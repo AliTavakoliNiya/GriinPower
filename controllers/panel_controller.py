@@ -1,7 +1,7 @@
 from math import sqrt
 
 from config import COSNUS_PI, ETA
-from controllers.project_datas import ProjectDatas
+from controllers.project_datas_controller import ProjectDatasController
 from models.items.bimetal import get_bimetal_by_current
 from models.items.contactor import get_contactor_by_current
 from models.items.electrical_panel import get_electrical_panel_by_spec
@@ -25,7 +25,7 @@ class PanelController:
         """
         self.panel_type = panel_type
         self.panel = self._create_empty_panel()
-        self.electrical_specs = ProjectDatas().project_electrical_specs
+        self.electrical_specs = ProjectDatasController().project_electrical_specs
 
     def _create_empty_panel(self):
         """
@@ -788,8 +788,8 @@ class PanelController:
 
     """ ------------------------------------- Calculate Motor Current ------------------------------------- """
 
-    def calculate_motor_current(self, power, volt=None):
-        if volt is None:
+    def calculate_motor_current(self, power, volt=False):
+        if not volt:
             volt = self.electrical_specs["project_info"]["l_voltage"]
 
         return round(power / (sqrt(3) * volt * COSNUS_PI * ETA), 2)
