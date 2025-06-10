@@ -326,7 +326,7 @@ class PanelController:
         # process_item("duct_cover", "DUCT COVER", get_general_by_spec)
         # process_item("miniatory_rail", "MINIATORY RAIL", get_general_by_spec)
 
-        has_hmi = False if self.electrical_specs["bagfilter"]["touch_panel"] == "None" else True
+        has_hmi = True if self.electrical_specs["bagfilter"]["touch_panel"] else False
         if not has_hmi:
             self.process_item(motor_objects=motor_objects, attr_name="signal_lamp_24v_qty", comp_type="Signal Lamp",
                               specification="24")

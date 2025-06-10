@@ -22,6 +22,7 @@ attribute_keys:
     created_by_id --> required
 """
 
+
 def get_all_plcs():
     session = SessionLocal()
 
@@ -73,83 +74,83 @@ def get_all_plcs():
     return plc_list
 
 
+def get_plc_by_spec(series, **optional_filters):
+    """
+    Retrieve a single PLC component filtered by series (required)
+    and optionally by other attribute key-value pairs.
 
-def get_plc_by_spec(series, model, comminucation_type=None, brand="siemens", order_number=None):
-    brand = brand.lower()
+    Returns (True, plc_data) if found, else (False, message).
+
+    :param series: required attribute 'series' string
+    :param optional_filters: other optional filters as key=value pairs
+    """
     session = SessionLocal()
     try:
-        plcs = (
+        if not series:
+            return False, "Series is required"
+
+        query = (
             session.query(Component)
             .filter(Component.type == "PLC")
             .options(
                 joinedload(Component.attributes),
                 joinedload(Component.suppliers).joinedload(ComponentSupplier.supplier)
             )
-            .all()
         )
 
-        matching_plcs = []
-
-        for plc in plcs:
-            attr_dict = {attr.key: attr.value for attr in plc.attributes}
-
-            if attr_dict.get("series") != series or attr_dict.get("model") != model:
-                continue
-
-            if brand and attr_dict.get("brand") != brand:
-                continue
-            if order_number and attr_dict.get("order_number") != order_number:
-                continue
-
-            if comminucation_type:
-                comm_key = f"{comminucation_type}"
-                if attr_dict.get(comm_key, "false").lower() != "true":
-                    continue
-
-            matching_plcs.append({
-                "component": plc,
-                "attr_dict": attr_dict,
-                "latest_supplier": max(plc.suppliers, key=lambda s: s.date if s.date else "", default=None)
-            })
-
-        if not matching_plcs:
-            return False, "❌ PLC not found"
-
-        latest = max(
-            matching_plcs,
-            key=lambda item: item["latest_supplier"].date if item["latest_supplier"] else ""
+        # Join once for series filter
+        alias_series = ComponentAttribute.__table__.alias("attr_series")
+        query = query.join(
+            alias_series,
+            (alias_series.c.component_id == Component.id) &
+            (alias_series.c.key == "series") &
+            (alias_series.c.value == str(series))
         )
 
-        supplier = latest["latest_supplier"]
-        attr = latest["attr_dict"]
-        result = {
-            "id": latest["component"].id,
-            "series": attr.get("series"),
-            "model": attr.get("model"),
-            "di_pins": attr.get("di_pins"),
-            "do_pins": attr.get("do_pins"),
-            "ai_pins": attr.get("ai_pins"),
-            "ao_pins": attr.get("ao_pins"),
-            "has_profinet": attr.get("has_profinet"),
-            "has_profibus": attr.get("has_profibus"),
-            "has_hart": attr.get("has_hart"),
-            "has_mpi": attr.get("has_mpi"),
-            "brand": attr.get("brand"),
-            "order_number": attr.get("order_number"),
-            "supplier_name": supplier.supplier.name if supplier else "",
-            "price": supplier.price if supplier else "",
-            "currency": supplier.currency if supplier else "",
-            "date": str(supplier.date) if supplier else "",
-        }
-        return True, result
+        # Join for each optional filter if provided and value not None or empty
+        for i, (key, value) in enumerate(optional_filters.items()):
+            if value is None or (isinstance(value, str) and value.strip() == ""):
+                continue  # skip empty filters
 
-    except Exception as e:
-        session.rollback()
-        print(str(e))
-        return f"failed in get plc\n{str(e)}"
+            val_str = str(value).lower() if isinstance(value, bool) else str(value)
+            alias = ComponentAttribute.__table__.alias(f"attr_opt_{i}")
+            query = query.join(
+                alias,
+                (alias.c.component_id == Component.id) &
+                (alias.c.key == key) &
+                (alias.c.value == val_str)
+            )
+
+        plc = query.first()
+        if not plc:
+            return False, "No matching PLC found"
+
+        attr_dict = {attr.key: attr.value for attr in plc.attributes}
+        created_by_id = attr_dict.get("created_by_id")
+
+        created_by = ""
+        if created_by_id:
+            user = session.query(User).filter_by(id=int(created_by_id)).first()
+            if user:
+                created_by = f"{user.first_name} {user.last_name}"
+
+        plc_list = []
+        for supplier in plc.suppliers:
+            plc_data = {
+                "id": plc.id,
+                "supplier_name": supplier.supplier.name,
+                "price": supplier.price,
+                "currency": supplier.currency,
+                "date": str(supplier.date),
+                "created_by": created_by,
+            }
+            plc_data.update(attr_dict)
+            plc_list.append(plc_data)
+
+        return True, plc_list[0] if plc_list else attr_dict
+
     finally:
         session.close()
-
 
 
 def insert_plc_to_db(
@@ -165,7 +166,7 @@ def insert_plc_to_db(
         has_mpi,
         brand,
         order_number
-    ):
+):
     brand = brand.lower()
 
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
@@ -182,9 +183,9 @@ def insert_plc_to_db(
         for component in existing_components:
             attr_dict = {attr.key: attr.value for attr in component.attributes}
             if (
-                attr_dict.get("series") == series and
-                attr_dict.get("model") == model and
-                attr_dict.get("order_number") == order_number
+                    attr_dict.get("series") == series and
+                    attr_dict.get("model") == model and
+                    attr_dict.get("order_number") == order_number
             ):
                 return True, component.id
 
@@ -218,4 +219,3 @@ def insert_plc_to_db(
         return False, f"❌ Error inserting PLC: {str(e)}"
     finally:
         session.close()
-

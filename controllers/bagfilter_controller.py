@@ -8,6 +8,7 @@ from models.items.electrical_panel import get_electrical_panel_by_spec
 from models.items.general import get_general_by_spec
 from models.items.instrument import get_instrument_by_spec
 from models.items.mccb import get_mccb_by_current
+from models.items.plc import get_plc_by_spec
 
 
 class BagfilterController(PanelController):
@@ -37,6 +38,7 @@ class BagfilterController(PanelController):
                 n_valves = num1 * num2
 
         self.bagfilter_general_items = {
+            "touch_panel": 0,
             "relay_1no_1nc": 3,
             "relay_2no_2nc": 3,
             "terminal_4": n_valves * 2 + 20,
@@ -59,18 +61,20 @@ class BagfilterController(PanelController):
             do_bagfilter_card += math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digist use in binary
         total_do += do_bagfilter_card
 
-        has_hmi = False if self.electrical_specs["bagfilter"]["touch_panel"] == "None" else True
-        if not has_hmi:
+        has_hmi = True if self.electrical_specs["bagfilter"]["touch_panel"] else False
+        if has_hmi:
+            self.bagfilter_general_items["touch_panel"] = 1
+        else:
             total_di += 4
             total_do = 1
             self.bagfilter_general_items["button"] = 3
             self.bagfilter_general_items["selector_switch"] = 1
             self.bagfilter_general_items["signal_lamp_24v"] = 6
-        else:
-            hmi_type = self.electrical_specs["bagfilter"]["touch_panel"]
-            self.bagfilter_general_items[hmi_type] = 1
 
         self.bagfilter_general_items["olm"] = 1 if self.electrical_specs["bagfilter"]["olm"] else 0
+
+        """ ----------------------- Add plc ----------------------- """
+        self.choose_plc()
 
         """ ----------------------- Add Components for Motors ----------------------- """
         self.choose_mccb()
@@ -162,11 +166,8 @@ class BagfilterController(PanelController):
         self.process_item(comp_type="Power Outlet", qty=general_items.get("power_outlet", 0))
         self.process_item(comp_type="MCB", specification="4DC", qty=general_items.get("mcb_4DC", 0))
         self.process_item(comp_type="MCB", specification="2AC", qty=general_items.get("mcb_2AC", 0))
-
-        # Handle dynamic HMI
-        has_hmi = False if self.electrical_specs["bagfilter"]["touch_panel"] == "None" else True
-        if not has_hmi:
-            self.process_item(comp_type="Signal Lamp", specification="24", qty=general_items.get("signal_lamp_24v", 0))
+        self.process_item(comp_type="Touch Panel", specification=self.electrical_specs["bagfilter"]["touch_panel"], qty=general_items.get("touch_panel", 0))
+        self.process_item(comp_type="Signal Lamp", specification="24", qty=general_items.get("signal_lamp_24v", 0))
 
         # Optional OLM
         if "olm" in general_items:
@@ -418,3 +419,75 @@ class BagfilterController(PanelController):
                         note = f"calibration for {instrument_name.replace('_', ' ').title()}"
                     )
                     print(calibration)
+
+    def choose_plc(self):
+        """
+        Adds a PLC entry to the panel based on electrical specs.
+        """
+        plc_series_spec = self.electrical_specs.get("bagfilter", {}).get("plc_series", "")
+
+        series = None
+        if "S7-1200 Series" in plc_series_spec:
+            series = "S7-1200"
+        elif "S7-300 Series" in plc_series_spec:
+            series = "S7-300"
+        elif "LOGO!" in plc_series_spec:
+            series = "LOGO!"
+
+        if not series:
+            self.add_to_panel(
+                type="PLC",
+                brand="",
+                order_number="",
+                specifications="PLC series not specified in electrical specs.",
+                quantity=0,
+                price=0,
+                last_price_update="❌ PLC series missing",
+                note=""
+            )
+            return
+
+        plc_protocol = (self.electrical_specs.get("bagfilter", {}).get("plc_protocol") or "").lower()
+        protocol_filters = {}
+        if plc_protocol == "profinet":
+            protocol_filters["has_profinet"] = True
+        elif plc_protocol == "profibus":
+            protocol_filters["has_profibus"] = True
+        elif plc_protocol == "hart":
+            protocol_filters["has_hart"] = True
+        # else no protocol filters added, so these are optional
+
+        success, plc = get_plc_by_spec(
+            series=series,
+            **protocol_filters
+        )
+
+        if success:
+            self.add_to_panel(
+                type="PLC",
+                brand=plc.get('brand', ''),
+                order_number=plc.get('order_number', ''),
+                specifications="",
+                quantity=1,
+                price=float(plc.get('price', 0)),
+                last_price_update=f"{plc.get('supplier_name', '')}\n{plc.get('date', '')}",
+                note=(
+                    f"Series: {plc.get('series', '')}, "
+                    f"Model: {plc.get('model', '')}, "
+                    f"DI pins: {plc.get('di_pins', '')}, "
+                    f"DO pins: {plc.get('do_pins', '')}, "
+                    f"AI pins: {plc.get('ai_pins', '')}, "
+                    f"AO pins: {plc.get('ao_pins', '')}"
+                )
+            )
+        else:
+            self.add_to_panel(
+                type="PLC",
+                brand="",
+                order_number="",
+                specifications="No matching PLC found for selected specs.",
+                quantity=1,
+                price=0,
+                last_price_update="❌ PLC not found",
+                note=""
+            )

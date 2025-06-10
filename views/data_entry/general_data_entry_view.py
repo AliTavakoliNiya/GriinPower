@@ -22,6 +22,11 @@ class GeneralDataEntryView:
 
     def general_type_change_func(self):
         type_config = {
+            'Touch Panel': {
+                'show': True,
+                'label': "*Model",
+                'entry': ""
+            },
             'Signal Lamp': {
                 'show': True,
                 'label': "*Voltage",

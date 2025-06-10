@@ -639,7 +639,10 @@ class ElectricalTab(QWidget):
             self._update_project_value(["bagfilter", "olm"], False)
 
     def _handle_touch_panel_changed(self):
-        self._update_project_value(["bagfilter", "touch_panel"], self.touch_panel_model.currentText())
+        if self.touch_panel_model.currentText() == "None":
+            self._update_project_value(["bagfilter", "touch_panel"], "")
+        else:
+            self._update_project_value(["bagfilter", "touch_panel"], self.touch_panel_model.currentText())
 
     def _handle_olm_changed(self, state):
         self._update_project_value(["bagfilter", "olm"], state == Qt.Checked)

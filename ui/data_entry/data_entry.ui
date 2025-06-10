@@ -1028,7 +1028,7 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>10</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -4346,6 +4346,11 @@ QListWidget::item:selected {
              <item>
               <property name="text">
                <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Touch Panel</string>
               </property>
              </item>
              <item>
