@@ -62,7 +62,7 @@ class MCCBDataEntryView:
         price = parse_price(self.ui.mccb_price.text())
         order_number = self.ui.mccb_order_number.text().strip() if self.ui.mccb_order_number.text().strip() else None
 
-        if not all([current, breaking_capacity, brand, supplier, price, order_number]):
+        if not all([current, brand, supplier, price, order_number]):
             show_message("Please fill in all required fields.", title="Error")
             return
 

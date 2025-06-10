@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QTableView
 
 from controllers.user_session import UserSession
+from models.supplier import get_all_suppliers
 from views.data_entry.bimetal_data_entry_view import BimetalDataEntryView
 from views.data_entry.contactor_data_entry_view import ContactorDataEntryView
 from views.data_entry.electrical_panel_data_entry_view import ElectricalPanelDataEntryView
@@ -46,7 +47,8 @@ class DataEntry(QMainWindow):
         self.history_list.setSelectionMode(QTableView.SingleSelection)
         self.history_list.setSortingEnabled(True)
 
-        self.history_table_headers = ["brand", "order_number", "supplier_name","price", "currency", "date", "created_by"]
+        self.history_table_headers = ["brand", "order_number", "supplier_name", "price", "currency", "date",
+                                      "created_by"]
 
         self.load_suppliers()
 
@@ -80,21 +82,37 @@ class DataEntry(QMainWindow):
         elif index == 10:
             GeneralDataEntryView(self)
 
-
     def add_supplier(self):
         self.venor_application_window = SupplierEntry(parent=self)
 
     def load_suppliers(self):
-        suppliers = ["--------", "Elica electric", "Asam kala", "Arman control tajhiz part"]
-        self.plc_supplier_list.addItems(suppliers)
-        self.instrument_supplier_list.addItems(suppliers)
-        self.contactor_supplier_list.addItems(suppliers)
-        self.mccb_supplier_list.addItems(suppliers)
-        self.mpcb_supplier_list.addItems(suppliers)
-        self.bimetal_supplier_list.addItems(suppliers)
-        self.general_supplier.addItems(suppliers)
-        self.vfd_softstarter_supplier.addItems(suppliers)
-        self.electrical_panel_supplier.addItems(suppliers)
+        success, all_supplier = get_all_suppliers()
+
+        suppliers_name = ["--------"] + [s.name for s in all_supplier]
+        self.plc_supplier_list.addItems(suppliers_name)
+        self.instrument_supplier_list.addItems(suppliers_name)
+        self.contactor_supplier_list.addItems(suppliers_name)
+        self.mccb_supplier_list.addItems(suppliers_name)
+        self.mpcb_supplier_list.addItems(suppliers_name)
+        self.bimetal_supplier_list.addItems(suppliers_name)
+        self.general_supplier.addItems(suppliers_name)
+        self.vfd_softstarter_supplier.addItems(suppliers_name)
+        self.electrical_panel_supplier.addItems(suppliers_name)
+
+    def load_brands(self):
+        success, all_brands = get_all_brands()
+
+        suppliers_name = ["--------"] + [s.name for s in all_supplier]
+        self.plc_supplier_list.addItems(suppliers_name)
+        self.instrument_supplier_list.addItems(suppliers_name)
+        self.contactor_supplier_list.addItems(suppliers_name)
+        self.mccb_supplier_list.addItems(suppliers_name)
+        self.mpcb_supplier_list.addItems(suppliers_name)
+        self.bimetal_supplier_list.addItems(suppliers_name)
+        self.general_supplier.addItems(suppliers_name)
+        self.vfd_softstarter_supplier.addItems(suppliers_name)
+        self.electrical_panel_supplier.addItems(suppliers_name)
+
 
     def hide_show_item_stack_btn_func(self):
         # Toggle visibility of motor_list table view

@@ -3,12 +3,10 @@ import re
 from copy import deepcopy
 
 from controllers.panel_controller import PanelController
-from models.items.calibration import get_calibration
 
 from models.items.electrical_panel import get_electrical_panel_by_spec
 from models.items.general import get_general_by_spec
 from models.items.instrument import get_instrument_by_spec
-from models.items.manifold import get_manifold
 from models.items.mccb import get_mccb_by_current
 
 
@@ -39,16 +37,16 @@ class BagfilterController(PanelController):
                 n_valves = num1 * num2
 
         self.bagfilter_general_items = {
-                                        "relay_1no_1nc": 3,
-                                        "relay_2no_2nc": 3,
-                                        "terminal_4": n_valves * 2 + 20,
-                                        "mpcb_mccb_aux_contact": 1,
-                                        "duct_cover": round(n_valves * 0.1, 2),
-                                        "miniatory_rail": round(n_valves * 0.3, 2),
-                                        "power_outlet": 1,
-                                        "mcb_4DC": 2,
-                                        "mcb_2AC": 1,
-                                        }
+            "relay_1no_1nc": 3,
+            "relay_2no_2nc": 3,
+            "terminal_4": n_valves * 2 + 20,
+            "mpcb_mccb_aux_contact": 1,
+            "duct_cover": round(n_valves * 0.1, 2),
+            "miniatory_rail": round(n_valves * 0.3, 2),
+            "power_outlet": 1,
+            "mcb_4DC": 2,
+            "mcb_2AC": 1,
+        }
 
         total_do = 3
         total_di = 3
@@ -165,7 +163,6 @@ class BagfilterController(PanelController):
         self.process_item(comp_type="MCB", specification="4DC", qty=general_items.get("mcb_4DC", 0))
         self.process_item(comp_type="MCB", specification="2AC", qty=general_items.get("mcb_2AC", 0))
 
-
         # Handle dynamic HMI
         has_hmi = False if self.electrical_specs["bagfilter"]["touch_panel"] == "None" else True
         if not has_hmi:
@@ -199,14 +196,14 @@ class BagfilterController(PanelController):
         if success:
             self.add_to_panel(
                 type="MCCB INPUT PANEL",
-                brand=mccb.brand,
-                order_number=mccb.order_number,
+                brand=mccb['brand'],
+                order_number=mccb["order_number"],
                 specifications=(
                     f"Total Motor Current: {total_current:.2f}A"
                 ),
                 quantity=1,
-                price=mccb.component_supplier.price,
-                last_price_update=f"{mccb.component_supplier.supplier.name}\n{mccb.component_supplier.date}",
+                price=mccb['price'],
+                last_price_update=f"{mccb['supplier_name']}\n{mccb['date']}",
                 note=""
             )
         else:
@@ -237,10 +234,10 @@ class BagfilterController(PanelController):
         elif io_type == "AO":
             success, card = get_general_by_spec(type="AO Module", specification="16")
 
-        if success and card.component_supplier:
-            price = card.component_supplier.price or 0
-            effective_date = card.component_supplier.date or "Not Found"
-            brand = card.brand
+        if success:
+            price = card["price"] or 0
+            effective_date = f"{card['supplier_name']}\n{card['date']}" or "Not Found"
+            brand = card["brand"]
         else:
             price = 0
             effective_date = f"❌ Channel card not found"
@@ -342,72 +339,18 @@ class BagfilterController(PanelController):
                 else instrument_name
             name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
-            success, instrument = get_instrument_by_spec(name)
+            success, instrument = get_instrument_by_spec(name.replace('_', ' ').title())
 
             if success:
                 self.add_to_panel(
                     type=instrument_name.upper().replace("_", " "),
-                    brand=instrument.brand,
-                    order_number=instrument.order_number,
+                    brand=instrument["brand"],
+                    order_number=instrument["order_number"],
                     specifications="",
                     quantity=qty,
-                    price=instrument.component_supplier.price,
-                    last_price_update=f"{instrument.component_supplier.supplier.name}\n{instrument.component_supplier.date}",
+                    price=instrument["price"],
+                    last_price_update=f"{instrument['supplier_name']}\n{instrument['date']}",
                 )
-                # ------------ Choose Manifold ------------
-                manifold_qty = 0
-                manifold_ways = None
-                if "delta" in name.lower():
-                    manifold_ways = 3
-                    manifold_qty = qty
-                elif "pressure" in name.lower():
-                    manifold_ways = 2
-                    manifold_qty = qty
-
-                if manifold_qty > 0 and manifold_ways is not None:
-                    formatted_name = f"{manifold_ways} WAYS MANIFOLD"
-                    success, manifold_obj = get_manifold(manifold_ways)
-                    if success and manifold_obj.component_supplier and manifold_obj.component_supplier.item_id:
-                        self.add_to_panel(
-                            type=formatted_name,
-                            brand=manifold_obj.brand,
-                            order_number=manifold_obj.order_number,
-                            quantity=qty,
-                            price=manifold_obj.component_supplier.price,
-                            last_price_update=f"{manifold_obj.component_supplier.supplier.name}\n{manifold_obj.component_supplier.date}",
-                            note=f"manifold for {instrument_name}")
-                    else:
-                        self.add_to_panel(
-                            type=formatted_name,
-                            brand="",
-                            order_number="",
-                            quantity=qty,
-                            price=0,
-                            last_price_update=f"❌Manifold not found",
-                            note=f"manifold for {instrument_name}")
-                        print(manifold_obj)
-
-                # ------------ Calibration ------------
-                if "transmitter" in name and qty != 0:
-                    success, calibration = get_calibration()
-                    if success:
-                        self.add_to_panel(
-                            type="CALIBRATION",
-                            brand=calibration.brand,
-                            quantity=qty,
-                            price=calibration.component_supplier.price,
-                            last_price_update=f"{calibration.component_supplier.supplier.name}\n{calibration.component_supplier.date}",
-                            note=f"calibration for {instrument_name}"
-                        )
-                    else:
-                        self.add_to_panel(
-                            type="CALIBRATION",
-                            brand="",
-                            quantity=qty,
-                            price=0,
-                            last_price_update=f"❌ Calibration not found for {instrument_name}"
-                        )
-                        print(calibration)
             else:
                 self.add_to_panel(
                     type=instrument_name.upper().replace("_", " "),
@@ -419,3 +362,59 @@ class BagfilterController(PanelController):
                     last_price_update=f"❌ Instrument not found",
                 )
                 print(instrument)
+
+            # ------------ Choose Manifold ------------
+            manifold_qty = 0
+            manifold_ways = None
+            if "delta" in name.lower():
+                manifold_ways = "3 Ways Manifold"
+                manifold_qty = qty
+            elif "pressure" in name.lower():
+                manifold_ways = "2 Ways Manifold"
+                manifold_qty = qty
+
+            if manifold_qty > 0 and manifold_ways:
+
+                success, manifold_obj = get_instrument_by_spec(type=manifold_ways)
+                if success :
+                    self.add_to_panel(
+                        type=manifold_ways,
+                        brand=manifold_obj['brand'],
+                        order_number=manifold_obj['order_number'],
+                        quantity=qty,
+                        price=manifold_obj['price'],
+                        last_price_update=f"{manifold_obj['supplier_name']}\n{manifold_obj['date']}",
+                        note=f"manifold for {instrument_name.replace('_', ' ').capitalize()}")
+                else:
+                    self.add_to_panel(
+                        type=manifold_ways,
+                        brand="",
+                        order_number="",
+                        quantity=qty,
+                        price=0,
+                        last_price_update=f"❌Manifold not found",
+                        note=f"manifold for {instrument_name.replace('_', ' ').capitalize()}")
+                    print(manifold_obj)
+
+            # ------------ Calibration ------------
+            if "transmitter" in name and qty != 0:
+                success, calibration = get_instrument_by_spec(type="Calibration")
+                if success:
+                    self.add_to_panel(
+                        type="CALIBRATION",
+                        brand=calibration['brand'],
+                        quantity=qty,
+                        price=calibration['price'],
+                        last_price_update=f"{calibration['supplier_name']}\n{calibration['date']}",
+                        note=f"calibration for {instrument_name.replace('_', ' ').capitalize()}"
+                    )
+                else:
+                    self.add_to_panel(
+                        type="CALIBRATION",
+                        brand="",
+                        quantity=qty,
+                        price=0,
+                        last_price_update=f"❌ Calibration not found",
+                        note = f"calibration for {instrument_name.replace('_', ' ').capitalize()}"
+                    )
+                    print(calibration)

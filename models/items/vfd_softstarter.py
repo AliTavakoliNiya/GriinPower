@@ -61,6 +61,7 @@ def get_all_vfds_softstarters():
 
 
 def get_vfd_softstarter_by_power(type, power, brands=[], order_number=None):
+    brands = [b.lower() for b in brands]
     session = SessionLocal()
     try:
         components = (
@@ -137,6 +138,8 @@ def insert_vfd_softstarter_to_db(
         power,
         brand,
         order_number):
+    brand = brand.lower()
+
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()

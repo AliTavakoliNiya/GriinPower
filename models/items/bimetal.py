@@ -64,6 +64,7 @@ def get_all_bimetals():
 
 
 def get_bimetal_by_current(rated_current, brands=[], order_number=None):
+    brands = [b.lower() for b in brands]
     session = SessionLocal()
     try:
         current_val = float(rated_current)
@@ -150,6 +151,7 @@ def insert_bimetal_to_db(
         _class,
         trip_time,
         ):
+    brand = brand.lower()
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()

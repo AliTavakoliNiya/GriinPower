@@ -2502,13 +2502,13 @@
         <widget class="QGroupBox" name="fan_damper_gbox">
          <property name="minimumSize">
           <size>
-           <width>320</width>
+           <width>330</width>
            <height>630</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>320</width>
+           <width>350</width>
            <height>16777215</height>
           </size>
          </property>

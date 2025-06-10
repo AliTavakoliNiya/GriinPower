@@ -64,6 +64,7 @@ def get_all_mpcbs():
 
 
 def get_mpcb_by_current(rated_current, brands=[], order_number=None):
+    brands = [b.lower() for b in brands]
     session = SessionLocal()
     try:
         current_val = float(rated_current)
@@ -150,6 +151,8 @@ def insert_mpcb_to_db(
         breaking_capacity,
         trip_class,
         ):
+    brand = brand.lower()
+
 
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()

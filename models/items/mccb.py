@@ -62,6 +62,7 @@ def get_all_mccbs():
 
 
 def get_mccb_by_current(rated_current, brands=[], order_number=None):
+    brands = [b.lower() for b in brands]
     session = SessionLocal()
     try:
         current_val = float(rated_current)
@@ -144,6 +145,8 @@ def insert_mccb_to_db(
         rated_current,
         breaking_capacity,
         ):
+    brand = brand.lower()
+
 
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()

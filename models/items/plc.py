@@ -75,6 +75,7 @@ def get_all_plcs():
 
 
 def get_plc_by_spec(series, model, comminucation_type=None, brand="siemens", order_number=None):
+    brand = brand.lower()
     session = SessionLocal()
     try:
         plcs = (
@@ -165,6 +166,8 @@ def insert_plc_to_db(
         brand,
         order_number
     ):
+    brand = brand.lower()
+
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()

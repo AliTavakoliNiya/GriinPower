@@ -18,8 +18,6 @@ class Supplier(Base):
     components = relationship('ComponentSupplier', back_populates='supplier', lazy="joined")
 
 
-
-
 def get_all_suppliers():
     session = SessionLocal()
     try:
@@ -62,4 +60,3 @@ def save_supplier_to_db(supplier: Supplier) -> bool:
         return False
     finally:
         session.close()  # Ensure the session is closed
-

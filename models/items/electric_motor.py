@@ -86,6 +86,7 @@ def get_motor_by_spec(
         is_official=None,
         is_routine=None,
 ):
+    brand = brand.lower() if brand else brand
     session = SessionLocal()
     try:
         power_val = float(power)
@@ -205,6 +206,7 @@ def insert_motor_to_db(
         is_official=None,
         is_routine=None,
 ):
+    brand = brand.lower()
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()

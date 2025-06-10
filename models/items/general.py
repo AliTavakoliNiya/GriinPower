@@ -61,6 +61,7 @@ def get_all_generals():
 
 
 def get_general_by_spec(type, specification, brand=None, order_number=None):
+    brand = brand.lower() if brand else None
     session = SessionLocal()
     try:
         generals = (
@@ -128,6 +129,7 @@ def insert_general_to_db(
         order_number,
         type,
         specification):
+    brand = brand.lower()
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()

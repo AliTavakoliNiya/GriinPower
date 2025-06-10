@@ -14,6 +14,7 @@ attribute_keys:
     created_by_id --> required
 """
 
+
 def get_all_instruments():
     session = SessionLocal()
 
@@ -62,6 +63,7 @@ def get_all_instruments():
 
 
 def get_instrument_by_spec(type, hart_comminucation=None, brands=[], order_number=None):
+    brands = [b.lower() for b in brands]
     session = SessionLocal()
     try:
         instruments = (
@@ -86,7 +88,7 @@ def get_instrument_by_spec(type, hart_comminucation=None, brands=[], order_numbe
                 if attr_dict.get("hart_comminucation", "").lower() != str(hart_comminucation).lower():
                     continue
 
-            if brand and attr_dict.get("brand") != brand:
+            if brands and attr_dict.get("brand") not in brands:
                 continue
             if order_number and attr_dict.get("order_number") != order_number:
                 continue
@@ -133,6 +135,8 @@ def insert_instrument_to_db(
         hart_comminucation,
         brand,
         order_number):
+    brand = brand.lower()
+
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()
@@ -178,5 +182,3 @@ def insert_instrument_to_db(
         return False, f"❌ Error inserting Instrument: {str(e)}"
     finally:
         session.close()
-
-
