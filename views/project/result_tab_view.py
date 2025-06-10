@@ -297,7 +297,7 @@ class DictionaryViewer(QMainWindow):
 
     def populate_tree(self, parent_item, dictionary):
         def format_key(key):
-            return ' '.join(word.capitalize() for word in str(key).split('_'))
+            return ' '.join(word.title() for word in str(key).split('_'))
 
         for key, value in dictionary.items():
             display_key = format_key(key)

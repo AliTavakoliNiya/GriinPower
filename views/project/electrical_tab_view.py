@@ -892,8 +892,8 @@ def create_qss_word():
         "thermal_protection": fan["thermal_protection"],
         "anti_condensation_heater": anti_condensation_heater,
         "frequency_converter": frequency_converter,
-        "check_user": f"{current_user.first_name[0].capitalize()}.{current_user.last_name.capitalize()}",
-        "approve_user": f"{current_user.first_name[0].capitalize()}.{current_user.last_name.capitalize()}",
+        "check_user": f"{current_user.first_name[0].title()}.{current_user.last_name.title()}",
+        "approve_user": f"{current_user.first_name[0].title()}.{current_user.last_name.title()}",
     }
 
     replace_placeholders(doc, keywords)

@@ -72,7 +72,7 @@ class PanelController:
         success, contactor = get_contactor_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
-                type=f"CONTACTOR FOR {motor.usage.upper()}",
+                type=f"Comector For {motor.usage.title()}",
                 brand=contactor["brand"],
                 order_number=contactor["order_number"],
                 specifications=f"Current: {contactor['rated_current']}A",
@@ -83,7 +83,7 @@ class PanelController:
             )
         else:
             self.add_to_panel(
-                type=f"CONTACTOR FOR {motor.usage.upper()}",
+                type=f"Conectorr For {motor.usage.title()}",
                 brand="",
                 order_number="",
                 specifications= f"At Least: {motor.current * 1.25:.2f}A",
@@ -105,7 +105,7 @@ class PanelController:
         success, mpcb = get_mpcb_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
-                type=f"MPCB FOR {motor.usage.upper()}",
+                type=f"MPCB For {motor.usage.title()}",
                 brand=mpcb["brand"],
                 order_number=mpcb["order_number"],
                 specifications=f"Current: {mpcb['min_current']}A ~ {mpcb['max_current']}A\n"
@@ -117,7 +117,7 @@ class PanelController:
             )
         else:
             self.add_to_panel(
-                type=f"MPCB FOR {motor.usage.upper()}",
+                type=f"MPCB For {motor.usage.title()}",
                 brand="",
                 order_number="",
                 specifications= f"Current: {motor.current * 1.25:.2f}A",
@@ -139,7 +139,7 @@ class PanelController:
         success, mccb = get_mccb_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
-                type=f"MCCB FOR {motor.usage.upper()}",
+                type=f"MCCB For {motor.usage.title()}",
                 brand=mccb["brand"],
                 order_number=mccb["order_number"],
                 specifications=f"Current: {mccb['rated_current']}A\nBreaking Capacity:{mccb['breaking_capacity']}KA",
@@ -150,7 +150,7 @@ class PanelController:
             )
         else:
             self.add_to_panel(
-                type=f"MCCB FOR {motor.usage.upper()}",
+                type=f"MCCB For {motor.usage.title()}",
                 brand="",
                 order_number="",
                 specifications= f"At Least: {motor.current * 1.25:.2f}A",
@@ -173,7 +173,7 @@ class PanelController:
 
         if success:
             self.add_to_panel(
-                type=f"BIMETAL FOR {motor.usage.upper()}",
+                type=f"Bimetal For {motor.usage.title()}",
                 brand=bimetal["brand"],
                 order_number=bimetal["order_number"],
                 specifications=(
@@ -186,7 +186,7 @@ class PanelController:
             )
         else:
             self.add_to_panel(
-                type=f"BIMETAL FOR {motor.usage.upper()}",
+                type=f"Bimetal For {motor.usage.title()}",
                 brand="",
                 order_number="",
                 specifications= f"Current: {motor.current * 1.25:.2f}A",
@@ -209,7 +209,7 @@ class PanelController:
         if success:
             if success:
                 self.add_to_panel(
-                    type=f"VFD FOR {motor.usage.upper()}",
+                    type=f"VFD For {motor.usage.title()}",
                     brand=vfd["brand"],
                     order_number=vfd["order_number"],
                     specifications= f"Power: {vfd['power']}",
@@ -220,7 +220,7 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type=f"VFD FOR {motor.usage.upper()}",
+                    type=f"VFD For {motor.usage.title()}",
                     brand="",
                     order_number="",
                     specifications=f"At Least: {motor.power/1000}KW",
@@ -242,7 +242,7 @@ class PanelController:
         if success:
             if success:
                 self.add_to_panel(
-                    type=f"SoftStarter FOR {motor.usage.upper()}",
+                    type=f"SoftStarter For {motor.usage.title()}",
                     brand=soft_starter["brand"],
                     order_number=soft_starter["order_number"],
                     specifications=f"Power: {soft_starter['power']}",
@@ -253,7 +253,7 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type=f"SoftStarter FOR {motor.usage.upper()}",
+                    type=f"SoftStarter For {motor.usage.title()}",
                     brand="",
                     order_number="",
                     specifications=f"At Least: {motor.power/1000}KW",
@@ -397,7 +397,7 @@ class PanelController:
 
             if success:
                 self.add_to_panel(
-                    type=instrument_name.upper().replace("_", " "),
+                    type=instrument_name.title().replace("_", " "),
                     brand=instrument["brand"],
                     order_number=instrument["order_number"],
                     specifications="",
@@ -407,7 +407,7 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type=instrument_name.upper().replace("_", " "),
+                    type=instrument_name.title().replace("_", " "),
                     brand="",
                     order_number="",
                     specifications="",
@@ -439,7 +439,7 @@ class PanelController:
                         quantity=qty,
                         price=manifold_obj['price'],
                         last_price_update=f"{manifold_obj['supplier_name']}\n{manifold_obj['date']}",
-                        note=f"manifold for {instrument_name.replace('_', ' ').capitalize()}")
+                        note=f"manifold for {instrument_name.replace('_', ' ').title()}")
                 else:
                     self.add_to_panel(
                         type=formatted_name,
@@ -448,7 +448,7 @@ class PanelController:
                         quantity=qty,
                         price=0,
                         last_price_update=f"❌Manifold not found",
-                        note=f"manifold for {instrument_name.replace('_', ' ').capitalize()}")
+                        note=f"manifold for {instrument_name.replace('_', ' ').title()}")
                     print(manifold_obj)
 
             # ------------ Calibration ------------
@@ -461,7 +461,7 @@ class PanelController:
                         quantity=qty,
                         price=calibration['price'],
                         last_price_update=f"{calibration['supplier_name']}\n{calibration['date']}",
-                        note=f"calibration for {instrument_name.replace('_', ' ').capitalize()}"
+                        note=f"calibration for {instrument_name.replace('_', ' ').title()}"
                     )
                 else:
                     self.add_to_panel(
@@ -470,7 +470,7 @@ class PanelController:
                         quantity=qty,
                         price=0,
                         last_price_update=f"❌ Calibration not found",
-                        note = f"calibration for {instrument_name.replace('_', ' ').capitalize()}"
+                        note = f"calibration for {instrument_name.replace('_', ' ').title()}"
 
                     )
                     print(calibration)
@@ -517,7 +517,7 @@ class PanelController:
             success, pin_card = get_general_by_spec(type="Front Connector", specification="20")
             if success:
                 self.add_to_panel(
-                    type=f"FRONT CONNECTOR 20PIN FOR {motor.usage.upper()}",
+                    type=f"Front Connector 20Pin For {motor.usage.title()}",
                     brand=pin_card["brand"],
                     order_number=pin_card["order_number"],
                     quantity=total_20pin,
@@ -527,13 +527,13 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type=f"FRONT CONNECTOR 20PIN FOR {motor.usage.upper()}",
+                    type=f"Front Connector 20Pin For {motor.usage.title()}",
                     brand="",
                     order_number="",
                     specifications="",
                     quantity=total_20pin,
                     price=0,
-                    last_price_update="❌ FRONT CONNECTOR not found",
+                    last_price_update="❌ Front Connector not found",
                     note="Total connectors for all 16CH cards"
                 )
 
@@ -561,7 +561,7 @@ class PanelController:
             brand = ""
 
         self.add_to_panel(
-            type=f"{io_type} 16 CHANNEL",
+            type=f"{io_type} 16 Channel",
             brand=brand,
             specifications=f"Total: {total}",
             quantity=cards,

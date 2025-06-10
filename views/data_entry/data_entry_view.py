@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QTableView
 
 from controllers.user_session import UserSession
+from models.items.brand import get_all_brands
 from models.supplier import get_all_suppliers
 from views.data_entry.bimetal_data_entry_view import BimetalDataEntryView
 from views.data_entry.contactor_data_entry_view import ContactorDataEntryView
@@ -99,20 +100,8 @@ class DataEntry(QMainWindow):
         self.vfd_softstarter_supplier.addItems(suppliers_name)
         self.electrical_panel_supplier.addItems(suppliers_name)
 
-    def load_brands(self):
-        success, all_brands = get_all_brands()
-
-        suppliers_name = ["--------"] + [s.name for s in all_supplier]
-        self.plc_supplier_list.addItems(suppliers_name)
-        self.instrument_supplier_list.addItems(suppliers_name)
-        self.contactor_supplier_list.addItems(suppliers_name)
-        self.mccb_supplier_list.addItems(suppliers_name)
-        self.mpcb_supplier_list.addItems(suppliers_name)
-        self.bimetal_supplier_list.addItems(suppliers_name)
-        self.general_supplier.addItems(suppliers_name)
-        self.vfd_softstarter_supplier.addItems(suppliers_name)
-        self.electrical_panel_supplier.addItems(suppliers_name)
-
+    # def load_brands(self):
+    #     success, all_brands = get_all_brands()
 
     def hide_show_item_stack_btn_func(self):
         # Toggle visibility of motor_list table view
