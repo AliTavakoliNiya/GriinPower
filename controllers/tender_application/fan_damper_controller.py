@@ -1,6 +1,6 @@
 import copy
 
-from controllers.panel_controller import PanelController
+from controllers.tender_application.panel_controller import PanelController
 from models.abs_motor import Motor
 
 
@@ -14,7 +14,7 @@ class FanDamperController(PanelController):
 
     def build_panel(self):
         """
-        Main controller for building a fan_damper panel from project specifications.
+        Main controller for building a fan_damper panel from tender_application specifications.
         """
         # ----------------------- Initialize Motors -----------------------
         damper_config = self.electrical_specs["damper"]["motors"]["damper"]

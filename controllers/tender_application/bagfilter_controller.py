@@ -2,7 +2,7 @@ import math
 import re
 from copy import deepcopy
 
-from controllers.panel_controller import PanelController
+from controllers.tender_application.panel_controller import PanelController
 
 from models.items.electrical_panel import get_electrical_panel_by_spec
 from models.items.general import get_general_by_spec
@@ -21,7 +21,7 @@ class BagfilterController(PanelController):
 
     def build_panel(self):
         """
-        Main controller for building a bagfilter from project specifications.
+        Main controller for building a bagfilter from tender_application specifications.
         """
 
         n_valves = 0
@@ -175,7 +175,7 @@ class BagfilterController(PanelController):
 
     def choose_mccb(self):
         """
-        Adds an MCCB entry to the panel based on the total motor power in the project.
+        Adds an MCCB entry to the panel based on the total motor power in the tender_application.
         """
         total_current = 0.0
 
@@ -424,7 +424,7 @@ class BagfilterController(PanelController):
         """
         Adds a PLC entry to the panel based on electrical specs.
         """
-        plc_series_spec = self.electrical_specs.get("bagfilter", {}).get("plc_series", "")
+        plc_series_spec = self.electrical_specs["bagfilter"]["plc_series"]
 
         series = None
         if "S7-1200 Series" in plc_series_spec:
@@ -439,7 +439,7 @@ class BagfilterController(PanelController):
                 type="PLC",
                 brand="",
                 order_number="",
-                specifications="PLC series not specified in electrical specs.",
+                specifications=f"{series}",
                 quantity=0,
                 price=0,
                 last_price_update="❌ PLC series missing",

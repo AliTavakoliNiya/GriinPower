@@ -6,14 +6,15 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 
-from controllers.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_datas_controller import ProjectDatasController
 from controllers.user_session import UserSession
-from models.projects import get_project
+import json
 from utils.database import SessionLocal
 from views.data_entry.data_entry_view import DataEntry
 from views.login_view import LoginView
 from views.message_box_view import show_message
-from views.project.tender_application_view import TenderApplication
+from views.tender_application.open_project_view import OpenProjectView
+from views.tender_application.tender_application_view import TenderApplication
 from views.supplier_view import SupplierEntry
 
 
@@ -61,17 +62,16 @@ class GriinPower(QMainWindow):
             show_message(f"file {path} not found.", "Details")
 
     def open_project_func(self, load_proj=False):
-        if load_proj:
-            self.tender_application_window = TenderApplication(parent=self)
-            project_datas = ProjectDatasController()
-            success, datas = get_project(project_id=None)
-            if success:
-                project_datas.load_data(datas)
+        if load_proj: # open existing project
+            open_project_detail_window = OpenProjectView()
+            result = open_project_detail_window.exec_()
+            if result == QDialog.Accepted:
+                project_datas = ProjectDatasController()
+                project_datas.load_data(json.loads(open_project_detail_window.selected_project.datas))
             else:
-                show_message(datas, title="Error")
-        else:
-            self.tender_application_window = TenderApplication(parent=self)
+                return # open project rejected by user
 
+        self.tender_application_window = TenderApplication(parent=self)
 
     def open_data_entry_func(self):
         self.data_entry_window = DataEntry(parent=self)
@@ -88,7 +88,8 @@ if __name__ == "__main__":
 
     # Show login dialog
     login = LoginView(db_session)
-    if login.exec_() == QDialog.Accepted:
+    #if login.exec_() == QDialog.Accepted:
+    if True:
         session = QSettings("Griin", "GriinPower")
         username = session.value("last_username", "")
         current_user = UserSession()

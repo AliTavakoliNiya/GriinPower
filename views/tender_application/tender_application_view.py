@@ -3,10 +3,10 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
-from controllers.project_datas_controller import ProjectDatasController
-from views.project.electrical_tab_view import ElectricalTab
-from views.project.project_information_view import ProjectInformationTab
-from views.project.result_tab_view import ResultTab
+from controllers.tender_application.project_datas_controller import ProjectDatasController
+from views.tender_application.electrical_tab_view import ElectricalTab
+from views.tender_application.project_information_view import ProjectInformationTab
+from views.tender_application.result_tab_view import ResultTab
 
 
 class TenderApplication(QMainWindow):
@@ -14,7 +14,7 @@ class TenderApplication(QMainWindow):
         super().__init__(parent)
 
         # Load the main window UI (with the QTabWidget)
-        uic.loadUi("ui/project/tender_application.ui", self)
+        uic.loadUi("ui/tender_application/tender_application.ui", self)
         self.setWindowIcon(QIcon('assets/Logo.ico'))
         self.setWindowTitle("GriinPower")
         self.settings = QSettings("Griin", "GriinPower")

@@ -1,6 +1,6 @@
 from math import ceil
 
-from controllers.panel_controller import PanelController
+from controllers.tender_application.panel_controller import PanelController
 from models.abs_motor import Motor
 
 
@@ -14,7 +14,7 @@ class TransportController(PanelController):
 
     def build_panel(self):
         """
-        Main controller for building a transport panel from project specifications.
+        Main controller for building a transport panel from tender_application specifications.
         """
         # ----------------------- Initialize Motors -----------------------
         motors_config = self.electrical_specs["transport"]["motors"]

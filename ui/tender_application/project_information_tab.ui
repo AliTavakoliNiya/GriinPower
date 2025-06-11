@@ -1051,7 +1051,7 @@ Contact Person</string>
           </item>
           <item>
            <property name="text">
-            <string>6</string>
+            <string>6.0</string>
            </property>
           </item>
           <item>
@@ -1061,7 +1061,7 @@ Contact Person</string>
           </item>
           <item>
            <property name="text">
-            <string>11</string>
+            <string>11.0</string>
            </property>
           </item>
          </widget>
@@ -1354,7 +1354,7 @@ Contact Person</string>
          <widget class="QComboBox" name="electro_motor_start_type_10">
           <property name="minimumSize">
            <size>
-            <width>40</width>
+            <width>50</width>
             <height>0</height>
            </size>
           </property>
@@ -1420,23 +1420,21 @@ Contact Person</string>
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background: transparent;
-    border: none;
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
 }
-QPushButton:hover{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+QPushButton:hover {
 	color: #d3dae3;
 	padding: 2px;
-	background-color: #1c1f1f;
+	background-color: #F77F00;
 }
-QPushButton:pressed{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
 	color: #d3dae3;
 	padding: 2px;
 	background-color: #2c2f2f;
@@ -1497,23 +1495,21 @@ QPushButton:pressed{
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background: transparent;
-    border: none;
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
 }
-QPushButton:hover{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+QPushButton:hover {
 	color: #d3dae3;
 	padding: 2px;
-	background-color: #1c1f1f;
+	background-color: #F77F00;
 }
-QPushButton:pressed{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
 	color: #d3dae3;
 	padding: 2px;
 	background-color: #2c2f2f;
@@ -1551,23 +1547,21 @@ QPushButton:pressed{
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background: transparent;
-    border: none;
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
 }
-QPushButton:hover{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+QPushButton:hover {
 	color: #d3dae3;
 	padding: 2px;
-	background-color: #1c1f1f;
+	background-color: #F77F00;
 }
-QPushButton:pressed{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
 	color: #d3dae3;
 	padding: 2px;
 	background-color: #2c2f2f;
@@ -1651,23 +1645,21 @@ QPushButton:pressed{
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background: transparent;
-    border: none;
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
 }
-QPushButton:hover{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+QPushButton:hover {
 	color: #d3dae3;
 	padding: 2px;
-	background-color: #1c1f1f;
+	background-color: #F77F00;
 }
-QPushButton:pressed{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
 	color: #d3dae3;
 	padding: 2px;
 	background-color: #2c2f2f;
@@ -1708,23 +1700,21 @@ QPushButton:pressed{
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background: transparent;
-    border: none;
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
 }
-QPushButton:hover{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+QPushButton:hover {
 	color: #d3dae3;
 	padding: 2px;
-	background-color: #1c1f1f;
+	background-color: #F77F00;
 }
-QPushButton:pressed{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
 	color: #d3dae3;
 	padding: 2px;
 	background-color: #2c2f2f;
@@ -1775,23 +1765,21 @@ QPushButton:pressed{
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background: transparent;
-    border: none;
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
 }
-QPushButton:hover{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+QPushButton:hover {
 	color: #d3dae3;
 	padding: 2px;
-	background-color: #1c1f1f;
+	background-color: #F77F00;
 }
-QPushButton:pressed{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
 	color: #d3dae3;
 	padding: 2px;
 	background-color: #2c2f2f;
@@ -1842,23 +1830,21 @@ QPushButton:pressed{
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background: transparent;
-    border: none;
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
 }
-QPushButton:hover{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+QPushButton:hover {
 	color: #d3dae3;
 	padding: 2px;
-	background-color: #1c1f1f;
+	background-color: #F77F00;
 }
-QPushButton:pressed{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
 	color: #d3dae3;
 	padding: 2px;
 	background-color: #2c2f2f;
@@ -1886,23 +1872,21 @@ QPushButton:pressed{
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background: transparent;
-    border: none;
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
 }
-QPushButton:hover{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+QPushButton:hover {
 	color: #d3dae3;
 	padding: 2px;
-	background-color: #1c1f1f;
+	background-color: #F77F00;
 }
-QPushButton:pressed{
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
 	color: #d3dae3;
 	padding: 2px;
 	background-color: #2c2f2f;
@@ -1951,7 +1935,7 @@ QPushButton:pressed{
          <widget class="QComboBox" name="electro_motor_start_type_11">
           <property name="minimumSize">
            <size>
-            <width>40</width>
+            <width>50</width>
             <height>0</height>
            </size>
           </property>
@@ -1972,7 +1956,7 @@ QPushButton:pressed{
          <widget class="QComboBox" name="electro_motor_start_type_12">
           <property name="minimumSize">
            <size>
-            <width>40</width>
+            <width>50</width>
             <height>0</height>
            </size>
           </property>
@@ -1993,7 +1977,7 @@ QPushButton:pressed{
          <widget class="QComboBox" name="electro_motor_start_type_13">
           <property name="minimumSize">
            <size>
-            <width>40</width>
+            <width>50</width>
             <height>0</height>
            </size>
           </property>

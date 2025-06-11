@@ -1,6 +1,5 @@
-from controllers.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_datas_controller import ProjectDatasController
 from models.items.electric_motor import get_motor_by_spec
-from views.message_box_view import show_message
 
 
 class ElectricMotorController():

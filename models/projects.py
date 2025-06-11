@@ -4,7 +4,7 @@ import json
 from models.abs_motor import Motor
 
 from utils.database import SessionLocal
-
+import jdatetime
 Base = declarative_base()
 
 
@@ -16,6 +16,8 @@ class Project(Base):
     code = Column(String)
     unique_no = Column(String)
     revison = Column(String)
+    modified_by_id = Column(Integer)
+    modified_at = Column(String)
     datas = Column(Text)
 
     def serialize_project_data(self, data: dict) -> dict:
@@ -33,16 +35,30 @@ class Project(Base):
     def set_data(self, data_dict: dict):
         self.datas = json.dumps(self.serialize_project_data(data_dict))
 
+def get_all_project():
+    session = SessionLocal()
+    try:
+        projects = session.query(Project).all()
+        return True, projects
+    except Exception as e:
+        session.rollback()
+        return False, f"Error achiving projects\n{str(e)}"
+    finally:
+        session.close()
+
 
 def save_project(new_project):
+    today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
+    new_project.modified_at = today_shamsi
+
     session = SessionLocal()
     try:
         session.add(new_project)
         session.commit()
-        return True, "Successfully saved project"
+        return True, "Successfully saved!"
     except Exception as e:
         session.rollback()
-        return False, f"Error saving project\n{str(e)}"
+        return False, f"Error saving tender_application\n{str(e)}"
     finally:
         session.close()
 
@@ -55,7 +71,7 @@ def get_project(project_id: int):
         return True, loaded_project
     except Exception as e:
         print(str(e))
-        return False, f"Error loading project\n{str(e)}"
+        return False, f"Error loading tender_application\n{str(e)}"
     finally:
         session.close()
 

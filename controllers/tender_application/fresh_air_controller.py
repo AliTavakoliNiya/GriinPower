@@ -1,4 +1,4 @@
-from controllers.panel_controller import PanelController
+from controllers.tender_application.panel_controller import PanelController
 from models.abs_motor import Motor
 
 
@@ -12,7 +12,7 @@ class FreshAirController(PanelController):
 
     def build_panel(self):
         """
-        Main controller for building a fresh air panel from project specifications.
+        Main controller for building a fresh air panel from tender_application specifications.
         """
         # ----------------------- Initialize Motors -----------------------
         motors_config = self.electrical_specs["fresh_air"]["motors"]

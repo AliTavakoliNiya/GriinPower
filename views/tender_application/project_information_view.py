@@ -1,17 +1,20 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox
-from controllers.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_datas_controller import ProjectDatasController
 from views.message_box_view import show_message
 
 
 class ProjectInformationTab(QWidget):
     def __init__(self, main_view):
         super().__init__()
-        uic.loadUi("ui/project/project_information_tab.ui", self)
+        uic.loadUi("ui/tender_application/project_information_tab.ui", self)
         self.main_view = main_view
 
         self.electrical_specs = ProjectDatasController().project_electrical_specs
         self._initialize_info()
+
+        self.set_project_info_ui_values()
+
         self.info_tab_rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
 
     def on_selection_rev_hint_change(self, index):
@@ -62,7 +65,7 @@ class ProjectInformationTab(QWidget):
         self.proj_avl_hyundai.stateChanged.connect(self._handle_proj_avl_hyundai_changed)
 
     def _update_project_value(self, path_list, value=None):
-        """Update project details dictionary value at the specified path
+        """Update tender_application details dictionary value at the specified path
 
         Args:
             path_list: List of keys to navigate the nested dictionary
@@ -189,16 +192,16 @@ class ProjectInformationTab(QWidget):
             self.electrical_specs["project_info"]["proj_avl"].remove("siemens")
 
     def _handle_proj_avl_schneider_changed(self):
-        if self.proj_avl_schneider.isChecked() and "Schneider Electric" not in self.electrical_specs["project_info"]["proj_avl"]:
-            self.electrical_specs["project_info"]["proj_avl"].append("Schneider Electric")
-        elif not self.proj_avl_schneider.isChecked() and "Schneider Electric" in self.electrical_specs["project_info"]["proj_avl"]:
-            self.electrical_specs["project_info"]["proj_avl"].remove("Schneider Electric")
+        if self.proj_avl_schneider.isChecked() and "schneider electric" not in self.electrical_specs["project_info"]["proj_avl"]:
+            self.electrical_specs["project_info"]["proj_avl"].append("schneider electric")
+        elif not self.proj_avl_schneider.isChecked() and "schneider electric" in self.electrical_specs["project_info"]["proj_avl"]:
+            self.electrical_specs["project_info"]["proj_avl"].remove("schneider electric")
 
     def _handle_proj_avl_hyundai_changed(self):
         if self.proj_avl_hyundai.isChecked() and "Hyundai" not in self.electrical_specs["project_info"]["proj_avl"]:
-            self.electrical_specs["project_info"]["proj_avl"].append("Hyundai")
+            self.electrical_specs["project_info"]["proj_avl"].append("hyundai")
         elif not self.proj_avl_hyundai.isChecked() and "Hyundai" in self.electrical_specs["project_info"]["proj_avl"]:
-            self.electrical_specs["project_info"]["proj_avl"].remove("Hyundai")
+            self.electrical_specs["project_info"]["proj_avl"].remove("hyundai")
 
     def check_info_tab_ui_rules(self):
         if self.project_m_voltage.currentIndex() == 0:
@@ -210,3 +213,67 @@ class ProjectInformationTab(QWidget):
             return False
 
         return True
+
+    """ Load Pervios Revision as need """
+    def set_project_info_ui_values(self):
+        """
+        Set values for UI elements.
+        """
+        try:
+            # Project Information
+            self.project_name.setText(self.electrical_specs['project_info']['project_name'])
+            self.project_code.setText(self.electrical_specs['project_info']['project_code'])
+            self.project_unique_code.setText(self.electrical_specs['project_info']['project_unique_code'])
+            self.project_site_location.setPlainText(self.electrical_specs['project_info']['project_site_location'])
+
+            # Company Information
+            self.owner_name.setText(self.electrical_specs['project_info']['owner_name'])
+            self.consultant_name.setText(self.electrical_specs['project_info']['consultant_name'])
+            self.employer_name.setText(self.electrical_specs['project_info']['employer_name'])
+
+            # Revision
+            self.info_tab_rev_hint_combo.setCurrentText(str(self.electrical_specs['project_info']['rev']))
+
+            # Contact Information - Electrical
+            self.el_contact_name.setText(self.electrical_specs['project_info']['el_contact_name'])
+            self.el_contact_position.setText(self.electrical_specs['project_info']['el_contact_position'])
+            self.el_contact_phone.setText(self.electrical_specs['project_info']['el_contact_phone'])
+
+            # Contact Information - Mechanical
+            self.me_contact_name.setText(self.electrical_specs['project_info']['me_contact_name'])
+            self.me_contact_position.setText(self.electrical_specs['project_info']['me_contact_position'])
+            self.me_contact_phone.setText(self.electrical_specs['project_info']['me_contact_phone'])
+
+            # Contact Information - Construction
+            self.co_contact_name.setText(self.electrical_specs['project_info']['co_contact_name'])
+            self.co_contact_position.setText(self.electrical_specs['project_info']['co_contact_position'])
+            self.co_contact_phone.setText(self.electrical_specs['project_info']['co_contact_phone'])
+
+            # Electrical Specifications - Voltage
+            self.project_m_voltage.setCurrentText(str(self.electrical_specs['project_info']['m_voltage']/1000))
+            self.project_l_voltage.setCurrentText(str(int(self.electrical_specs['project_info']['l_voltage'])))
+            self.project_voltage_variation.setCurrentText(
+                str(int(self.electrical_specs['project_info']['voltage_variation'])))
+
+            # Electrical Specifications - Frequency
+            self.project_frequency.setCurrentText(str(int(self.electrical_specs['project_info']['voltage_frequency'])))
+            self.project_frequency_variation.setCurrentText(
+                str(int(self.electrical_specs['project_info']['frequency_variation'])))
+
+            # Environmental Conditions
+            self.min_temprature.setValue(self.electrical_specs['project_info']['minimum_temprature'])
+            self.max_temprature.setValue(self.electrical_specs['project_info']['maximum_temprature'])
+            self.humidity.setValue(self.electrical_specs['project_info']['humidity'])
+            self.altitude_elevation.setValue(self.electrical_specs['project_info']['altitude_elevation'])
+
+            # Available Equipment Checkboxes
+            self.proj_avl_schneider.setChecked('schneider' in self.electrical_specs['project_info']['proj_avl'])
+            self.proj_avl_hyundai.setChecked('hyundai' in self.electrical_specs['project_info']['proj_avl'])
+            self.proj_avl_siemens.setChecked('siemens' in self.electrical_specs['project_info']['proj_avl'])
+        except KeyError as e:
+            show_message(f"KeyError: Missing key in electrical_specs: {e}")
+        except AttributeError as e:
+            show_message(f"AttributeError: UI element not found: {e}")
+        except Exception as e:
+            show_message(f"Unexpected error: {e}")
+

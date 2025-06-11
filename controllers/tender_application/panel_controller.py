@@ -1,7 +1,7 @@
 from math import sqrt
 
 from config import COSNUS_PI, ETA
-from controllers.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_datas_controller import ProjectDatasController
 from models.items.bimetal import get_bimetal_by_current
 from models.items.contactor import get_contactor_by_current
 from models.items.electrical_panel import get_electrical_panel_by_spec
@@ -14,7 +14,7 @@ from models.items.vfd_softstarter import get_vfd_softstarter_by_power
 
 class PanelController:
     """
-    Base controller class for building electrical panels from project specifications.
+    Base controller class for building electrical panels from tender_application specifications.
     """
 
     def __init__(self, panel_type):

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QWidget, QSpinBox, QComboBox, QLineEdit, QCheckBox
 from docx import Document
 import jdatetime
 
-from controllers.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_datas_controller import ProjectDatasController
 from controllers.user_session import UserSession
 from views.message_box_view import show_message
 
@@ -16,15 +16,19 @@ from views.message_box_view import show_message
 class ElectricalTab(QWidget):
     def __init__(self, main_view):
         super().__init__()
-        uic.loadUi("ui/project/electrical_tab.ui", self)
+        uic.loadUi("ui/tender_application/electrical_tab.ui", self)
         self.main_view = main_view
         self.electrical_specs = ProjectDatasController().project_electrical_specs
-        self._initialize_components()
-        self.el_tab_rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
 
+        self._initialize_components()
+
+        self.set_electrical_ui_values()
+
+        self.el_tab_rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
 
     def _initialize_components(self):
         """Initialize all UI components with their event handlers"""
+
         """ ------------ Bagfilter ------------ """
         self.bagfilter_type.currentIndexChanged.connect(self._handle_bagfilter_type_changed)
         self.bagfilter_order.textChanged.connect(self._handle_bagfilter_order_changed)
@@ -36,6 +40,7 @@ class ElectricalTab(QWidget):
         self.me.stateChanged.connect(self._handle_me_changed)
         self.cable_supply.stateChanged.connect(self._handle_cable_supply_changed)
         self.cable_length.valueChanged.connect(self._handle_cable_length_changed)
+        self.spare_pins.valueChanged.connect(self._handle_spare_pins_changed)
 
         """ ------------Bagfilter instruments ------------ """
         self.bagfilter_dpt_qty.valueChanged.connect(self._handle_bagfilter_dpt_qty_changed)
@@ -64,7 +69,6 @@ class ElectricalTab(QWidget):
         self.screw2_add_btn.clicked.connect(self._show_screw2)
         self.screw2_minuse_btn.clicked.connect(self._hide_screw2)
         self._hide_screw2()
-        self.transport_checkbox.setChecked(False)
 
         """ ------------Transport motors ------------ """
         self.rotary_qty.valueChanged.connect(self._handle_rotary_qty_changed)
@@ -97,7 +101,6 @@ class ElectricalTab(QWidget):
 
         """ ------------ Vibration ------------ """
         self.vibration_checkbox.stateChanged.connect(self._handle_vibration_checkbox_changed)
-        self.vibration_checkbox.setChecked(False)
 
         """ ------------Vibration motors ------------ """
         self.vibration_motor_qty.valueChanged.connect(self._handle_vibration_motor_qty_changed)
@@ -105,7 +108,6 @@ class ElectricalTab(QWidget):
 
         """ ------------ Fresh Air ------------ """
         self.freshair_checkbox.stateChanged.connect(self._handle_freshair_checkbox_changed)
-        self.freshair_checkbox.setChecked(False)
 
         """ ------------Fresh air motors ------------ """
         self.freshair_motor_qty.valueChanged.connect(self._handle_freshair_motor_qty_changed)
@@ -129,7 +131,6 @@ class ElectricalTab(QWidget):
 
         """ ------------ Heater Hopper ------------ """
         self.hopper_heater_checkbox.stateChanged.connect(self._handle_hopper_heater_checkbox_changed)
-        self.hopper_heater_checkbox.setChecked(False)
 
         self.hopper_heater_qty.valueChanged.connect(self._handle_hopper_heater_qty_changed)
         self.hopper_heater_kw.currentIndexChanged.connect(self._handle_hopper_heater_kw_changed)
@@ -137,7 +138,6 @@ class ElectricalTab(QWidget):
 
         """ ------------ Damper ------------ """
         self.damper_checkbox.stateChanged.connect(self._handle_damper_checkbox_changed)
-        self.damper_checkbox.setChecked(False)
 
         self.damper_kw.currentIndexChanged.connect(self._handle_damper_kw_changed)
         self.damper_brand.currentIndexChanged.connect(self._handle_damper_brand_changed)
@@ -148,7 +148,6 @@ class ElectricalTab(QWidget):
 
         """ ------------ Fan ------------ """
         self.fan_checkbox.stateChanged.connect(self._handle_fan_checkbox_changed)
-        self.fan_checkbox.setChecked(False)
         self.qss_btn.clicked.connect(self._handle_qss_generate)
 
         """ ------------Fan motor properties ------------ """
@@ -366,7 +365,6 @@ class ElectricalTab(QWidget):
             self._update_project_value(["fan", "motors", "fan", "voltage_type"], None)
             self.fan_voltage_type_text.setText("Voltage Type")
 
-
     def _handle_fan_brand_changed(self):
         self._update_project_value(["fan", "motors", "fan", "brand"])
 
@@ -401,7 +399,7 @@ class ElectricalTab(QWidget):
 
         else:
             self.pt100_qty.setValue(pt100_value - 2)
-            self._update_project_value(["fan", "instruments", "pt100", "qty"], max(pt100_value - 2 , 0))
+            self._update_project_value(["fan", "instruments", "pt100", "qty"], max(pt100_value - 2, 0))
 
     """ ------------Fan instrument handlers ------------ """
 
@@ -448,7 +446,7 @@ class ElectricalTab(QWidget):
         if not motor_type:
             return
 
-        """ ------------Update the project details ------------ """
+        """ ------------Update the tender_application details ------------ """
         self.electrical_specs["transport"]["motors"][motor_type]["qty"] = widget.value()
 
         """ ------------Calculate total rotary/screw motors ------------ """
@@ -531,8 +529,6 @@ class ElectricalTab(QWidget):
             self.damper_start_type.setCurrentIndex(0)
             self.damper_zs_qty.setValue(0)
             self.damper_zs_brand.setCurrentIndex(0)
-
-        self.damper_checkbox.setEnabled(True)
 
     def _handle_fan_checkbox_changed(self, state):
         """Handle fan section enabling/disabling"""
@@ -660,51 +656,61 @@ class ElectricalTab(QWidget):
         self._update_project_value(["bagfilter", "cable_dimension"], value)
 
     """ ------------ Bagfilter instrument handlers ------------ """
+    def _handle_spare_pins_changed(self, value):
+        self._update_project_value(["bagfilter", "spare_pins"], value)
+
 
     def _handle_bagfilter_dpt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "qty"], value)
 
     def _handle_bagfilter_dpt_brand_changed(self, index):
-        self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "brand"], self.bagfilter_dpt_brand.currentText())
+        self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "brand"],
+                                   self.bagfilter_dpt_brand.currentText())
 
     def _handle_bagfilter_dps_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "delta_pressure_switch", "qty"], value)
 
     def _handle_bagfilter_dps_brand_changed(self, index):
-        self._update_project_value(["bagfilter", "instruments", "delta_pressure_switch", "brand"], self.bagfilter_dps_brand.currentText())
+        self._update_project_value(["bagfilter", "instruments", "delta_pressure_switch", "brand"],
+                                   self.bagfilter_dps_brand.currentText())
 
     def _handle_bagfilter_pt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "pressure_transmitter", "qty"], value)
 
     def _handle_bagfilter_pt_brand_changed(self, index):
-        self._update_project_value(["bagfilter", "instruments", "pressure_transmitter", "brand"], self.bagfilter_pt_brand.currentText())
+        self._update_project_value(["bagfilter", "instruments", "pressure_transmitter", "brand"],
+                                   self.bagfilter_pt_brand.currentText())
 
     def _handle_bagfilter_ps_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "pressure_switch", "qty"], value)
 
     def _handle_bagfilter_ps_brand_changed(self, index):
-        self._update_project_value(["bagfilter", "instruments", "pressure_switch", "brand"], self.bagfilter_ps_brand.currentText())
+        self._update_project_value(["bagfilter", "instruments", "pressure_switch", "brand"],
+                                   self.bagfilter_ps_brand.currentText())
 
     def _handle_bagfilter_pg_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "pressure_gauge", "qty"], value)
 
     def _handle_bagfilter_pg_brand_changed(self, index):
-        self._update_project_value(["bagfilter", "instruments", "pressure_gauge", "brand"], self.bagfilter_pg_brand.currentText())
+        self._update_project_value(["bagfilter", "instruments", "pressure_gauge", "brand"],
+                                   self.bagfilter_pg_brand.currentText())
 
     def _handle_bagfilter_inlet_tt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "inlet_temperature_transmitter", "qty"], value)
 
     def _handle_bagfilter_inlet_tt_brand_changed(self, index):
-        self._update_project_value(["bagfilter", "instruments", "inlet_temperature_transmitter", "brand"], self.bagfilter_inlet_tt_brand.currentText())
+        self._update_project_value(["bagfilter", "instruments", "inlet_temperature_transmitter", "brand"],
+                                   self.bagfilter_inlet_tt_brand.currentText())
 
     def _handle_bagfilter_outlet_tt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "outlet_temperature_transmitter", "qty"], value)
 
     def _handle_bagfilter_outlet_tt_brand_changed(self, index):
-        self._update_project_value(["bagfilter", "instruments", "outlet_temperature_transmitter", "brand"], self.bagfilter_outlet_tt_brand.currentText())
+        self._update_project_value(["bagfilter", "instruments", "outlet_temperature_transmitter", "brand"],
+                                   self.bagfilter_outlet_tt_brand.currentText())
 
     def _update_project_value(self, path_list, value=None):
-        """Update project details dictionary value at the specified path
+        """Update tender_application details dictionary value at the specified path
 
         Args:
             path_list: List of keys to navigate the nested dictionary
@@ -822,6 +828,220 @@ class ElectricalTab(QWidget):
                 return False
 
         return True
+
+    """ Load Pervios Revision as need """
+
+    def set_electrical_ui_values(self):
+        """
+        Set values for UI elements based on the self.electrical_specs dictionary.
+        """
+        new_proj = True if self.electrical_specs["project_info"]["rev"] == 0 else False
+        if new_proj:  # new proj
+            self.transport_checkbox.setChecked(False)
+            self.damper_checkbox.setChecked(False)
+            self.fan_checkbox.setChecked(False)
+            self.hopper_heater_checkbox.setChecked(False)
+            self.vibration_checkbox.setChecked(False)
+            self.freshair_checkbox.setChecked(False)
+            return
+
+        try:
+            # QLabel elements
+            self.hopper_heater_ptc_qty.setText(str(self.electrical_specs['hopper_heater']['instruments']['ptc']['qty']))
+
+            # QSpinBox elements
+            self.spare_pins.setValue(self.electrical_specs['bagfilter']['spare_pins'])
+            self.hopper_heater_qty.setValue(self.electrical_specs['hopper_heater']['motors']['elements']['qty'])
+            self.vibration_motor_qty.setValue(self.electrical_specs['vibration']['motors']['vibration']['qty'])
+            self.emergency_flap_motor_qty.setValue(
+                self.electrical_specs['fresh_air']['motors']['emergency_flap']['qty'])
+            self.freshair_zs_qty.setValue(self.electrical_specs['fresh_air']['instruments']['proximity_switch']['qty'])
+            self.freshair_tt_qty.setValue(
+                self.electrical_specs['fresh_air']['instruments']['temperature_transmitter']['qty'])
+            self.freshair_motor_qty.setValue(self.electrical_specs['fresh_air']['motors']['freshair_motor']['qty'])
+            self.freshair_flap_motor_qty.setValue(self.electrical_specs['fresh_air']['motors']['fresh_air_flap']['qty'])
+            self.transport_zs_qty.setValue(self.electrical_specs['transport']['instruments']['proximity_switch']['qty'])
+            self.rotary_qty.setValue(self.electrical_specs['transport']['motors']['rotary']['qty'])
+            self.telescopic_chute_qty.setValue(self.electrical_specs['transport']['motors']['telescopic_chute']['qty'])
+            self.transport_ls_bin_qty.setValue(self.electrical_specs['transport']['instruments']['level_switch']['qty'])
+            self.transport_lt_qty.setValue(
+                self.electrical_specs['transport']['instruments']['level_transmitter']['qty'])
+            self.screw2_qty.setValue(self.electrical_specs['transport']['motors']['screw2']['qty'])
+            self.screw1_qty.setValue(self.electrical_specs['transport']['motors']['screw1']['qty'])
+            self.slide_gate_qty.setValue(self.electrical_specs['transport']['motors']['slide_gate']['qty'])
+            self.transport_spd_qty.setValue(self.electrical_specs['transport']['instruments']['speed_detector']['qty'])
+            self.fan_bearing_vt_qty.setValue(
+                self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['qty'])
+            self.fan_bearing_tt_qty.setValue(
+                self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['qty'])
+            self.damper_zs_qty.setValue(self.electrical_specs['damper']['instruments']['proximity_switch']['qty'])
+            self.fan_pt_qty.setValue(self.electrical_specs['fan']['instruments']['pressure_transmitter']['qty'])
+            self.fan_tt_qty.setValue(self.electrical_specs['fan']['instruments']['temperature_transmitter']['qty'])
+            self.pt100_qty.setValue(self.electrical_specs['fan']['instruments']['pt100']['qty'])
+            self.bagfilter_dpt_qty.setValue(
+                self.electrical_specs['bagfilter']['instruments']['delta_pressure_transmitter']['qty'])
+            self.bagfilter_pt_qty.setValue(
+                self.electrical_specs['bagfilter']['instruments']['pressure_transmitter']['qty'])
+            self.bagfilter_ps_qty.setValue(self.electrical_specs['bagfilter']['instruments']['pressure_switch']['qty'])
+            self.bagfilter_inlet_tt_qty.setValue(
+                self.electrical_specs['bagfilter']['instruments']['inlet_temperature_transmitter']['qty'])
+            self.bagfilter_dps_qty.setValue(
+                self.electrical_specs['bagfilter']['instruments']['delta_pressure_switch']['qty'])
+            self.cable_length.setValue(self.electrical_specs['bagfilter']['cable_dimension'])
+            self.bagfilter_outlet_tt_qty.setValue(
+                self.electrical_specs['bagfilter']['instruments']['outlet_temperature_transmitter']['qty'])
+            self.bagfilter_pg_qty.setValue(self.electrical_specs['bagfilter']['instruments']['pressure_gauge']['qty'])
+            self.cable_length.setValue(self.electrical_specs['bagfilter']['cable_dimension'])
+
+            # QCheckBox elements
+            self.hopper_heater_checkbox.setChecked(self.electrical_specs['hopper_heater']['status'])
+            self.vibration_checkbox.setChecked(self.electrical_specs['vibration']['status'])
+            self.freshair_checkbox.setChecked(self.electrical_specs['fresh_air']['status'])
+            self.transport_checkbox.setChecked(self.electrical_specs['transport']['status'])
+            self.fan_space_heater.setChecked(self.electrical_specs['fan']['motors']['fan']['space_heater'])
+            self.fan_de_nde.setChecked(self.electrical_specs['fan']['motors']['fan']['de_nde'])
+            self.damper_checkbox.setChecked(self.electrical_specs['damper']['status'])
+            self.fan_checkbox.setChecked(self.electrical_specs['fan']['status'])
+            self.cable_supply.setChecked(self.electrical_specs['bagfilter']['cable_supply'])
+            self.olm.setChecked(self.electrical_specs['bagfilter']['olm'])
+            self.me.setChecked(self.electrical_specs['bagfilter']['me'])
+            self.ee.setChecked(self.electrical_specs['bagfilter']['ee'])
+
+            # QComboBox elements
+            self.hopper_heater_kw.setCurrentText(
+                str(self.electrical_specs['hopper_heater']['motors']['elements']['power']))
+            self.hopper_heater_ptc_brand.setCurrentText(
+                str(self.electrical_specs['hopper_heater']['instruments']['ptc']['brand']) if
+                self.electrical_specs['hopper_heater']['instruments']['ptc']['brand'] else "")
+            self.vibration_motor_kw.setCurrentText(
+                str(self.electrical_specs['vibration']['motors']['vibration']['power']))
+            self.freshair_zs_brand.setCurrentText(
+                str(self.electrical_specs['fresh_air']['instruments']['proximity_switch']['brand']) if
+                self.electrical_specs['fresh_air']['instruments']['proximity_switch']['brand'] else "")
+            self.freshair_tt_brand.setCurrentText(
+                str(self.electrical_specs['fresh_air']['instruments']['temperature_transmitter']['brand']) if
+                self.electrical_specs['fresh_air']['instruments']['temperature_transmitter']['brand'] else "")
+            self.freshair_flap_motor_start_type.setCurrentText(
+                str(self.electrical_specs['fresh_air']['motors']['fresh_air_flap']['start_type']) if
+                self.electrical_specs['fresh_air']['motors']['fresh_air_flap']['start_type'] else "")
+            self.freshair_motor_start_type.setCurrentText(
+                str(self.electrical_specs['fresh_air']['motors']['freshair_motor']['start_type']) if
+                self.electrical_specs['fresh_air']['motors']['freshair_motor']['start_type'] else "")
+            self.freshair_motor_kw.setCurrentText(
+                str(self.electrical_specs['fresh_air']['motors']['freshair_motor']['power']))
+            self.emergency_flap_motor_start_type.setCurrentText(
+                str(self.electrical_specs['fresh_air']['motors']['emergency_flap']['start_type']) if
+                self.electrical_specs['fresh_air']['motors']['emergency_flap']['start_type'] else "")
+            self.freshair_flap_motor_kw.setCurrentText(
+                str(self.electrical_specs['fresh_air']['motors']['fresh_air_flap']['power']))
+            self.emergency_flap_motor_kw.setCurrentText(
+                str(self.electrical_specs['fresh_air']['motors']['emergency_flap']['power']))
+            self.rotary_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['rotary']['power']))
+            self.transport_zs_brand.setCurrentText(
+                str(self.electrical_specs['transport']['instruments']['proximity_switch']['brand']) if
+                self.electrical_specs['transport']['instruments']['proximity_switch']['brand'] else "")
+            self.telescopic_chute_kw.setCurrentText(
+                str(self.electrical_specs['transport']['motors']['telescopic_chute']['power']))
+            self.transport_ls_bin_brand.setCurrentText(
+                str(self.electrical_specs['transport']['instruments']['level_switch']['brand']) if
+                self.electrical_specs['transport']['instruments']['level_switch']['brand'] else "")
+            self.transport_lt_brand.setCurrentText(
+                str(self.electrical_specs['transport']['instruments']['level_transmitter']['brand']) if
+                self.electrical_specs['transport']['instruments']['level_transmitter']['brand'] else "")
+            self.screw2_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw2']['power']))
+            self.screw1_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw1']['power']))
+            self.slide_gate_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['slide_gate']['power']))
+            self.transport_spd_brand.setCurrentText(
+                str(self.electrical_specs['transport']['instruments']['speed_detector']['brand']) if
+                self.electrical_specs['transport']['instruments']['speed_detector']['brand'] else "")
+            self.fan_brand.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['brand']) if
+                                          self.electrical_specs['fan']['motors']['fan']['brand'] else "")
+            self.fan_thermal_protection.setCurrentText(
+                str(self.electrical_specs['fan']['motors']['fan']['thermal_protection']) if
+                self.electrical_specs['fan']['motors']['fan']['thermal_protection'] else "")
+            self.fan_pt_brand.setCurrentText(
+                str(self.electrical_specs['fan']['instruments']['pressure_transmitter']['brand']) if
+                self.electrical_specs['fan']['instruments']['pressure_transmitter']['brand'] else "")
+            self.fan_start_type.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['start_type']) if
+                                               self.electrical_specs['fan']['motors']['fan']['start_type'] else "")
+            self.fan_tt_brand.setCurrentText(
+                str(self.electrical_specs['fan']['instruments']['temperature_transmitter']['brand']) if
+                self.electrical_specs['fan']['instruments']['temperature_transmitter']['brand'] else "")
+            self.pt100_brand.setCurrentText(str(self.electrical_specs['fan']['instruments']['pt100']['brand']) if
+                                            self.electrical_specs['fan']['instruments']['pt100']['brand'] else "")
+            self.damper_zs_brand.setCurrentText(
+                str(self.electrical_specs['damper']['instruments']['proximity_switch']['brand']) if
+                self.electrical_specs['damper']['instruments']['proximity_switch']['brand'] else "")
+            self.fan_bearing_vt_brand.setCurrentText(
+                str(self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['brand']) if
+                self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['brand'] else "")
+            self.damper_kw.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['power']))
+            self.damper_brand.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['brand']) if
+                                             self.electrical_specs['damper']['motors']['damper']['brand'] else "")
+            self.damper_start_type.setCurrentText(
+                str(self.electrical_specs['damper']['motors']['damper']['start_type']) if
+                self.electrical_specs['damper']['motors']['damper']['start_type'] else "")
+            self.fan_painting_ral.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['painting_ral']) if
+                                                 self.electrical_specs['fan']['motors']['fan']['painting_ral'] else "")
+            self.fan_kw.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['power']))
+            self.fan_bearing_tt_brand.setCurrentText(
+                str(self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['brand']) if
+                self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['brand'] else "")
+            self.fan_efficiency_class.setCurrentText(
+                str(self.electrical_specs['fan']['motors']['fan']['efficiency_class']) if
+                self.electrical_specs['fan']['motors']['fan']['efficiency_class'] else "")
+            self.fan_cooling_method.setCurrentText(
+                str(self.electrical_specs['fan']['motors']['fan']['cooling_method']) if
+                self.electrical_specs['fan']['motors']['fan']['cooling_method'] else "")
+            self.fan_voltage_type.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['voltage_type']) if
+                                                 self.electrical_specs['fan']['motors']['fan']['voltage_type'] else "")
+            self.fan_ip.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['ip_rating']) if
+                                       self.electrical_specs['fan']['motors']['fan']['ip_rating'] else "")
+            self.bagfilter_pg_brand.setCurrentText(
+                str(self.electrical_specs['bagfilter']['instruments']['pressure_gauge']['brand']) if
+                self.electrical_specs['bagfilter']['instruments']['pressure_gauge']['brand'] else "")
+            self.bagfilter_pt_brand.setCurrentText(
+                str(self.electrical_specs['bagfilter']['instruments']['pressure_transmitter']['brand']) if
+                self.electrical_specs['bagfilter']['instruments']['pressure_transmitter']['brand'] else "")
+            self.bagfilter_ps_brand.setCurrentText(
+                str(self.electrical_specs['bagfilter']['instruments']['pressure_switch']['brand']) if
+                self.electrical_specs['bagfilter']['instruments']['pressure_switch']['brand'] else "")
+            self.bagfilter_type.setCurrentText(
+                str(self.electrical_specs['bagfilter']['type']) if self.electrical_specs['bagfilter']['type'] else "")
+            self.bagfilter_outlet_tt_brand.setCurrentText(
+                str(self.electrical_specs['bagfilter']['instruments']['outlet_temperature_transmitter']['brand']) if
+                self.electrical_specs['bagfilter']['instruments']['outlet_temperature_transmitter']['brand'] else "")
+            self.plc_series.setCurrentText(
+                str(self.electrical_specs['bagfilter']['plc_series']) if self.electrical_specs['bagfilter'][
+                    'plc_series'] else "")
+            self.bagfilter_dpt_brand.setCurrentText(
+                str(self.electrical_specs['bagfilter']['instruments']['delta_pressure_transmitter']['brand']) if
+                self.electrical_specs['bagfilter']['instruments']['delta_pressure_transmitter']['brand'] else "")
+            self.bagfilter_dps_brand.setCurrentText(
+                str(self.electrical_specs['bagfilter']['instruments']['delta_pressure_switch']['brand']) if
+                self.electrical_specs['bagfilter']['instruments']['delta_pressure_switch']['brand'] else "")
+            self.touch_panel_model.setCurrentText(
+                str(self.electrical_specs['bagfilter']['touch_panel']) if self.electrical_specs['bagfilter'][
+                    'touch_panel'] else "")
+            self.plc_protocol.setCurrentText(
+                str(self.electrical_specs['bagfilter']['plc_protocol']) if self.electrical_specs['bagfilter'][
+                    'plc_protocol'] else "")
+            self.bagfilter_inlet_tt_brand.setCurrentText(
+                str(self.electrical_specs['bagfilter']['instruments']['inlet_temperature_transmitter']['brand']) if
+                self.electrical_specs['bagfilter']['instruments']['inlet_temperature_transmitter']['brand'] else "")
+
+            # QLineEdit elements
+            self.fan_rpm.setText(str(self.electrical_specs['fan']['motors']['fan']['rpm']) if
+                                 self.electrical_specs['fan']['motors']['fan']['rpm'] else "")
+            self.bagfilter_order.setText(str(self.electrical_specs['bagfilter']['order']))
+
+
+        except KeyError as e:
+            show_message(f"KeyError: Missing key in electrical_specs: {e}")
+        except AttributeError as e:
+            show_message(f"AttributeError: UI element not found: {e}")
+        except Exception as e:
+            show_message(f"Unexpected error: {e}")
 
 
 def replace_placeholders(doc: Document, data: dict):
