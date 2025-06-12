@@ -3,17 +3,19 @@ from utils.pandas_model import PandasModel
 from utils.thousand_separator_line_edit import format_line_edit_text, parse_price
 import pandas as pd
 
-from views.message_box_view import show_message
+from views.data_entry.contactor_table_view import TableWindow
+from views.message_box_view import show_message, confirmation
 
 
 class ContactorDataEntryView:
     def __init__(self, ui):
         self.ui = ui
-        self.contactor_data_entry_controller = ContactorDataEntryController()
+        self.contactor_data_entry_controller = ContactorDataEntryController(self)
 
         self.format_price_fields()
         self.ui.contactor_add_supplier_btn.clicked.connect(self.ui.add_supplier)
         self.ui.contactor_save_btn.clicked.connect(self.save_contactor_to_db_func)
+        self.ui.update_contactor_prices_btn.clicked.connect(self.update_contactor_prices_btn_pressed)
 
         self.history_table_headers = (["rated_current", "coil_voltage"] + self.ui.history_table_headers)
 
@@ -79,4 +81,22 @@ class ContactorDataEntryView:
             self.refresh_page()
         else:
             show_message(msg, "Error")
+
+    def update_contactor_prices_btn_pressed(self):
+
+        if not confirmation(f"You are about to update the Schneider Electric contactor prices from:\n"
+                            f"D series: https://elicaelectric.com/کنتاکتور-220-ولت-ac-سری-d-اشنایدر-contactor-220-v-ac-coil\n"
+                            f"G series: https://elicaelectric.com/contactor-tesys-giga\n"
+                            f"Are you sure?",
+                            centeralize=False):
+            return
+
+        show_message("Fetching Datas...")
+        self.contactor_data_entry_controller.update_contactors_in_background()
+
+
+    def show_table(self, data):
+
+        self.table_window = TableWindow(data)
+        self.table_window.show()
 

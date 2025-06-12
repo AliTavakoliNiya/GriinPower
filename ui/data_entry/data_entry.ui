@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1366</width>
+    <width>1354</width>
     <height>779</height>
    </rect>
   </property>
@@ -14,894 +14,14 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMainWindow , QWidget {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color:#151a1e;
-}
-
-QCalendar {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #151a1e;
-}
-
-QTextEdit {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-	background-color: #222b2e;
-	color: #d3dae3;
-}
-
-QPlainTextEdit {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-	background-color: #222b2e;
-	color: #d3dae3;
-}
-
-QToolButton {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
-	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));
-	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));
-	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: rgb(255,255,255);
-}
-
-QToolButton:hover {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));
-	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(197, 197, 197), stop:1 rgb(227, 227, 227));
-	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(197, 197, 197));
-	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(195, 195, 195), stop:1 rgb(222, 222, 222));
-	border-width: 1px;
-	border-radius: 5px;
-	color: rgb(0,0,0);
-	padding: 2px;
-	background-color: rgb(255,255,255);
-}
-
-QToolButton:pressed {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
-	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));
-	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));
-	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
-	border-width: 1px;
-	border-radius: 5px;
-	color: rgb(0,0,0);
-	padding: 2px;
-	background-color: rgb(142,142,142);
-}
-
-QPushButton {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #F77F00;
-}
-
-QPushButton::default {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #FFFFFF;
-	padding: 2px;
-	background-color: #151a1e;;
-}
-
-QPushButton:hover {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #1c1f1f;
-}
-
-QPushButton:pressed {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #2c2f2f;
-}
-
-QPushButton:disabled {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-top-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
-	border-right-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(217, 217, 217), stop:1 rgb(227, 227, 227));
-	border-left-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgb(227, 227, 227), stop:1 rgb(217, 217, 217));
-	border-bottom-color: qlineargradient(spread:pad, x1:0.5, y1:1, x2:0.5, y2:0, stop:0 rgb(215, 215, 215), stop:1 rgb(222, 222, 222));
-	border-width: 1px;
-	border-radius: 5px;
-	color: #808086;
-	padding: 2px;
-	background-color: rgb(142,142,142);
-}
-
-QLineEdit {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-	background-color: #222b2e;
-	color: #d3dae3;
-}
-
-QLineEdit:disabled {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-    background-color: #151a1e;
-    color: #151a1e;
-}
-
-QLCDNumber {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #4d9b87;
-}
-
-QProgressBar {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	text-align: center;
-	color: #d3dae3;
-	border-radius: 10px;
-	border-color: transparent;
-	border-style: solid;
-	background-color: #52595d;
-}
-
-QProgressBar::chunk {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #214037	;
-	border-radius: 10px;
-}
-
-QMenuBar {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #151a1e;
-}
-
-QMenuBar::item {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-  	spacing: 3px;
-  	padding: 1px 4px;
-	background-color: #151a1e;
-}
-
-QMenuBar::item:selected {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #252a2e;
-	color: #FFFFFF;
-}
-
-QMenu {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #151a1e;
-}
-
-QMenu::item:selected {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #252a2e;
-	color: #FFFFFF;
-}
-
-QMenu::item {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	background-color: #151a1e;
-}
-
-QTabBar::tab:first {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-left-width:1px;
-	border-right-width:0px;
-	border-top-width:1px;
-	border-bottom-width:0px;
-	border-top-color: #050a0e;
-	border-left-color: #050a0e;
-	border-bottom-color: #050a0e;
-	border-top-left-radius: 4px;
-	color: #d3dae3;
-	padding: 3px;
-	margin-left:0px;
-	background-color: #151a1e;
-}
-
-QTabBar::tab:last {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-top-width:1px;
-	border-left-width:1px;
-	border-right-width:1px;
-	border-bottom-width:0px;
-	border-color: #050a0e;
-	border-top-right-radius: 4px;
-	color: #d3dae3;
-	padding: 3px;
-	margin-left:0px;
-	background-color: #151a1e;
-}
-
-QTabBar::tab {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-top-width:1px;
-	border-bottom-width:0px;
-	border-left-width:1px;
-	border-top-color: #050a0e;
-	border-left-color: #050a0e;
-	border-bottom-color: #050a0e;
-	color: #d3dae3;
-	padding: 3px;
-	margin-left:0px;
-	background-color: #151a1e;
-}
-
-
-QTabBar::tab:selected, QTabBar::tab:last:selected, QTabBar::tab:hover {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-  	border-left-width:1px;
-	border-bottom-width:0px;
-	border-right-color: transparent;
-	border-top-color: #050a0e;
-	border-left-color: #050a0e;
-	border-bottom-color: #050a0e;
-	color: #FFFFFF;
-	padding: 3px;
-	margin-left:0px;
-    background-color: #F77F00;
-}
-
-QTabBar::tab:selected, QTabBar::tab:first:selected, QTabBar::tab:hover {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-  	border-left-width:1px;
-  	border-bottom-width:0px;
-  	border-top-width:1px;
-	border-right-color: transparent;
-	border-top-color: #050a0e;
-	border-left-color: #050a0e;
-	border-bottom-color: #050a0e;
-	color: #FFFFFF;
-	padding: 3px;
-	margin-left:0px;
-    background-color: #F77F00;
-}
-
-QCheckBox {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	padding: 2px;
-}
-
-QCheckBox:disabled {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #808086;
-	padding: 2px;
-}
-
-QCheckBox:hover {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-radius:4px;
-	border-style:solid;
-	padding-left: 1px;
-	padding-right: 1px;
-	padding-bottom: 1px;
-	padding-top: 1px;
-	border-width:1px;
-	border-color: transparent;
-}
-
-QCheckBox::indicator:checked {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	height: 10px;
-	width: 10px;
-	border-style:solid;
-	border-width: 1px;
-	border-color: #4fa08b;
-	color: #000000;
-	background-color: qradialgradient(cx:0.4, cy:0.4, radius: 1.5,fx:0, fy:0, stop:0 #1e282c, stop:0.3 #1e282c, stop:0.4 #4fa08b, stop:0.5 #1e282c, stop:1 #1e282c);
-}
-
-QCheckBox::indicator:unchecked {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	height: 10px;
-	width: 10px;
-	border-style:solid;
-	border-width: 1px;
-	border-color: #4fa08b;
-	color: #000000;
-}
-
-QRadioButton {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	padding: 1px;
-}
-
-QRadioButton::indicator:checked {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	height: 10px;
-	width: 10px;
-	border-style:solid;
-	border-radius:5px;
-	border-width: 1px;
-	border-color: #4fa08b;
-	color: #a9b7c6;
-	background-color: qradialgradient(cx:0.5, cy:0.5, radius:0.4,fx:0.5, fy:0.5, stop:0 #4fa08b, stop:1 #1e282c);
-}
-
-QRadioButton::indicator:!checked {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	height: 10px;
-	width: 10px;
-	border-style:solid;
-	border-radius:5px;
-	border-width: 1px;
-	border-color: #4fa08b;
-	color: #a9b7c6;
-	background-color: transparent;
-}
-
-QStatusBar {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color:#027f7f;
-}
-
-QSpinBox {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	background-color: #222b2e;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-}
-
-QSpinBox:disabled {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #151a1e;
-    color: #151a1e;
-}
-
-QDoubleSpinBox {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	background-color: #222b2e;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-}
-
-QTimeEdit {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	background-color: #222b2e;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-}
-
-QDateTimeEdit {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	background-color: #222b2e;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-}
-
-QDateEdit {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	background-color: #222b2e;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-}
-
-QFontComboBox {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	background-color: #222b2e;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-}
-
-QComboBox {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #d3dae3;
-	background-color: #222b2e;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-}
-
-QComboBox QAbstractItemView {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #222b2e;
-	color: #d3dae3;
-	selection-background-color: #007acc;
-}
-
-QDial {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: #16a085;
-}
-
-QToolBox {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #a9b7c6;
-	background-color: #222b2e;
-}
-
-QToolBox::tab {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #a9b7c6;
-	background-color:#222b2e;
-}
-
-QToolBox::tab:selected {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #FFFFFF;
-	background-color:#222b2e;
-}
-
-QSlider::groove:horizontal {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	height: 5px;
-	background-color: #52595d;
-}
-
-QSlider::groove:vertical {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	width: 5px;
-	background-color: #52595d;
-}
-
-QSlider::handle:horizontal {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: #1a2224;
-	border-style: solid;
-	border-width: 1px;
-	border-color: rgb(207,207,207);
-	width: 12px;
-	margin: -5px 0;
-	border-radius: 7px;
-}
-
-QSlider::handle:vertical {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: #1a2224;
-	border-style: solid;
-	border-width: 1px;
-	border-color: rgb(207,207,207);
-	height: 12px;
-	margin: 0 -5px;
-	border-radius: 7px;
-}
-
-QSlider::add-page:horizontal {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: #52595d;
-}
-
-QSlider::add-page:vertical {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: #52595d;
-}
-
-QSlider::sub-page:horizontal {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #15433a;
-}
-
-QSlider::sub-page:vertical {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #15433a;
-}
-
-QScrollBar:horizontal {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	max-height: 10px;
-	border: 1px transparent grey;
-	margin: 0px 20px 0px 20px;
-	background: transparent;
-}
-
-QScrollBar:vertical {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	max-width: 10px;
-	border: 1px transparent grey;
-	margin: 20px 0px 20px 0px;
-	background: transparent;
-}
-
-QScrollBar::handle:horizontal {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: #52595d;
-	border-style: transparent;
-	border-radius: 4px;
-	min-width: 25px;
-}
-
-QScrollBar::handle:horizontal:hover {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: #58a492;
-	border-style: transparent;
-	border-radius: 4px;
-	min-width: 25px;
-}
-
-QScrollBar::handle:vertical {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: #52595d;
-	border-style: transparent;
-	border-radius: 4px;
-	min-height: 25px;
-}
-
-QScrollBar::handle:vertical:hover {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: #58a492;
-	border-style: transparent;
-	border-radius: 4px;
-	min-height: 25px;
-}
-
-QScrollBar::add-line:horizontal {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border: 2px transparent grey;
-   border-top-right-radius: 4px;
-   border-bottom-right-radius: 4px;
-   background: #15433a;
-   width: 20px;
-   subcontrol-position: right;
-   subcontrol-origin: margin;
-}
-
-QScrollBar::add-line:horizontal:pressed {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border: 2px transparent grey;
-   border-top-right-radius: 4px;
-   border-bottom-right-radius: 4px;
-   background: rgb(181,181,181);
-   width: 20px;
-   subcontrol-position: right;
-   subcontrol-origin: margin;
-}
-
-QScrollBar::add-line:vertical {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border: 2px transparent grey;
-   border-bottom-left-radius: 4px;
-   border-bottom-right-radius: 4px;
-   background: #15433a;
-   height: 20px;
-   subcontrol-position: bottom;
-   subcontrol-origin: margin;
-}
-
-QScrollBar::add-line:vertical:pressed {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border: 2px transparent grey;
-   border-bottom-left-radius: 4px;
-   border-bottom-right-radius: 4px;
-   background: rgb(181,181,181);
-   height: 20px;
-   subcontrol-position: bottom;
-   subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:horizontal {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border: 2px transparent grey;
-   border-top-left-radius: 4px;
-   border-bottom-left-radius: 4px;
-   background: #15433a;
-   width: 20px;
-   subcontrol-position: left;
-   subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:horizontal:pressed {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border: 2px transparent grey;
-   border-top-left-radius: 4px;
-   border-bottom-left-radius: 4px;
-   background: rgb(181,181,181);
-   width: 20px;
-   subcontrol-position: left;
-   subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:vertical {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border: 2px transparent grey;
-   border-top-left-radius: 4px;
-   border-top-right-radius: 4px;
-   background: #15433a;
-   height: 20px;
-   subcontrol-position: top;
-   subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:vertical:pressed {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border: 2px transparent grey;
-   border-top-left-radius: 4px;
-   border-top-right-radius: 4px;
-   background: rgb(181,181,181);
-   height: 20px;
-   subcontrol-position: top;
-   subcontrol-origin: margin;
-}
-
-QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: none;
-}
-
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background: none;
-}
-
-QComboBox {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #ffffff;
-    font-weight: bold;
-}
-
-QRadioButton, QComboBox {
-	font-size: 10pt;
-	color: #ffffff;
-    font-family: Calibri;
-    font-weight: bold;
-}
-
-QComboBox:disabled {
-	font-family: Calibri;
-    font-weight: bold;
-	font-size: 13px;
-    background-color: #151a1e;
-    color: #151a1e;
-}
-
-QFrame {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	background-color: #151a1e;
-}
-
-QTabWidget {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color:#ffffff;
-	background-color: #151a1e;
-}
-
-QTabWidget::pane {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #ffffff;
-
-	border-color: #050a0e;
-	background-color: #151a1e;
-	border-style: solid;
-	border-width: 1px;
-}
-
-
-QHeaderView::section {
-    background-color: #F77F00;
-    color: white;
-    padding: 4px;
-    border: 1px solid black;
-}
-
-QTableView::item {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	padding: 5px;
-    background: white;
-}
-
-QTableView::item:alternate {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	color: #000000;
-    background: lightgray;
-}
-
-QTableView::item:selected {
-    background-color: #3399FF; /* or any contrasting color */
-    color: black; /* ensure text is visible */
-}
-
-
-
-QLabel {
-	color: #ffffff;
-	background-color: #151a1e;
-    font-family: Calibri;
-    font-weight: bold;
-	font-size: 13px;
-}
-
-QGroupBox {
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border: 1px solid #F77F00;
-    margin-top: 10px;
-}
-
-QGroupBox::title {
-	color: #F77F00 ;
-    subcontrol-origin: margin;
-    left: 2px;
-    padding: 0 3px;
-    font-family: PoetsenOne;
-    font-weight: bold;
-	font-size: 14px;
-}
-
-
-QTreeWidget {
-    background-color: white;
-    border: 1px solid black;
-}
-
-QTreeWidget::item {
-    border-bottom: 1px solid black;
-}
-QTreeWidget::item:selected {
-    background-color: #3399FF; /* or any contrasting color */
-    color: black; /* ensure text is visible */
-}
-
-
-QTableWidget {
-    background-color: white;
-    border: 1px solid black;
-}
-
-QTableWidget::item {
-    border-bottom: 1px solid black;
-}
-QTableWidget::item:selected {
-    background-color: #3399FF; /* or any contrasting color */
-    color: black; /* ensure text is visible */
-}
-
-QListWidget{
-	font-size: 10pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #4fa08b;
-	background-color: #222b2e;
-	color: #d3dae3;
-}
-QListWidget::item {
-    padding: 5px;
-    border: none;
-}
-
-QListWidget::item:selected {
-    background-color: #F77F00;
-    color: #ffffff; /* optional: adjust text color for contrast */
-}
-
-
-</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_11">
-    <item row="1" column="1" rowspan="2">
+    <property name="horizontalSpacing">
+     <number>6</number>
+    </property>
+    <item row="3" column="1" rowspan="2">
      <widget class="QListWidget" name="item_list">
       <property name="minimumSize">
        <size>
@@ -975,7 +95,7 @@ QListWidget::item:selected {
       </item>
      </widget>
     </item>
-    <item row="0" column="2">
+    <item row="0" column="4">
      <spacer name="verticalSpacer_12">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -991,7 +111,7 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="3" column="2">
+    <item row="5" column="4">
      <spacer name="verticalSpacer_9">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -1007,7 +127,65 @@ QListWidget::item:selected {
       </property>
      </spacer>
     </item>
-    <item row="2" column="2">
+    <item row="4" column="0">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="5">
+     <widget class="QTableView" name="history_list">
+      <property name="minimumSize">
+       <size>
+        <width>540</width>
+        <height>540</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="6">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="1">
+     <spacer name="verticalSpacer_8">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="3" colspan="2">
      <widget class="QStackedWidget" name="item_stack">
       <property name="maximumSize">
        <size>
@@ -1028,11 +206,23 @@ QListWidget::item:selected {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
-        <item row="1" column="0">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
          <widget class="QGroupBox" name="motor_gp_box">
           <property name="minimumSize">
            <size>
@@ -1378,6 +568,28 @@ QListWidget::item:selected {
                <width>16</width>
                <height>16</height>
               </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
              </property>
              <property name="text">
               <string/>
@@ -1778,6 +990,18 @@ QListWidget::item:selected {
       </widget>
       <widget class="QWidget" name="plc">
        <layout class="QGridLayout" name="gridLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item row="1" column="0">
          <widget class="QGroupBox" name="groupBox_3">
           <property name="minimumSize">
@@ -1810,6 +1034,28 @@ QListWidget::item:selected {
                <width>16</width>
                <height>16</height>
               </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
              </property>
              <property name="text">
               <string/>
@@ -2175,6 +1421,21 @@ QListWidget::item:selected {
       </widget>
       <widget class="QWidget" name="instrument">
        <layout class="QGridLayout" name="gridLayout_8">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_10">
           <property name="title">
@@ -2237,6 +1498,28 @@ QListWidget::item:selected {
                <width>16</width>
                <height>16</height>
               </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
              </property>
              <property name="text">
               <string/>
@@ -2506,6 +1789,18 @@ QListWidget::item:selected {
       </widget>
       <widget class="QWidget" name="contactor">
        <layout class="QGridLayout" name="gridLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item row="1" column="0">
          <widget class="QGroupBox" name="contactor_gp_box">
           <property name="minimumSize">
@@ -2525,13 +1820,6 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="7" column="0" colspan="2">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>*Price (IRR)</string>
-             </property>
-            </widget>
-           </item>
            <item row="5" column="0">
             <widget class="QPushButton" name="contactor_add_supplier_btn">
              <property name="maximumSize">
@@ -2539,6 +1827,28 @@ QListWidget::item:selected {
                <width>16</width>
                <height>16</height>
               </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
              </property>
              <property name="text">
               <string/>
@@ -2549,10 +1859,10 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="1" column="0" colspan="2">
-            <widget class="QLabel" name="label_2">
+           <item row="7" column="0" colspan="2">
+            <widget class="QLabel" name="label_3">
              <property name="text">
-              <string>*Current (A)</string>
+              <string>*Price (IRR)</string>
              </property>
             </widget>
            </item>
@@ -2576,6 +1886,19 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
+           <item row="9" column="4" colspan="2" alignment="Qt::AlignRight">
+            <widget class="QPushButton" name="contactor_save_btn">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>💾 Save To Database</string>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="2">
             <widget class="QLineEdit" name="contactor_order_number">
              <property name="minimumSize">
@@ -2592,35 +1915,11 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
-           <item row="3" column="0" colspan="2">
-            <widget class="QLabel" name="label">
+           <item row="1" column="0" colspan="2">
+            <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>*Order Number</string>
+              <string>*Current (A)</string>
              </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QComboBox" name="contactor_brand">
-             <item>
-              <property name="text">
-               <string>----------</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Schneider Electric</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Siemens</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Hyundai</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="4" column="2">
@@ -2661,6 +1960,37 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
+           <item row="2" column="2">
+            <widget class="QComboBox" name="contactor_brand">
+             <item>
+              <property name="text">
+               <string>----------</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Schneider Electric</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Siemens</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Hyundai</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="2">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>*Order Number</string>
+             </property>
+            </widget>
+           </item>
            <item row="5" column="2">
             <widget class="QComboBox" name="contactor_supplier_list">
              <property name="maximumSize">
@@ -2683,57 +2013,6 @@ QListWidget::item:selected {
               </size>
              </property>
             </spacer>
-           </item>
-           <item row="1" column="6">
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Minimum</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="9" column="5" colspan="2">
-            <widget class="QPushButton" name="contactor_save_btn">
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>💾 Save To Database</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QDoubleSpinBox" name="contactor_current">
-             <property name="minimumSize">
-              <size>
-               <width>62</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>100</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::NoButtons</enum>
-             </property>
-            </widget>
            </item>
            <item row="1" column="5">
             <widget class="QDoubleSpinBox" name="contactor_coil_voltage">
@@ -2760,6 +2039,73 @@ QListWidget::item:selected {
              </property>
             </widget>
            </item>
+           <item row="1" column="2">
+            <widget class="QDoubleSpinBox" name="contactor_current">
+             <property name="minimumSize">
+              <size>
+               <width>62</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0" colspan="2">
+            <widget class="QPushButton" name="update_contactor_prices_btn">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16666</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string> Update Prices</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../../assets/refresh.png</normaloff>../../assets/refresh.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>17</width>
+               <height>17</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </widget>
         </item>
@@ -2767,6 +2113,18 @@ QListWidget::item:selected {
       </widget>
       <widget class="QWidget" name="mpcb">
        <layout class="QGridLayout" name="gridLayout_10">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_5">
           <property name="title">
@@ -2933,6 +2291,28 @@ QListWidget::item:selected {
                <height>16</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -3037,6 +2417,18 @@ QListWidget::item:selected {
       </widget>
       <widget class="QWidget" name="mccb">
        <layout class="QGridLayout" name="gridLayout_15">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_7">
           <property name="title">
@@ -3153,6 +2545,28 @@ QListWidget::item:selected {
                <height>16</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -3258,6 +2672,18 @@ QListWidget::item:selected {
       </widget>
       <widget class="QWidget" name="bimetal">
        <layout class="QGridLayout" name="gridLayout_14">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_6">
           <property name="minimumSize">
@@ -3305,6 +2731,28 @@ QListWidget::item:selected {
                <width>16</width>
                <height>16</height>
               </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
              </property>
              <property name="text">
               <string/>
@@ -3528,6 +2976,18 @@ QListWidget::item:selected {
       </widget>
       <widget class="QWidget" name="vfd_softstarter">
        <layout class="QGridLayout" name="gridLayout_19">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_9">
           <property name="title">
@@ -3698,6 +3158,28 @@ QListWidget::item:selected {
                <height>16</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -3818,6 +3300,18 @@ QListWidget::item:selected {
       <widget class="QWidget" name="wire_cable"/>
       <widget class="QWidget" name="electrical_panels">
        <layout class="QGridLayout" name="gridLayout_7">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_11">
           <property name="title">
@@ -3831,6 +3325,28 @@ QListWidget::item:selected {
                <width>16</width>
                <height>16</height>
               </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
              </property>
              <property name="text">
               <string/>
@@ -4244,6 +3760,18 @@ QListWidget::item:selected {
       </widget>
       <widget class="QWidget" name="generals">
        <layout class="QGridLayout" name="gridLayout_17">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_8">
           <property name="title">
@@ -4454,6 +3982,28 @@ QListWidget::item:selected {
                <height>16</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -4560,85 +4110,66 @@ QListWidget::item:selected {
       </widget>
      </widget>
     </item>
-    <item row="2" column="0">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="1" column="2" colspan="2">
-     <widget class="QPushButton" name="hide_show_item_stack_btn">
-      <property name="maximumSize">
-       <size>
-        <width>17</width>
-        <height>17</height>
-       </size>
-      </property>
-      <property name="toolTip">
-       <string>Show/Hide Add New Motor</string>
-      </property>
-      <property name="text">
-       <string>⏪</string>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>17</width>
-        <height>17</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QTableView" name="history_list">
-      <property name="minimumSize">
-       <size>
-        <width>540</width>
-        <height>540</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="4">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="1">
-     <spacer name="verticalSpacer_8">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
+    <item row="3" column="3" colspan="3">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="hide_show_item_stack_btn">
+        <property name="maximumSize">
+         <size>
+          <width>17</width>
+          <height>17</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Show/Hide Add New Motor</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
+        </property>
+        <property name="text">
+         <string>⏪</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>17</width>
+          <height>17</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_11">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -4673,13 +4204,11 @@ QListWidget::item:selected {
   <tabstop>bimetal_add_supplier_btn</tabstop>
   <tabstop>bimetal_price</tabstop>
   <tabstop>plc_add_supplier_btn</tabstop>
-  <tabstop>hide_show_item_stack_btn</tabstop>
   <tabstop>contactor_brand</tabstop>
   <tabstop>contactor_order_number</tabstop>
   <tabstop>contactor_supplier_list</tabstop>
   <tabstop>contactor_price</tabstop>
   <tabstop>contactor_add_supplier_btn</tabstop>
-  <tabstop>contactor_save_btn</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -18,7 +18,7 @@ def show_message(message: str, title: str = " "):
     msg.exec_()
 
 
-def confirmation(text):
+def confirmation(text, centeralize = True):
     dialog = QDialog()
     dialog.setWindowTitle(" ")
     apply_stylesheet(dialog, "styles/dark_style.qss")
@@ -27,7 +27,8 @@ def confirmation(text):
 
     layout = QVBoxLayout()
     label = QLabel(text)
-    label.setAlignment(Qt.AlignCenter)
+    if centeralize:
+        label.setAlignment(Qt.AlignCenter)
     layout.addWidget(label)
 
     button_layout = QHBoxLayout()
