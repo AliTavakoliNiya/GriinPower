@@ -133,17 +133,14 @@ def get_contactor_by_current(rated_current, brands=[], order_number=None):
         session.close()
 
 
-def insert_contactor_to_db(
-        brand,
-        order_number,
-        rated_current,
-        coil_voltage):
-
+def insert_contactor_to_db(brand, order_number, rated_current, coil_voltage, created_by_id=None):
     brand = brand.lower()
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()
+
     try:
+        # Query only components of type "Contactor" with matching attributes
         existing_components = (
             session.query(Component)
             .filter(Component.type == "Contactor")
@@ -159,21 +156,23 @@ def insert_contactor_to_db(
                 attr_dict.get("rated_current") == rated_current and
                 attr_dict.get("coil_voltage") == coil_voltage
             ):
-                return True, component.id  # component exists
+                return True, component.id  # Match found
 
+        # No match found, create new component
+        created_by_id = created_by_id if created_by_id else str(current_user.id)
         new_contactor = Component(
             type="Contactor",
             attributes=[
-                ComponentAttribute(key='brand', value=brand),
-                ComponentAttribute(key='order_number', value=order_number),
-                ComponentAttribute(key='rated_current', value=rated_current),
-                ComponentAttribute(key='coil_voltage', value=coil_voltage),
-                ComponentAttribute(key='created_by_id', value=str(current_user.id)),
-                ComponentAttribute(key='created_at', value=today_shamsi),
+                ComponentAttribute(key="brand", value=brand),
+                ComponentAttribute(key="order_number", value=order_number),
+                ComponentAttribute(key="rated_current", value=rated_current),
+                ComponentAttribute(key="coil_voltage", value=coil_voltage),
+                ComponentAttribute(key="created_by_id", value=created_by_id),
+                ComponentAttribute(key="created_at", value=today_shamsi),
             ]
         )
         session.add(new_contactor)
-        session.flush()
+        session.flush()  # Assign ID
         session.commit()
         return True, new_contactor.id
 
@@ -181,7 +180,9 @@ def insert_contactor_to_db(
         session.rollback()
         print(str(e))
         return False, f"❌ Error inserting contactor: {str(e)}"
+
     finally:
         session.close()
+
 
 

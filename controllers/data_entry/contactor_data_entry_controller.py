@@ -1,22 +1,22 @@
+import re
+
+import requests
+from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, QThreadPool
+from bs4 import BeautifulSoup
+
 from models.component_suppliers import insert_component_suppliers_to_db
 from models.items.contactor import get_all_contactors, insert_contactor_to_db
 from models.supplier import get_supplier_by_name
-import requests
-from bs4 import BeautifulSoup
-import re
-import threading
-from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
-from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, QThreadPool
-
-from views.message_box_view import show_message
 
 
-# define signals to tell main thread
 class ContactorUpdateWorkerSignals(QObject):
+    """ define signals to tell main thread """
     finished = pyqtSignal(bool, object)  # success, data
 
-# running Worker in seprate Thread
+
 class ContactorUpdateWorker(QRunnable):
+    """ running Worker in seprate Thread """
+
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -35,7 +35,6 @@ class ContactorUpdateWorker(QRunnable):
                 return
             for contactor in data:
                 contactor["series"] = series
-                contactor["component_id"] = "???"
                 contactor["supplier_id"] = 9
                 contactors.append(contactor)
         self.signals.finished.emit(True, contactors)
@@ -76,17 +75,7 @@ class ContactorDataEntryController:
     def update_contactors_in_background(self):
         self.view.ui.update_contactor_prices_btn.setEnabled(False)
         worker = ContactorUpdateWorker(self)
-        worker.signals.finished.connect(self.on_update_complete)  # connecto to main signal
-        self.threadpool.start(worker)
-
-        def on_update_complete(success, data):
-            if success:
-                self.view.show_table(data)
-            else:
-                show_message(data,title="Error")
-
-        worker = ContactorUpdateWorker(self)
-        worker.signals.finished.connect(on_update_complete)
+        worker.signals.finished.connect(self.on_update_complete)
         self.threadpool.start(worker)
 
     # react to complete fetching data
@@ -96,7 +85,6 @@ class ContactorDataEntryController:
         else:
             print("❌ Error:", data)
         self.view.ui.update_contactor_prices_btn.setEnabled(True)
-
 
     def _extract_product_info_from_elica(self, url):
         try:
@@ -141,25 +129,24 @@ class ContactorDataEntryController:
         except Exception as e:
             return False, f"Error while fetching: {e}"
 
+    def save_contactors(self, contactors_list):
 
-class TableWindow(QWidget):
-    def __init__(self, data):
-        super().__init__()
-        self.setWindowTitle("لیست کنتاکتورها")
-        self.resize(800, 400)
+        for contactor in contactors_list:
+            success, contactor_id = insert_contactor_to_db(
+                rated_current=contactor["rated_current"],
+                coil_voltage=contactor["coil_voltage"],
+                brand=contactor["brand"],
+                order_number=contactor["order_number"],
+                created_by_id=2, # System
+            )
+            if not success:
+                return False, "Failed to save contactor"
 
-        layout = QVBoxLayout()
-        self.table = QTableWidget()
-        self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["Order#", "Brand", "Amp", "Voltage", "Price"])
+            success, result = insert_component_suppliers_to_db(
+                component_id=contactor_id, supplier_id=contactor["supplier_id"],
+                price=contactor["price"], currency="IRR"
+            )
+            if not success:
+                return False, "Failed to save price"
 
-        self.table.setRowCount(len(data))
-        for row, item in enumerate(data):
-            self.table.setItem(row, 0, QTableWidgetItem(str(item["order_number"])))
-            self.table.setItem(row, 1, QTableWidgetItem(item["brand"]))
-            self.table.setItem(row, 2, QTableWidgetItem(str(item["rated_current"])))
-            self.table.setItem(row, 3, QTableWidgetItem(str(item["coil_voltage"])))
-            self.table.setItem(row, 4, QTableWidgetItem(str(item["price"])))
-
-        layout.addWidget(self.table)
-        self.setLayout(layout)
+        return True, "✅ Contactor Saved successfully"

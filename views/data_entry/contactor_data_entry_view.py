@@ -1,9 +1,11 @@
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QTableView, QHBoxLayout, QPushButton
+
 from controllers.data_entry.contactor_data_entry_controller import ContactorDataEntryController
 from utils.pandas_model import PandasModel
 from utils.thousand_separator_line_edit import format_line_edit_text, parse_price
 import pandas as pd
 
-from views.data_entry.contactor_table_view import TableWindow
 from views.message_box_view import show_message, confirmation
 
 
@@ -84,9 +86,9 @@ class ContactorDataEntryView:
 
     def update_contactor_prices_btn_pressed(self):
 
-        if not confirmation(f"You are about to update the Schneider Electric contactor prices from:\n"
+        if not confirmation(f"You are about to update the Schneider Electric contactor prices from:\n\n"
                             f"D series: https://elicaelectric.com/کنتاکتور-220-ولت-ac-سری-d-اشنایدر-contactor-220-v-ac-coil\n"
-                            f"G series: https://elicaelectric.com/contactor-tesys-giga\n"
+                            f"G series: https://elicaelectric.com/contactor-tesys-giga\n\n"
                             f"Are you sure?",
                             centeralize=False):
             return
@@ -94,9 +96,69 @@ class ContactorDataEntryView:
         show_message("Fetching Datas...")
         self.contactor_data_entry_controller.update_contactors_in_background()
 
-
     def show_table(self, data):
-
-        self.table_window = TableWindow(data)
+        self.table_window = TableWindow(data, on_save_callback=self.save_contactors_to_db_after_fetch, parent=self.ui)
         self.table_window.show()
 
+    def save_contactors_to_db_after_fetch(self, data):
+        success, msg = self.contactor_data_entry_controller.save_contactors(data)
+        if success:
+            show_message(msg, title="Saved")
+        else:
+            show_message(msg, title="Failed")
+
+        self.refresh_page()
+
+
+class TableWindow(QMainWindow):
+    def __init__(self, data, on_save_callback, parent=None):
+        super().__init__(parent)
+        if parent:
+            self.setStyleSheet(parent.styleSheet())
+
+        self.setWindowTitle("contactor list")
+        self.data = data
+        self.on_save_callback = on_save_callback
+
+        central_widget = QWidget()
+        layout = QVBoxLayout(central_widget)
+
+        self.table_view = QTableView()
+        self.resize(780, 600)
+        self.model = QStandardItemModel(len(data), 5)
+        self.model.setHorizontalHeaderLabels(["Order Number", "Brand", "Amper", "Voltage", "Price"])
+
+        for row, item in enumerate(data):
+            self.model.setItem(row, 0, QStandardItem(str(item["order_number"])))
+            self.model.setItem(row, 1, QStandardItem(item["brand"]))
+            self.model.setItem(row, 2, QStandardItem(str(item["rated_current"])))
+            self.model.setItem(row, 3, QStandardItem(str(item["coil_voltage"])))
+            self.model.setItem(row, 4, QStandardItem(str(item["price"])))
+
+        self.table_view.setModel(self.model)
+        self.table_view.setSelectionBehavior(QTableView.SelectRows)
+        self.table_view.resizeColumnsToContents()
+
+        layout.addWidget(self.table_view)
+
+        self.table_view.setColumnWidth(0, 200)  # order_number
+        self.table_view.setColumnWidth(1, 200)  # brand
+        self.table_view.setColumnWidth(2, 100)  # rated_current
+        self.table_view.setColumnWidth(3, 100)  # coil_voltage
+        self.table_view.setColumnWidth(4, 100)  # price
+        self.setCentralWidget(central_widget)
+
+        button_layout = QHBoxLayout()
+        self.save_button = QPushButton("Save To Database")
+        self.save_button.setFixedSize(150, 30)
+        self.save_button.clicked.connect(self.save_to_db)
+
+        button_layout.addStretch()  # Pushes the button to the right
+        button_layout.addWidget(self.save_button)
+
+        layout.addLayout(button_layout)
+
+
+    def save_to_db(self):
+        self.close()
+        self.on_save_callback(self.data)
