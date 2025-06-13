@@ -1,4 +1,6 @@
 import re
+import time
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -94,9 +96,13 @@ class MPCBDataEntryController:
         self.view.ui.update_mpcb_prices_btn.setEnabled(True)
 
     def _extract_product_info_from_elica(self, url):
+        time.sleep(2)
         try:
-            headers = {'User-Agent': 'Mozilla/5.0'}
-            resp = requests.get(url, headers=headers)
+            session = requests.Session()
+            session.headers.update({
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0 Safari/537.36'
+            })
+            resp = session.get(url, timeout=15)
             soup = BeautifulSoup(resp.text, 'html.parser')
             products = soup.find_all('div', class_='product-thumb')
             out = []
@@ -178,7 +184,7 @@ class MPCBDataEntryController:
 
             success, result = insert_component_suppliers_to_db(
                 component_id=mpcb_id, supplier_id=mpcb["supplier_id"],
-                price=mpcb["price"], currency="IRR"
+                price=mpcb["price"], currency="IRR", created_by_id=2
             )
             if not success:
                 return False, "Failed to save price"

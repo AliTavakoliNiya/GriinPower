@@ -24,7 +24,7 @@ class ComponentSupplier(Base):
     component = relationship('Component', back_populates='suppliers', lazy="joined")
 
 
-def insert_component_suppliers_to_db(component_id, supplier_id, price, currency):
+def insert_component_suppliers_to_db(component_id, supplier_id, price, currency, created_by_id=None):
     session = SessionLocal()
     try:
         component = session.get(Component, component_id)
@@ -33,6 +33,7 @@ def insert_component_suppliers_to_db(component_id, supplier_id, price, currency)
             component_id=component_id,
             price=price,
             currency=currency,
+            created_by_id=created_by_id
         )
 
         component.suppliers.append(supplier_link)

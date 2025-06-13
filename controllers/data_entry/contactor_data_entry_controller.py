@@ -1,4 +1,6 @@
 import re
+import time
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -87,11 +89,13 @@ class ContactorDataEntryController:
         self.view.ui.update_contactor_prices_btn.setEnabled(True)
 
     def _extract_product_info_from_elica(self, url):
+        time.sleep(2)
         try:
-            headers = {'User-Agent': 'Mozilla/5.0'}
-            response = requests.get(url, headers=headers)
-            print(f"\n\nurl: {url}")
-            print(f"HTTP result: {response.status_code}\n\n")
+            session = requests.Session()
+            session.headers.update({
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0 Safari/537.36'
+            })
+            response = session.get(url, timeout=15)
             soup = BeautifulSoup(response.text, 'html.parser')
 
             product_divs = soup.find_all('div', class_='product-thumb')
@@ -144,7 +148,7 @@ class ContactorDataEntryController:
 
             success, result = insert_component_suppliers_to_db(
                 component_id=contactor_id, supplier_id=contactor["supplier_id"],
-                price=contactor["price"], currency="IRR"
+                price=contactor["price"], currency="IRR", created_by_id=2
             )
             if not success:
                 return False, "Failed to save price"

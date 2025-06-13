@@ -94,12 +94,10 @@ def get_mpcb_by_current(rated_current, brands=[], order_number=None):
             if not (min_c <= current_val <= max_c):
                 continue
 
-            # بررسی برند
             brand = attr_dict.get("brand")
             if brands and brand not in brands:
                 continue
 
-            # بررسی شماره سفارش
             if order_number and attr_dict.get("order_number") != order_number:
                 continue
 
@@ -113,7 +111,6 @@ def get_mpcb_by_current(rated_current, brands=[], order_number=None):
         if not matching_mpcbs:
             return False, "❌ MPCB not found"
 
-        # انتخاب MPCB با کوچک‌ترین بازه جریان (بیشترین دقت)
         best_match = min(
             matching_mpcbs,
             key=lambda item: item["range"]
