@@ -36,19 +36,19 @@ def get_all_contactors():
     contactor_list = []
     for contactor in contactors:
         attr_dict = {attr.key: attr.value for attr in contactor.attributes}
-        created_by_id = attr_dict.get("created_by_id")
 
         created_by = ""
-        if created_by_id:
-            user = session.query(User).filter_by(id=int(created_by_id)).first()
-            if user:
-                created_by = f"{user.first_name} {user.last_name}"
-
         for supplier in contactor.suppliers:
+            created_by_id = supplier.created_by_id
+            if created_by_id:
+                user = session.query(User).filter_by(id=int(created_by_id)).first()
+                if user:
+                    created_by = f"{user.first_name} {user.last_name}"
+
             contactor_data = {
                 "id": contactor.id,
                 "supplier_name": supplier.supplier.name,
-                "price": supplier.price,
+                "price": int(supplier.price),
                 "currency": supplier.currency,
                 "date": str(supplier.date),
                 "created_by": created_by
@@ -115,12 +115,12 @@ def get_contactor_by_current(rated_current, brands=[], order_number=None):
         attr = best_match["attr_dict"]
         result = {
             "id": best_match["component"].id,
-            "rated_current": attr.get("rated_current"),
-            "coil_voltage": attr.get("coil_voltage"),
+            "rated_current": float(attr.get("rated_current")),
+            "coil_voltage": float(attr.get("coil_voltage")),
             "brand": attr.get("brand"),
             "order_number": attr.get("order_number"),
             "supplier_name": supplier.supplier.name if supplier else "",
-            "price": supplier.price if supplier else "",
+            "price": int(supplier.price) if supplier else 0,
             "currency": supplier.currency if supplier else "",
             "date": str(supplier.date) if supplier else "",
         }
@@ -138,6 +138,9 @@ def insert_contactor_to_db(brand, order_number, rated_current, coil_voltage, cre
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()
+
+    rated_current = str(float(rated_current))
+    coil_voltage = str(float(coil_voltage))
 
     try:
         # Query only components of type "Contactor" with matching attributes

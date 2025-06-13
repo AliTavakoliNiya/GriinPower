@@ -1,8 +1,8 @@
 import re
-
 import requests
-from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, QThreadPool
 from bs4 import BeautifulSoup
+
+from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, QThreadPool
 
 from models.component_suppliers import insert_component_suppliers_to_db
 from models.items.contactor import get_all_contactors, insert_contactor_to_db

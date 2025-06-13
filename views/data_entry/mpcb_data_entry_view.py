@@ -1,19 +1,23 @@
+import pandas as pd
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QTableView, QHBoxLayout, QPushButton
+
 from controllers.data_entry.mpcb_data_entry_controller import MPCBDataEntryController
 from utils.pandas_model import PandasModel
 from utils.thousand_separator_line_edit import format_line_edit_text, parse_price
-import pandas as pd
-
-from views.message_box_view import show_message
+from views.message_box_view import show_message, confirmation
 
 
 class MPCBDataEntryView:
     def __init__(self, ui):
         self.ui = ui
-        self.mpcb_data_entry_controller = MPCBDataEntryController()
+        self.mpcb_data_entry_controller = MPCBDataEntryController(self)
 
         self.format_price_fields()
         self.ui.mpcb_add_supplier_btn.clicked.connect(self.ui.add_supplier)
         self.ui.mpcb_save_btn.clicked.connect(self.save_mpcb_to_db_func)
+        self.ui.update_mpcb_prices_btn.clicked.connect(self.update_mpcb_prices_btn_pressed)
+
 
         self.history_table_headers = (
                     ["min_current", "max_current", "breaking_capacity", "trip_class"] + self.ui.history_table_headers)
@@ -86,3 +90,86 @@ class MPCBDataEntryView:
             self.refresh_page()
         else:
             show_message(msg, "Error")
+
+    def show_table(self, data):
+        self.table_window = TableWindow(data, on_save_callback=self.save_mpcbs_to_db_after_fetch, parent=self.ui)
+        self.table_window.show()
+
+    def save_mpcbs_to_db_after_fetch(self, data):
+        success, msg = self.mpcb_data_entry_controller.save_mpcbs(data)
+        if success:
+            show_message(msg, title="Saved")
+        else:
+            show_message(msg, title="Failed")
+
+        self.refresh_page()
+
+
+    def update_mpcb_prices_btn_pressed(self):
+        if not confirmation(f"You are about to update the Schneider Electric mpcb prices from:\n\n"
+                            f"GV2 series: https://elicaelectric.com/انواع-کليد-حرارتی-مغناطيسی-سری-gv2\n"
+                            f"GV2P series: https://elicaelectric.com/انواع-کليد-حرارتی-مغناطيسی-سری-gv2p\n"
+                            f"GV3 series: https://elicaelectric.com/انواع-کليد-حرارتی-مغناطيسی-سری-gv3\n"
+                            f"GV4 series: https://elicaelectric.com/کلید-حرارتی-مغناطیسی-سری-gv4-اشنایدر-الکتریک\n"
+                            f"GV5 series: https://elicaelectric.com/کلید-حرارتی-مغناطیسی-سری-gv5-اشنایدر-الکتریک\n\n"
+                            f"Are you sure?",
+                            centeralize=False):
+            return
+
+        show_message("Fetching Datas...")
+        self.mpcb_data_entry_controller.update_mpcbs_in_background()
+
+class TableWindow(QMainWindow):
+    def __init__(self, data, on_save_callback, parent=None):
+        super().__init__(parent)
+        if parent:
+            self.setStyleSheet(parent.styleSheet())
+
+        self.setWindowTitle("contactor list")
+        self.data = data
+        self.on_save_callback = on_save_callback
+
+        central_widget = QWidget()
+        layout = QVBoxLayout(central_widget)
+
+        self.table_view = QTableView()
+        self.resize(880, 600)
+        self.model = QStandardItemModel(len(data), 6)
+        self.model.setHorizontalHeaderLabels(["Order Number", "Brand", "min_current", "max_current", "breaking_capacity", "Price"])
+
+        for row, item in enumerate(data):
+            self.model.setItem(row, 0, QStandardItem(str(item["order_number"])))
+            self.model.setItem(row, 1, QStandardItem(item["brand"]))
+            self.model.setItem(row, 2, QStandardItem(str(item["min_current"])))
+            self.model.setItem(row, 3, QStandardItem(str(item["max_current"])))
+            self.model.setItem(row, 4, QStandardItem(str(item["breaking_capacity"])))
+            self.model.setItem(row, 5, QStandardItem(str(item["price"])))
+
+        self.table_view.setModel(self.model)
+        self.table_view.setSelectionBehavior(QTableView.SelectRows)
+        self.table_view.resizeColumnsToContents()
+
+        layout.addWidget(self.table_view)
+
+        self.table_view.setColumnWidth(0, 200)  # order_number
+        self.table_view.setColumnWidth(1, 200)  # brand
+        self.table_view.setColumnWidth(2, 100)  # min_current
+        self.table_view.setColumnWidth(3, 100)  # max_current
+        self.table_view.setColumnWidth(4, 100)  # breaking_capacity
+        self.table_view.setColumnWidth(5, 100)  # price
+        self.setCentralWidget(central_widget)
+
+        button_layout = QHBoxLayout()
+        self.save_button = QPushButton("Save To Database")
+        self.save_button.setFixedSize(150, 30)
+        self.save_button.clicked.connect(self.save_to_db)
+
+        button_layout.addStretch()  # Pushes the button to the right
+        button_layout.addWidget(self.save_button)
+
+        layout.addLayout(button_layout)
+
+
+    def save_to_db(self):
+        self.close()
+        self.on_save_callback(self.data)

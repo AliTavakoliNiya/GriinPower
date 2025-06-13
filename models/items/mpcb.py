@@ -37,15 +37,14 @@ def get_all_mpcbs():
     mpcb_list = []
     for mpcb in mpcbs:
         attr_dict = {attr.key: attr.value for attr in mpcb.attributes}
-        created_by_id = attr_dict.get("created_by_id")
 
         created_by = ""
-        if created_by_id:
-            user = session.query(User).filter_by(id=int(created_by_id)).first()
-            if user:
-                created_by = f"{user.first_name} {user.last_name}"
-
         for supplier in mpcb.suppliers:
+            created_by_id = supplier.created_by_id
+            if created_by_id:
+                user = session.query(User).filter_by(id=int(created_by_id)).first()
+                if user:
+                    created_by = f"{user.first_name} {user.last_name}"
             mpcb_data = {
                 "id": mpcb.id,
                 "supplier_name": supplier.supplier.name,
@@ -84,13 +83,14 @@ def get_mpcb_by_current(rated_current, brands=[], order_number=None):
         for mpcb in mpcbs:
             attr_dict = {attr.key: attr.value for attr in mpcb.attributes}
 
-            try:
-                min_c = float(attr_dict.get("min_current", -1))
-                max_c = float(attr_dict.get("max_current", -1))
-            except ValueError:
+            min_c = safe_float(attr_dict.get("min_current"))
+            max_c = safe_float(attr_dict.get("max_current"))
+
+            print("\n\n", type(min_c), ":", min_c , type(max_c), ":", max_c, "\n\n")
+
+            if min_c is None or max_c is None:
                 continue
 
-            # بررسی تطابق جریان
             if not (min_c <= current_val <= max_c):
                 continue
 
@@ -150,7 +150,8 @@ def insert_mpcb_to_db(
         max_current,
         breaking_capacity,
         trip_class,
-        ):
+        created_by_id=None):
+
     brand = brand.lower()
 
 
@@ -170,23 +171,24 @@ def insert_mpcb_to_db(
             if (
                 attr_dict.get("brand") == brand and
                 attr_dict.get("order_number") == order_number and
-                attr_dict.get("min_current") == min_current and
+                attr_dict.get("min_current") == float(min_current) and
                 attr_dict.get("max_current") == max_current and
                 attr_dict.get("breaking_capacity") == breaking_capacity and
                 attr_dict.get("trip_class") == trip_class
             ):
                 return True, component.id  # Already exists
 
+        created_by_id = created_by_id if created_by_id else str(current_user.id)
         new_mpcb = Component(
             type="MPCB",
             attributes=[
                 ComponentAttribute(key='brand', value=brand),
                 ComponentAttribute(key='order_number', value=order_number),
-                ComponentAttribute(key='min_current', value=min_current),
-                ComponentAttribute(key='max_current', value=max_current),
-                ComponentAttribute(key='breaking_capacity', value=breaking_capacity),
+                ComponentAttribute(key='min_current', value=str(float(min_current))),
+                ComponentAttribute(key='max_current', value=str(float(max_current))),
+                ComponentAttribute(key='breaking_capacity', value=str(float(breaking_capacity))),
                 ComponentAttribute(key='trip_class', value=trip_class),
-                ComponentAttribute(key='created_by_id', value=str(current_user.id)),
+                ComponentAttribute(key='created_by_id', value=created_by_id),
                 ComponentAttribute(key='created_at', value=today_shamsi),
             ]
         )
@@ -201,3 +203,9 @@ def insert_mpcb_to_db(
         return False, f"❌ Error inserting MPCB: {str(e)}"
     finally:
         session.close()
+
+def safe_float(val):
+    try:
+        return float(str(val).replace('٬', '').replace(',', '').strip())
+    except:
+        return None

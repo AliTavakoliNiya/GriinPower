@@ -18,6 +18,7 @@ class ComponentSupplier(Base):
     price = Column(Float)
     currency = Column(String, default='IRR')
     date = Column(String, default=today_shamsi)
+    created_by_id = Column(Integer)
 
     supplier = relationship('Supplier', back_populates='components', lazy="joined")
     component = relationship('Component', back_populates='suppliers', lazy="joined")
