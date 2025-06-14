@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QDialog
 
 from models.projects import get_all_project
 from models.user_model import get_all_users
-from views.message_box_view import show_message, confirmation
+from views.message_box_view import show_message
 
 
 class OpenProjectView(QDialog):
@@ -18,9 +18,7 @@ class OpenProjectView(QDialog):
 
         self.project_code.textChanged.connect(self.code_change)
         self.project_unique_code.currentIndexChanged.connect(self.projec_unique_code_changed)
-        self.open_project_btn.clicked.connect(self.open_project_btn_changed)
-
-        self.selected_project = []
+        self.open_project_btn.clicked.connect(self.open_project_btn_pressed)
 
         success, self.all_projects = get_all_project()
         success, self.all_users = get_all_users()
@@ -29,11 +27,35 @@ class OpenProjectView(QDialog):
         self.show()
 
     def clear_form(self):
+        self.selected_project = None
         self.project_unique_code.clear()
         self.project_name.setText("")
         self.project_code_uniq_code.setText("")
         self.current_revision.setText("")
         self.last_modified_by.setText("")
+
+    def code_change(self):
+        entered_code = self.project_code.text().strip()
+
+        if not entered_code:
+            self.clear_form()
+            return
+
+        # Find all matching projects by code (case-insensitive)
+        matches = [
+            project for project in self.all_projects
+            if (project.code or "").strip().lower() == entered_code.lower()
+        ]
+
+        if not matches:
+            self.clear_form()
+            return
+
+        self.selected_projects = matches
+
+        # Update the QComboBox with unique_no values
+        for proj in matches:
+            self.project_unique_code.addItem(proj.unique_no)
 
     def projec_unique_code_changed(self):
         selected_unique_no = self.project_unique_code.currentText().strip()
@@ -59,36 +81,9 @@ class OpenProjectView(QDialog):
                     self.last_modified_by.setText(f"{full_name}\n{modified_time}")
                     break
 
-
-    def code_change(self):
-        self.selected_project = []
-        entered_code = self.project_code.text().strip()
-
-        if not entered_code:
-            self.clear_form()
-            return
-
-        # Find all matching projects by code (case-insensitive)
-        matches = [
-            project for project in self.all_projects
-            if (project.code or "").strip().lower() == entered_code.lower()
-        ]
-
-        if not matches:
-            self.clear_form()
-            return
-
-        self.selected_projects = matches
-
-        # Update the QComboBox with unique_no values
-        for proj in matches:
-            self.project_unique_code.addItem(proj.unique_no)
-
-    def open_project_btn_changed(self):
+    def open_project_btn_pressed(self):
         if not self.selected_project:
             show_message("Please select a project before continuing.")
             return
 
         self.accept()  # Closes the dialog and sets result to Accepted (True)
-
-

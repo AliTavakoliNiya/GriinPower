@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox
-from controllers.tender_application.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_session_controller import ProjectSession
 from views.message_box_view import show_message
 
 
@@ -10,7 +10,7 @@ class ProjectInformationTab(QWidget):
         uic.loadUi("ui/tender_application/project_information_tab.ui", self)
         self.main_view = main_view
 
-        self.electrical_specs = ProjectDatasController().project_electrical_specs
+        self.electrical_specs = ProjectSession().project_electrical_specs
         self._initialize_info()
 
         self.set_project_info_ui_values()

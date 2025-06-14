@@ -3,7 +3,7 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
-from controllers.tender_application.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_session_controller import ProjectSession
 from views.tender_application.electrical_tab_view import ElectricalTab
 from views.tender_application.project_information_view import ProjectInformationTab
 from views.tender_application.result_tab_view import ResultTab
@@ -19,7 +19,7 @@ class TenderApplication(QMainWindow):
         self.setWindowTitle("GriinPower")
         self.settings = QSettings("Griin", "GriinPower")
 
-        self.electrical_specs = ProjectDatasController().project_electrical_specs
+        self.electrical_specs = ProjectSession().project_electrical_specs
 
         self.project_information_tab = ProjectInformationTab(self)
         self.tabWidget.addTab(self.project_information_tab, "Project Information")

@@ -46,6 +46,7 @@ def get_user_by_username(username: str, password: str):
         user = session.query(User).filter_by(username=username).first()
         if user:
             hashed_password = hashlib.sha256(password.encode()).hexdigest()
+            print("hashed_password: ", hashed_password)
             if user.password == hashed_password:
                 return user
             else:

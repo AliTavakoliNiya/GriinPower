@@ -16,10 +16,10 @@ from controllers.tender_application.electric_motor_controller import ElectricMot
 from controllers.tender_application.fan_damper_controller import FanDamperController
 from controllers.tender_application.fresh_air_controller import FreshAirController
 from controllers.tender_application.hopper_heater_controller import HopperHeaterController
-from controllers.tender_application.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.tender_application.transport_controller import TransportController
 from controllers.tender_application.vibration_controller import VibrationController
-from controllers.user_session import UserSession
+from controllers.user_session_controller import UserSession
 from utils.pandas_model import PandasModel
 from models import projects
 from views.message_box_view import show_message
@@ -31,7 +31,7 @@ class ResultTab(QWidget):
         uic.loadUi("ui/tender_application/results_tab.ui", self)
 
         self.main_view = main_view
-        self.electrical_specs = ProjectDatasController().project_electrical_specs
+        self.electrical_specs = ProjectSession().project_electrical_specs
         self.tabWidget.setCurrentIndex(0)
 
 
@@ -54,15 +54,7 @@ class ResultTab(QWidget):
         self.save_current_rev_btn.clicked.connect(self.save_current_rev_btn_handler)
 
     def save_current_rev_btn_handler(self):
-        current_user = UserSession()
-        current_project = projects.Project()
-        current_project.name = self.electrical_specs["project_info"]["project_name"]
-        current_project.code = self.electrical_specs["project_info"]["project_code"]
-        current_project.unique_no = self.electrical_specs["project_info"]["project_unique_code"]
-        current_project.revison = self.electrical_specs["project_info"]["rev"]
-        current_project.modified_by_id = current_user.id
-        current_project.set_data(self.electrical_specs)
-
+        current_project = ProjectSession()
         success, msg = projects.save_project(current_project)
         if success:
             show_message(msg, title="Saved")

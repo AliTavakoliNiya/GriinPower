@@ -1,11 +1,11 @@
-from controllers.tender_application.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_session_controller import ProjectSession
 from models.items.electric_motor import get_motor_by_spec
 
 
 class ElectricMotorController():
 
     def __init__(self):
-        self.electrical_specs = ProjectDatasController().project_electrical_specs
+        self.electrical_specs = ProjectSession().project_electrical_specs
 
     def calculate_price(self):
         motor = self.electrical_specs["fan"]["motors"]["fan"]

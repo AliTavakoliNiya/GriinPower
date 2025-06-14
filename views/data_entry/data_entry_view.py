@@ -5,7 +5,7 @@ from PyQt5.QtGui import QIcon, QStandardItemModel
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QTableView
 
-from controllers.user_session import UserSession
+from controllers.user_session_controller import UserSession
 from models.supplier import get_all_suppliers
 from views.data_entry.bimetal_data_entry_view import BimetalDataEntryView
 from views.data_entry.contactor_data_entry_view import ContactorDataEntryView

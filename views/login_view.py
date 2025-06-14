@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy
 )
 
-from controllers.user_session import authenticate
+from controllers.user_session_controller import authenticate
 from views.message_box_view import show_message
 
 

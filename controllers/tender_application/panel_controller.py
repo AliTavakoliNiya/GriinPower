@@ -1,7 +1,7 @@
 from math import sqrt
 
 from config import COSNUS_PI, ETA
-from controllers.tender_application.project_datas_controller import ProjectDatasController
+from controllers.tender_application.project_session_controller import ProjectSession
 from models.items.bimetal import get_bimetal_by_current
 from models.items.contactor import get_contactor_by_current
 from models.items.electrical_panel import get_electrical_panel_by_spec
@@ -23,7 +23,7 @@ class PanelController:
         """
         self.panel_type = panel_type
         self.panel = self._create_empty_panel()
-        self.electrical_specs = ProjectDatasController().project_electrical_specs
+        self.electrical_specs = ProjectSession().project_electrical_specs
 
     def _create_empty_panel(self):
         """

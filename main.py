@@ -1,13 +1,14 @@
 import os
 import sys
 
+import jdatetime
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 
-from controllers.tender_application.project_datas_controller import ProjectDatasController
-from controllers.user_session import UserSession
+from controllers.tender_application.project_session_controller import ProjectSession
+from controllers.user_session_controller import UserSession
 import json
 from utils.database import SessionLocal
 from views.data_entry.data_entry_view import DataEntry
@@ -28,11 +29,7 @@ class GriinPower(QMainWindow):
         self.setWindowTitle("GriinPower")
         self.settings = QSettings("Griin", "GriinPower")
 
-        self.new_project_btn.clicked.connect(self.open_project_func)
-        self.open_project_btn.clicked.connect(lambda: self.open_project_func(True))
-        self.data_entry_btn.clicked.connect(self.open_data_entry_func)
-        self.supplier_btn.clicked.connect(self.open_suppliers_func)
-
+        # set styles
         self.themes = {
             "dark": "styles/dark_style.qss",
             "coffee": "styles/coffee_style.qss",
@@ -46,6 +43,18 @@ class GriinPower(QMainWindow):
 
         last_theme = self.settings.value("theme_path", "styles/dark_style.qss")
         self.apply_stylesheet(last_theme)
+
+        # current user
+        self.current_user = UserSession()
+        self.user_details_field.setText(
+            f"Welcome, {self.current_user.first_name.title()} {self.current_user.last_name.title()}\n{self.current_user.role}")
+
+        # Connect buttons to their signals
+        self.new_project_btn.clicked.connect(self.tender_application_func)
+        self.open_project_btn.clicked.connect(lambda: self.tender_application_func(True))
+
+        self.data_entry_btn.clicked.connect(self.data_entry_func)
+        self.supplier_btn.clicked.connect(self.suppliers_func)
 
         self.show()
 
@@ -61,22 +70,28 @@ class GriinPower(QMainWindow):
         else:
             show_message(f"file {path} not found.", "Details")
 
-    def open_project_func(self, load_proj=False):
-        if load_proj: # open existing project
+    def tender_application_func(self, load_proj=False):
+        current_project = ProjectSession() # new empty project
+        current_project.modified_by_id = self.current_user.id
+
+        if load_proj:  # open existing project
             open_project_detail_window = OpenProjectView()
             result = open_project_detail_window.exec_()
             if result == QDialog.Accepted:
-                project_datas = ProjectDatasController()
-                project_datas.load_data(json.loads(open_project_detail_window.selected_project.datas))
+                current_project.id = open_project_detail_window.selected_project.id
+                current_project.name = open_project_detail_window.selected_project.name
+                current_project.code = open_project_detail_window.selected_project.code
+                current_project.unique_no = open_project_detail_window.selected_project.unique_no
+                current_project.project_electrical_specs = json.loads(open_project_detail_window.selected_project.project_electrical_specs)
             else:
-                return # open project rejected by user
+                return  # open project rejected by user
 
         self.tender_application_window = TenderApplication(parent=self)
 
-    def open_data_entry_func(self):
+    def data_entry_func(self):
         self.data_entry_window = DataEntry(parent=self)
 
-    def open_suppliers_func(self):
+    def suppliers_func(self):
         self.venor_application_window = SupplierEntry(parent=self)
 
 
@@ -88,11 +103,10 @@ if __name__ == "__main__":
 
     # Show login dialog
     login = LoginView(db_session)
-    #if login.exec_() == QDialog.Accepted:
-    if True:
+    if login.exec_() == QDialog.Accepted:
+        #if True:
         session = QSettings("Griin", "GriinPower")
         username = session.value("last_username", "")
-        current_user = UserSession()
 
         window = GriinPower()
         window.show()
