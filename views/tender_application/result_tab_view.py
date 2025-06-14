@@ -51,9 +51,9 @@ class ResultTab(QWidget):
 
         self.excel_btn.clicked.connect(self._export_to_excel)
         self.show_datail_btn.clicked.connect(self.show_datail_btn_handler)
-        self.save_current_rev_btn.clicked.connect(self.save_current_rev_btn_handler)
+        self.save_changes_btn.clicked.connect(self.save_changes_btn_handler)
 
-    def save_current_rev_btn_handler(self):
+    def save_changes_btn_handler(self):
         current_project = ProjectSession()
         success, msg = projects.save_project(current_project)
         if success:

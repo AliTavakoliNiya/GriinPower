@@ -173,9 +173,9 @@ QPushButton:pressed {
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="save_current_rev_btn">
+         <widget class="QPushButton" name="save_changes_btn">
           <property name="text">
-           <string>💾 Save Current Rev.</string>
+           <string>💾 Save Changes</string>
           </property>
          </widget>
         </item>

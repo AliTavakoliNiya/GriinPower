@@ -2,10 +2,9 @@ from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 import json
 from models.abs_motor import Motor
-
 from utils.database import SessionLocal
 import jdatetime
-
+import traceback
 
 
 Base = declarative_base()
@@ -33,41 +32,30 @@ class Project(Base):
             elif isinstance(obj, list):
                 return [convert(i) for i in obj]
             return obj
-
         return convert(data)
 
     def set_data(self, data_dict: dict):
         self.project_electrical_specs = json.dumps(self.serialize_project_data(data_dict))
 
-def get_all_project():
-    session = SessionLocal()
-    try:
-        projects = session.query(Project).all()
-        return True, projects
-    except Exception as e:
-        session.rollback()
-        return False, f"Error achiving projects\n{str(e)}"
-    finally:
-        session.close()
 
-
-def save_project(current_project, revision=None):
+def save_project(current_project, new_revision=None):
     saving_project = Project()
-    saving_project.id = current_project.id
     saving_project.name = current_project.name
     saving_project.code = current_project.code
     saving_project.unique_no = current_project.unique_no
     saving_project.revison = current_project.revison
     saving_project.modified_by_id = current_project.modified_by_id
     saving_project.modified_at = today_shamsi
-    saving_project.project_electrical_specs = current_project.project_electrical_specs
+    saving_project.set_data(current_project.project_electrical_specs)
 
     session = SessionLocal()
     try:
-        if revision: # save new revision as new record to db
-            saving_project.revison = revision
+        if new_revision:  # save new revision as new record
+            saving_project.id = None
+            saving_project.revison = new_revision
             session.add(saving_project)
-        else: # update project
+        else:  # update existing
+            saving_project.id = current_project.id
             session.query(Project).filter(Project.id == saving_project.id).update({
                 Project.modified_by_id: saving_project.modified_by_id,
                 Project.modified_at: saving_project.modified_at,
@@ -77,7 +65,8 @@ def save_project(current_project, revision=None):
         return True, "Successfully saved!"
     except Exception as e:
         session.rollback()
-        return False, f"Error Saving Tender Application\n{str(e)}"
+        print(traceback.format_exc())
+        return False, f"Error Saving Project\n{str(e)}"
     finally:
         session.close()
 
@@ -85,13 +74,26 @@ def save_project(current_project, revision=None):
 def get_project(project_id: int):
     session = SessionLocal()
     try:
-        project = session.query(Project).first()
+        project = session.query(Project).filter(Project.id == project_id).first()
+        if project is None:
+            return False, "Project not found"
         loaded_project = json.loads(project.project_electrical_specs)
         return True, loaded_project
     except Exception as e:
-        print(str(e))
-        return False, f"Error loading tender_application\n{str(e)}"
+        print(traceback.format_exc())
+        return False, f"Error loading project\n{str(e)}"
     finally:
         session.close()
 
-    session.close()
+
+def get_all_project():
+    session = SessionLocal()
+    try:
+        projects = session.query(Project).all()
+        return True, projects
+    except Exception as e:
+        session.rollback()
+        print(traceback.format_exc())
+        return False, f"Error fetching projects\n{str(e)}"
+    finally:
+        session.close()
