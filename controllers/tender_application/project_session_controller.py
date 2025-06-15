@@ -11,18 +11,14 @@ class ProjectSession:
             cls._instance.name = None
             cls._instance.code = None
             cls._instance.unique_no = None
-            cls._instance.revison = None
+            cls._instance.revision = 0
             cls._instance.modified_by_id = None
             cls._instance.modified_at = None
             cls._instance.project_electrical_specs = {"project_info": {"proj_avl": [],
-                                                                       "project_name": "",
-                                                                       "project_code": "",
-                                                                       "project_unique_code": "",
                                                                        "project_site_location": "",
                                                                        "owner_name": "",
                                                                        "consultant_name": "",
                                                                        "employer_name": "",
-                                                                       "rev": 0,
                                                                        "el_contact_name": "",
                                                                        "el_contact_position": "",
                                                                        "el_contact_phone": "",

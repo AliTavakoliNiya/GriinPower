@@ -18,13 +18,13 @@ class ElectricalTab(QWidget):
         super().__init__()
         uic.loadUi("ui/tender_application/electrical_tab.ui", self)
         self.main_view = main_view
-        self.electrical_specs = ProjectSession().project_electrical_specs
+
+        self.current_project = ProjectSession()
+        self.electrical_specs = self.current_project.project_electrical_specs
 
         self._initialize_components()
 
         self.set_electrical_ui_values()
-
-        self.el_tab_rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
 
     def _initialize_components(self):
         """Initialize all UI components with their event handlers"""
@@ -180,9 +180,6 @@ class ElectricalTab(QWidget):
         self.fan_tt_qty.valueChanged.connect(self._handle_fan_tt_qty_changed)
         self.fan_tt_brand.currentIndexChanged.connect(self._handle_fan_tt_brand_changed)
 
-    def on_selection_rev_hint_change(self, index):
-        if index != 0:
-            self.main_view.set_rev_hint(rev_number=self.el_tab_rev_hint_combo.currentText())
 
     """ ------------Transport motor handlers ------------ """
 
@@ -831,11 +828,11 @@ class ElectricalTab(QWidget):
 
     """ Load Pervios Revision as need """
 
-    def set_electrical_ui_values(self):
+    def set_electrical_ui_values(self): # Using for open pervios project
         """
         Set values for UI elements based on the self.electrical_specs dictionary.
         """
-        new_proj = True if self.electrical_specs["project_info"]["rev"] == 0 else False
+        new_proj = True if self.current_project.revision == 0 else False
         if new_proj:  # new proj
             self.transport_checkbox.setChecked(False)
             self.damper_checkbox.setChecked(False)
@@ -1079,7 +1076,8 @@ def create_qss_word():
     doc = Document(template_path)
 
     current_user = UserSession()
-    project_details = ProjectSession().project_electrical_specs
+    current_project = ProjectSession()
+    project_details = current_project.project_electrical_specs
 
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
 
@@ -1093,8 +1091,9 @@ def create_qss_word():
         fan_voltage = project_details["project_info"]["m_voltage"]
     keywords = {
         "date": today_shamsi,
-        "project_name": project_details["project_info"]["project_name"],
-        "project_code": project_details["project_info"]["project_code"],
+        "project_name": current_project.name,
+        "project_code": current_project.code,
+        "project_unique_code": current_project.unique_no,
         "humidity": project_details["project_info"]["humidity"],
         "min_temp": project_details["project_info"]["minimum_temprature"],
         "max_temp": project_details["project_info"]["maximum_temprature"],

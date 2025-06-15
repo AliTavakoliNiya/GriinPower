@@ -18,7 +18,7 @@ class Project(Base):
     name = Column(String)
     code = Column(String)
     unique_no = Column(String)
-    revison = Column(String)
+    revision = Column(Integer)
     modified_by_id = Column(Integer)
     modified_at = Column(String)
     project_electrical_specs = Column(Text)
@@ -38,29 +38,28 @@ class Project(Base):
         self.project_electrical_specs = json.dumps(self.serialize_project_data(data_dict))
 
 
-def save_project(current_project, new_revision=None):
+def save_project(current_project):
     saving_project = Project()
+    saving_project.id = current_project.id
     saving_project.name = current_project.name
     saving_project.code = current_project.code
     saving_project.unique_no = current_project.unique_no
-    saving_project.revison = current_project.revison
+    saving_project.revision = current_project.revision
     saving_project.modified_by_id = current_project.modified_by_id
     saving_project.modified_at = today_shamsi
     saving_project.set_data(current_project.project_electrical_specs)
 
     session = SessionLocal()
     try:
-        if new_revision:  # save new revision as new record
-            saving_project.id = None
-            saving_project.revison = new_revision
-            session.add(saving_project)
-        else:  # update existing
-            saving_project.id = current_project.id
+        if saving_project.id:  # update existing
             session.query(Project).filter(Project.id == saving_project.id).update({
                 Project.modified_by_id: saving_project.modified_by_id,
                 Project.modified_at: saving_project.modified_at,
                 Project.project_electrical_specs: saving_project.project_electrical_specs,
             })
+        else:  # save new revision as new record
+            session.add(saving_project)
+
         session.commit()
         return True, "Successfully saved!"
     except Exception as e:
@@ -71,19 +70,37 @@ def save_project(current_project, new_revision=None):
         session.close()
 
 
-def get_project(project_id: int):
+def get_project(project_id=None, code=None, unique_no=None, revision=None):
     session = SessionLocal()
     try:
-        project = session.query(Project).filter(Project.id == project_id).first()
+        query = session.query(Project)
+
+        # Apply filters dynamically if parameters are provided
+        if project_id is not None:
+            query = query.filter(Project.id == project_id)
+        if code is not None:
+            query = query.filter(Project.code == code)
+        if unique_no is not None:
+            query = query.filter(Project.unique_no == unique_no)
+
+        # Apply revision filter if provided, otherwise get the latest revision
+        if revision is not None:
+            query = query.filter(Project.revision == revision)
+        else:
+            query = query.order_by(Project.revision.desc())
+
+        project = query.first()
+
         if project is None:
             return False, "Project not found"
-        loaded_project = json.loads(project.project_electrical_specs)
-        return True, loaded_project
+
+        return True, project
     except Exception as e:
         print(traceback.format_exc())
         return False, f"Error loading project\n{str(e)}"
     finally:
         session.close()
+
 
 
 def get_all_project():

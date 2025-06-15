@@ -604,7 +604,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="project_no_label_6">
+           <widget class="QLabel" name="current_revision_filed">
             <property name="font">
              <font>
               <family>Calibri</family>
@@ -619,7 +619,7 @@
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>01</string>
+             <string>-</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -663,29 +663,26 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="el_tab_rev_hint_combo">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>0</height>
-             </size>
+           <widget class="QLabel" name="revision_hint_filed">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
             </property>
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>16777215</height>
-             </size>
+            <property name="layoutDirection">
+             <enum>Qt::RightToLeft</enum>
             </property>
-            <item>
-             <property name="text">
-              <string>00</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>01</string>
-             </property>
-            </item>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
            </widget>
           </item>
          </layout>

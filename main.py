@@ -82,9 +82,15 @@ class GriinPower(QMainWindow):
                 current_project.name = open_project_detail_window.selected_project.name
                 current_project.code = open_project_detail_window.selected_project.code
                 current_project.unique_no = open_project_detail_window.selected_project.unique_no
+                current_project.revision = open_project_detail_window.selected_project.revision
                 current_project.project_electrical_specs = json.loads(open_project_detail_window.selected_project.project_electrical_specs)
             else:
                 return  # open project rejected by user
+
+        else: # create new project
+            # dont change id to update result ==> id = None
+            current_project.revision = 0
+
 
         self.tender_application_window = TenderApplication(parent=self)
 

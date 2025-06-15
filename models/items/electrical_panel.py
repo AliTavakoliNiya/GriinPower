@@ -123,7 +123,7 @@ def get_electrical_panel_by_spec(type, width=None, height=None, depth=None, ip_r
             "brand": attr.get("brand"),
             "order_number": attr.get("order_number"),
             "supplier_name": supplier.supplier.name if supplier else "",
-            "price": supplier.price if supplier else "",
+            "price": supplier.price if supplier else 0,
             "currency": supplier.currency if supplier else "",
             "date": str(supplier.date) if supplier else "",
         }

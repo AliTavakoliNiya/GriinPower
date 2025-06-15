@@ -10,16 +10,11 @@ class ProjectInformationTab(QWidget):
         uic.loadUi("ui/tender_application/project_information_tab.ui", self)
         self.main_view = main_view
 
-        self.electrical_specs = ProjectSession().project_electrical_specs
+        self.current_project = ProjectSession()
+        self.electrical_specs = self.current_project.project_electrical_specs
         self._initialize_info()
 
         self.set_project_info_ui_values()
-
-        self.info_tab_rev_hint_combo.currentIndexChanged.connect(self.on_selection_rev_hint_change)
-
-    def on_selection_rev_hint_change(self, index):
-        if index != 0:  # rev 00 has no hint
-            self.main_view.set_rev_hint(rev_number=self.info_tab_rev_hint_combo.currentText())
 
     def _initialize_info(self):
         """ --------------------------- Project Information --------------------------- """
@@ -96,13 +91,13 @@ class ProjectInformationTab(QWidget):
     """ --------------------------- Project Information --------------------------- """
 
     def _handle_project_name_changed(self):
-        self._update_project_value(["project_info", "project_name"], str(self.project_name.text()))
+        self.current_project.name = str(self.project_name.text())
 
     def _handle_project_code_changed(self):
-        self._update_project_value(["project_info", "project_code"], str(self.project_code.text()))
+        self.current_project.code = str(self.project_code.text())
 
     def _handle_project_unique_code_changed(self):
-        self._update_project_value(["project_info", "project_unique_code"], str(self.project_unique_code.text()))
+        self.current_project.unique_no = str(self.project_unique_code.text())
 
     def _handle_project_site_location_changed(self):
         self._update_project_value(["project_info", "project_site_location"],
@@ -221,18 +216,15 @@ class ProjectInformationTab(QWidget):
         """
         try:
             # Project Information
-            self.project_name.setText(self.electrical_specs['project_info']['project_name'])
-            self.project_code.setText(self.electrical_specs['project_info']['project_code'])
-            self.project_unique_code.setText(self.electrical_specs['project_info']['project_unique_code'])
+            self.project_name.setText(self.current_project.name)
+            self.project_code.setText(self.current_project.code)
+            self.project_unique_code.setText(self.current_project.unique_no)
             self.project_site_location.setPlainText(self.electrical_specs['project_info']['project_site_location'])
 
             # Company Information
             self.owner_name.setText(self.electrical_specs['project_info']['owner_name'])
             self.consultant_name.setText(self.electrical_specs['project_info']['consultant_name'])
             self.employer_name.setText(self.electrical_specs['project_info']['employer_name'])
-
-            # Revision
-            self.info_tab_rev_hint_combo.setCurrentText(str(self.electrical_specs['project_info']['rev']))
 
             # Contact Information - Electrical
             self.el_contact_name.setText(self.electrical_specs['project_info']['el_contact_name'])

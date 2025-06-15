@@ -1280,6 +1280,9 @@ QListWidget::item:selected {
           <height>30</height>
          </size>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="text">
          <string>Create New Rev.</string>
         </property>
@@ -1293,6 +1296,9 @@ QListWidget::item:selected {
           <height>30</height>
          </size>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="text">
          <string>Open Project</string>
         </property>
@@ -1303,6 +1309,12 @@ QListWidget::item:selected {
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>project_code</tabstop>
+  <tabstop>project_unique_code</tabstop>
+  <tabstop>open_project_btn</tabstop>
+  <tabstop>new_revision_btn</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

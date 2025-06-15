@@ -1,9 +1,12 @@
+import json
+
 from PyQt5 import uic
 from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
 from controllers.tender_application.project_session_controller import ProjectSession
+from models.projects import get_project
 from views.tender_application.electrical_tab_view import ElectricalTab
 from views.tender_application.project_information_view import ProjectInformationTab
 from views.tender_application.result_tab_view import ResultTab
@@ -19,6 +22,7 @@ class TenderApplication(QMainWindow):
         self.setWindowTitle("GriinPower")
         self.settings = QSettings("Griin", "GriinPower")
 
+        self.current_project = ProjectSession()
         self.electrical_specs = ProjectSession().project_electrical_specs
 
         self.project_information_tab = ProjectInformationTab(self)
@@ -29,6 +33,18 @@ class TenderApplication(QMainWindow):
 
         self.result_tab = ResultTab(self)
         self.tabWidget.addTab(self.result_tab, "Result")
+
+        # set revision
+        revision_hint_no = str(self.current_project.revision-1).zfill(2) if self.current_project.revision >= 1 else "-"
+        if revision_hint_no != "-":
+            self.set_rev_hint(int(revision_hint_no))
+
+        self.project_information_tab.current_revision_filed.setText(str(self.current_project.revision).zfill(2))
+        self.project_information_tab.revision_hint_filed.setText(revision_hint_no)
+
+        self.electrical_tab.current_revision_filed.setText(str(self.current_project.revision).zfill(2))
+        self.electrical_tab.revision_hint_filed.setText(revision_hint_no)
+
 
         self.tabWidget.currentChanged.connect(self.on_tab_changed)
 
@@ -50,8 +66,11 @@ class TenderApplication(QMainWindow):
                 self.result_tab.generate_panels()
 
     def set_rev_hint(self, rev_number):
-        rev_specs = self.electrical_specs
-        rev_number = "00"
+        success, revision_project = get_project(code=self.current_project.code, unique_no=self.current_project.unique_no, revision=rev_number)
+        rev_specs = json.loads(revision_project.project_electrical_specs)
+
+        rev_number = str(rev_number).zfill(2)
+
         """----------------------project_information_tab----------------------"""
         info_tab = self.project_information_tab
         info_tab.max_temprature.setToolTip(f"Rev:<b>{rev_number}</b><br><b>{rev_specs['project_info']['maximum_temprature']}</b>℃")

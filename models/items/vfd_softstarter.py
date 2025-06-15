@@ -120,7 +120,7 @@ def get_vfd_softstarter_by_power(type, power, brands=[], order_number=None):
             "brand": attr.get("brand"),
             "order_number": attr.get("order_number"),
             "supplier_name": supplier.supplier.name if supplier else "",
-            "price": supplier.price if supplier else "",
+            "price": supplier.price if supplier else 0,
             "currency": supplier.currency if supplier else "",
             "date": str(supplier.date) if supplier else "",
         }

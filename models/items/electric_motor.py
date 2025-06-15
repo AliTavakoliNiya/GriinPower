@@ -177,7 +177,7 @@ def get_motor_by_spec(
             "is_official": attr.get("is_official", ""),
             "is_routine": attr.get("is_routine", ""),
             "supplier_name": supplier.supplier.name if supplier else "",
-            "price": supplier.price if supplier else "",
+            "price": supplier.price if supplier else 0,
             "currency": supplier.currency if supplier else "",
             "date": str(supplier.date) if supplier else "",
         }

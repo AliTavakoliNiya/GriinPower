@@ -19,10 +19,9 @@ from controllers.tender_application.hopper_heater_controller import HopperHeater
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.tender_application.transport_controller import TransportController
 from controllers.tender_application.vibration_controller import VibrationController
-from controllers.user_session_controller import UserSession
 from utils.pandas_model import PandasModel
 from models import projects
-from views.message_box_view import show_message
+from views.message_box_view import show_message, confirmation
 
 
 class ResultTab(QWidget):
@@ -54,6 +53,10 @@ class ResultTab(QWidget):
         self.save_changes_btn.clicked.connect(self.save_changes_btn_handler)
 
     def save_changes_btn_handler(self):
+        if not confirmation(f"You are about to save changes, Are you sure?"):
+            return
+
+
         current_project = ProjectSession()
         success, msg = projects.save_project(current_project)
         if success:
