@@ -166,7 +166,8 @@ class BagfilterController(PanelController):
         self.process_item(comp_type="Power Outlet", qty=general_items.get("power_outlet", 0))
         self.process_item(comp_type="MCB", specification="4DC", qty=general_items.get("mcb_4DC", 0))
         self.process_item(comp_type="MCB", specification="2AC", qty=general_items.get("mcb_2AC", 0))
-        self.process_item(comp_type="Touch Panel", specification=self.electrical_specs["bagfilter"]["touch_panel"], qty=general_items.get("touch_panel", 0))
+        self.process_item(comp_type="Touch Panel", specification=self.electrical_specs["bagfilter"]["touch_panel"],
+                          qty=general_items.get("touch_panel", 0))
         self.process_item(comp_type="Signal Lamp", specification="24", qty=general_items.get("signal_lamp_24v", 0))
 
         # Optional OLM
@@ -377,7 +378,7 @@ class BagfilterController(PanelController):
             if manifold_qty > 0 and manifold_ways:
 
                 success, manifold_obj = get_instrument_by_spec(type=manifold_ways)
-                if success :
+                if success:
                     self.add_to_panel(
                         type=manifold_ways,
                         brand=manifold_obj['brand'],
@@ -416,7 +417,7 @@ class BagfilterController(PanelController):
                         quantity=qty,
                         price=0,
                         last_price_update=f"❌ Calibration not found",
-                        note = f"calibration for {instrument_name.replace('_', ' ').title()}"
+                        note=f"calibration for {instrument_name.replace('_', ' ').title()}"
                     )
                     print(calibration)
 

@@ -1,5 +1,5 @@
 from math import sqrt
-
+from collections import defaultdict
 from config import COSNUS_PI, ETA
 from controllers.tender_application.project_session_controller import ProjectSession
 from models.items.bimetal import get_bimetal_by_current
@@ -10,6 +10,7 @@ from models.items.instrument import get_instrument_by_spec
 from models.items.mccb import get_mccb_by_current
 from models.items.mpcb import get_mpcb_by_current
 from models.items.vfd_softstarter import get_vfd_softstarter_by_power
+from models.items.wire_cable import get_wire_cable_by_spec
 
 
 class PanelController:
@@ -610,86 +611,7 @@ class PanelController:
 
     """ ------------------------------------- Wire and Cable ------------------------------------- """
 
-    # def choose_signal_cable(self, motor_objects):
-    #     """
-    #     Adds signal cable entries based on motor usage and length.
-    #     """
-    #
-    #     length = self.electrical_specs["bagfilter"]["cable_dimension"]
-    #     if length == 0:
-    #         return
-    #
-    #     total_length = 0
-    #     notes = []
-    #     for motor, qty in motor_objects:
-    #         if qty > 0:
-    #             seg_length = length * motor.signal_cable_7x1p5_l_cofactor * qty
-    #             total_length += seg_length
-    #             notes.append(f"{seg_length:.1f} m for {motor.usage}")
-    #
-    #     total_length = round(total_length, 1)  # round to 1 point float
-    #     if total_length == 0:
-    #         return
-    #
-    #     cable = get_general_by_name("cable_7x1p5")
-    #     price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doent matter in this stage
-    #
-    #     price = price_item.price if price_item.price else 0
-    #     effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-    #
-    #     self.add_to_panel(
-    #         type="SIGNAL CABLE 7x1.5",
-    #         quantity=total_length,
-    #         price=price,
-    #         last_price_update=effective_date,
-    #         note="\n".join(notes)
-    #     )
-    #
-    # def choose_power_cable(self, motor_objects):
-    #     """
-    #     Adds power cable entries with sizing based on current and motor demand.
-    #     """
-    #     volt = self.electrical_specs["project_info"]["l_voltage"]
-    #     length = self.electrical_specs["bagfilter"]["cable_dimension"]
-    #     if length == 0:
-    #         return
-    #
-    #     cable_grouping = defaultdict(lambda: {"total_length": 0, "notes": []})
-    #     correction_factor = 1.6 / (sqrt(3) * volt * COSNUS_PI * ETA)
-    #
-    #     for motor, qty in motor_objects:
-    #         if qty > 0 and motor.power > 0:
-    #             current = motor.power * correction_factor
-    #             cable = cable_rating(cable_length_m=length, cable_current_a=current)
-    #             if cable:
-    #                 motor_length = length * motor.power_cable_cofactor * qty
-    #                 cable_grouping[cable]["total_length"] += motor_length
-    #                 cable_grouping[cable]["notes"].append(f"{motor_length:.1f} m for {motor.usage}")
-    #             else:
-    #                 self.add_to_panel(
-    #                     type=f"POWER CABLE",
-    #                     note="POWER CABLE For {motor.usage} Not Found"
-    #                 )
-    #
-    #     for size_mm, data in cable_grouping.items():
-    #         total_len = round(data["total_length"], 1)
-    #         if total_len == 0:
-    #             continue
-    #
-    #         cable_name = "cable_4x" + str(size_mm).replace(".", "p")
-    #         cable = get_general_by_name(cable_name)
-    #         price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
-    #
-    #         price = price_item.price if price_item.price else 0
-    #         effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-    #
-    #         self.add_to_panel(
-    #             type=f"POWER CABLE SIZE 4x{size_mm}mm²",
-    #             quantity=total_len,
-    #             price=price,
-    #             last_price_update=effective_date,
-    #             note="\n".join(data["notes"])
-    #         )
+
     #
     # def choose_internal_signal_wire(self, motor_objects):
     #     """
@@ -783,10 +705,106 @@ class PanelController:
 
     # ----------------------- Add Cables -----------------------
     def choose_signal_cable(self, motor_objects):
-        pass
+        """
+        Adds signal cable entries based on motor usage and length.
+        """
+
+        length = self.electrical_specs["bagfilter"]["cable_dimension"]
+        if length == 0:
+            return
+
+        total_length = 0
+        notes = []
+        for motor, qty in motor_objects:
+            if qty > 0:
+                seg_length = length * motor.signal_cable_7x1p5_l_cofactor * qty
+                total_length += seg_length
+                notes.append(f"{seg_length:.1f} m for {motor.usage}")
+
+        total_length = round(total_length, 1)  # round to 1 point float
+        if total_length == 0:
+            return
+
+        success, cable = get_wire_cable_by_spec("Cable", 7, 1.5, brand=None, note=None)
+        if success:
+            self.add_to_panel(
+                type=f"Signal Cable",
+                brand=cable["brand"],
+                order_number=cable["order_number"],
+                specifications="7x1.5mm²",
+                quantity=total_length,
+                price=cable['price'],
+                last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
+                note="\n".join(notes)
+            )
+        else:
+            self.add_to_panel(
+                type=f"Signal Cable",
+                brand="",
+                order_number="",
+                specifications="7x1.5mm²",
+                quantity=total_length,
+                price=0,
+                last_price_update="❌ Cable not found",
+                note="\n".join(notes)
+            )
+            print(cable)
 
     def choose_power_cable(self, motor_objects):
-        pass
+        """
+        Adds power cable entries with sizing based on current and motor demand.
+        """
+        volt = self.electrical_specs["project_info"]["l_voltage"]
+        length = self.electrical_specs["bagfilter"]["cable_dimension"]
+        if length == 0:
+            return
+
+        cable_grouping = defaultdict(lambda: {"total_length": 0, "notes": []})
+        correction_factor = 1.6 / (sqrt(3) * volt * COSNUS_PI * ETA)
+
+        for motor, qty in motor_objects:
+            if qty > 0 and motor.power > 0:
+                current = motor.power * correction_factor
+                cable = cable_rating(cable_length_m=length, cable_current_a=current)
+                if cable:
+                    motor_length = length * motor.power_cable_cofactor * qty
+                    cable_grouping[cable]["total_length"] += motor_length
+                    cable_grouping[cable]["notes"].append(f"{motor_length:.1f} m for {motor.usage}")
+                else:
+                    self.add_to_panel(
+                        type=f"POWER CABLE",
+                        note="POWER CABLE For {motor.usage} Not Found"
+                    )
+
+        for size_mm, data in cable_grouping.items():
+            total_len = round(data["total_length"], 1)
+            if total_len == 0:
+                continue
+
+            success, cable = get_wire_cable_by_spec("Cable", 4, size_mm, brand=None, note=None)
+            if success:
+                self.add_to_panel(
+                    type=f"POWER CABLE",
+                    brand=cable["brand"],
+                    order_number=cable["order_number"],
+                    specifications=f"4x{size_mm}mm²",
+                    quantity=total_len,
+                    price=cable['price'],
+                    last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
+                    note="\n".join(data["notes"])
+                )
+            else:
+                self.add_to_panel(
+                    type=f"POWER CABLE",
+                    brand="",
+                    order_number="",
+                    specifications=f"4x{size_mm}mm²",
+                    quantity=total_len,
+                    price=0,
+                    last_price_update="❌ Cable not found",
+                    note="\n".join(data["notes"])
+                )
+                print(cable)
 
     """ ------------------------------------- Calculate Motor Current ------------------------------------- """
 

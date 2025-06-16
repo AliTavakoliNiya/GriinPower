@@ -17,8 +17,10 @@ from views.data_entry.mccb_data_entry_view import MCCBDataEntryView
 from views.data_entry.mpcb_data_entry_view import MPCBDataEntryView
 from views.data_entry.plc_data_entry_view import PLCDataEntryView
 from views.data_entry.vfd_softstarter_data_entry_view import VFDSoftStarterDataEntryView
+from views.data_entry.wire_cable_data_entry_view import WireCableDataEntryView
 from views.supplier_view import SupplierEntry
-
+import jdatetime
+import re
 
 class DataEntry(QMainWindow):
     def __init__(self, parent=None):
@@ -29,6 +31,8 @@ class DataEntry(QMainWindow):
         self.setWindowIcon(QIcon('assets/Logo.ico'))
         self.setWindowTitle("GriinPower")
         self.settings = QSettings("Griin", "GriinPower")
+
+        self.today = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
 
         self.user_logged = UserSession()
 
@@ -77,6 +81,8 @@ class DataEntry(QMainWindow):
             BimetalDataEntryView(self)
         elif index == 7:
             VFDSoftStarterDataEntryView(self)
+        elif index == 8:
+            WireCableDataEntryView(self)
         elif index == 9:
             ElectricalPanelDataEntryView(self)
         elif index == 10:
@@ -97,6 +103,7 @@ class DataEntry(QMainWindow):
         self.bimetal_supplier_list.addItems(suppliers_name)
         self.general_supplier.addItems(suppliers_name)
         self.vfd_softstarter_supplier.addItems(suppliers_name)
+        self.wire_cable_supplier.addItems(suppliers_name)
         self.electrical_panel_supplier.addItems(suppliers_name)
 
     # def load_brands(self):
@@ -111,3 +118,18 @@ class DataEntry(QMainWindow):
         self.hide_show_item_stack_btn.setText(
             "⏩" if is_visible else "⏪"
         )
+
+    # def validate_shamsi_date(self, date_str):
+    #     pattern = r'^\d{4}/\d{2}/\d{2}$'
+    #     if not re.match(pattern, date_str):
+    #         return False
+    #
+    #     try:
+    #         year, month, day = map(int, date_str.split('/'))
+    #         input_date = jdatetime.date(year, month, day)
+    #
+    #         today_date = jdatetime.date.today()
+    #
+    #         return input_date <= today_date
+    #     except ValueError:
+    #         return False
