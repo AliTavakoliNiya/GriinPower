@@ -70,7 +70,8 @@ class PanelController:
             return
         total_qty = qty * motor.contactor_qty
 
-        success, contactor = get_contactor_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
+        success, contactor = get_contactor_by_current(rated_current=motor.current,
+                                                      brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type=f"Comector For {motor.usage.title()}",
@@ -87,7 +88,7 @@ class PanelController:
                 type=f"Conectorr For {motor.usage.title()}",
                 brand="",
                 order_number="",
-                specifications= f"At Least: {motor.current * 1.25:.2f}A",
+                specifications=f"At Least: {motor.current * 1.25:.2f}A",
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ Contactor not found",
@@ -103,7 +104,8 @@ class PanelController:
             return
         total_qty = qty * motor.mpcb_qty
 
-        success, mpcb = get_mpcb_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
+        success, mpcb = get_mpcb_by_current(rated_current=motor.current,
+                                            brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type=f"MPCB For {motor.usage.title()}",
@@ -121,7 +123,7 @@ class PanelController:
                 type=f"MPCB For {motor.usage.title()}",
                 brand="",
                 order_number="",
-                specifications= f"Current: {motor.current * 1.25:.2f}A",
+                specifications=f"Current: {motor.current * 1.25:.2f}A",
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ MPCB not found",
@@ -137,7 +139,8 @@ class PanelController:
             return
         total_qty = qty * motor.mccb_qty
 
-        success, mccb = get_mccb_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
+        success, mccb = get_mccb_by_current(rated_current=motor.current,
+                                            brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
                 type=f"MCCB For {motor.usage.title()}",
@@ -154,7 +157,7 @@ class PanelController:
                 type=f"MCCB For {motor.usage.title()}",
                 brand="",
                 order_number="",
-                specifications= f"At Least: {motor.current * 1.25:.2f}A",
+                specifications=f"At Least: {motor.current * 1.25:.2f}A",
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ MCCB not found",
@@ -170,7 +173,8 @@ class PanelController:
             return
         total_qty = qty * motor.bimetal_qty
 
-        success, bimetal = get_bimetal_by_current(rated_current=motor.current, brands=self.electrical_specs["project_info"]["proj_avl"])
+        success, bimetal = get_bimetal_by_current(rated_current=motor.current,
+                                                  brands=self.electrical_specs["project_info"]["proj_avl"])
 
         if success:
             self.add_to_panel(
@@ -190,7 +194,7 @@ class PanelController:
                 type=f"Bimetal For {motor.usage.title()}",
                 brand="",
                 order_number="",
-                specifications= f"Current: {motor.current * 1.25:.2f}A",
+                specifications=f"Current: {motor.current * 1.25:.2f}A",
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ BIMETAL not found",
@@ -205,7 +209,8 @@ class PanelController:
         if total_qty == 0:
             return
 
-        success, vfd = get_vfd_softstarter_by_power(type="VFD", power=motor.power, brands=self.electrical_specs["project_info"]["proj_avl"])
+        success, vfd = get_vfd_softstarter_by_power(type="VFD", power=motor.power,
+                                                    brands=self.electrical_specs["project_info"]["proj_avl"])
 
         if success:
             if success:
@@ -213,7 +218,7 @@ class PanelController:
                     type=f"VFD For {motor.usage.title()}",
                     brand=vfd["brand"],
                     order_number=vfd["order_number"],
-                    specifications= f"Power: {vfd['power']}",
+                    specifications=f"Power: {vfd['power']}",
                     quantity=total_qty,
                     price=vfd['price'],
                     last_price_update=f"{vfd['supplier_name']}\n{vfd['date']}",
@@ -224,7 +229,7 @@ class PanelController:
                     type=f"VFD For {motor.usage.title()}",
                     brand="",
                     order_number="",
-                    specifications=f"At Least: {motor.power/1000}KW",
+                    specifications=f"At Least: {motor.power / 1000}KW",
                     quantity=total_qty,
                     price=0,
                     last_price_update="❌ VFD not found",
@@ -239,7 +244,8 @@ class PanelController:
         if total_qty == 0:
             return
 
-        success, soft_starter = get_vfd_softstarter_by_power(type="SoftStarter", power=motor.power, brands=self.electrical_specs["project_info"]["proj_avl"])
+        success, soft_starter = get_vfd_softstarter_by_power(type="SoftStarter", power=motor.power,
+                                                             brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             if success:
                 self.add_to_panel(
@@ -257,7 +263,7 @@ class PanelController:
                     type=f"SoftStarter For {motor.usage.title()}",
                     brand="",
                     order_number="",
-                    specifications=f"At Least: {motor.power/1000}KW",
+                    specifications=f"At Least: {motor.power / 1000}KW",
                     quantity=total_qty,
                     price=0,
                     last_price_update="❌ VFD not found",
@@ -428,7 +434,7 @@ class PanelController:
                 manifold_ways = "2 Ways Manifold"
                 manifold_qty = qty
 
-            if manifold_qty > 0 and manifold_ways :
+            if manifold_qty > 0 and manifold_ways:
                 formatted_name = f"{manifold_ways} WAYS MANIFOLD"
 
                 success, manifold_obj = get_instrument_by_spec(type=manifold_ways)
@@ -471,12 +477,10 @@ class PanelController:
                         quantity=qty,
                         price=0,
                         last_price_update=f"❌ Calibration not found",
-                        note = f"calibration for {instrument_name.replace('_', ' ').title()}"
+                        note=f"calibration for {instrument_name.replace('_', ' ').title()}"
 
                     )
                     print(calibration)
-
-
 
     def calculate_plc_io_requirements(self, motor_objects, instruments=None):
         total_di = total_do = total_ai = total_ao = 0
@@ -611,97 +615,122 @@ class PanelController:
 
     """ ------------------------------------- Wire and Cable ------------------------------------- """
 
+    def choose_internal_power_wire(self, motor_objects):
+        """
+        Adds internal power panel wire or busbar based on motor power:
+        - For motors <= 45kW: 4 meters of 1x1.6 wire per motor
+        - For motors > 45kW: 5 meters of busbar per motor
+        """
+        wire_length = 0
+        busbar_length = 0
+        wire_notes = []
+        busbar_notes = []
 
-    #
-    # def choose_internal_signal_wire(self, motor_objects):
-    #     """
-    #     Adds internal signal panel wire (1x1.5) entries for each motor.
-    #     Each motor gets 4 meters of wire if its quantity isn't 0.
-    #     """
-    #     total_length = 0
-    #     notes = []
-    #
-    #     for motor, qty in motor_objects:
-    #         if qty > 0:
-    #             wire_length = 4 * qty  # 4 meters per motor
-    #             total_length += wire_length
-    #             notes.append(f"{wire_length} m for {motor.usage}")
-    #
-    #     if total_length == 0:
-    #         return
-    #
-    #     cable = get_general_by_name("cable_1x1p5")
-    #     price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
-    #
-    #     price = price_item.price if price_item.price else 0
-    #     effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-    #
-    #     self.add_to_panel(
-    #         type="INTERNAL SIGNAL PANEL WIRE 1x1.5",
-    #         specifications="Size: 1x1.5 mm²",
-    #         quantity=total_length,
-    #         price=price,
-    #         last_price_update=effective_date,
-    #         note="\n".join(notes))
-    #
-    # def choose_internal_power_wire(self, motor_objects):
-    #     """
-    #     Adds internal power panel wire or busbar based on motor power:
-    #     - For motors <= 45kW: 4 meters of 1x1.6 wire per motor
-    #     - For motors > 45kW: 5 meters of busbar per motor
-    #     """
-    #     wire_length = 0
-    #     busbar_length = 0
-    #     wire_notes = []
-    #     busbar_notes = []
-    #
-    #     for motor, qty in motor_objects:
-    #         if qty > 0:
-    #             if motor.power <= 45:
-    #                 motor_wire_length = 4 * qty
-    #                 wire_length += motor_wire_length
-    #                 wire_notes.append(f"{motor_wire_length} m for {motor.usage}")
-    #             else:
-    #                 motor_busbar_length = 5 * qty
-    #                 busbar_length += motor_busbar_length
-    #                 busbar_notes.append(f"{motor_busbar_length} m for {motor.usage}")
-    #
-    #     if wire_length > 0:
-    #         cable = get_general_by_name("cable_1x1p6")
-    #         price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
-    #
-    #         price = price_item.price if price_item.price else 0
-    #         effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-    #
-    #         self.add_to_panel(
-    #             type="INTERNAL POWER PANEL WIRE 1x1.6mm²",
-    #             specifications="Size: 1x1.6 mm²",
-    #             quantity=wire_length,
-    #             price=price,
-    #             last_price_update=effective_date,
-    #             note="\n".join(wire_notes)
-    #         )
-    #
-    #     if busbar_length > 0:
-    #         cable = get_general_by_name("busbar")
-    #         price_item = get_price(cable.item_id, brand="", item_brand=False)  # brand doesnt matter in this stage
-    #
-    #         price = price_item.price if price_item.price else 0
-    #         effective_date = price_item.effective_date if price_item.effective_date else "Not Found"
-    #
-    #         self.add_to_panel(
-    #             type="INTERNAL POWER BUSBAR",
-    #             specifications="For motors > 45kW",
-    #             quantity=busbar_length,
-    #             price=price,
-    #             last_price_update=effective_date,
-    #             note="\n".join(busbar_notes))
+        for motor, qty in motor_objects:
+            if qty > 0:
+                if motor.power <= 45:
+                    motor_wire_length = 4 * qty
+                    wire_length += motor_wire_length
+                    wire_notes.append(f"{motor_wire_length} m for {motor.usage}")
+                else:
+                    motor_busbar_length = 5 * qty
+                    busbar_length += motor_busbar_length
+                    busbar_notes.append(f"{motor_busbar_length} m for {motor.usage}")
+
+        if wire_length > 0:
+            success, cable = get_wire_cable_by_spec("Wire", 1, 1.6, brand=None, note=None)
+            if success:
+                self.add_to_panel(
+                    type="INTERNAL POWER PANEL WIRE",
+                    brand=cable["brand"],
+                    order_number=cable["order_number"],
+                    specifications="Size: 1x1.6 mm²",
+                    quantity=wire_length,
+                    price=cable['price'],
+                    last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
+                    note="\n".join(wire_notes)
+                )
+            else:
+                self.add_to_panel(
+                    type="INTERNAL POWER PANEL WIRE",
+                    brand="",
+                    order_number="",
+                    specifications="Size: 1x1.6 mm²",
+                    quantity=wire_length,
+                    price=0,
+                    last_price_update="❌ WIRE not found",
+                    note="\n".join(wire_notes)
+                )
+                print(cable)
+
+        if busbar_length > 0:
+
+            success, cable = get_wire_cable_by_spec("Busbar", 1, 1, brand=None, note=None)
+            if success:
+                self.add_to_panel(
+                    type="INTERNAL POWER BUSBAR",
+                    brand=cable["brand"],
+                    order_number=cable["order_number"],
+                    specifications="For motors > 45kW",
+                    quantity=busbar_length,
+                    price=cable['price'],
+                    last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
+                    note="\n".join(busbar_notes))
+            else:
+                self.add_to_panel(
+                    type="INTERNAL POWER BUSBAR",
+                    brand="",
+                    order_number="",
+                    specifications="For motors > 45kW",
+                    quantity=busbar_length,
+                    price=0,
+                    last_price_update="❌ BUSBAR not found",
+                    note="\n".join(busbar_notes))
+
+            print(cable)
+
 
     def choose_internal_signal_wire(self, motor_objects):
-        pass
+        """
+        Adds internal signal panel wire (1x1.5) entries for each motor.
+        Each motor gets 4 meters of wire if its quantity isn't 0.
+        """
+        total_length = 0
+        notes = []
 
-    def choose_internal_power_wire(self, motor_objects):
-        pass
+        for motor, qty in motor_objects:
+            if qty > 0:
+                wire_length = 4 * qty  # 4 meters per motor
+                total_length += wire_length
+                notes.append(f"{wire_length} m for {motor.usage}")
+
+        if total_length == 0:
+            return
+
+        success, cable = get_wire_cable_by_spec("Wire", 1, 1.5, brand=None, note=None)
+        if success:
+            self.add_to_panel(
+                type=f"INTERNAL SIGNAL PANEL WIRE",
+                brand=cable["brand"],
+                order_number=cable["order_number"],
+                specifications="Size: 1x1.5 mm²",
+                quantity=total_length,
+                price=cable['price'],
+                last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
+                note="\n".join(notes)
+            )
+        else:
+            self.add_to_panel(
+                type=f"INTERNAL SIGNAL PANEL WIRE",
+                brand="",
+                order_number="",
+                specifications="Size: 1x1.5 mm²",
+                quantity=total_length,
+                price=0,
+                last_price_update="❌ WIRE not found",
+                note="\n".join(notes)
+            )
+            print(cable)
 
     # ----------------------- Add Cables -----------------------
     def choose_signal_cable(self, motor_objects):
