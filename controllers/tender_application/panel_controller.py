@@ -74,7 +74,7 @@ class PanelController:
                                                       brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
-                type=f"Comector For {motor.usage.title()}",
+                type=f"Comector",
                 brand=contactor["brand"],
                 order_number=contactor["order_number"],
                 specifications=f"Current: {contactor['rated_current']}A",
@@ -85,7 +85,7 @@ class PanelController:
             )
         else:
             self.add_to_panel(
-                type=f"Conectorr For {motor.usage.title()}",
+                type=f"Contactor",
                 brand="",
                 order_number="",
                 specifications=f"At Least: {motor.current * 1.25:.2f}A",
@@ -108,7 +108,7 @@ class PanelController:
                                             brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
-                type=f"MPCB For {motor.usage.title()}",
+                type=f"MPCB",
                 brand=mpcb["brand"],
                 order_number=mpcb["order_number"],
                 specifications=f"Current: {mpcb['min_current']}A ~ {mpcb['max_current']}A\n"
@@ -120,7 +120,7 @@ class PanelController:
             )
         else:
             self.add_to_panel(
-                type=f"MPCB For {motor.usage.title()}",
+                type=f"MPCB",
                 brand="",
                 order_number="",
                 specifications=f"Current: {motor.current * 1.25:.2f}A",
@@ -143,7 +143,7 @@ class PanelController:
                                             brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
-                type=f"MCCB For {motor.usage.title()}",
+                type=f"MCCB",
                 brand=mccb["brand"],
                 order_number=mccb["order_number"],
                 specifications=f"Current: {mccb['rated_current']}A\nBreaking Capacity:{mccb['breaking_capacity']}KA",
@@ -154,7 +154,7 @@ class PanelController:
             )
         else:
             self.add_to_panel(
-                type=f"MCCB For {motor.usage.title()}",
+                type=f"MCCB",
                 brand="",
                 order_number="",
                 specifications=f"At Least: {motor.current * 1.25:.2f}A",
@@ -178,7 +178,7 @@ class PanelController:
 
         if success:
             self.add_to_panel(
-                type=f"Bimetal For {motor.usage.title()}",
+                type=f"Bimetal",
                 brand=bimetal["brand"],
                 order_number=bimetal["order_number"],
                 specifications=(
@@ -191,7 +191,7 @@ class PanelController:
             )
         else:
             self.add_to_panel(
-                type=f"Bimetal For {motor.usage.title()}",
+                type=f"Bimetal",
                 brand="",
                 order_number="",
                 specifications=f"Current: {motor.current * 1.25:.2f}A",
@@ -215,7 +215,7 @@ class PanelController:
         if success:
             if success:
                 self.add_to_panel(
-                    type=f"VFD For {motor.usage.title()}",
+                    type=f"VFD",
                     brand=vfd["brand"],
                     order_number=vfd["order_number"],
                     specifications=f"Power: {vfd['power']}",
@@ -226,7 +226,7 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type=f"VFD For {motor.usage.title()}",
+                    type=f"VFD",
                     brand="",
                     order_number="",
                     specifications=f"At Least: {motor.power / 1000}KW",
@@ -249,7 +249,7 @@ class PanelController:
         if success:
             if success:
                 self.add_to_panel(
-                    type=f"SoftStarter For {motor.usage.title()}",
+                    type=f"SoftStarter",
                     brand=soft_starter["brand"],
                     order_number=soft_starter["order_number"],
                     specifications=f"Power: {soft_starter['power']}",
@@ -260,7 +260,7 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type=f"SoftStarter For {motor.usage.title()}",
+                    type=f"SoftStarter",
                     brand="",
                     order_number="",
                     specifications=f"At Least: {motor.power / 1000}KW",
@@ -522,7 +522,7 @@ class PanelController:
             success, pin_card = get_general_by_spec(type="Front Connector", specification="20")
             if success:
                 self.add_to_panel(
-                    type=f"Front Connector 20Pin For {motor.usage.title()}",
+                    type=f"Front Connector 20Pins",
                     brand=pin_card["brand"],
                     order_number=pin_card["order_number"],
                     quantity=total_20pin,
@@ -532,7 +532,7 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type=f"Front Connector 20Pin For {motor.usage.title()}",
+                    type=f"Front Connector 20Pins",
                     brand="",
                     order_number="",
                     specifications="",
@@ -628,7 +628,7 @@ class PanelController:
 
         for motor, qty in motor_objects:
             if qty > 0:
-                if motor.power <= 45:
+                if motor.power < 45000:
                     motor_wire_length = 4 * qty
                     wire_length += motor_wire_length
                     wire_notes.append(f"{motor_wire_length} m for {motor.usage}")
@@ -641,7 +641,7 @@ class PanelController:
             success, cable = get_wire_cable_by_spec("Wire", 1, 1.6, brand=None, note=None)
             if success:
                 self.add_to_panel(
-                    type="INTERNAL POWER PANEL WIRE",
+                    type="Internal Power Panel Wire",
                     brand=cable["brand"],
                     order_number=cable["order_number"],
                     specifications="Size: 1x1.6 mm²",
@@ -652,23 +652,23 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type="INTERNAL POWER PANEL WIRE",
+                    type="Internal Power Panel Wire",
                     brand="",
                     order_number="",
                     specifications="Size: 1x1.6 mm²",
                     quantity=wire_length,
                     price=0,
-                    last_price_update="❌ WIRE not found",
+                    last_price_update="❌ Wire not found",
                     note="\n".join(wire_notes)
                 )
                 print(cable)
 
         if busbar_length > 0:
 
-            success, cable = get_wire_cable_by_spec("Busbar", 1, 1, brand=None, note=None)
+            success, cable = get_wire_cable_by_spec("Busbar", 1)
             if success:
                 self.add_to_panel(
-                    type="INTERNAL POWER BUSBAR",
+                    type="Internal Power Busbar",
                     brand=cable["brand"],
                     order_number=cable["order_number"],
                     specifications="For motors > 45kW",
@@ -678,13 +678,13 @@ class PanelController:
                     note="\n".join(busbar_notes))
             else:
                 self.add_to_panel(
-                    type="INTERNAL POWER BUSBAR",
+                    type="Internal Power Busbar",
                     brand="",
                     order_number="",
                     specifications="For motors > 45kW",
                     quantity=busbar_length,
                     price=0,
-                    last_price_update="❌ BUSBAR not found",
+                    last_price_update="❌ Busbar not found",
                     note="\n".join(busbar_notes))
 
             print(cable)
@@ -710,7 +710,7 @@ class PanelController:
         success, cable = get_wire_cable_by_spec("Wire", 1, 1.5, brand=None, note=None)
         if success:
             self.add_to_panel(
-                type=f"INTERNAL SIGNAL PANEL WIRE",
+                type=f"Internal Signal Panel Wire",
                 brand=cable["brand"],
                 order_number=cable["order_number"],
                 specifications="Size: 1x1.5 mm²",
@@ -721,13 +721,13 @@ class PanelController:
             )
         else:
             self.add_to_panel(
-                type=f"INTERNAL SIGNAL PANEL WIRE",
+                type=f"Internal Signal Panel Wire",
                 brand="",
                 order_number="",
                 specifications="Size: 1x1.5 mm²",
                 quantity=total_length,
                 price=0,
-                last_price_update="❌ WIRE not found",
+                last_price_update="❌ Wire not found",
                 note="\n".join(notes)
             )
             print(cable)
@@ -801,8 +801,8 @@ class PanelController:
                     cable_grouping[cable]["notes"].append(f"{motor_length:.1f} m for {motor.usage}")
                 else:
                     self.add_to_panel(
-                        type=f"POWER CABLE",
-                        note="POWER CABLE For {motor.usage} Not Found"
+                        type=f"Power Cable",
+                        note="Power Cable For {motor.usage} Not Found"
                     )
 
         for size_mm, data in cable_grouping.items():
@@ -813,7 +813,7 @@ class PanelController:
             success, cable = get_wire_cable_by_spec("Cable", 4, size_mm, brand=None, note=None)
             if success:
                 self.add_to_panel(
-                    type=f"POWER CABLE",
+                    type=f"Power Cable",
                     brand=cable["brand"],
                     order_number=cable["order_number"],
                     specifications=f"4x{size_mm}mm²",
@@ -824,7 +824,7 @@ class PanelController:
                 )
             else:
                 self.add_to_panel(
-                    type=f"POWER CABLE",
+                    type=f"Power Cable",
                     brand="",
                     order_number="",
                     specifications=f"4x{size_mm}mm²",

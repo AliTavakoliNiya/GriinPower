@@ -149,7 +149,7 @@ class ResultTab(QWidget):
         total_sum = 0
 
         for name, panel in self.panels.items():
-            summary["title"].append(name.upper().replace("_"," "))
+            summary["title"].append(name.title().replace("_"," "))
             panel_df = pd.DataFrame(panel)
             panel_total = panel_df["total_price"].sum() if "total_price" in panel_df.columns else 0
             summary["Price"].append(panel_total)

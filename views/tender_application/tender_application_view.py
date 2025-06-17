@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMainWindow
 from controllers.tender_application.project_session_controller import ProjectSession
 from models.projects import get_project
 from views.tender_application.electrical_tab_view import ElectricalTab
+from views.tender_application.installation_tab_view import InstallationTab
 from views.tender_application.project_information_view import ProjectInformationTab
 from views.tender_application.result_tab_view import ResultTab
 
@@ -30,6 +31,9 @@ class TenderApplication(QMainWindow):
 
         self.electrical_tab = ElectricalTab(self)
         self.tabWidget.addTab(self.electrical_tab, "Electrical")
+
+        self.installation_tab = InstallationTab(self)
+        self.tabWidget.addTab(self.installation_tab, "Installation")
 
         self.result_tab = ResultTab(self)
         self.tabWidget.addTab(self.result_tab, "Result")
@@ -56,7 +60,13 @@ class TenderApplication(QMainWindow):
             if not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
 
-        if index == 2:  # Result
+        if index == 2:  # Installation
+            if not self.electrical_tab.check_electrical_tab_ui_rules():
+                self.tabWidget.setCurrentIndex(1)
+            elif not self.project_information_tab.check_info_tab_ui_rules():
+                self.tabWidget.setCurrentIndex(0)
+
+        if index == 3:  # Result
             if not self.electrical_tab.check_electrical_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(1)
             elif not self.project_information_tab.check_info_tab_ui_rules():

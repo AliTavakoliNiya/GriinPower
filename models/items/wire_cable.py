@@ -66,7 +66,7 @@ def get_all_wire_cable():
     return result_list
 
 
-def get_wire_cable_by_spec(type, l_number, l_size, brand=None, note=None):
+def get_wire_cable_by_spec(type, l_number, l_size=None, brand=None, note=None):
     session = SessionLocal()
     try:
         components = (
@@ -94,7 +94,7 @@ def get_wire_cable_by_spec(type, l_number, l_size, brand=None, note=None):
 
             if l_number_db != float(l_number):
                 continue
-            if l_size_db != float(l_size):
+            if l_size and l_size_db != float(l_size):
                 continue
             if brand and attr_dict.get("brand") != brand:
                 continue
