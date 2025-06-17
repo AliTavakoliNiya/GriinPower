@@ -84,11 +84,11 @@ def get_electrical_panel_by_spec(type, width=None, height=None, depth=None, ip_r
 
             if attr_dict.get("type") != type:
                 continue
-            if width and attr_dict.get("width") != width:
+            if width and float(attr_dict.get("width")) != width:
                 continue
-            if height and attr_dict.get("height") != height:
+            if height and float(attr_dict.get("height")) != height:
                 continue
-            if depth and attr_dict.get("depth") != depth:
+            if depth and float(attr_dict.get("depth")) != depth:
                 continue
             if ip_rating and attr_dict.get("ip_rating") != ip_rating:
                 continue

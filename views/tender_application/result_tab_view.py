@@ -33,7 +33,6 @@ class ResultTab(QWidget):
         self.electrical_specs = ProjectSession().project_electrical_specs
         self.tabWidget.setCurrentIndex(0)
 
-
         self.tables = {
             "bagfilter_panel_table": self.bagfilter_panel_table,
             "fan_damper_panel_table": self.fan_damper_panel_table,
@@ -55,7 +54,6 @@ class ResultTab(QWidget):
     def save_changes_btn_handler(self):
         if not confirmation(f"You are about to save changes, Are you sure?"):
             return
-
 
         current_project = ProjectSession()
         success, msg = projects.save_project(current_project)
@@ -149,7 +147,7 @@ class ResultTab(QWidget):
         total_sum = 0
 
         for name, panel in self.panels.items():
-            summary["title"].append(name.title().replace("_"," "))
+            summary["title"].append(name.replace("_", " ").title())
             panel_df = pd.DataFrame(panel)
             panel_total = panel_df["total_price"].sum() if "total_price" in panel_df.columns else 0
             summary["Price"].append(panel_total)

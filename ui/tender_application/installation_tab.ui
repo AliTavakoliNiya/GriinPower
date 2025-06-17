@@ -916,7 +916,24 @@ QListWidget::item:selected {
      <property name="title">
       <string/>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3"/>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QTableView" name="installation_panel_table">
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <attribute name="horizontalHeaderCascadingSectionResizes">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderCascadingSectionResizes">
+         <bool>true</bool>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
@@ -967,7 +984,7 @@ QListWidget::item:selected {
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QDoubleSpinBox" name="doubleSpinBox">
+     <widget class="QDoubleSpinBox" name="height_field">
       <property name="geometry">
        <rect>
         <x>520</x>
@@ -999,7 +1016,7 @@ QListWidget::item:selected {
        <string>Height (m)</string>
       </property>
      </widget>
-     <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+     <widget class="QDoubleSpinBox" name="width_field">
       <property name="geometry">
        <rect>
         <x>360</x>
@@ -1031,7 +1048,7 @@ QListWidget::item:selected {
        <string>Width (m)</string>
       </property>
      </widget>
-     <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+     <widget class="QDoubleSpinBox" name="depth_field">
       <property name="geometry">
        <rect>
         <x>120</x>

@@ -147,5 +147,10 @@ class ProjectSession:
                                                                                   "power": 0}},
                                                           "instruments": {"ptc": {"qty": 0, "brand": None}}
                                                       },
+                                                      "installation":{
+                                                          "height":0,
+                                                          "width":0,
+                                                          "depth":0,
+                                                      },
                                                       }
         return cls._instance

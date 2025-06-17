@@ -65,6 +65,8 @@ class TenderApplication(QMainWindow):
                 self.tabWidget.setCurrentIndex(1)
             elif not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
+            else:
+                self.installation_tab.generate_result()
 
         if index == 3:  # Result
             if not self.electrical_tab.check_electrical_tab_ui_rules():
