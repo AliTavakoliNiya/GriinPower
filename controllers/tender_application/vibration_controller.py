@@ -47,12 +47,6 @@ class VibrationController(PanelController):
         # ----------------------- Add General Accessories -----------------------
         self.choose_general(motor_objects)
 
-
-
-        # ----------------------- Add Cables -----------------------
-        self.choose_signal_cable(motor_objects)
-        self.choose_power_cable(motor_objects)
-
         # ----------------------- Add Electrical Panel -----------------------
         total_motors = sum(qty for _, qty in motor_objects)
         total_motors = ceil(total_motors)

@@ -3729,6 +3729,16 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
+               <string>DuctCover</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MiniatoryRail</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>FlexibleConduit</string>
               </property>
              </item>

@@ -91,9 +91,6 @@ class BagfilterController(PanelController):
         # # ----------------------- Add General Accessories -----------------------
         self.choose_general(self.bagfilter_general_items)
 
-        # # ----------------------- Add Cables -----------------------
-        # self.choose_signal_cable(motor_objects)
-        # self.choose_power_cable(motor_objects)
 
         # # ----------------------- Add Electrical Panel -----------------------
         # self.choose_electrical_panel()

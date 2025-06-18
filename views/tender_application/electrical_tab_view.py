@@ -610,9 +610,9 @@ class ElectricalTab(QWidget):
         if self.bagfilter_type.currentIndex() == 0:
             self.bagfilter_order.setPlaceholderText("Order")
         if self.bagfilter_type.currentText() == "Griin/China":  # Griin/China
-            self.bagfilter_order.setPlaceholderText("Ex: 8.96×5.(2.7m).10")  #5 valve ~ compartment
+            self.bagfilter_order.setPlaceholderText("Ex: 8.96×5.(2.7m).10")  # 5 valve ~ compartment
         if self.bagfilter_type.currentText() == "BETH":  # BETH
-            self.bagfilter_order.setPlaceholderText("Ex: 6.78x2.3x10")  #6x2 valve
+            self.bagfilter_order.setPlaceholderText("Ex: 6.78x2.3.10")  # 6x2 valve
 
         self._update_project_value(["bagfilter", "type"], self.bagfilter_type.currentText())
 
@@ -809,10 +809,10 @@ class ElectricalTab(QWidget):
                 show_message("Please Follow Pattern Like 8.96×5.(2.7m).10 for Griin/China Model", "Error")
                 return False
         if self.bagfilter_type.currentIndex() == 2:
-            beth_pattern = r"^(\d+)\.\d+x(\d+)\.\d+x\d+$"
+            beth_pattern = r"^(\d+)\.\d+x(\d+)\.(\d+)\.(\d+)$"
             match = re.fullmatch(beth_pattern, self.electrical_specs["bagfilter"]["order"])
             if not match:  # BETH
-                show_message("Please Follow Pattern Like 6.78x2.3x10 for BETH Model", "Error")
+                show_message("Please Follow Pattern Like 6.78x2.3.10 for BETH Model", "Error")
                 return False
 
         if self.touch_panel_model.currentIndex() == 0:

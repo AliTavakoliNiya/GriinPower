@@ -330,8 +330,8 @@ class PanelController:
         self.process_item(motor_objects=motor_objects, attr_name="button_qty", comp_type="Button")
         self.process_item(motor_objects=motor_objects, attr_name="selector_switch_qty", comp_type="Selector Switch")
 
-        # process_item("duct_cover", "DUCT COVER", get_general_by_spec)
-        # process_item("miniatory_rail", "MINIATORY RAIL", get_general_by_spec)
+        self.choose_duct_cover(motor_objects)
+        self.choose_miniatory_rail(motor_objects)
 
         has_hmi = True if self.electrical_specs["bagfilter"]["touch_panel"] else False
         if not has_hmi:
@@ -614,6 +614,81 @@ class PanelController:
         return total_di, total_ai
 
     """ ------------------------------------- Wire and Cable ------------------------------------- """
+
+    def choose_miniatory_rail(self, motor_objects):
+
+        rail_length = 0
+        rail_notes = []
+
+        for motor, qty in motor_objects:
+            if qty > 0:
+                motor_wire_length = qty * motor.miniatory_rail_qty
+                rail_length += motor_wire_length
+                rail_notes.append(f"{motor_wire_length} m for {motor.usage}")
+
+
+        if rail_length > 0:
+            success, rail = get_wire_cable_by_spec("MiniatoryRail", 1)
+            if success:
+                self.add_to_panel(
+                    type="Miniatory Rail",
+                    brand=rail["brand"],
+                    order_number=rail["order_number"],
+                    specifications=rail["note"],
+                    quantity=rail_length,
+                    price=rail['price'],
+                    last_price_update=f"{rail['supplier_name']}\n{rail['date']}",
+                    note="\n".join(rail_notes)
+                )
+            else:
+                self.add_to_panel(
+                    type="Miniatory Rail",
+                    brand="",
+                    order_number="",
+                    specifications="",
+                    quantity=rail_length,
+                    price=0,
+                    last_price_update="❌ Miniatory Rail not found",
+                    note="\n".join(rail_notes)
+                )
+                print(rail)
+
+    def choose_duct_cover(self, motor_objects):
+        duct_length = 0
+        duct_notes = []
+
+        for motor, qty in motor_objects:
+            if qty > 0:
+                motor_wire_length = qty * motor.duct_cover_qty
+                duct_length += motor_wire_length
+                duct_notes.append(f"{motor_wire_length} m for {motor.usage}")
+
+
+        if duct_length > 0:
+            success, duct = get_wire_cable_by_spec("DuctCover", 1)
+            if success:
+                self.add_to_panel(
+                    type="Duct & Cover",
+                    brand=duct["brand"],
+                    order_number=duct["order_number"],
+                    specifications=duct["note"],
+                    quantity=duct_length,
+                    price=duct['price'],
+                    last_price_update=f"{duct['supplier_name']}\n{duct['date']}",
+                    note="\n".join(duct_notes)
+                )
+            else:
+                self.add_to_panel(
+                    type="Duct & Cover",
+                    brand="",
+                    order_number="",
+                    specifications="",
+                    quantity=duct_length,
+                    price=0,
+                    last_price_update="❌ Duct not found",
+                    note="\n".join(duct_notes)
+                )
+                print(duct)
 
     def choose_internal_power_wire(self, motor_objects):
         """
