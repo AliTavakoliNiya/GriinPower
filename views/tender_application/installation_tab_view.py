@@ -24,6 +24,9 @@ class InstallationTab(QWidget):
         self.width_field.valueChanged.connect(self.width_field_value_handler)
         self.height_field.valueChanged.connect(self.height_field_value_handler)
         self.depth_field.valueChanged.connect(self.depth_field_value_handler)
+        self.ccr_field.valueChanged.connect(self.ccr_field_value_handler)
+
+        self.update_table.clicked.connect(self.generate_result)
 
 
 
@@ -35,6 +38,9 @@ class InstallationTab(QWidget):
 
     def height_field_value_handler(self):
         self.electrical_specs["installation"]["height"] = self.height_field.value()
+
+    def ccr_field_value_handler(self):
+        self.electrical_specs["installation"]["ccr"] = self.ccr_field.value()
 
     def _setup_result_table(self):
         self.installation_panel.setAlternatingRowColors(True)

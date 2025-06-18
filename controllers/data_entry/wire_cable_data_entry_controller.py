@@ -174,7 +174,9 @@ class WireCableDataEntryController:
                                                              l_number=wire_cable['l_number'],
                                                              l_size=wire_cable['l_size'],
                                                              brand=wire_cable['brand'],
-                                                             note=wire_cable['note'])
+                                                             note=wire_cable['note'],
+                                                             created_by_id=2,  # System
+                                                             )
             if not success:
                 return False, "Failed to save wire_cable"
 

@@ -23,7 +23,7 @@ class Motor:
             power_cable_cofactor=1,
             duct_cover_qty=0.5,
             miniatory_rail_qty=0.3,
-            junction_box_for_speed_qty=1,
+            lcb_for_speed_qty=1,
             panel_wire_qty=5,
             plc_di=5,
             plc_do=1,
@@ -53,7 +53,7 @@ class Motor:
         self.duct_cover_qty = duct_cover_qty
         self.miniatory_rail_qty = miniatory_rail_qty
         self.panel_wire_qty = panel_wire_qty
-        self.junction_box_for_speed_qty = junction_box_for_speed_qty
+        self.lcb_for_speed_qty = lcb_for_speed_qty
         self.plc_di = plc_di
         self.plc_do = plc_do
         self.plc_ai = plc_ai

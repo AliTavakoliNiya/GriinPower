@@ -56,6 +56,8 @@ class BagfilterController(PanelController):
         total_ai = 0
 
         n_bagfilter_cards = (n_valves + 15) // 16  # each card support 16 valves(round up)
+        self.bagfilter_general_items["bagfilter_cards"] = n_bagfilter_cards
+
         do_bagfilter_card = n_bagfilter_cards * 5
         if n_bagfilter_cards > 0:
             do_bagfilter_card += math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digist use in binary
@@ -158,6 +160,7 @@ class BagfilterController(PanelController):
             )
 
     def choose_general(self, general_items):
+        self.process_item(comp_type="Griin Bagfilter Cards", qty=general_items.get("bagfilter_cards", 0))
         self.process_item(comp_type="Terminal", specification="4", qty=general_items.get("terminal_4", 0))
         self.process_item(comp_type="Relay", specification="1", qty=general_items.get("relay_1no_1nc", 0))
         self.process_item(comp_type="Relay", specification="2", qty=general_items.get("relay_2no_2nc", 0))

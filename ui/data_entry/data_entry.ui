@@ -159,7 +159,7 @@
       </item>
       <item>
        <property name="text">
-        <string>EL.Panel/LCB/JB</string>
+        <string>EL Panel/LCB/JB</string>
        </property>
       </item>
       <item>
@@ -3727,6 +3727,11 @@ QPushButton:pressed {
                <string>Busbar</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>FlexibleConduit</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item row="1" column="0" colspan="2">
@@ -4383,6 +4388,11 @@ QPushButton:pressed {
              <item>
               <property name="text">
                <string>Relay</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gland</string>
               </property>
              </item>
             </widget>

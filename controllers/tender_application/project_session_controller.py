@@ -151,6 +151,7 @@ class ProjectSession:
                                                           "height":0,
                                                           "width":0,
                                                           "depth":0,
+                                                          "ccr":0,
                                                       },
                                                       }
         return cls._instance

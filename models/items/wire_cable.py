@@ -53,7 +53,12 @@ def get_all_wire_cable():
                 "created_by": created_by
             }
             for key in attribute_keys:
-                if key == "l_number" or key == "l_size":
+                if key == "l_number":
+                    try:
+                        item[key] = int(attr_dict.get(key, 0))
+                    except (ValueError, TypeError):
+                        item[key] = 0
+                elif key == "l_size":
                     try:
                         item[key] = float(attr_dict.get(key, 0))
                     except (ValueError, TypeError):
@@ -87,12 +92,12 @@ def get_wire_cable_by_spec(type, l_number, l_size=None, brand=None, note=None):
                 continue
 
             try:
-                l_number_db = float(attr_dict.get("l_number", 0))
+                l_number_db = int(attr_dict.get("l_number", 0))
                 l_size_db = float(attr_dict.get("l_size", 0))
             except (ValueError, TypeError):
                 continue
 
-            if l_number_db != float(l_number):
+            if l_number_db != int(l_number):
                 continue
             if l_size and l_size_db != float(l_size):
                 continue
@@ -118,7 +123,7 @@ def get_wire_cable_by_spec(type, l_number, l_size=None, brand=None, note=None):
         result = {
             "id": latest["component"].id,
             "type": attr.get("type"),
-            "l_number": float(attr.get("l_number", 0)),
+            "l_number": int(attr.get("l_number", 0)),
             "l_size": float(attr.get("l_size", 0)),
             "brand": attr.get("brand"),
             "note": attr.get("note", ""),
@@ -138,7 +143,7 @@ def get_wire_cable_by_spec(type, l_number, l_size=None, brand=None, note=None):
         session.close()
 
 
-def insert_wire_cable_to_db(type, l_number, l_size, brand, note=None):
+def insert_wire_cable_to_db(type, l_number, l_size, brand, note=None, created_by_id=None):
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
     session = SessionLocal()
@@ -163,13 +168,14 @@ def insert_wire_cable_to_db(type, l_number, l_size, brand, note=None):
                     continue
                 return True, comp.id
 
+        created_by_id = created_by_id if created_by_id else str(current_user.id)
         attributes = [
             ComponentAttribute(key="type", value=type),
             ComponentAttribute(key="l_number", value=l_number),
             ComponentAttribute(key="l_size", value=l_size),
             ComponentAttribute(key="brand", value=brand),
             ComponentAttribute(key="order_number", value=""),
-            ComponentAttribute(key="created_by_id", value=str(current_user.id)),
+            ComponentAttribute(key="created_by_id", value=str(created_by_id)),
             ComponentAttribute(key="created_at", value=today_shamsi),
         ]
         if note:

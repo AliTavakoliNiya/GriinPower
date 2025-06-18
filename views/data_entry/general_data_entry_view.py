@@ -102,7 +102,11 @@ class GeneralDataEntryView:
                 'label': "",
                 'entry': "None"
             },
-
+            'Gland': {
+                'show': True,
+                'label': "Model",
+                'entry': ""
+            },
             }
 
         current_type = self.ui.general_type.currentText()

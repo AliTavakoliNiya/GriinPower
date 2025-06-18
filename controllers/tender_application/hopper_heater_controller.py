@@ -15,17 +15,17 @@ class HopperHeaterController(PanelController):
         # ----------------------- Initialize Motors -----------------------
         motors_config = self.electrical_specs["hopper_heater"]["motors"]
         hopper_heater = Motor(motors_config["elements"]["power"],
-                   usage="Hopper Heater",
-                   plc_di=4,
-                   junction_box_for_speed_qty=4,
-                   terminal_4_qty=4 * 8,
-                   terminal_6_qty=4 * 10,
-                   relay_1no_1nc_qty=2,
-                   mpcb_qty=0,
-                   mccb_qty=1,
-                   button_qty=0,
-                   selector_switch_qty=0,
-                   signal_lamp_24v_qty=0)
+                              usage="Hopper Heater",
+                              plc_di=4,
+                              lcb_for_speed_qty=4,
+                              terminal_4_qty=4 * 8,
+                              terminal_6_qty=4 * 10,
+                              relay_1no_1nc_qty=2,
+                              mpcb_qty=0,
+                              mccb_qty=1,
+                              button_qty=0,
+                              selector_switch_qty=0,
+                              signal_lamp_24v_qty=0)
         hopper_heater.current = self.calculate_motor_current(power=hopper_heater.power)
         self.electrical_specs["hopper_heater"]["motors"]["elements"]["motor"] = hopper_heater
         motor_objects = [(hopper_heater, motors_config["elements"]["qty"])]

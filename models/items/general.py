@@ -60,7 +60,7 @@ def get_all_generals():
     return general_list
 
 
-def get_general_by_spec(type, specification, brand=None, order_number=None):
+def get_general_by_spec(type, specification=None, brand=None, order_number=None):
     brand = brand.lower() if brand else None
     session = SessionLocal()
     try:
@@ -79,9 +79,11 @@ def get_general_by_spec(type, specification, brand=None, order_number=None):
         for general in generals:
             attr_dict = {attr.key: attr.value for attr in general.attributes}
 
-            if attr_dict.get("type") != type or attr_dict.get("specification") != specification:
+            if attr_dict.get("type") != type:
                 continue
 
+            if specification and attr_dict.get("specification") != specification:
+                continue
             if brand and attr_dict.get("brand") != brand:
                 continue
             if order_number and attr_dict.get("order_number") != order_number:
