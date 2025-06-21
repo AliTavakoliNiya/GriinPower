@@ -107,6 +107,41 @@ class GeneralDataEntryView:
                 'label': "Model",
                 'entry': ""
             },
+            'Ladder Connector': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
+            'Ladder Screw': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
+            'Support U': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Support L': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Support Screw': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Riser': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
+            'Griin Bagfilter': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
             }
 
         current_type = self.ui.general_type.currentText()

@@ -424,7 +424,7 @@ class InstallationController(PanelController):
 
             print(ladder)
 
-        success, ladder_cover = get_wire_cable_by_spec("Ladder Cover", l_number=1, l_size=ladder_size)
+        success, ladder_cover = get_wire_cable_by_spec("LadderCover", l_number=1, l_size=ladder_size)
         if success:
             self.add_to_panel(
                 type=f"Ladder Cover",
@@ -476,7 +476,7 @@ class InstallationController(PanelController):
                 last_price_update="❌ Ladder Connector not found",
                 note=f"For {self.n_airtank} Air Tanks")
 
-        success, screw = get_general_by_spec(type="Screw")
+        success, screw = get_general_by_spec(type="Ladder Screw")
         if success:
             self.add_to_panel(
                 type=f"Ladder Screw",
@@ -489,7 +489,7 @@ class InstallationController(PanelController):
                 note=f"For {n_connectors} Ladder Connector")
         else:
             self.add_to_panel(
-                type=f"Ladder Connector",
+                type=f"Ladder Screw",
                 brand="",
                 order_number="",
                 specifications="",
@@ -572,7 +572,7 @@ class InstallationController(PanelController):
                 last_price_update="❌ Support Screw not found",
                 note=f"For Ladder_Height/1.5 x 8")
 
-        n_riser = int(self.electrical_specs["installation"]["height"] * 1.5) * 2
+        n_riser = 2
         success, riser = get_general_by_spec(type="Riser")
         if success:
             self.add_to_panel(

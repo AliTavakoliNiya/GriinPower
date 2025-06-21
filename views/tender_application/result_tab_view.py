@@ -51,6 +51,8 @@ class ResultTab(QWidget):
         self.show_datail_btn.clicked.connect(self.show_datail_btn_handler)
         self.save_changes_btn.clicked.connect(self.save_changes_btn_handler)
 
+        self.update_table.clicked.connect(self.generate_panels)
+
     def save_changes_btn_handler(self):
         if not confirmation(f"You are about to save changes, Are you sure?"):
             return

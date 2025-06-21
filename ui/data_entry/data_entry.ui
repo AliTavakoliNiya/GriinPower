@@ -254,7 +254,7 @@ QPushButton:pressed {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>8</number>
+       <number>10</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -3740,6 +3740,11 @@ QPushButton:pressed {
                <string>Ladder</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>LadderCover</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item row="1" column="0" colspan="2">
@@ -4327,6 +4332,11 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
+               <string>Griin Bagfilter Cards</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>Touch Panel</string>
               </property>
              </item>
@@ -4410,6 +4420,36 @@ QPushButton:pressed {
                <string>Gland</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>Ladder Connector</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Ladder Screw</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Support U</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Support L</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Support Screw</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Riser</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item row="5" column="1">
@@ -4448,7 +4488,7 @@ QPushButton:pressed {
             <widget class="QLineEdit" name="general_spec_entry">
              <property name="minimumSize">
               <size>
-               <width>150</width>
+               <width>80</width>
                <height>0</height>
               </size>
              </property>
@@ -4610,6 +4650,19 @@ QPushButton:pressed {
              </property>
              <property name="sizeType">
               <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="6">
+            <spacer name="horizontalSpacer_15">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
