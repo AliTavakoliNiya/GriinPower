@@ -25,17 +25,18 @@ class BagfilterController(PanelController):
         """
 
         n_valves = 0
-        if self.electrical_specs["bagfilter"]["type"] == "Griin/China":
-            match = re.search(r"×(.*?)\.", self.electrical_specs["bagfilter"]["order"])
+        if self.electrical_specs["bagfilter"]["type"] == "Griin/China":  # EX: 8.96x5.(2.7m).10
+            pattern = r'(\d+)\.(\d+)x(\d+)\.\((\d+(?:\.\d+)?)m\)\.(\d+)'
+            match = re.match(pattern, self.electrical_specs["bagfilter"]["order"])
             if match:
-                n_valves = int(match.group(1))
+                n_valves = int(match.group(1))  # ~ compartments ~ jacks
 
-        if self.electrical_specs["bagfilter"]["type"] == "BETH":
-            match = re.fullmatch(r"^(\d+)\.\d+x(\d+)\.\d+x\d+$", self.electrical_specs["bagfilter"]["order"])
+        if self.electrical_specs["bagfilter"]["type"] == "BETH":  # 6.78x2.3.10
+            match = re.match(r'(\d+)\.(\d+)x(\d+)\.(\d+)\.(\d+)', self.electrical_specs["bagfilter"]["order"])
             if match:
-                num1 = int(match.group(1))
-                num2 = int(match.group(2))
-                n_valves = num1 * num2
+                n_valve_per_airtank = int(match.group(1))
+                n_airtank = int(match.group(3))
+                n_valves = n_valve_per_airtank * n_airtank
 
         self.bagfilter_general_items = {
             "touch_panel": 0,

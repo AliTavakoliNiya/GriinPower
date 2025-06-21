@@ -69,6 +69,7 @@ class InstallationTab(QWidget):
         header.setSectionResizeMode(model.columnCount(None) - 1, QHeaderView.Stretch)
 
         self.installation_panel_table.resizeRowsToContents()
+        self.installation_panel_table.setColumnHidden(2, True) #hide order_number column
 
     def _add_summary_row(self, df):
         summary = {

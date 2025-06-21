@@ -3457,13 +3457,6 @@ QPushButton:pressed {
              </property>
             </widget>
            </item>
-           <item row="3" column="9">
-            <widget class="QLabel" name="general_spec_label_8">
-             <property name="text">
-              <string>mm²</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="10">
             <widget class="QLineEdit" name="wire_cable_note">
              <property name="minimumSize">
@@ -3742,6 +3735,11 @@ QPushButton:pressed {
                <string>FlexibleConduit</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>Ladder</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item row="1" column="0" colspan="2">
@@ -3825,6 +3823,13 @@ QPushButton:pressed {
                <width>17</width>
                <height>17</height>
               </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="9">
+            <widget class="QLabel" name="general_spec_label_8">
+             <property name="text">
+              <string>mm²</string>
              </property>
             </widget>
            </item>

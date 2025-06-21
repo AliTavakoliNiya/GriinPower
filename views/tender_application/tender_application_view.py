@@ -60,21 +60,14 @@ class TenderApplication(QMainWindow):
             if not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
 
-        if index == 2:  # Installation
-            if not self.electrical_tab.check_electrical_tab_ui_rules():
-                self.tabWidget.setCurrentIndex(1)
-            elif not self.project_information_tab.check_info_tab_ui_rules():
-                self.tabWidget.setCurrentIndex(0)
-            else:
-                self.installation_tab.generate_result()
-
-        if index == 3:  # Result
+        if index == 2 or index == 3:  # Installation, Result
             if not self.electrical_tab.check_electrical_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(1)
             elif not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
             else:
                 self.result_tab.generate_panels()
+                self.installation_tab.generate_result()
 
     def set_rev_hint(self, rev_number):
         success, revision_project = get_project(code=self.current_project.code,

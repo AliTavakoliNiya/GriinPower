@@ -29,6 +29,8 @@ class WireCableDataEntryView:
     def refresh_page(self):
         self.clear_wire_cable_form()
         wire_cables = self.wire_cable_data_entry_controller.get_all_wire_cables()
+        for wire in wire_cables:
+            wire["type"] = f"{wire['type']} {wire['l_number']}x{wire['l_size']}mm"
         self.show_wire_cables_in_table(wire_cables)
 
     def clear_wire_cable_form(self):
@@ -119,10 +121,10 @@ class TableWindow(QMainWindow):
         self.table_view = QTableView()
         self.resize(780, 600)
         self.model = QStandardItemModel(len(data), 6)
-        self.model.setHorizontalHeaderLabels(["Type", "L Number", "L Size", "Brand", "Note", "Price"])
+        self.model.setHorizontalHeaderLabels(["Name", "L Number", "L Size", "Brand", "Note", "Price"])
 
         for row, item in enumerate(data):
-            self.model.setItem(row, 0, QStandardItem(str(item["type"])))
+            self.model.setItem(row, 0, QStandardItem(f"item['type'] item['l_number']xitem['l_size']"))
             self.model.setItem(row, 1, QStandardItem(str(item["l_number"])))
             self.model.setItem(row, 2, QStandardItem(str(item["l_size"])))
             self.model.setItem(row, 3, QStandardItem(str(item["brand"])))
