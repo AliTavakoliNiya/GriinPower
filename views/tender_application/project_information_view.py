@@ -14,7 +14,8 @@ class ProjectInformationTab(QWidget):
         self.electrical_specs = self.current_project.project_electrical_specs
         self._initialize_info()
 
-        self.set_project_info_ui_values()
+        if self.current_project.revision != None:
+            self.set_project_info_ui_values()
 
     def _initialize_info(self):
         """ --------------------------- Project Information --------------------------- """
@@ -193,9 +194,9 @@ class ProjectInformationTab(QWidget):
             self.electrical_specs["project_info"]["proj_avl"].remove("schneider electric")
 
     def _handle_proj_avl_hyundai_changed(self):
-        if self.proj_avl_hyundai.isChecked() and "Hyundai" not in self.electrical_specs["project_info"]["proj_avl"]:
+        if self.proj_avl_hyundai.isChecked() and "hyundai" not in self.electrical_specs["project_info"]["proj_avl"]:
             self.electrical_specs["project_info"]["proj_avl"].append("hyundai")
-        elif not self.proj_avl_hyundai.isChecked() and "Hyundai" in self.electrical_specs["project_info"]["proj_avl"]:
+        elif not self.proj_avl_hyundai.isChecked() and "hyundai" in self.electrical_specs["project_info"]["proj_avl"]:
             self.electrical_specs["project_info"]["proj_avl"].remove("hyundai")
 
     def check_info_tab_ui_rules(self):
@@ -259,7 +260,7 @@ class ProjectInformationTab(QWidget):
             self.altitude_elevation.setValue(self.electrical_specs['project_info']['altitude_elevation'])
 
             # Available Equipment Checkboxes
-            self.proj_avl_schneider.setChecked('schneider' in self.electrical_specs['project_info']['proj_avl'])
+            self.proj_avl_schneider.setChecked('schneider electric' in self.electrical_specs['project_info']['proj_avl'])
             self.proj_avl_hyundai.setChecked('hyundai' in self.electrical_specs['project_info']['proj_avl'])
             self.proj_avl_siemens.setChecked('siemens' in self.electrical_specs['project_info']['proj_avl'])
         except KeyError as e:

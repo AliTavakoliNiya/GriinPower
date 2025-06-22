@@ -177,7 +177,7 @@ class BagfilterController(PanelController):
 
     def choose_mccb(self):
         """
-        Adds an MCCB entry to the panel based on the total motor power in the tender_application.
+        Adds an MCCB entry to the panel based on the total motor power in the Tender Application.
         """
         total_current = 0.0
 

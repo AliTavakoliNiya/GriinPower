@@ -22,9 +22,10 @@ class ElectricalTab(QWidget):
         self.current_project = ProjectSession()
         self.electrical_specs = self.current_project.project_electrical_specs
 
+        self.set_electrical_ui_values()
+
         self._initialize_components()
 
-        self.set_electrical_ui_values()
 
     def _initialize_components(self):
         """Initialize all UI components with their event handlers"""
@@ -359,7 +360,7 @@ class ElectricalTab(QWidget):
         else:
             self.fan_voltage_type.setCurrentIndex(0)
             self.fan_voltage_type.setEnabled(True)
-            self._update_project_value(["fan", "motors", "fan", "voltage_type"], None)
+            self._update_project_value(["fan", "motors", "fan", "voltage_type"], self.fan_voltage_type.itemText(0))
             self.fan_voltage_type_text.setText("Voltage Type")
 
     def _handle_fan_brand_changed(self):
@@ -906,12 +907,12 @@ class ElectricalTab(QWidget):
 
             # QComboBox elements
             self.hopper_heater_kw.setCurrentText(
-                str(self.electrical_specs['hopper_heater']['motors']['elements']['power']))
+                str(self.electrical_specs['hopper_heater']['motors']['elements']['power']/1000))
             self.hopper_heater_ptc_brand.setCurrentText(
                 str(self.electrical_specs['hopper_heater']['instruments']['ptc']['brand']) if
                 self.electrical_specs['hopper_heater']['instruments']['ptc']['brand'] else "")
             self.vibration_motor_kw.setCurrentText(
-                str(self.electrical_specs['vibration']['motors']['vibration']['power']))
+                str(self.electrical_specs['vibration']['motors']['vibration']['power']/1000))
             self.freshair_zs_brand.setCurrentText(
                 str(self.electrical_specs['fresh_air']['instruments']['proximity_switch']['brand']) if
                 self.electrical_specs['fresh_air']['instruments']['proximity_switch']['brand'] else "")
@@ -925,29 +926,29 @@ class ElectricalTab(QWidget):
                 str(self.electrical_specs['fresh_air']['motors']['freshair_motor']['start_type']) if
                 self.electrical_specs['fresh_air']['motors']['freshair_motor']['start_type'] else "")
             self.freshair_motor_kw.setCurrentText(
-                str(self.electrical_specs['fresh_air']['motors']['freshair_motor']['power']))
+                str(self.electrical_specs['fresh_air']['motors']['freshair_motor']['power']/1000))
             self.emergency_flap_motor_start_type.setCurrentText(
                 str(self.electrical_specs['fresh_air']['motors']['emergency_flap']['start_type']) if
                 self.electrical_specs['fresh_air']['motors']['emergency_flap']['start_type'] else "")
             self.freshair_flap_motor_kw.setCurrentText(
-                str(self.electrical_specs['fresh_air']['motors']['fresh_air_flap']['power']))
+                str(self.electrical_specs['fresh_air']['motors']['fresh_air_flap']['power']/1000))
             self.emergency_flap_motor_kw.setCurrentText(
-                str(self.electrical_specs['fresh_air']['motors']['emergency_flap']['power']))
-            self.rotary_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['rotary']['power']))
+                str(self.electrical_specs['fresh_air']['motors']['emergency_flap']['power']/1000))
+            self.rotary_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['rotary']['power']/1000))
             self.transport_zs_brand.setCurrentText(
                 str(self.electrical_specs['transport']['instruments']['proximity_switch']['brand']) if
                 self.electrical_specs['transport']['instruments']['proximity_switch']['brand'] else "")
             self.telescopic_chute_kw.setCurrentText(
-                str(self.electrical_specs['transport']['motors']['telescopic_chute']['power']))
+                str(self.electrical_specs['transport']['motors']['telescopic_chute']['power']/1000))
             self.transport_ls_bin_brand.setCurrentText(
                 str(self.electrical_specs['transport']['instruments']['level_switch']['brand']) if
                 self.electrical_specs['transport']['instruments']['level_switch']['brand'] else "")
             self.transport_lt_brand.setCurrentText(
                 str(self.electrical_specs['transport']['instruments']['level_transmitter']['brand']) if
                 self.electrical_specs['transport']['instruments']['level_transmitter']['brand'] else "")
-            self.screw2_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw2']['power']))
-            self.screw1_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw1']['power']))
-            self.slide_gate_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['slide_gate']['power']))
+            self.screw2_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw2']['power']/1000))
+            self.screw1_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw1']['power']/1000))
+            self.slide_gate_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['slide_gate']['power']/1000))
             self.transport_spd_brand.setCurrentText(
                 str(self.electrical_specs['transport']['instruments']['speed_detector']['brand']) if
                 self.electrical_specs['transport']['instruments']['speed_detector']['brand'] else "")
@@ -972,7 +973,7 @@ class ElectricalTab(QWidget):
             self.fan_bearing_vt_brand.setCurrentText(
                 str(self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['brand']) if
                 self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['brand'] else "")
-            self.damper_kw.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['power']))
+            self.damper_kw.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['power']/1000))
             self.damper_brand.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['brand']) if
                                              self.electrical_specs['damper']['motors']['damper']['brand'] else "")
             self.damper_start_type.setCurrentText(
@@ -980,7 +981,7 @@ class ElectricalTab(QWidget):
                 self.electrical_specs['damper']['motors']['damper']['start_type'] else "")
             self.fan_painting_ral.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['painting_ral']) if
                                                  self.electrical_specs['fan']['motors']['fan']['painting_ral'] else "")
-            self.fan_kw.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['power']))
+            self.fan_kw.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['power']/1000))
             self.fan_bearing_tt_brand.setCurrentText(
                 str(self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['brand']) if
                 self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['brand'] else "")

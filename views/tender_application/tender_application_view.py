@@ -17,50 +17,91 @@ class TenderApplication(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        # Load the main window UI (with the QTabWidget)
+        # Load the main tender application UI
         uic.loadUi("ui/tender_application/tender_application.ui", self)
         self.setWindowIcon(QIcon('assets/Logo.ico'))
         self.setWindowTitle("GriinPower")
+
+        # Load application settings
         self.settings = QSettings("Griin", "GriinPower")
 
+        # Initialize project session and specs
         self.current_project = ProjectSession()
-        self.electrical_specs = ProjectSession().project_electrical_specs
+        self.electrical_specs = self.current_project.project_electrical_specs
 
+        # Add "Project Information" tab
         self.project_information_tab = ProjectInformationTab(self)
         self.tabWidget.addTab(self.project_information_tab, "Project Information")
 
+        # Add "Electrical" tab
         self.electrical_tab = ElectricalTab(self)
         self.tabWidget.addTab(self.electrical_tab, "Electrical")
 
+        # Add "Installation" tab
         self.installation_tab = InstallationTab(self)
         self.tabWidget.addTab(self.installation_tab, "Installation")
 
+        # Add "Result" tab
         self.result_tab = ResultTab(self)
         self.tabWidget.addTab(self.result_tab, "Result")
 
-        # set revision
-        revision_hint_no = str(self.current_project.revision - 1).zfill(2) if self.current_project.revision >= 1 else "-"
+        self._last_tab_index = 0  # start at the first tab
+
+        # Handle revision number and hint logic
+        if self.current_project.revision is None:
+            revision_hint_no = "-"
+            self.current_project.revision = 0
+        elif self.current_project.revision == 0:
+            revision_hint_no = "-"
+        else:
+            revision_hint_no = str(self.current_project.revision - 1).zfill(2)
+
+        # Set revision hint only if it's valid
         if revision_hint_no != "-":
             self.set_rev_hint(int(revision_hint_no))
 
-        self.project_information_tab.current_revision_filed.setText(str(self.current_project.revision).zfill(2))
+        # Set current and hint revision in Project Information tab
+        self.project_information_tab.current_revision_filed.setText(
+            str(self.current_project.revision).zfill(2)
+        )
         self.project_information_tab.revision_hint_filed.setText(revision_hint_no)
 
-        self.electrical_tab.current_revision_filed.setText(str(self.current_project.revision).zfill(2))
+        # Set current and hint revision in Electrical tab
+        self.electrical_tab.current_revision_filed.setText(
+            str(self.current_project.revision).zfill(2)
+        )
         self.electrical_tab.revision_hint_filed.setText(revision_hint_no)
 
+        # Tab change validation and updates
         self.tabWidget.currentChanged.connect(self.on_tab_changed)
 
-        self.tabWidget.setCurrentIndex(0)  # Start at first tab
+        # Set initial tab index
+        self.tabWidget.setCurrentIndex(0)
 
+        # Launch window maximized
         self.showMaximized()
 
     def on_tab_changed(self, index):
-        if index == 1:  # Electrical
+        """Validates data after a tab has been changed. Reverts if invalid."""
+
+        # If switched to Electrical tab (index 1)
+        if index == 1:
             if not self.project_information_tab.check_info_tab_ui_rules():
+                # Revert back to Project Information tab
                 self.tabWidget.setCurrentIndex(0)
 
-        if index == 2 or index == 3:  # Installation, Result
+        # If switched to Installation or Result (index 2 or 3)
+        elif index in (2, 3):
+            prev_index = self.tabWidget.currentIndex()
+
+            # If switched directly from one to the other (2 <-> 3), do nothing
+            # (but this will NOT work because currentIndex is now the *new* index)
+            # So instead, cache the last index in the class manually
+
+            if getattr(self, "_last_tab_index", None) in (2, 3):
+                self._last_tab_index = index
+                return
+
             if not self.electrical_tab.check_electrical_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(1)
             elif not self.project_information_tab.check_info_tab_ui_rules():
@@ -68,6 +109,9 @@ class TenderApplication(QMainWindow):
             else:
                 self.result_tab.generate_panels()
                 self.installation_tab.generate_result()
+
+        # Update the cached tab index
+        self._last_tab_index = index
 
     def set_rev_hint(self, rev_number):
         success, revision_project = get_project(code=self.current_project.code,
@@ -98,9 +142,9 @@ class TenderApplication(QMainWindow):
         info_tab.proj_avl_siemens.setToolTip(
             f"Rev:<b>{rev_number}</b><br><b>{'siemens' in rev_specs['project_info']['proj_avl']}</b>")
         info_tab.proj_avl_schneider.setToolTip(
-            f"Rev:<b>{rev_number}</b><br><b>{'Schneider Electric' in rev_specs['project_info']['proj_avl']}</b>")
+            f"Rev:<b>{rev_number}</b><br><b>{'schneider electric' in rev_specs['project_info']['proj_avl']}</b>")
         info_tab.proj_avl_hyundai.setToolTip(
-            f"Rev:<b>{rev_number}</b><br><b>{'Hyundai' in rev_specs['project_info']['proj_avl']}</b>")
+            f"Rev:<b>{rev_number}</b><br><b>{'hyundai' in rev_specs['project_info']['proj_avl']}</b>")
 
         """----------------------project_electrical_tab----------------------"""
 

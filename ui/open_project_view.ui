@@ -1272,22 +1272,6 @@ QListWidget::item:selected {
         </property>
        </widget>
       </item>
-      <item row="10" column="0">
-       <widget class="QPushButton" name="new_revision_btn">
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::NoFocus</enum>
-        </property>
-        <property name="text">
-         <string>Create New Rev.</string>
-        </property>
-       </widget>
-      </item>
       <item row="10" column="4">
        <widget class="QPushButton" name="open_project_btn">
         <property name="minimumSize">
@@ -1313,7 +1297,6 @@ QListWidget::item:selected {
   <tabstop>project_code</tabstop>
   <tabstop>project_unique_code</tabstop>
   <tabstop>open_project_btn</tabstop>
-  <tabstop>new_revision_btn</tabstop>
  </tabstops>
  <resources/>
  <connections/>
