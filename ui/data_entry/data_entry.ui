@@ -3745,6 +3745,26 @@ QPushButton:pressed {
                <string>LadderCover</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>LadderRiser</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Tray</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>TrayCover</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>TrayRiser</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item row="1" column="0" colspan="2">
@@ -4427,27 +4447,47 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
+               <string>Tray Connector</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>Ladder Screw</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Support U</string>
+               <string>Tray Screw</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Support L</string>
+               <string>Ladder Support U</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Support Screw</string>
+               <string>Tray Support U</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Riser</string>
+               <string>Ladder Support L</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Tray Support L</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Ladder Support Screw</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Tray Support Screw</string>
               </property>
              </item>
             </widget>

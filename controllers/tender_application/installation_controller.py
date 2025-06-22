@@ -59,6 +59,16 @@ class InstallationController(PanelController):
                 except Exception:
                     pass
 
+        if self.n_airtank <= 2:
+            self.ladder_size = self.tray_size = 200  # mm
+        elif self.n_airtank <= 4:
+            self.ladder_size = self.tray_size = 300  # mm
+        else:
+            self.ladder_size = self.tray_size = 400  # mm
+
+        self.ladder_length = round(self.electrical_specs["installation"]["height"] * 1.5, 2)  # ~ ladder_cover_length
+        self.tray_length = round(self.electrical_specs["installation"]["width"] * 1.5, 2)
+
         self.choose_lcb()
         self.choose_jb()
         self.choose_gland_valvecable_flexible_conduit()
@@ -67,7 +77,10 @@ class InstallationController(PanelController):
         self.choose_power_cable_to_motors()
         self.choose_ladder_and_cover()
         self.choose_ladder_connector_and_screw()
+        self.choose_tray_and_cover()
+        self.choose_tray_connector_and_screw()
         self.choose_supports()
+        self.choose_tray_riser()
         return self.panel
 
     def choose_lcb(self):
@@ -387,26 +400,20 @@ class InstallationController(PanelController):
                 )
                 print(cable)
 
+    """ ladder """
+
     def choose_ladder_and_cover(self):
         if self.n_airtank == 0 or self.electrical_specs["installation"]["height"] == 0:
             return
 
-        if self.n_airtank <= 2:
-            ladder_size = 200  # mm
-        elif self.n_airtank <= 4:
-            ladder_size = 300  # mm
-        else:
-            ladder_size = 400  # mm
-
-        ladder_length = round(self.electrical_specs["installation"]["height"] * 1.5, 2)  # ~ ladder_cover_length
-        success, ladder = get_wire_cable_by_spec("Ladder", l_number=1, l_size=ladder_size)
+        success, ladder = get_wire_cable_by_spec("Ladder", l_number=1, l_size=self.ladder_size)
         if success:
             self.add_to_panel(
                 type=f"Ladder",
                 brand=ladder["brand"],
                 order_number=ladder["order_number"],
-                specifications=f"{ladder_size}mm²",
-                quantity=ladder_length,
+                specifications=f"{self.ladder_size}mm²",
+                quantity=self.ladder_length,
                 price=ladder['price'],
                 last_price_update=f"{ladder['supplier_name']}\n{ladder['date']}",
                 note=f"For {self.n_airtank} Air Tanks")
@@ -416,22 +423,22 @@ class InstallationController(PanelController):
                 type=f"Ladder",
                 brand="",
                 order_number="",
-                specifications=f"{ladder_size}mm²",
-                quantity=ladder_length,
+                specifications=f"{self.ladder_size}mm²",
+                quantity=self.ladder_length,
                 price=0,
                 last_price_update="❌ Ladder not found",
                 note=f"For {self.n_airtank} Air Tanks")
 
             print(ladder)
 
-        success, ladder_cover = get_wire_cable_by_spec("LadderCover", l_number=1, l_size=ladder_size)
+        success, ladder_cover = get_wire_cable_by_spec("LadderCover", l_number=1, l_size=self.ladder_size)
         if success:
             self.add_to_panel(
                 type=f"Ladder Cover",
                 brand=ladder_cover["brand"],
                 order_number=ladder_cover["order_number"],
-                specifications=f"{ladder_size}mm²",
-                quantity=ladder_length,
+                specifications=f"{self.ladder_size}mm²",
+                quantity=self.ladder_length,
                 price=ladder_cover['price'],
                 last_price_update=f"{ladder_cover['supplier_name']}\n{ladder_cover['date']}",
                 note=f"For {self.n_airtank} Air Tanks")
@@ -441,8 +448,8 @@ class InstallationController(PanelController):
                 type=f"Ladder Cover",
                 brand="",
                 order_number="",
-                specifications=f"{ladder_size}mm²",
-                quantity=ladder_length,
+                specifications=f"{self.ladder_size}mm²",
+                quantity=self.ladder_length,
                 price=0,
                 last_price_update="❌ Ladder Cover not found",
                 note=f"For {self.n_airtank} Air Tanks")
@@ -502,11 +509,11 @@ class InstallationController(PanelController):
         if self.electrical_specs["installation"]["height"] == 0:
             return
 
-        n_support_u     = round(self.electrical_specs["installation"]["height"] * 1.3 , 2)
-        success, support_u = get_general_by_spec(type="Support U", specification="8")
+        n_support_u = round(self.electrical_specs["installation"]["height"] * 1.3, 2)
+        success, support_u = get_general_by_spec(type="Ladder Support U", specification="8")
         if success:
             self.add_to_panel(
-                type=f"Support U8",
+                type=f"Ladder Support U8",
                 brand=support_u["brand"],
                 order_number=support_u["order_number"],
                 specifications="",
@@ -516,20 +523,20 @@ class InstallationController(PanelController):
                 note=f"For {self.electrical_specs['installation']['height']} Height")
         else:
             self.add_to_panel(
-                type=f"Support U8",
+                type=f"Ladder Support U8",
                 brand="",
                 order_number="",
                 specifications="",
                 quantity=n_support_u,
                 price=0,
-                last_price_update="❌ Support U not found",
+                last_price_update="❌ Ladder Support U not found",
                 note=f"For {self.electrical_specs['installation']['height']} Height")
 
-        n_support_l     = round(self.electrical_specs["installation"]["height"] * 0.6 , 2)
-        success, support_l = get_general_by_spec(type="Support L", specification="5")
+        n_support_l = round(self.electrical_specs["installation"]["height"] * 0.6, 2)
+        success, support_l = get_general_by_spec(type="Ladder Support L", specification="5")
         if success:
             self.add_to_panel(
-                type=f"Support L5",
+                type=f"Ladder Support L5",
                 brand=support_l["brand"],
                 order_number=support_l["order_number"],
                 specifications="",
@@ -539,21 +546,20 @@ class InstallationController(PanelController):
                 note=f"For Ladder_Height/1.5 x 0.6 Height")
         else:
             self.add_to_panel(
-                type=f"Support L5",
+                type=f"Ladder Support L5",
                 brand="",
                 order_number="",
                 specifications="",
                 quantity=n_support_l,
                 price=0,
-                last_price_update="❌ Support L not found",
+                last_price_update="❌ Ladder Support L not found",
                 note=f"For Ladder_Height/1.5 x 0.6 Height")
 
-
         n_support_screw = self.electrical_specs["installation"]["height"] * 8
-        success, support_screw = get_general_by_spec(type="Support Screw", specification="8")
+        success, support_screw = get_general_by_spec(type="Ladder Support Screw", specification="8")
         if success:
             self.add_to_panel(
-                type=f"Support Screw",
+                type=f"Ladder Support Screw",
                 brand=support_screw["brand"],
                 order_number=support_screw["order_number"],
                 specifications="",
@@ -563,20 +569,20 @@ class InstallationController(PanelController):
                 note=f"For Ladder_Height/1.5 x 8")
         else:
             self.add_to_panel(
-                type=f"Support Screw",
+                type=f"Ladder Support Screw",
                 brand="",
                 order_number="",
                 specifications="",
                 quantity=n_support_screw,
                 price=0,
-                last_price_update="❌ Support Screw not found",
+                last_price_update="❌ Ladder Support Screw not found",
                 note=f"For Ladder_Height/1.5 x 8")
 
         n_riser = 2
-        success, riser = get_general_by_spec(type="Riser")
+        success, riser = get_wire_cable_by_spec("LadderRiser", l_number=1, l_size=self.ladder_size)
         if success:
             self.add_to_panel(
-                type=f"Riser",
+                type=f"Ladder Riser",
                 brand=riser["brand"],
                 order_number=riser["order_number"],
                 specifications="",
@@ -586,7 +592,7 @@ class InstallationController(PanelController):
                 note=f"According to ladder size")
         else:
             self.add_to_panel(
-                type=f"Riser",
+                type=f"Ladder Riser",
                 brand="",
                 order_number="",
                 specifications="",
@@ -595,6 +601,204 @@ class InstallationController(PanelController):
                 last_price_update="❌ Riser not found",
                 note=f"According to ladder size")
 
+    """ tray """
+
+    def choose_tray_and_cover(self):
+
+        success, tray = get_wire_cable_by_spec("Tray", l_number=1, l_size=self.tray_size)
+        if success:
+            self.add_to_panel(
+                type=f"Tray",
+                brand=tray["brand"],
+                order_number=tray["order_number"],
+                specifications=f"{self.tray_length}mm²",
+                quantity=self.tray_length,
+                price=tray['price'],
+                last_price_update=f"{tray['supplier_name']}\n{tray['date']}",
+                note=f"For {self.n_airtank} Air Tanks")
+
+        else:
+            self.add_to_panel(
+                type=f"Tray",
+                brand="",
+                order_number="",
+                specifications=f"{self.tray_length}mm²",
+                quantity=self.tray_length,
+                price=0,
+                last_price_update="❌ Tray not found",
+                note=f"For {self.n_airtank} Air Tanks")
+
+            print(tray)
+
+        success, tray_cover = get_wire_cable_by_spec("TrayCover", l_number=1, l_size=self.ladder_size)
+        if success:
+            self.add_to_panel(
+                type=f"Tray Cover",
+                brand=tray_cover["brand"],
+                order_number=tray_cover["order_number"],
+                specifications=f"{self.tray_length}mm²",
+                quantity=self.tray_length,
+                price=tray_cover['price'],
+                last_price_update=f"{tray_cover['supplier_name']}\n{tray_cover['date']}",
+                note=f"For {self.n_airtank} Air Tanks")
+
+        else:
+            self.add_to_panel(
+                type=f"Tray Cover",
+                brand="",
+                order_number="",
+                specifications=f"{self.tray_length}mm²",
+                quantity=self.tray_length,
+                price=0,
+                last_price_update="❌ Tray Cover not found",
+                note=f"For {self.n_airtank} Air Tanks")
+
+    def choose_tray_connector_and_screw(self):
+        if self.electrical_specs["installation"]["width"] == 0:
+            return
+
+        n_connectors = int(self.electrical_specs["installation"]["width"] * 1.5 / 2) * 2
+        n_screw = n_connectors * 16
+
+        success, connector = get_general_by_spec(type="Tray Connector")
+        if success:
+            self.add_to_panel(
+                type=f"Tray Connector",
+                brand=connector["brand"],
+                order_number=connector["order_number"],
+                specifications="",
+                quantity=n_connectors,
+                price=connector['price'],
+                last_price_update=f"{connector['supplier_name']}\n{connector['date']}",
+                note="")
+        else:
+            self.add_to_panel(
+                type=f"Tray Connector",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=n_connectors,
+                price=0,
+                last_price_update="❌ Tray Connector not found",
+                note=f"For {self.n_airtank} Air Tanks")
+
+        success, screw = get_general_by_spec(type="Tray Screw")
+        if success:
+            self.add_to_panel(
+                type=f"Tray Screw",
+                brand=screw["brand"],
+                order_number=screw["order_number"],
+                specifications="",
+                quantity=n_screw,
+                price=screw['price'],
+                last_price_update=f"{screw['supplier_name']}\n{screw['date']}",
+                note=f"For {n_connectors} Tray Connector")
+        else:
+            self.add_to_panel(
+                type=f"Tray Screw",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=n_screw,
+                price=0,
+                last_price_update="❌ Tray Connector found",
+                note=f"For {n_connectors} Tray Connector")
+
+    def choose_tray_riser(self):
+        if self.electrical_specs["installation"]["width"] == 0:
+            return
+
+        n_support_u = round(self.electrical_specs["installation"]["width"] * 1.3, 2)
+        success, support_u = get_general_by_spec(type="Tray Support U", specification="8")
+        if success:
+            self.add_to_panel(
+                type=f"Tray Support U8",
+                brand=support_u["brand"],
+                order_number=support_u["order_number"],
+                specifications="",
+                quantity=n_support_u,
+                price=support_u['price'],
+                last_price_update=f"{support_u['supplier_name']}\n{support_u['date']}",
+                note=f"For {self.electrical_specs['installation']['width']} Width")
+        else:
+            self.add_to_panel(
+                type=f"Tray Support U8",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=n_support_u,
+                price=0,
+                last_price_update="❌ Tray Support U not found",
+                note=f"For {self.electrical_specs['installation']['width']} Width")
+
+        n_support_l = round(self.electrical_specs["installation"]["width"] * 0.6, 2)
+        success, support_l = get_general_by_spec(type="Tray Support L", specification="5")
+        if success:
+            self.add_to_panel(
+                type=f"Tray Support L5",
+                brand=support_l["brand"],
+                order_number=support_l["order_number"],
+                specifications="",
+                quantity=n_support_l,
+                price=support_l['price'],
+                last_price_update=f"{support_l['supplier_name']}\n{support_l['date']}",
+                note=f"For Ladder_Width/1.5 x 0.6 Width")
+        else:
+            self.add_to_panel(
+                type=f"Tray Support L5",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=n_support_l,
+                price=0,
+                last_price_update="❌ Tray Support L not found",
+                note=f"For Ladder_Width/1.5 x 0.6 Width")
+
+        n_support_screw = self.electrical_specs["installation"]["width"] * 8
+        success, support_screw = get_general_by_spec(type="Tray Support Screw", specification="8")
+        if success:
+            self.add_to_panel(
+                type=f"Tray Support Screw",
+                brand=support_screw["brand"],
+                order_number=support_screw["order_number"],
+                specifications="",
+                quantity=n_support_screw,
+                price=support_screw['price'],
+                last_price_update=f"{support_screw['supplier_name']}\n{support_screw['date']}",
+                note=f"For Ladder_Height/1.5 x 8")
+        else:
+            self.add_to_panel(
+                type=f"Tray Support Screw",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=n_support_screw,
+                price=0,
+                last_price_update="❌ Tray Support Screw not found",
+                note=f"For Ladder_Height/1.5 x 8")
+
+        n_riser = 2
+        success, riser = get_wire_cable_by_spec("LadderRiser", l_number=1, l_size=self.ladder_size)
+        if success:
+            self.add_to_panel(
+                type=f"Tray Riser",
+                brand=riser["brand"],
+                order_number=riser["order_number"],
+                specifications="",
+                quantity=n_riser,
+                price=riser['price'],
+                last_price_update=f"{riser['supplier_name']}\n{riser['date']}",
+                note=f"According to ladder size")
+        else:
+            self.add_to_panel(
+                type=f"Tray Riser",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=n_riser,
+                price=0,
+                last_price_update="❌ Riser not found",
+                note=f"According to ladder size")
 
 
 def cable_rating(cable_length_m, cable_current_a):

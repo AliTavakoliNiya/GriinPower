@@ -112,30 +112,60 @@ class GeneralDataEntryView:
                 'label': "",
                 'entry': "None"
             },
+            'Tray Connector': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
             'Ladder Screw': {
                 'show': False,
                 'label': "",
                 'entry': "None"
             },
-            'Support U': {
-                'show': True,
-                'label': "*Size",
-                'entry': ""
-            },
-            'Support L': {
-                'show': True,
-                'label': "*Size",
-                'entry': ""
-            },
-            'Support Screw': {
-                'show': True,
-                'label': "*Size",
-                'entry': ""
-            },
-            'Riser': {
+            'Tray Screw': {
                 'show': False,
                 'label': "",
                 'entry': "None"
+            },
+            'Ladder Support U': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Ladder Support L': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Ladder Support Screw': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Ladder Riser': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Tray Support U': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Tray Support L': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Tray Support Screw': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
+            },
+            'Tray Riser': {
+                'show': True,
+                'label': "*Size",
+                'entry': ""
             },
             'Griin Bagfilter': {
                 'show': False,

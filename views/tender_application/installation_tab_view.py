@@ -6,9 +6,6 @@ from controllers.tender_application.project_session_controller import ProjectSes
 import pandas as pd
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QHeaderView, QTableView
-
-from controllers.tender_application.panel_controller import PanelController
-from models.items.electrical_panel import get_electrical_panel_by_spec
 from utils.pandas_model import PandasModel
 from views.message_box_view import show_message
 
@@ -29,7 +26,6 @@ class InstallationTab(QWidget):
 
         self.update_table.clicked.connect(self.generate_result)
         self.set_installation_ui_values()
-
 
     def depth_field_value_handler(self):
         self.electrical_specs["installation"]["depth"] = self.depth_field.value()
@@ -90,9 +86,9 @@ class InstallationTab(QWidget):
                 max_width = max(max_width, metrics.horizontalAdvance(text) + 20)
             table.setColumnWidth(col, max_width)
 
-
     """ Load Pervios Revision as need """
-    def set_installation_ui_values(self): # Using for open pervios project
+
+    def set_installation_ui_values(self):  # Using for open pervios project
         """
         Set values for UI elements based on the self.electrical_specs dictionary.
         """
