@@ -254,7 +254,7 @@ QPushButton:pressed {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>10</number>
+       <number>9</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -4490,6 +4490,26 @@ QPushButton:pressed {
                <string>Tray Support Screw</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>Flexible Conduit Fixer</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cable Shoe</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cable Trap</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cable Tag</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item row="5" column="1">
@@ -4589,19 +4609,6 @@ QPushButton:pressed {
              </property>
             </widget>
            </item>
-           <item row="7" column="0" colspan="2">
-            <widget class="QLabel" name="label_63">
-             <property name="maximumSize">
-              <size>
-               <width>73</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>*Price (IRR)</string>
-             </property>
-            </widget>
-           </item>
            <item row="4" column="3">
             <spacer name="verticalSpacer_21">
              <property name="orientation">
@@ -4683,13 +4690,10 @@ QPushButton:pressed {
              </property>
             </widget>
            </item>
-           <item row="3" column="4" colspan="2">
-            <spacer name="horizontalSpacer_8">
+           <item row="1" column="6">
+            <spacer name="horizontalSpacer_15">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -4699,10 +4703,26 @@ QPushButton:pressed {
              </property>
             </spacer>
            </item>
-           <item row="1" column="6">
-            <spacer name="horizontalSpacer_15">
+           <item row="7" column="0" colspan="3">
+            <widget class="QLabel" name="label_63">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Price (IRR)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="4" colspan="3">
+            <spacer name="horizontalSpacer_8">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>

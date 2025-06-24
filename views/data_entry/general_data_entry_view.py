@@ -172,6 +172,26 @@ class GeneralDataEntryView:
                 'label': "",
                 'entry': "None"
             },
+            'Flexible Conduit Fixer': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
+            'Cable Shoe': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
+            'Cable Trap': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
+            'Cable Tag': {
+                'show': False,
+                'label': "",
+                'entry': "None"
+            },
             }
 
         current_type = self.ui.general_type.currentText()

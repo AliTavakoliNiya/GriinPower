@@ -74,7 +74,7 @@ class PanelController:
                                                       brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
-                type=f"Comector",
+                type=f"Contactor",
                 brand=contactor["brand"],
                 order_number=contactor["order_number"],
                 specifications=f"Current: {contactor['rated_current']}A",

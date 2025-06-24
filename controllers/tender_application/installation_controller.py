@@ -14,6 +14,7 @@ class InstallationController(PanelController):
     Specialized controller for bagfilter panel.
     """
 
+
     def __init__(self):
         super().__init__("installation")
 
@@ -21,6 +22,19 @@ class InstallationController(PanelController):
         """
                 Main controller for building installation from tender_application specifications.
         """
+
+        instruments = self.electrical_specs["bagfilter"]["instruments"]
+        for instrument_name, properties in instruments.items():
+            qty = properties["qty"]
+            if qty == 0:
+                continue
+
+            name = "temperature_transmitter" if instrument_name == "inlet_temperature_transmitter" \
+                                                or instrument_name == "outlet_temperature_transmitter" \
+                                                or instrument_name == "bearing_temperature_transmitter" \
+                                                or instrument_name == "pt100" \
+                else instrument_name
+            name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
         # calculate n_valves and n_airtanks
         self.n_valves = 0
@@ -50,12 +64,22 @@ class InstallationController(PanelController):
 
         # calculates n_motors
         self.total_motors_qty = 0
+        self.total_instruments = 0
         for section in self.electrical_specs.values():
             motors = section.get("motors", {})
+            instruments = section.get("instruments", {})
             for motor_name, motor_data in motors.items():
                 try:
                     qty = motor_data.get("qty", 0)
                     self.total_motors_qty += qty
+                except Exception:
+                    pass
+            for instrument_name, instrument_data in instruments.items():
+                try:
+                    if instrument_name == "ptc" or instrument_name == "vibration_transmitter":
+                        continue # skip this 2 instruments
+                    qty  = instrument_data.get("qty", 0)
+                    self.total_instruments += qty
                 except Exception:
                     pass
 
@@ -81,6 +105,7 @@ class InstallationController(PanelController):
         self.choose_tray_connector_and_screw()
         self.choose_supports()
         self.choose_tray_riser()
+        self.choose_cableshow_cabletrap_cabletag()
         return self.panel
 
     def choose_lcb(self):
@@ -121,7 +146,7 @@ class InstallationController(PanelController):
                 specifications="",
                 quantity=total_lcb_for_speed_qty,
                 price=0,
-                last_price_update="❌ Junction Box not found",
+                last_price_update="❌ Local Box not found",
                 note=notes
             )
 
@@ -151,6 +176,30 @@ class InstallationController(PanelController):
                 note=""
             )
 
+        success, jb = get_electrical_panel_by_spec(type="Junction Box", width=100, height=100, depth=60)
+        if success:
+            self.add_to_panel(
+                type="Junction Box",
+                brand=jb['brand'],
+                order_number=jb["order_number"],
+                specifications=f"100mm x 100mm x 60mm",
+                quantity=self.total_instruments,
+                price=jb['price'],
+                last_price_update=f"{jb['supplier_name']}\n{jb['date']}",
+                note=""
+            )
+        else:
+            self.add_to_panel(
+                type="Junction Box",
+                brand="",
+                order_number="",
+                specifications=f"100mm x 100mm x 60mm",
+                quantity=self.total_instruments,
+                price=0,
+                last_price_update="❌ Junction Box not found",
+                note=""
+            )
+
     def choose_gland_valvecable_flexible_conduit(self):
 
         if self.n_valves == 0 or self.n_airtank == 0:
@@ -164,10 +213,10 @@ class InstallationController(PanelController):
                 brand=gland["brand"],
                 order_number="",
                 specifications="PG16",
-                quantity=self.n_valves * 2,
+                quantity=self.n_valves * 2 + self.total_instruments,
                 price=gland["price"],
                 last_price_update=f"{gland.get('supplier_name', '')}\n{gland.get('date', '')}",
-                note=f"{self.n_valves} Valves"
+                note=f"{self.n_valves} Valves and {self.total_instruments} Instruments"
             )
         else:
             self.add_to_panel(
@@ -175,11 +224,10 @@ class InstallationController(PanelController):
                 brand="",
                 order_number="",
                 specifications="PG16",
-                quantity=self.n_valves * 2,
+                quantity=self.n_valves * 2 + self.total_instruments,
                 price=0,
                 last_price_update=f"❌ Gland not found",
-                note=f"{self.n_valves} Valves"
-            )
+                note=f"{self.n_valves} Valves and {self.total_instruments} Instruments")
 
         # choose gland for airtank
         success, gland = get_general_by_spec("Gland", specification="PG21")
@@ -189,10 +237,10 @@ class InstallationController(PanelController):
                 brand=gland["brand"],
                 order_number="",
                 specifications="PG21",
-                quantity=self.n_airtank * 2,
+                quantity=self.n_airtank * 2 + self.total_instruments * 4,
                 price=gland["price"],
                 last_price_update=f"{gland.get('supplier_name', '')}\n{gland.get('date', '')}",
-                note=f"{self.n_airtank} Air Tank"
+                note=f"{self.n_airtank} Air Tank and {self.total_instruments} Instruments"
             )
         else:
             self.add_to_panel(
@@ -200,10 +248,10 @@ class InstallationController(PanelController):
                 brand="",
                 order_number="",
                 specifications="PG21",
-                quantity=self.n_airtank * 2,
+                quantity=self.n_airtank * 2 + self.total_instruments * 4,
                 price=0,
                 last_price_update=f"❌ Gland not found",
-                note=f"{self.n_airtank} Air Tank"
+                note=f"{self.n_airtank} Air Tank and {self.total_instruments} Instruments"
             )
 
         # choose cable 3x1.5 for valves
@@ -239,10 +287,10 @@ class InstallationController(PanelController):
                 brand=conduit["brand"],
                 order_number="",
                 specifications=f"{conduit['l_number']}x{conduit['l_size']}mm²",
-                quantity=self.n_valves * 2,
+                quantity=self.n_valves * 2 + self.total_instruments * 2,
                 price=conduit["price"],
                 last_price_update=f"{conduit.get('supplier_name', '')}\n{conduit.get('date', '')}",
-                note=f"{self.n_valves} Valves"
+                note=f"{self.n_valves} Valves  and {self.total_instruments} Instruments"
             )
         else:
             self.add_to_panel(
@@ -250,10 +298,34 @@ class InstallationController(PanelController):
                 brand="",
                 order_number="",
                 specifications="",
-                quantity=self.n_valves * 2,
+                quantity=self.n_valves * 2 + self.total_instruments * 2,
                 price=0,
                 last_price_update=f"❌ Flexible Conduit not found",
-                note=f"{self.n_valves} Valves"
+                note=f"{self.n_valves} Valves  and {self.total_instruments} Instruments"
+            )
+
+        # flexible conduit Fixer
+        success, conduit_fixer = get_general_by_spec("Flexible Conduit Fixer")
+        if success:
+            self.add_to_panel(
+                type="Flexible Conduit Fixer",
+                brand=conduit_fixer["brand"],
+                order_number="",
+                quantity= self.total_instruments * 2,
+                price=conduit_fixer["price"],
+                last_price_update=f"{conduit_fixer.get('supplier_name', '')}\n{conduit_fixer.get('date', '')}",
+                note=f"For {self.total_instruments} Instruments"
+            )
+        else:
+            self.add_to_panel(
+                type="Flexible Conduit Fixer",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity= self.total_instruments * 2,
+                price=0,
+                last_price_update=f"❌ Flexible Conduit Fixer not found",
+                note=f"For {self.total_instruments} Instruments"
             )
 
     # signal cable to air tanks
@@ -510,6 +582,7 @@ class InstallationController(PanelController):
             return
 
         n_support_u = round(self.electrical_specs["installation"]["height"] * 1.3, 2)
+        n_support_u += round(self.total_instruments * 2, 2)
         success, support_u = get_general_by_spec(type="Ladder Support U", specification="8")
         if success:
             self.add_to_panel(
@@ -520,7 +593,7 @@ class InstallationController(PanelController):
                 quantity=n_support_u,
                 price=support_u['price'],
                 last_price_update=f"{support_u['supplier_name']}\n{support_u['date']}",
-                note=f"For {self.electrical_specs['installation']['height']} Height")
+                note=f"For {self.electrical_specs['installation']['height']} Height and {self.total_instruments} Instruments")
         else:
             self.add_to_panel(
                 type=f"Ladder Support U8",
@@ -530,9 +603,10 @@ class InstallationController(PanelController):
                 quantity=n_support_u,
                 price=0,
                 last_price_update="❌ Ladder Support U not found",
-                note=f"For {self.electrical_specs['installation']['height']} Height")
+                note=f"For {self.electrical_specs['installation']['height']} Height and {self.total_instruments} Instruments")
 
         n_support_l = round(self.electrical_specs["installation"]["height"] * 0.6, 2)
+        n_support_l += round(self.total_instruments * 0.5, 2)
         success, support_l = get_general_by_spec(type="Ladder Support L", specification="5")
         if success:
             self.add_to_panel(
@@ -543,7 +617,7 @@ class InstallationController(PanelController):
                 quantity=n_support_l,
                 price=support_l['price'],
                 last_price_update=f"{support_l['supplier_name']}\n{support_l['date']}",
-                note=f"For Ladder_Height/1.5 x 0.6 Height")
+                note=f"For Ladder_Height/1.5 x 0.6 Height and {self.total_instruments} Instruments")
         else:
             self.add_to_panel(
                 type=f"Ladder Support L5",
@@ -553,9 +627,10 @@ class InstallationController(PanelController):
                 quantity=n_support_l,
                 price=0,
                 last_price_update="❌ Ladder Support L not found",
-                note=f"For Ladder_Height/1.5 x 0.6 Height")
+                note=f"For Ladder_Height/1.5 x 0.6 Height and {self.total_instruments} Instruments")
 
         n_support_screw = self.electrical_specs["installation"]["height"] * 8
+        n_support_screw += self.total_instruments * 8
         success, support_screw = get_general_by_spec(type="Ladder Support Screw", specification="8")
         if success:
             self.add_to_panel(
@@ -566,7 +641,7 @@ class InstallationController(PanelController):
                 quantity=n_support_screw,
                 price=support_screw['price'],
                 last_price_update=f"{support_screw['supplier_name']}\n{support_screw['date']}",
-                note=f"For Ladder_Height/1.5 x 8")
+                note=f"For Ladder_Height/1.5 x 8 and {self.total_instruments} Instruments")
         else:
             self.add_to_panel(
                 type=f"Ladder Support Screw",
@@ -576,7 +651,7 @@ class InstallationController(PanelController):
                 quantity=n_support_screw,
                 price=0,
                 last_price_update="❌ Ladder Support Screw not found",
-                note=f"For Ladder_Height/1.5 x 8")
+                note=f"For Ladder_Height/1.5 x 8 and {self.total_instruments} Instruments")
 
         n_riser = 2
         success, riser = get_wire_cable_by_spec("LadderRiser", l_number=1, l_size=self.ladder_size)
@@ -799,6 +874,79 @@ class InstallationController(PanelController):
                 price=0,
                 last_price_update="❌ Riser not found",
                 note=f"According to ladder size")
+
+    def choose_cableshow_cabletrap_cabletag(self):
+        # Cable Shoe
+        success, cable_show = get_general_by_spec("Cable Shoe")
+        if success:
+            self.add_to_panel(
+                type="Cable Shoe",
+                brand=cable_show["brand"],
+                order_number="",
+                quantity=self.total_instruments * 5,
+                price=cable_show["price"],
+                last_price_update=f"{cable_show.get('supplier_name', '')}\n{cable_show.get('date', '')}",
+                note=f"For {self.total_instruments} Instruments"
+            )
+        else:
+            self.add_to_panel(
+                type="Cable Shoe",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=self.total_instruments * 5,
+                price=0,
+                last_price_update=f"❌ Cable Shoe not found",
+                note=f"For {self.total_instruments} Instruments"
+            )
+
+        # Cable Trap
+        success, cable_show = get_general_by_spec("Cable Trap")
+        if success:
+            self.add_to_panel(
+                type="Cable Trap",
+                brand=cable_show["brand"],
+                order_number="",
+                quantity=self.n_airtank,
+                price=cable_show["price"],
+                last_price_update=f"{cable_show.get('supplier_name', '')}\n{cable_show.get('date', '')}",
+                note=f"For {self.n_airtank} AirTank"
+            )
+        else:
+            self.add_to_panel(
+                type="Cable Trap",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity=self.n_airtank,
+                price=0,
+                last_price_update=f"❌ Cable Trap not found",
+                note=f"For {self.n_airtank} AirTank"
+            )
+
+        # Cable Tag
+        success, cable_tag = get_general_by_spec("Cable Tag")
+        if success:
+            self.add_to_panel(
+                type="Cable Tag",
+                brand=cable_tag["brand"],
+                order_number="",
+                quantity= self.n_airtank + self.total_instruments,
+                price=cable_tag["price"],
+                last_price_update=f"{cable_tag.get('supplier_name', '')}\n{cable_tag.get('date', '')}",
+                note=f"For {self.n_airtank} and {self.total_instruments} Instruments"
+            )
+        else:
+            self.add_to_panel(
+                type="Cable Tag",
+                brand="",
+                order_number="",
+                specifications="",
+                quantity= self.n_airtank + self.total_instruments,
+                price=0,
+                last_price_update=f"❌ Cable Tag not found",
+                note=f"For {self.n_airtank} and {self.total_instruments} Instruments"
+            )
 
 
 def cable_rating(cable_length_m, cable_current_a):
