@@ -34,13 +34,13 @@ class ResultTab(QWidget):
         self.tabWidget.setCurrentIndex(0)
 
         self.tables = {
-            "bagfilter_panel_table": self.bagfilter_panel_table,
-            "fan_damper_panel_table": self.fan_damper_panel_table,
-            "transport_panel_table": self.transport_panel_table,
-            "fresh_air_panel_table": self.fresh_air_panel_table,
-            "vibration_panel_table": self.vibration_panel_table,
-            "hopper_heater_panel_table": self.hopper_heater_panel_table,
-            "summary_panel_table": self.summary_panel_table
+            "bagfilter_table": self.bagfilter_table,
+            "fan_damper_table": self.fan_damper_table,
+            "transport_table": self.transport_table,
+            "fresh_air_table": self.fresh_air_table,
+            "vibration_table": self.vibration_table,
+            "hopper_heater_table": self.hopper_heater_table,
+            "summary_table": self.summary_table
         }
 
         self.panels = {}
@@ -94,31 +94,40 @@ class ResultTab(QWidget):
             electric_motor_controller = ElectricMotorController()
             electric_motor_price_and_effective_date = electric_motor_controller.calculate_price()
 
-        self.generate_table(self.panels["bagfilter_panel"], self.tables["bagfilter_panel_table"])
-        self.generate_table(self.panels["fan_damper_panel"], self.tables["fan_damper_panel_table"])
-        self.generate_table(self.panels["transport_panel"], self.tables["transport_panel_table"])
-        self.generate_table(self.panels["fresh_air_panel"], self.tables["fresh_air_panel_table"])
-        self.generate_table(self.panels["vibration_panel"], self.tables["vibration_panel_table"])
-        self.generate_table(self.panels["hopper_heater_panel"], self.tables["hopper_heater_panel_table"])
+        self.generate_table(panel=self.panels["bagfilter_panel"], table=self.tables["bagfilter_table"])
+        self.generate_table(panel=self.panels["fan_damper_panel"], table=self.tables["fan_damper_table"])
+        self.generate_table(panel=self.panels["transport_panel"], table=self.tables["transport_table"])
+        self.generate_table(panel=self.panels["fresh_air_panel"], table=self.tables["fresh_air_table"])
+        self.generate_table(panel=self.panels["vibration_panel"], table=self.tables["vibration_table"])
+        self.generate_table(panel=self.panels["hopper_heater_panel"], table=self.tables["hopper_heater_table"])
         if self.main_view.electrical_tab.fan_checkbox.isChecked():
-            summary_data = self.generate_summary_panel(electric_motor_price_and_effective_date)
+            summary_data = self._generate_summary_table(electric_motor_price_and_effective_date)
         else:
-            summary_data = self.generate_summary_panel()
-        self.generate_table(summary_data, self.tables["summary_panel_table"])
+            summary_data = self._generate_summary_table()
+        self.generate_table(panel=summary_data, table=self.tables["summary_table"])
+
+    def _add_summary_row(self, df):
+        summary = {
+            col: df[col].sum() if col == "total_price" else ("Total" if col.lower() == "type" else "")
+            for col in df.columns
+        }
+        return pd.concat([df, pd.DataFrame([summary], index=["Total"])])
 
     def generate_table(self, panel, table):
         df = pd.DataFrame(panel)
         df = self._add_summary_row(df)
         model = PandasModel(df)
         table.setModel(model)
-
-        self._resize_columns_to_contents(model, table)
+        # if 'total_price' in df.columns and df.iloc[-1]['total_price'] == 0: # hide 0 price tabs
+        #     tab_name = f"self.{table.objectName().replace('table', 'tab')}.hide()"
+        #     eval(tab_name)
 
         header = table.horizontalHeader()
         for col in range(model.columnCount(None) - 1):
             header.setSectionResizeMode(col, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(model.columnCount(None) - 1, QHeaderView.Stretch)
 
+        self._resize_columns_to_contents(model, table)
         table.resizeRowsToContents()
 
     def _resize_columns_to_contents(self, model, table):
@@ -132,14 +141,7 @@ class ResultTab(QWidget):
                 max_width = max(max_width, metrics.horizontalAdvance(text) + 20)
             table.setColumnWidth(col, max_width)
 
-    def _add_summary_row(self, df):
-        summary = {
-            col: df[col].sum() if col == "total_price" else ("Total" if col.lower() == "type" else "")
-            for col in df.columns
-        }
-        return pd.concat([df, pd.DataFrame([summary], index=["Total"])])
-
-    def generate_summary_panel(self, electric_motor_price_and_effective_date=None):
+    def _generate_summary_table(self, electric_motor_price_and_effective_date=None):
         summary = {
             "title": [],
             "Price": [],

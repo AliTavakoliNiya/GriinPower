@@ -56,17 +56,17 @@ class InstallationTab(QWidget):
         df = pd.DataFrame(self.installation_panel)
         df = self._add_summary_row(df)
         model = PandasModel(df)
-        self.installation_panel_table.setModel(model)
+        self.installation_table.setModel(model)
 
-        self._resize_columns_to_contents(model, self.installation_panel_table)
+        self._resize_columns_to_contents(model, self.installation_table)
 
-        header = self.installation_panel_table.horizontalHeader()
+        header = self.installation_table.horizontalHeader()
         for col in range(model.columnCount(None) - 1):
             header.setSectionResizeMode(col, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(model.columnCount(None) - 1, QHeaderView.Stretch)
 
-        self.installation_panel_table.resizeRowsToContents()
-        self.installation_panel_table.setColumnHidden(2, True)  # hide order_number column
+        self.installation_table.resizeRowsToContents()
+        self.installation_table.setColumnHidden(2, True)  # hide order_number column
 
     def _add_summary_row(self, df):
         summary = {

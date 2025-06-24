@@ -57,7 +57,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="QTableView" name="installation_panel_table">
+           <widget class="QTableView" name="installation_table">
             <property name="selectionMode">
              <enum>QAbstractItemView::SingleSelection</enum>
             </property>
@@ -323,7 +323,7 @@ QPushButton:pressed {
   <tabstop>ccr_field</tabstop>
   <tabstop>update_table</tabstop>
   <tabstop>scrollArea</tabstop>
-  <tabstop>installation_panel_table</tabstop>
+  <tabstop>installation_table</tabstop>
  </tabstops>
  <resources/>
  <connections/>
