@@ -92,7 +92,7 @@ class InstallationTab(QWidget):
         """
         Set values for UI elements based on the self.electrical_specs dictionary.
         """
-        new_proj = True if self.current_project.revision == 0 else False
+        new_proj = True if self.current_project.revision == None else False
         try:
             # QLabel elements
             self.height_field.setValue(float(self.electrical_specs['installation']['height']))

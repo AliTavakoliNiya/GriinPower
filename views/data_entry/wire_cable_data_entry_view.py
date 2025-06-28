@@ -124,7 +124,7 @@ class TableWindow(QMainWindow):
         self.model.setHorizontalHeaderLabels(["Name", "L Number", "L Size", "Brand", "Note", "Price"])
 
         for row, item in enumerate(data):
-            self.model.setItem(row, 0, QStandardItem(f"item['type'] item['l_number']xitem['l_size']"))
+            self.model.setItem(row, 0, QStandardItem(f"{item['type']} {item['l_number']}x{item['l_size']}"))
             self.model.setItem(row, 1, QStandardItem(str(item["l_number"])))
             self.model.setItem(row, 2, QStandardItem(str(item["l_size"])))
             self.model.setItem(row, 3, QStandardItem(str(item["brand"])))

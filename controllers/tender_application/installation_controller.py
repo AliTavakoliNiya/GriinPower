@@ -29,38 +29,43 @@ class InstallationController(PanelController):
             if qty == 0:
                 continue
 
-            name = "temperature_transmitter" if instrument_name == "inlet_temperature_transmitter" \
-                                                or instrument_name == "outlet_temperature_transmitter" \
-                                                or instrument_name == "bearing_temperature_transmitter" \
-                                                or instrument_name == "pt100" \
-                else instrument_name
-            name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
         # calculate n_valves and n_airtanks
+        result = []
+        # Split string into parts inside and outside parentheses
+        parts = re.split(r'(\(.*?\))', self.electrical_specs["bagfilter"]["order"])
+
+        for part in parts:
+            if part.startswith('(') and part.endswith(')'):
+                # Inside parentheses - extract decimal numbers
+                nums = re.findall(r'\d+\.\d+|\d+', part)
+                result.extend(nums)
+            else:
+                # Outside parentheses - replace 'x' with '.' and remove non-digit/dot
+                cleaned = part.replace('x', '.')
+                cleaned = re.sub(r'[^\d\.]', '', cleaned)
+                # split by dots
+                nums = [p for p in cleaned.split('.') if p]
+                result.extend(nums)
+
         self.n_valves = 0
         self.n_airtank = 0
         if self.electrical_specs["bagfilter"]["type"] == "Griin/China":  # EX: 8.96x5.(2.7m).10
-            pattern = r'(\d+)\.(\d+)x(\d+)\.\((\d+(?:\.\d+)?)m\)\.(\d+)'
-            match = re.match(pattern, self.electrical_specs["bagfilter"]["order"])
-            if match:
-                self.n_valves = int(match.group(1))  # ~ compartments ~ jacks
-                bags = int(match.group(2))
-
-                if bags >= 128:
-                    self.n_airtank = 2
-                elif bags >= 64 and self.n_valves >= 6:
-                    self.n_airtank = 2
-                elif bags <= 96 and self.n_valves <= 5:
-                    self.n_airtank = 1
-                else:
-                    self.n_airtank = 0
+            self.n_valves = int(result[2])  # ~ compartments ~ jacks
+            bags = int(result[1])
+            if bags >= 128:
+                self.n_airtank = 2
+            elif bags >= 64 and self.n_valves >= 6:
+                self.n_airtank = 2
+            elif bags <= 96 and self.n_valves <= 5:
+                self.n_airtank = 1
+            else:
+                self.n_airtank = 0
 
         if self.electrical_specs["bagfilter"]["type"] == "BETH":  # 6.78x2.3.10
-            match = re.match(r'(\d+)\.(\d+)x(\d+)\.(\d+)\.(\d+)', self.electrical_specs["bagfilter"]["order"])
-            if match:
-                n_valve_per_airtank = int(match.group(1))
-                self.n_airtank = int(match.group(3))
-                self.n_valves = n_valve_per_airtank * self.n_airtank
+            n_valve_per_airtank = int(result[0])
+            self.n_airtank = int(result[2])
+            self.n_valves = n_valve_per_airtank * self.n_airtank
 
         # calculates n_motors
         self.total_motors_qty = 0

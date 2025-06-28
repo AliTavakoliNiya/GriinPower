@@ -62,8 +62,8 @@ def get_all_instruments():
     return instrument_list
 
 
-def get_instrument_by_spec(type, hart_comminucation=None, brands=[], order_number=None):
-    brands = [b.lower() for b in brands]
+def get_instrument_by_spec(type, hart_comminucation=None, brand=None, order_number=None):
+    brand = brand.lower() if brand else brand
     session = SessionLocal()
     try:
         instruments = (
@@ -88,7 +88,7 @@ def get_instrument_by_spec(type, hart_comminucation=None, brands=[], order_numbe
                 if attr_dict.get("hart_comminucation", "").lower() != str(hart_comminucation).lower():
                     continue
 
-            if brands and attr_dict.get("brand") not in brands:
+            if brand and attr_dict.get("brand") != brand:
                 continue
             if order_number and attr_dict.get("order_number") != order_number:
                 continue

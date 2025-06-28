@@ -173,7 +173,7 @@ class PanelController:
             return
         total_qty = qty * motor.bimetal_qty
 
-        success, bimetal = get_bimetal_by_current(rated_current=motor.current,
+        success, bimetal = get_bimetal_by_current(rated_current=motor.current*1.25,
                                                   brands=self.electrical_specs["project_info"]["proj_avl"])
 
         if success:
@@ -400,7 +400,7 @@ class PanelController:
                 else instrument_name
             name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
-            success, instrument = get_instrument_by_spec(name.replace('_', ' ').title())
+            success, instrument = get_instrument_by_spec(name.replace('_', ' ').title(), brand=properties["brand"])
 
             if success:
                 self.add_to_panel(

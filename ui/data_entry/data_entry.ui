@@ -254,7 +254,7 @@ QPushButton:pressed {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>9</number>
+       <number>8</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -2770,13 +2770,6 @@ QPushButton:pressed {
              </property>
             </widget>
            </item>
-           <item row="8" column="0" colspan="2">
-            <widget class="QLabel" name="label_57">
-             <property name="text">
-              <string>*Price (IRR)</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="5">
             <widget class="QLabel" name="label_56">
              <property name="text">
@@ -2796,6 +2789,13 @@ QPushButton:pressed {
               </size>
              </property>
             </spacer>
+           </item>
+           <item row="8" column="0" colspan="3">
+            <widget class="QLabel" name="label_57">
+             <property name="text">
+              <string>*Price (IRR)</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -3793,19 +3793,6 @@ QPushButton:pressed {
              </property>
             </widget>
            </item>
-           <item row="9" column="0" colspan="2">
-            <widget class="QLabel" name="label_75">
-             <property name="maximumSize">
-              <size>
-               <width>73</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>*Price (IRR)</string>
-             </property>
-            </widget>
-           </item>
            <item row="9" column="5" colspan="4">
             <widget class="QLineEdit" name="wire_cable_price">
              <property name="maximumSize">
@@ -3855,6 +3842,19 @@ QPushButton:pressed {
             <widget class="QLabel" name="general_spec_label_8">
              <property name="text">
               <string>mm²</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0" colspan="4">
+            <widget class="QLabel" name="label_75">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Price (IRR)</string>
              </property>
             </widget>
            </item>

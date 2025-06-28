@@ -803,18 +803,18 @@ class ElectricalTab(QWidget):
             show_message("Enter Bagfilter Order", "Error")
             return False
 
-        if self.bagfilter_type.currentIndex() == 1:
-            griin_pattern = r"^\d+(\.\d+)?x\d+\.?\(\d+(\.\d+)?m\)\.\d+$"
-            match = re.fullmatch(griin_pattern, self.electrical_specs["bagfilter"]["order"])
-            if not match:  # Griin/China
-                show_message("Please Follow Pattern Like 8.96×5.(2.7m).10 for Griin/China Model", "Error")
-                return False
-        if self.bagfilter_type.currentIndex() == 2:
-            beth_pattern = r"^(\d+)\.\d+x(\d+)\.(\d+)\.(\d+)$"
-            match = re.fullmatch(beth_pattern, self.electrical_specs["bagfilter"]["order"])
-            if not match:  # BETH
-                show_message("Please Follow Pattern Like 6.78x2.3.10 for BETH Model", "Error")
-                return False
+        # if self.bagfilter_type.currentIndex() == 1:
+        #     griin_pattern = r"^\d+(\.\d+)?x\d+\.?\(\d+(\.\d+)?m\)\.\d+$"
+        #     match = re.fullmatch(griin_pattern, self.electrical_specs["bagfilter"]["order"])
+        #     if not match:  # Griin/China
+        #         show_message("Please Follow Pattern Like 8.96×5.(2.7m).10 for Griin/China Model", "Error")
+        #         return False
+        # if self.bagfilter_type.currentIndex() == 2:
+        #     beth_pattern = r"^(\d+)\.\d+x(\d+)\.(\d+)\.(\d+)$"
+        #     match = re.fullmatch(beth_pattern, self.electrical_specs["bagfilter"]["order"])
+        #     if not match:  # BETH
+        #         show_message("Please Follow Pattern Like 6.78x2.3.10 for BETH Model", "Error")
+        #         return False
 
         if self.touch_panel_model.currentIndex() == 0:
             show_message("Select Touch Panel Model")
@@ -833,7 +833,7 @@ class ElectricalTab(QWidget):
         """
         Set values for UI elements based on the self.electrical_specs dictionary.
         """
-        new_proj = True if self.current_project.revision == 0 else False
+        new_proj = True if self.current_project.revision == None else False
         if new_proj:  # new proj
             self.transport_checkbox.setChecked(False)
             self.damper_checkbox.setChecked(False)

@@ -290,26 +290,6 @@
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="4" column="0">
@@ -759,26 +739,6 @@
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="4" column="1" colspan="2">
@@ -803,26 +763,6 @@
             <item>
              <property name="text">
               <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
              </property>
             </item>
            </widget>
@@ -2487,26 +2427,6 @@ QPushButton:pressed {
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="11" column="6">
@@ -2524,26 +2444,6 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
              </property>
             </item>
            </widget>
@@ -2565,26 +2465,6 @@ QPushButton:pressed {
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="14" column="6">
@@ -2602,26 +2482,6 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
              </property>
             </item>
            </widget>
@@ -2868,26 +2728,6 @@ QPushButton:pressed {
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="5" column="3" colspan="4">
@@ -2949,26 +2789,6 @@ QPushButton:pressed {
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="17" column="5" colspan="2">
@@ -2988,26 +2808,6 @@ QPushButton:pressed {
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="19" column="5" colspan="2">
@@ -3025,26 +2825,6 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
              </property>
             </item>
            </widget>
@@ -3081,26 +2861,6 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
              </property>
             </item>
            </widget>
@@ -3619,26 +3379,6 @@ QPushButton:pressed {
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="9" column="5" colspan="2">
@@ -3894,26 +3634,6 @@ QPushButton:pressed {
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="14" column="4">
@@ -3931,26 +3651,6 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
              </property>
             </item>
            </widget>
@@ -4070,26 +3770,6 @@ QPushButton:pressed {
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="11" column="3" colspan="2">
@@ -4193,26 +3873,6 @@ QPushButton:pressed {
               <string>Danfoss</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="16" column="0" colspan="3">
@@ -4244,26 +3904,6 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
              </property>
             </item>
            </widget>
@@ -4511,26 +4151,6 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
              </property>
             </item>
            </widget>

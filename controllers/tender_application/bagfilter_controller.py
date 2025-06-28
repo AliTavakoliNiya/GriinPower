@@ -24,19 +24,31 @@ class BagfilterController(PanelController):
         Main controller for building a bagfilter from tender_application specifications.
         """
 
+        result = []
+        # Split string into parts inside and outside parentheses
+        parts = re.split(r'(\(.*?\))', self.electrical_specs["bagfilter"]["order"])
+
+        for part in parts:
+            if part.startswith('(') and part.endswith(')'):
+                # Inside parentheses - extract decimal numbers
+                nums = re.findall(r'\d+\.\d+|\d+', part)
+                result.extend(nums)
+            else:
+                # Outside parentheses - replace 'x' with '.' and remove non-digit/dot
+                cleaned = part.replace('x', '.')
+                cleaned = re.sub(r'[^\d\.]', '', cleaned)
+                # split by dots
+                nums = [p for p in cleaned.split('.') if p]
+                result.extend(nums)
+
         n_valves = 0
         if self.electrical_specs["bagfilter"]["type"] == "Griin/China":  # EX: 8.96x5.(2.7m).10
-            pattern = r'(\d+)\.(\d+)x(\d+)\.\((\d+(?:\.\d+)?)m\)\.(\d+)'
-            match = re.match(pattern, self.electrical_specs["bagfilter"]["order"])
-            if match:
-                n_valves = int(match.group(1))  # ~ compartments ~ jacks
+            n_valves = int(result[2])  # ~ compartments ~ jacks
 
         if self.electrical_specs["bagfilter"]["type"] == "BETH":  # 6.78x2.3.10
-            match = re.match(r'(\d+)\.(\d+)x(\d+)\.(\d+)\.(\d+)', self.electrical_specs["bagfilter"]["order"])
-            if match:
-                n_valve_per_airtank = int(match.group(1))
-                n_airtank = int(match.group(3))
-                n_valves = n_valve_per_airtank * n_airtank
+            n_valve_per_airtank = int(result[0])
+            n_airtank = int(result[2])
+            n_valves = n_valve_per_airtank * n_airtank
 
         self.bagfilter_general_items = {
             "touch_panel": 0,
@@ -198,7 +210,7 @@ class BagfilterController(PanelController):
                                             brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
-                type="MCCB INPUT PANEL",
+                type="MCCB Input Panel",
                 brand=mccb['brand'],
                 order_number=mccb["order_number"],
                 specifications=(
@@ -211,7 +223,7 @@ class BagfilterController(PanelController):
             )
         else:
             self.add_to_panel(
-                type="MCCB INPUT PANEL",
+                type="MCCB Input Panel",
                 brand="",
                 order_number="",
                 specifications=(
@@ -342,11 +354,11 @@ class BagfilterController(PanelController):
                 else instrument_name
             name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
-            success, instrument = get_instrument_by_spec(name.replace('_', ' ').title())
+            success, instrument = get_instrument_by_spec(name.replace('_', ' ').title(), brand=properties['brand'])
 
             if success:
                 self.add_to_panel(
-                    type=instrument_name.upper().replace("_", " "),
+                    type=instrument_name.title().replace("_", " "),
                     brand=instrument["brand"],
                     order_number=instrument["order_number"],
                     specifications="",
