@@ -53,6 +53,7 @@ class ElectricalPanelDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_electrical_panel_to_db_func(self):
         type = self.ui.electrical_panel_type.currentText().strip() if self.ui.electrical_panel_type.currentIndex() else None

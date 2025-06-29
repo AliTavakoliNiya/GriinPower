@@ -54,6 +54,7 @@ class BimetalDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_bimetal_to_db_func(self):
         min_current = self.ui.bimetal_min_current.value()

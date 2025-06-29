@@ -58,6 +58,7 @@ class MPCBDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_mpcb_to_db_func(self):
         min_current = self.ui.mpcb_min_current.value()
@@ -148,6 +149,7 @@ class TableWindow(QMainWindow):
         self.table_view.setModel(self.model)
         self.table_view.setSelectionBehavior(QTableView.SelectRows)
         self.table_view.resizeColumnsToContents()
+        self.table_view.setSortingEnabled(True)
 
         layout.addWidget(self.table_view)
 

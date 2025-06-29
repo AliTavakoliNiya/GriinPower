@@ -1987,13 +1987,6 @@
             </item>
            </widget>
           </item>
-          <item row="14" column="1">
-           <widget class="QLabel" name="label_47">
-            <property name="text">
-             <string>Level Transmitter</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="5">
            <widget class="QSpinBox" name="rotary_qty">
             <property name="minimum">
@@ -2650,6 +2643,13 @@ QPushButton:pressed {
             </property>
            </widget>
           </item>
+          <item row="14" column="1" colspan="3">
+           <widget class="QLabel" name="label_47">
+            <property name="text">
+             <string>Level Transmitter</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -2671,13 +2671,6 @@ QPushButton:pressed {
           <string>Fan - Damper</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="23" column="1" colspan="2">
-           <widget class="QLabel" name="label_31">
-            <property name="text">
-             <string>Inlet Fan TT</string>
-            </property>
-           </widget>
-          </item>
           <item row="6" column="5" colspan="2">
            <widget class="QComboBox" name="fan_brand">
             <item>
@@ -2919,19 +2912,6 @@ QPushButton:pressed {
             </item>
            </widget>
           </item>
-          <item row="17" column="2">
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="23" column="5" colspan="2">
            <widget class="QComboBox" name="fan_tt_brand">
             <item>
@@ -3121,13 +3101,6 @@ QPushButton:pressed {
             </property>
            </widget>
           </item>
-          <item row="21" column="1">
-           <widget class="QLabel" name="label_33">
-            <property name="text">
-             <string>Bearing VibrationT</string>
-            </property>
-           </widget>
-          </item>
           <item row="11" column="1" colspan="3">
            <widget class="QLabel" name="label_24">
             <property name="text">
@@ -3294,12 +3267,12 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
-              <string>Danfoss</string>
+              <string>Auma</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>DBL</string>
+              <string>Proval</string>
              </property>
             </item>
            </widget>
@@ -3595,13 +3568,6 @@ QPushButton:pressed {
             </property>
            </widget>
           </item>
-          <item row="22" column="1">
-           <widget class="QLabel" name="label_30">
-            <property name="text">
-             <string>Inlet Fan PressureT</string>
-            </property>
-           </widget>
-          </item>
           <item row="20" column="5" colspan="2">
            <widget class="QComboBox" name="fan_bearing_tt_brand">
             <item>
@@ -3670,13 +3636,6 @@ QPushButton:pressed {
             </item>
            </widget>
           </item>
-          <item row="20" column="1">
-           <widget class="QLabel" name="label_32">
-            <property name="text">
-             <string>Bearing TemperatureT</string>
-            </property>
-           </widget>
-          </item>
           <item row="7" column="5" colspan="2">
            <widget class="QComboBox" name="fan_cooling_method">
             <item>
@@ -3705,13 +3664,6 @@ QPushButton:pressed {
            <widget class="QLabel" name="label_25">
             <property name="text">
              <string>Winding Thermal Protection</string>
-            </property>
-           </widget>
-          </item>
-          <item row="19" column="1">
-           <widget class="QLabel" name="label_29">
-            <property name="text">
-             <string>Damper ProximityS</string>
             </property>
            </widget>
           </item>
@@ -3837,6 +3789,41 @@ QPushButton:pressed {
               <string>IP68</string>
              </property>
             </item>
+           </widget>
+          </item>
+          <item row="23" column="1" colspan="2">
+           <widget class="QLabel" name="label_31">
+            <property name="text">
+             <string>Inlet Fan TT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="22" column="1" colspan="2">
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>Inlet Fan PressureT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="21" column="1" colspan="2">
+           <widget class="QLabel" name="label_33">
+            <property name="text">
+             <string>Bearing VibrationT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="20" column="1" colspan="2">
+           <widget class="QLabel" name="label_32">
+            <property name="text">
+             <string>Bearing TemperatureT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="19" column="1" colspan="2">
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>Damper ProximityS</string>
+            </property>
            </widget>
           </item>
          </layout>

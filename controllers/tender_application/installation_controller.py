@@ -669,7 +669,7 @@ class InstallationController(PanelController):
                 quantity=n_riser,
                 price=riser['price'],
                 last_price_update=f"{riser['supplier_name']}\n{riser['date']}",
-                note=f"According to ladder size")
+                note=f"According to ladder size {self.ladder_size}")
         else:
             self.add_to_panel(
                 type=f"Ladder Riser",
@@ -678,8 +678,8 @@ class InstallationController(PanelController):
                 specifications="",
                 quantity=n_riser,
                 price=0,
-                last_price_update="❌ Riser not found",
-                note=f"According to ladder size")
+                last_price_update=f"❌ Ladder Riser not found",
+                note=f"According to ladder size {self.ladder_size}")
 
     """ tray """
 
@@ -691,7 +691,7 @@ class InstallationController(PanelController):
                 type=f"Tray",
                 brand=tray["brand"],
                 order_number=tray["order_number"],
-                specifications=f"{self.tray_length}mm²",
+                specifications=f"{self.tray_size}mm²",
                 quantity=self.tray_length,
                 price=tray['price'],
                 last_price_update=f"{tray['supplier_name']}\n{tray['date']}",
@@ -716,7 +716,7 @@ class InstallationController(PanelController):
                 type=f"Tray Cover",
                 brand=tray_cover["brand"],
                 order_number=tray_cover["order_number"],
-                specifications=f"{self.tray_length}mm²",
+                specifications=f"{self.tray_size}mm²",
                 quantity=self.tray_length,
                 price=tray_cover['price'],
                 last_price_update=f"{tray_cover['supplier_name']}\n{tray_cover['date']}",
@@ -727,7 +727,7 @@ class InstallationController(PanelController):
                 type=f"Tray Cover",
                 brand="",
                 order_number="",
-                specifications=f"{self.tray_length}mm²",
+                specifications=f"{self.tray_size}mm²",
                 quantity=self.tray_length,
                 price=0,
                 last_price_update="❌ Tray Cover not found",
@@ -858,7 +858,7 @@ class InstallationController(PanelController):
                 note=f"For Ladder_Height/1.5 x 8")
 
         n_riser = 2
-        success, riser = get_wire_cable_by_spec("LadderRiser", l_number=1, l_size=self.ladder_size)
+        success, riser = get_wire_cable_by_spec("TrayRiser", l_number=1, l_size=self.ladder_size)
         if success:
             self.add_to_panel(
                 type=f"Tray Riser",
@@ -868,7 +868,7 @@ class InstallationController(PanelController):
                 quantity=n_riser,
                 price=riser['price'],
                 last_price_update=f"{riser['supplier_name']}\n{riser['date']}",
-                note=f"According to ladder size")
+                note=f"According to ladder size {self.ladder_size}")
         else:
             self.add_to_panel(
                 type=f"Tray Riser",
@@ -877,8 +877,8 @@ class InstallationController(PanelController):
                 specifications="",
                 quantity=n_riser,
                 price=0,
-                last_price_update="❌ Riser not found",
-                note=f"According to ladder size")
+                last_price_update=f"❌ Tray Riser not found",
+                note=f"According to ladder size {self.ladder_size}")
 
     def choose_cableshow_cabletrap_cabletag(self):
         # Cable Shoe

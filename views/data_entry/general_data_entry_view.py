@@ -240,6 +240,7 @@ class GeneralDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_general_to_db_func(self):
         type = self.ui.general_type.currentText().strip() if self.ui.general_type.currentIndex() else None

@@ -98,10 +98,6 @@ class GriinPower(QMainWindow):
         # Assign the currently logged-in user as the modifier
         current_project.modified_by_id = self.current_user.id
 
-        # If no revision is set, default to 0 (new project)
-        if current_project.revision is None:
-            current_project.revision = 0
-
         # Launch the tender application window
         self.tender_application_window = TenderApplication(parent=self)
 

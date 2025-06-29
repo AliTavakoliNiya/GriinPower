@@ -1,3 +1,5 @@
+import copy
+
 import openpyxl
 import pandas as pd
 from PyQt5 import uic
@@ -30,7 +32,8 @@ class ResultTab(QWidget):
         uic.loadUi("ui/tender_application/results_tab.ui", self)
 
         self.main_view = main_view
-        self.electrical_specs = ProjectSession().project_electrical_specs
+        self.current_project = ProjectSession()
+        self.electrical_specs = self.current_project.project_electrical_specs
         self.tabWidget.setCurrentIndex(0)
 
         self.tables = {
@@ -100,10 +103,13 @@ class ResultTab(QWidget):
         self.generate_table(panel=self.panels["fresh_air_panel"], table=self.tables["fresh_air_table"])
         self.generate_table(panel=self.panels["vibration_panel"], table=self.tables["vibration_table"])
         self.generate_table(panel=self.panels["hopper_heater_panel"], table=self.tables["hopper_heater_table"])
+
+        panels = copy.deepcopy(self.panels)
+        panels["installation_panel"] = self.main_view.installation_tab.installation_panel
         if self.main_view.electrical_tab.fan_checkbox.isChecked():
-            summary_data = self._generate_summary_table(electric_motor_price_and_effective_date)
+            summary_data = self._generate_summary_table(electric_motor_price_and_effective_date=electric_motor_price_and_effective_date, panels=panels)
         else:
-            summary_data = self._generate_summary_table()
+            summary_data = self._generate_summary_table(panels=panels)
         self.generate_table(panel=summary_data, table=self.tables["summary_table"])
 
     def _add_summary_row(self, df):
@@ -141,7 +147,7 @@ class ResultTab(QWidget):
                 max_width = max(max_width, metrics.horizontalAdvance(text) + 20)
             table.setColumnWidth(col, max_width)
 
-    def _generate_summary_table(self, electric_motor_price_and_effective_date=None):
+    def _generate_summary_table(self, panels, electric_motor_price_and_effective_date=None):
         summary = {
             "title": [],
             "Price": [],
@@ -150,7 +156,8 @@ class ResultTab(QWidget):
 
         total_sum = 0
 
-        for name, panel in self.panels.items():
+
+        for name, panel in panels.items():
             summary["title"].append(name.replace("_", " ").title())
             panel_df = pd.DataFrame(panel)
             panel_total = panel_df["total_price"].sum() if "total_price" in panel_df.columns else 0
@@ -159,7 +166,7 @@ class ResultTab(QWidget):
             total_sum += panel_total
 
         if self.electrical_specs["fan"]["status"]:
-            summary["title"].append("ELECTRIC MOTOR")
+            summary["title"].append("Electric Motor")
             motor_price = electric_motor_price_and_effective_date[0]
             total_sum += motor_price
             summary["Price"].append(motor_price)
@@ -172,14 +179,17 @@ class ResultTab(QWidget):
         return summary
 
     def _export_to_excel(self):
+        tables = {name: table for name, table in self.tables.items()}
+        tables["installation_table"] = self.main_view.installation_tab.installation_table
 
-        file_path, _ = QFileDialog.getSaveFileName(self, "Save Excel File", "ReportByGriinPower",
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save Excel File",
+                                                   f"{self.current_project.name}-{self.current_project.code}-{self.current_project.unique_no}-Rev{str(self.current_project.revision).zfill(2)}(ReportByGriinPower)",
                                                    "Excel Files (*.xlsx)")
         if not file_path:
             return
 
         with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
-            for name, table in self.tables.items():
+            for name, table in tables.items():
                 model = table.model()
                 if model is None:
                     continue

@@ -49,6 +49,7 @@ class WireCableDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_wire_cable_to_db_func(self):
         type = self.ui.wire_cable_type.currentText().strip() if self.ui.wire_cable_type.currentIndex() else None
@@ -134,6 +135,7 @@ class TableWindow(QMainWindow):
         self.table_view.setModel(self.model)
         self.table_view.setSelectionBehavior(QTableView.SelectRows)
         self.table_view.resizeColumnsToContents()
+        self.table_view.setSortingEnabled(True)
 
         layout.addWidget(self.table_view)
 

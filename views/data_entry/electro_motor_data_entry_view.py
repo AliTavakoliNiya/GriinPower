@@ -57,6 +57,7 @@ class ElectroMotorDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_motor_to_db_func(self):
         power = self.ui.motor_power.value() * 1000

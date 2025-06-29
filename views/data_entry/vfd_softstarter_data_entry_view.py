@@ -52,6 +52,7 @@ class VFDSoftStarterDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_vfd_softstarter_to_db_func(self):
         type = self.ui.vfd_softstarter_type.currentText().strip() if self.ui.vfd_softstarter_type.currentIndex() else None

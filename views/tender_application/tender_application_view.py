@@ -107,8 +107,8 @@ class TenderApplication(QMainWindow):
             elif not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
             else:
-                self.result_tab.generate_panels()
                 self.installation_tab.generate_result()
+                self.result_tab.generate_panels()
 
         # Update the cached tab index
         self._last_tab_index = index

@@ -61,6 +61,7 @@ class InstrumentDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_instrument_to_db_func(self):
         type = self.ui.instrument_type.currentText().strip() if self.ui.instrument_type.currentIndex() else None

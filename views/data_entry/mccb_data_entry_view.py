@@ -52,6 +52,7 @@ class MCCBDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_mccb_to_db_func(self):
         rated_current = self.ui.mccb_current.value()

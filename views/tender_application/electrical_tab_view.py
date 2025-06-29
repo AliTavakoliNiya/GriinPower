@@ -1,12 +1,10 @@
 import os
-import re
 
+import jdatetime
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QFileDialog
-from PyQt5.QtWidgets import QWidget, QSpinBox, QComboBox, QLineEdit, QCheckBox
+from PyQt5.QtWidgets import QCheckBox, QComboBox, QFileDialog, QLineEdit, QSpinBox, QWidget
 from docx import Document
-import jdatetime
 
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.user_session_controller import UserSession
@@ -25,7 +23,6 @@ class ElectricalTab(QWidget):
         self.set_electrical_ui_values()
 
         self._initialize_components()
-
 
     def _initialize_components(self):
         """Initialize all UI components with their event handlers"""
@@ -180,7 +177,6 @@ class ElectricalTab(QWidget):
 
         self.fan_tt_qty.valueChanged.connect(self._handle_fan_tt_qty_changed)
         self.fan_tt_brand.currentIndexChanged.connect(self._handle_fan_tt_brand_changed)
-
 
     """ ------------Transport motor handlers ------------ """
 
@@ -654,9 +650,9 @@ class ElectricalTab(QWidget):
         self._update_project_value(["bagfilter", "cable_dimension"], value)
 
     """ ------------ Bagfilter instrument handlers ------------ """
+
     def _handle_spare_pins_changed(self, value):
         self._update_project_value(["bagfilter", "spare_pins"], value)
-
 
     def _handle_bagfilter_dpt_qty_changed(self, value):
         self._update_project_value(["bagfilter", "instruments", "delta_pressure_transmitter", "qty"], value)
@@ -829,7 +825,7 @@ class ElectricalTab(QWidget):
 
     """ Load Pervios Revision as need """
 
-    def set_electrical_ui_values(self): # Using for open pervios project
+    def set_electrical_ui_values(self):  # Using for open pervios project
         """
         Set values for UI elements based on the self.electrical_specs dictionary.
         """
@@ -891,28 +887,14 @@ class ElectricalTab(QWidget):
             self.bagfilter_pg_qty.setValue(self.electrical_specs['bagfilter']['instruments']['pressure_gauge']['qty'])
             self.cable_length.setValue(self.electrical_specs['bagfilter']['cable_dimension'])
 
-            # QCheckBox elements
-            self.hopper_heater_checkbox.setChecked(self.electrical_specs['hopper_heater']['status'])
-            self.vibration_checkbox.setChecked(self.electrical_specs['vibration']['status'])
-            self.freshair_checkbox.setChecked(self.electrical_specs['fresh_air']['status'])
-            self.transport_checkbox.setChecked(self.electrical_specs['transport']['status'])
-            self.fan_space_heater.setChecked(self.electrical_specs['fan']['motors']['fan']['space_heater'])
-            self.fan_de_nde.setChecked(self.electrical_specs['fan']['motors']['fan']['de_nde'])
-            self.damper_checkbox.setChecked(self.electrical_specs['damper']['status'])
-            self.fan_checkbox.setChecked(self.electrical_specs['fan']['status'])
-            self.cable_supply.setChecked(self.electrical_specs['bagfilter']['cable_supply'])
-            self.olm.setChecked(self.electrical_specs['bagfilter']['olm'])
-            self.me.setChecked(self.electrical_specs['bagfilter']['me'])
-            self.ee.setChecked(self.electrical_specs['bagfilter']['ee'])
-
             # QComboBox elements
             self.hopper_heater_kw.setCurrentText(
-                str(self.electrical_specs['hopper_heater']['motors']['elements']['power']/1000))
+                str(self.electrical_specs['hopper_heater']['motors']['elements']['power'] / 1000))
             self.hopper_heater_ptc_brand.setCurrentText(
                 str(self.electrical_specs['hopper_heater']['instruments']['ptc']['brand']) if
                 self.electrical_specs['hopper_heater']['instruments']['ptc']['brand'] else "")
             self.vibration_motor_kw.setCurrentText(
-                str(self.electrical_specs['vibration']['motors']['vibration']['power']/1000))
+                str(self.electrical_specs['vibration']['motors']['vibration']['power'] / 1000))
             self.freshair_zs_brand.setCurrentText(
                 str(self.electrical_specs['fresh_air']['instruments']['proximity_switch']['brand']) if
                 self.electrical_specs['fresh_air']['instruments']['proximity_switch']['brand'] else "")
@@ -926,29 +908,30 @@ class ElectricalTab(QWidget):
                 str(self.electrical_specs['fresh_air']['motors']['freshair_motor']['start_type']) if
                 self.electrical_specs['fresh_air']['motors']['freshair_motor']['start_type'] else "")
             self.freshair_motor_kw.setCurrentText(
-                str(self.electrical_specs['fresh_air']['motors']['freshair_motor']['power']/1000))
+                str(self.electrical_specs['fresh_air']['motors']['freshair_motor']['power'] / 1000))
             self.emergency_flap_motor_start_type.setCurrentText(
                 str(self.electrical_specs['fresh_air']['motors']['emergency_flap']['start_type']) if
                 self.electrical_specs['fresh_air']['motors']['emergency_flap']['start_type'] else "")
             self.freshair_flap_motor_kw.setCurrentText(
-                str(self.electrical_specs['fresh_air']['motors']['fresh_air_flap']['power']/1000))
+                str(self.electrical_specs['fresh_air']['motors']['fresh_air_flap']['power'] / 1000))
             self.emergency_flap_motor_kw.setCurrentText(
-                str(self.electrical_specs['fresh_air']['motors']['emergency_flap']['power']/1000))
-            self.rotary_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['rotary']['power']/1000))
+                str(self.electrical_specs['fresh_air']['motors']['emergency_flap']['power'] / 1000))
+            self.rotary_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['rotary']['power'] / 1000))
             self.transport_zs_brand.setCurrentText(
                 str(self.electrical_specs['transport']['instruments']['proximity_switch']['brand']) if
                 self.electrical_specs['transport']['instruments']['proximity_switch']['brand'] else "")
             self.telescopic_chute_kw.setCurrentText(
-                str(self.electrical_specs['transport']['motors']['telescopic_chute']['power']/1000))
+                str(self.electrical_specs['transport']['motors']['telescopic_chute']['power'] / 1000))
             self.transport_ls_bin_brand.setCurrentText(
                 str(self.electrical_specs['transport']['instruments']['level_switch']['brand']) if
                 self.electrical_specs['transport']['instruments']['level_switch']['brand'] else "")
             self.transport_lt_brand.setCurrentText(
                 str(self.electrical_specs['transport']['instruments']['level_transmitter']['brand']) if
                 self.electrical_specs['transport']['instruments']['level_transmitter']['brand'] else "")
-            self.screw2_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw2']['power']/1000))
-            self.screw1_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw1']['power']/1000))
-            self.slide_gate_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['slide_gate']['power']/1000))
+            self.screw2_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw2']['power'] / 1000))
+            self.screw1_kw.setCurrentText(str(self.electrical_specs['transport']['motors']['screw1']['power'] / 1000))
+            self.slide_gate_kw.setCurrentText(
+                str(self.electrical_specs['transport']['motors']['slide_gate']['power'] / 1000))
             self.transport_spd_brand.setCurrentText(
                 str(self.electrical_specs['transport']['instruments']['speed_detector']['brand']) if
                 self.electrical_specs['transport']['instruments']['speed_detector']['brand'] else "")
@@ -973,7 +956,7 @@ class ElectricalTab(QWidget):
             self.fan_bearing_vt_brand.setCurrentText(
                 str(self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['brand']) if
                 self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['brand'] else "")
-            self.damper_kw.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['power']/1000))
+            self.damper_kw.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['power'] / 1000))
             self.damper_brand.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['brand']) if
                                              self.electrical_specs['damper']['motors']['damper']['brand'] else "")
             self.damper_start_type.setCurrentText(
@@ -981,7 +964,7 @@ class ElectricalTab(QWidget):
                 self.electrical_specs['damper']['motors']['damper']['start_type'] else "")
             self.fan_painting_ral.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['painting_ral']) if
                                                  self.electrical_specs['fan']['motors']['fan']['painting_ral'] else "")
-            self.fan_kw.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['power']/1000))
+            self.fan_kw.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['power'] / 1000))
             self.fan_bearing_tt_brand.setCurrentText(
                 str(self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['brand']) if
                 self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['brand'] else "")
@@ -1032,6 +1015,31 @@ class ElectricalTab(QWidget):
             self.fan_rpm.setText(str(self.electrical_specs['fan']['motors']['fan']['rpm']) if
                                  self.electrical_specs['fan']['motors']['fan']['rpm'] else "")
             self.bagfilter_order.setText(str(self.electrical_specs['bagfilter']['order']))
+
+            # QCheckBox elements
+
+            self.fan_checkbox.stateChanged.connect(self._handle_fan_checkbox_changed)
+            self.fan_checkbox.setChecked(self.electrical_specs['fan']['status'])
+
+            self.transport_checkbox.stateChanged.connect(self._handle_transport_checkbox_changed)
+            self.transport_checkbox.setChecked(self.electrical_specs['transport']['status'])
+
+            self.vibration_checkbox.stateChanged.connect(self._handle_vibration_checkbox_changed)
+            self.vibration_checkbox.setChecked(self.electrical_specs['vibration']['status'])
+
+            self.hopper_heater_checkbox.stateChanged.connect(self._handle_hopper_heater_checkbox_changed)
+            self.hopper_heater_checkbox.setChecked(self.electrical_specs['hopper_heater']['status'])
+
+            self.freshair_checkbox.stateChanged.connect(self._handle_freshair_checkbox_changed)
+            self.freshair_checkbox.setChecked(self.electrical_specs['fresh_air']['status'])
+
+            self.fan_space_heater.setChecked(self.electrical_specs['fan']['motors']['fan']['space_heater'])
+            self.fan_de_nde.setChecked(self.electrical_specs['fan']['motors']['fan']['de_nde'])
+            self.damper_checkbox.setChecked(self.electrical_specs['damper']['status'])
+            self.cable_supply.setChecked(self.electrical_specs['bagfilter']['cable_supply'])
+            self.olm.setChecked(self.electrical_specs['bagfilter']['olm'])
+            self.me.setChecked(self.electrical_specs['bagfilter']['me'])
+            self.ee.setChecked(self.electrical_specs['bagfilter']['ee'])
 
 
         except KeyError as e:
@@ -1099,7 +1107,7 @@ def create_qss_word():
         "min_temp": project_details["project_info"]["minimum_temprature"],
         "max_temp": project_details["project_info"]["maximum_temprature"],
         "altitude_elevation": project_details["project_info"]["altitude_elevation"],
-        "power": fan["power"],
+        "power": fan["power"]/1000,
         "rpm": fan["rpm"],
         "voltage": fan_voltage,
         "voltage_variation": project_details["project_info"]["voltage_variation"],
@@ -1123,7 +1131,7 @@ def create_qss_word():
 
     output_path, _ = QFileDialog.getSaveFileName(
         caption="Save Word File",
-        directory=f"QSS_For_Motor_{fan['power']}KW_{fan['rpm']}RPM",
+        directory=f"QSS_For_Motor_{fan['power']/1000}KW_{fan['rpm']}RPM",
         filter="Word Documents (*.docx)"
     )
 

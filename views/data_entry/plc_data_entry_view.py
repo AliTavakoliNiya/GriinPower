@@ -75,6 +75,7 @@ class PLCDataEntryView:
         model = PandasModel(df)
         self.ui.history_list.setModel(model)
         self.ui.history_list.resizeColumnsToContents()
+        self.ui.history_list.setSortingEnabled(True)
 
     def save_plc_to_db_func(self):
         series = self.ui.plc_series.currentText().strip() if self.ui.plc_series.currentIndex() else None
