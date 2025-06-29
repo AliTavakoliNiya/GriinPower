@@ -4362,7 +4362,7 @@ QPushButton:pressed {
           <item row="0" column="3" colspan="3">
            <widget class="QLineEdit" name="bagfilter_order">
             <property name="text">
-             <string>8.96×5.(2.7m).10</string>
+             <string>8.96x5.(2.7m).10</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>

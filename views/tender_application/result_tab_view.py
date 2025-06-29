@@ -64,7 +64,6 @@ class ResultTab(QWidget):
         success, msg = projects.save_project(current_project)
         if success:
             show_message(msg, title="Saved")
-            self.main_view.close()
         else:
             show_message(msg, title="Error")
 

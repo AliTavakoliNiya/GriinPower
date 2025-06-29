@@ -30,6 +30,9 @@ class InstallationController(PanelController):
                 continue
 
 
+        parts = self.electrical_specs["bagfilter"]["order"].replace("x", ".")
+        parts = parts.split(".")
+
         # calculate n_valves and n_airtanks
         result = []
         # Split string into parts inside and outside parentheses
@@ -87,6 +90,7 @@ class InstallationController(PanelController):
                     self.total_instruments += qty
                 except Exception:
                     pass
+
 
         if self.n_airtank <= 2:
             self.ladder_size = self.tray_size = 200  # mm

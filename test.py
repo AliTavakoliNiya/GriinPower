@@ -1,31 +1,11 @@
-import re
+
+o1 = "6.96x16.(3.6m).20"
 
 
-def extract_valves_compartments(s):
-    result = []
-    # Split string into parts inside and outside parentheses
-    parts = re.split(r'(\(.*?\))', s)
+parts = o1.replace("x", ".")
+parts = parts.split(".")
 
-    for part in parts:
-        if part.startswith('(') and part.endswith(')'):
-            # Inside parentheses - extract decimal numbers
-            nums = re.findall(r'\d+\.\d+|\d+', part)
-            result.extend(nums)
-        else:
-            # Outside parentheses - replace 'x' with '.' and remove non-digit/dot
-            cleaned = part.replace('x', '.')
-            cleaned = re.sub(r'[^\d\.]', '', cleaned)
-            # split by dots
-            nums = [p for p in cleaned.split('.') if p]
-            result.extend(nums)
-    return ','.join(result)
+parts[3] = parts[3].replace("(", "").replace("m)", "") if "(" in parts[3] else parts[3]
 
-# Testing
-inputs = [
-    "in1: 6.9x16.(3.60m).201",
-    "in2: 6.961x1.5.10",
-    "in3: 6.96x2.5.110"
-]
-# Test
-for s in inputs:
-    print(extract_numbers_final(s))
+print
+
