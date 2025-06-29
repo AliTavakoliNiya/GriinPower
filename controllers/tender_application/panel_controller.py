@@ -713,13 +713,13 @@ class PanelController:
                     busbar_notes.append(f"{motor_busbar_length} m for {motor.usage}")
 
         if wire_length > 0:
-            success, cable = get_wire_cable_by_spec("Wire", 1, 1.6, brand=None, note=None)
+            success, cable = get_wire_cable_by_spec("Wire", 1, 1.5, brand=None, note=None)
             if success:
                 self.add_to_panel(
                     type="Internal Power Panel Wire",
                     brand=cable["brand"],
                     order_number=cable["order_number"],
-                    specifications="Size: 1x1.6 mm²",
+                    specifications="Size: 1x1.5 mm²",
                     quantity=wire_length,
                     price=cable['price'],
                     last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
@@ -730,7 +730,7 @@ class PanelController:
                     type="Internal Power Panel Wire",
                     brand="",
                     order_number="",
-                    specifications="Size: 1x1.6 mm²",
+                    specifications="Size: 1x1.5 mm²",
                     quantity=wire_length,
                     price=0,
                     last_price_update="❌ Wire not found",

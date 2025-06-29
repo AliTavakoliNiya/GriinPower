@@ -1033,9 +1033,12 @@ class ElectricalTab(QWidget):
             self.freshair_checkbox.stateChanged.connect(self._handle_freshair_checkbox_changed)
             self.freshair_checkbox.setChecked(self.electrical_specs['fresh_air']['status'])
 
+            self.damper_checkbox.stateChanged.connect(self._handle_damper_checkbox_changed)
+            self.damper_checkbox.setChecked(self.electrical_specs['damper']['status'])
+
+
             self.fan_space_heater.setChecked(self.electrical_specs['fan']['motors']['fan']['space_heater'])
             self.fan_de_nde.setChecked(self.electrical_specs['fan']['motors']['fan']['de_nde'])
-            self.damper_checkbox.setChecked(self.electrical_specs['damper']['status'])
             self.cable_supply.setChecked(self.electrical_specs['bagfilter']['cable_supply'])
             self.olm.setChecked(self.electrical_specs['bagfilter']['olm'])
             self.me.setChecked(self.electrical_specs['bagfilter']['me'])
