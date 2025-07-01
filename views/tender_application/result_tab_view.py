@@ -1,4 +1,5 @@
 import copy
+import subprocess
 
 import jdatetime
 import openpyxl
@@ -153,7 +154,7 @@ class ResultTab(QWidget):
 
     def _generate_summary_table(self, panels, electric_motor_price_and_effective_date=None):
         summary = {
-            "title": [],
+            "Title": [],
             "Price": [],
             "Note": []
         }
@@ -161,7 +162,7 @@ class ResultTab(QWidget):
         total_sum = 0
 
         for name, panel in panels.items():
-            summary["title"].append(name.replace("_", " ").title())
+            summary["Title"].append(name.replace("_", " ").title())
             panel_df = pd.DataFrame(panel)
             panel_total = panel_df["total_price"].sum() if "total_price" in panel_df.columns else 0
             summary["Price"].append(panel_total)
@@ -169,13 +170,13 @@ class ResultTab(QWidget):
             total_sum += panel_total
 
         if self.electrical_specs["fan"]["status"]:
-            summary["title"].append("Electric Motor")
+            summary["Title"].append("Electric Motor")
             motor_price = electric_motor_price_and_effective_date[0]
             total_sum += motor_price
             summary["Price"].append(motor_price)
             summary["Note"].append(electric_motor_price_and_effective_date[1])
 
-        summary["title"].append("Total")
+        summary["Title"].append("Total")
         summary["Price"].append(total_sum)
         summary["Note"].append("")
 
@@ -191,9 +192,18 @@ class ResultTab(QWidget):
         if not file_path:
             return
 
+        try:
+            report_path = file_path.replace(".xlsx", "(ReportByGriinPower).xlsx")
+            factor_path = file_path.replace(".xlsx", "(FactorByGriinPower).xlsx")
 
-        self._export_report_excel(tables=tables, file_path= file_path.replace(".xlsx", "(ReportByGriinPower).xlsx"))
-        self._export_factor_excel(tables=tables, file_path= file_path.replace(".xlsx", "(FactorByGriinPower).xlsx"))
+            self._export_report_excel(tables=tables, file_path= report_path)
+            self._export_factor_excel(tables=tables, file_path= factor_path)
+
+            subprocess.Popen(['start', '', report_path], shell=True)
+            subprocess.Popen(['start', '', factor_path], shell=True)
+
+        except Exception as e:
+            show_message(message=str(e), title="Error")
 
     def _export_report_excel(self, tables, file_path):
 
@@ -267,21 +277,43 @@ class ResultTab(QWidget):
                 worksheet.freeze_panes = worksheet["A3"]
 
     def _export_factor_excel(self, tables, file_path):
+        instruments_list = [
+            'Switch',
+            'Transmitter',
+            'Gauge',
+            'Detector',
+            'Ptc',
+            'Calibration',
+            'Manifold']
 
         bagfilter_price = 0
+        instruments_price = 0
         for name, table in tables.items():
             model = table.model()
-            if model is None or name=="summary_table":
+            if model is None or name=="summary_table" or name=="installation_table":
                 continue
 
             df = model._data.copy()
+            for index, row in df.iterrows():
+                if "Total" in row["type"]:
+                    continue
+                for instrument in instruments_list:
+                    if instrument in row["type"]:
+                        instruments_price += row['total_price']
+
+
             df_price = df.iloc[-1]['total_price']
             bagfilter_price += df_price
 
+        bagfilter_price -= instruments_price
+        el_motor_price = tables['summary_table'].model()._data.iloc[7]['Price']
         # create dataframe
         data = [
             [0, 0, 0, 1*bagfilter_price, bagfilter_price, 1, "تابلو بگ فیلتر", 1],
-            [0, 0, 0, 1*3700564000, 3700564000, 1, "ابزار دقیق", 2]]
+            [0, 0, 0, 1*instruments_price, instruments_price, 1, "ابزار دقیق", 2],
+            [0, 0, 0, 1*3700564000, 3700564000, 1, "کابل", 3],
+            [0, 0, 0, 1*3700564000, 3700564000, 1, "راه اندازی FAT", 4],
+            [0, 0, 0, 1*el_motor_price, el_motor_price, 1, f" الکتروموتور {int(self.electrical_specs['fan']['motors']['fan']['power']/1000)}KW {self.electrical_specs['fan']['motors']['fan']['brand']}  {self.electrical_specs['fan']['motors']['fan']['efficiency_class']} ", 5],]
         df = pd.DataFrame(data, columns=["خرید", "مهندسی", "ساخت", "قیمت کل(ریال)", "قیمت", "تعداد", "شرح", "ردیف"])
 
         # شروع نوشتن فایل با xlsxwriter
@@ -328,7 +360,7 @@ class ResultTab(QWidget):
 
             # تنظیم عرض ستون‌ها
             worksheet.set_column('J:J', 6)  # ردیف
-            worksheet.set_column('I:I', 25)  # شرح
+            worksheet.set_column('I:I', 35)  # شرح
             worksheet.set_column('H:H', 6)  # تعداد
             worksheet.set_column('F:G', 15)  # قیمت، قیمت کل
             worksheet.set_column('C:E', 12)  # نفر ساعت‌ها
