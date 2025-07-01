@@ -10,7 +10,7 @@ attribute_keys:
     min_current --> required
     max_current --> required
     class --> required
-    trip_time --> required
+    tripping_threshold --> required
     brand --> required
     order_number --> required
     created_by_id --> required
@@ -20,7 +20,7 @@ def get_all_bimetals():
     session = SessionLocal()
 
     attribute_keys = [
-        "min_current", "max_current", "class", "trip_time",
+        "min_current", "max_current", "class", "tripping_threshold",
         "brand", "order_number", "created_by_id"
     ]
 
@@ -126,7 +126,7 @@ def get_bimetal_by_current(rated_current, brands=[], order_number=None):
             "min_current": attr.get("min_current"),
             "max_current": attr.get("max_current"),
             "class": attr.get("class"),
-            "trip_time": attr.get("trip_time"),
+            "tripping_threshold": attr.get("tripping_threshold"),
             "brand": attr.get("brand"),
             "order_number": attr.get("order_number"),
             "supplier_name": supplier.supplier.name if supplier else "",
@@ -149,7 +149,7 @@ def insert_bimetal_to_db(
         min_current,
         max_current,
         _class,
-        trip_time,
+        tripping_threshold,
         ):
     brand = brand.lower()
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
@@ -171,7 +171,7 @@ def insert_bimetal_to_db(
                 attr_dict.get("min_current") == min_current and
                 attr_dict.get("max_current") == max_current and
                 attr_dict.get("class") == _class and
-                attr_dict.get("trip_time") == trip_time
+                attr_dict.get("tripping_threshold") == tripping_threshold
             ):
                 return True, component.id
 
@@ -183,7 +183,7 @@ def insert_bimetal_to_db(
                 ComponentAttribute(key='min_current', value=min_current),
                 ComponentAttribute(key='max_current', value=max_current),
                 ComponentAttribute(key='class', value=_class),
-                ComponentAttribute(key='trip_time', value=trip_time),
+                ComponentAttribute(key='tripping_threshold', value=tripping_threshold),
                 ComponentAttribute(key='created_by_id', value=str(current_user.id)),
                 ComponentAttribute(key='created_at', value=today_shamsi),
             ]

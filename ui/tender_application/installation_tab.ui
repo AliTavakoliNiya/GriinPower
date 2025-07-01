@@ -150,9 +150,15 @@
            <rect>
             <x>520</x>
             <y>390</y>
-            <width>61</width>
+            <width>70</width>
             <height>16</height>
            </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>70</width>
+            <height>0</height>
+           </size>
           </property>
           <property name="text">
            <string>Height (m)</string>
@@ -182,9 +188,15 @@
            <rect>
             <x>360</x>
             <y>45</y>
-            <width>61</width>
+            <width>70</width>
             <height>16</height>
            </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>70</width>
+            <height>0</height>
+           </size>
           </property>
           <property name="text">
            <string>Width (m)</string>
@@ -214,9 +226,15 @@
            <rect>
             <x>120</x>
             <y>35</y>
-            <width>61</width>
+            <width>70</width>
             <height>16</height>
            </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>70</width>
+            <height>0</height>
+           </size>
           </property>
           <property name="text">
            <string>Depth (m)</string>
@@ -300,9 +318,15 @@ QPushButton:pressed {
            <rect>
             <x>74</x>
             <y>700</y>
-            <width>67</width>
+            <width>70</width>
             <height>15</height>
            </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>70</width>
+            <height>0</height>
+           </size>
           </property>
           <property name="text">
            <string>To C.C.R. (m)</string>

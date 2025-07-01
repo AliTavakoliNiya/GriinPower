@@ -71,10 +71,8 @@ class BagfilterController(PanelController):
         n_bagfilter_cards = (n_valves + 15) // 16  # each card support 16 valves(round up)
         self.bagfilter_general_items["bagfilter_cards"] = n_bagfilter_cards
 
-        do_bagfilter_card = n_bagfilter_cards * 5
-        if n_bagfilter_cards > 0:
-            do_bagfilter_card += math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digist use in binary
-        total_do += do_bagfilter_card
+        do_bagfilter_card = math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digist use in binary
+        total_do += do_bagfilter_card + 5 # 1bits control pulse and 4bits address
 
         has_hmi = True if self.electrical_specs["bagfilter"]["touch_panel"] else False
         if has_hmi:
@@ -171,6 +169,7 @@ class BagfilterController(PanelController):
 
     def choose_general(self, general_items):
         self.process_item(comp_type="Griin Bagfilter Cards", qty=general_items.get("bagfilter_cards", 0))
+        self.process_item(comp_type="MCCB Aux Contact", qty=general_items.get("mccb_aux_contact_qty", 0))
         self.process_item(comp_type="Terminal", specification="4", qty=general_items.get("terminal_4", 0))
         self.process_item(comp_type="Relay", specification="1", qty=general_items.get("relay_1no_1nc", 0))
         self.process_item(comp_type="Relay", specification="2", qty=general_items.get("relay_2no_2nc", 0))
@@ -182,6 +181,7 @@ class BagfilterController(PanelController):
         self.process_item(comp_type="Touch Panel", specification=self.electrical_specs["bagfilter"]["touch_panel"],
                           qty=general_items.get("touch_panel", 0))
         self.process_item(comp_type="Signal Lamp", specification="24", qty=general_items.get("signal_lamp_24v", 0))
+
 
         # Optional OLM
         if "olm" in general_items:
@@ -368,7 +368,7 @@ class BagfilterController(PanelController):
                 )
             else:
                 self.add_to_panel(
-                    type=instrument_name.upper().replace("_", " "),
+                    type=instrument_name.title().replace("_", " "),
                     brand="",
                     order_number="",
                     specifications="",

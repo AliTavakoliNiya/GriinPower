@@ -1,5 +1,6 @@
 import copy
 
+import jdatetime
 import openpyxl
 import pandas as pd
 from PyQt5 import uic
@@ -56,6 +57,9 @@ class ResultTab(QWidget):
 
         self.update_table.clicked.connect(self.generate_panels)
 
+    def show_datail_btn_handler(self):
+        self.show_datail_window = DictionaryTreeViewer(data=self.electrical_specs, parent=self.main_view)
+
     def save_changes_btn_handler(self):
         if not confirmation(f"You are about to save changes, Are you sure?"):
             return
@@ -106,7 +110,8 @@ class ResultTab(QWidget):
         panels = copy.deepcopy(self.panels)
         panels["installation_panel"] = self.main_view.installation_tab.installation_panel
         if self.main_view.electrical_tab.fan_checkbox.isChecked():
-            summary_data = self._generate_summary_table(electric_motor_price_and_effective_date=electric_motor_price_and_effective_date, panels=panels)
+            summary_data = self._generate_summary_table(
+                electric_motor_price_and_effective_date=electric_motor_price_and_effective_date, panels=panels)
         else:
             summary_data = self._generate_summary_table(panels=panels)
         self.generate_table(panel=summary_data, table=self.tables["summary_table"])
@@ -155,7 +160,6 @@ class ResultTab(QWidget):
 
         total_sum = 0
 
-
         for name, panel in panels.items():
             summary["title"].append(name.replace("_", " ").title())
             panel_df = pd.DataFrame(panel)
@@ -178,14 +182,20 @@ class ResultTab(QWidget):
         return summary
 
     def _export_to_excel(self):
+
         tables = {name: table for name, table in self.tables.items()}
         tables["installation_table"] = self.main_view.installation_tab.installation_table
 
-        file_path, _ = QFileDialog.getSaveFileName(self, "Save Excel File",
-                                                   f"{self.current_project.name}-{self.current_project.code}-{self.current_project.unique_no}-Rev{str(self.current_project.revision).zfill(2)}(ReportByGriinPower)",
-                                                   "Excel Files (*.xlsx)")
+        file_name = f"{self.current_project.name}-{self.current_project.code}-{self.current_project.unique_no}-Rev{str(self.current_project.revision).zfill(2)}"
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save Excel File", file_name, "Excel Files (*.xlsx)" )
         if not file_path:
             return
+
+
+        self._export_report_excel(tables=tables, file_path= file_path.replace(".xlsx", "(ReportByGriinPower).xlsx"))
+        self._export_factor_excel(tables=tables, file_path= file_path.replace(".xlsx", "(FactorByGriinPower).xlsx"))
+
+    def _export_report_excel(self, tables, file_path):
 
         with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
             for name, table in tables.items():
@@ -256,11 +266,75 @@ class ResultTab(QWidget):
                 # Freeze header row
                 worksheet.freeze_panes = worksheet["A3"]
 
-    def show_datail_btn_handler(self):
-        self.show_datail_window = DictionaryViewer(data=self.electrical_specs, parent=self.main_view)
+    def _export_factor_excel(self, tables, file_path):
+
+        bagfilter_price = 0
+        for name, table in tables.items():
+            model = table.model()
+            if model is None or name=="summary_table":
+                continue
+
+            df = model._data.copy()
+            df_price = df.iloc[-1]['total_price']
+            bagfilter_price += df_price
+
+        # create dataframe
+        data = [
+            [0, 0, 0, 1*bagfilter_price, bagfilter_price, 1, "تابلو بگ فیلتر", 1],
+            [0, 0, 0, 1*3700564000, 3700564000, 1, "ابزار دقیق", 2]]
+        df = pd.DataFrame(data, columns=["خرید", "مهندسی", "ساخت", "قیمت کل(ریال)", "قیمت", "تعداد", "شرح", "ردیف"])
+
+        # شروع نوشتن فایل با xlsxwriter
+        with pd.ExcelWriter(file_path, engine='xlsxwriter') as writer:
+            workbook = writer.book
+            worksheet = workbook.add_worksheet("قیمت نهایی")
+            writer.sheets["قیمت نهایی"] = worksheet
+
+            # قالب‌های مورد استفاده
+            header_format = workbook.add_format({
+                'bold': True, 'align': 'center', 'valign': 'vcenter',
+                'border': 1, 'text_wrap': True
+            })
+            cell_format = workbook.add_format({
+                'border': 1, 'align': 'center', 'valign': 'vcenter'
+            })
+
+            # نوشتن هدرهای ترکیبی (3 ردیف اول)
+            today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d")
+            worksheet.merge_range('C1:J1', f'قیمت و نفر ساعت تقریبی یک دستگاه بگ‌فیلتر {self.current_project.name} ({self.current_project.code}-{self.current_project.unique_no}) {today_shamsi}', header_format)
+            worksheet.write('J2', 'ردیف', header_format)
+            worksheet.write('I2', 'شرح', header_format)
+            worksheet.write('H2', 'تعداد', header_format)
+            worksheet.write('G2', 'قیمت', header_format)
+            worksheet.write('F2', 'قیمت کل(ریال)', header_format)
+
+            worksheet.merge_range('C2:E2', 'نفر ساعت واحد', header_format)
+
+            # سطر سوم - زیرعنوان‌ها
+            worksheet.write('E3', 'خرید', header_format)
+            worksheet.write('D3', 'مهندسی', header_format)
+            worksheet.write('C3', 'ساخت', header_format)
+
+            # نوشتن داده‌ها
+            for row_idx, row in df.iterrows():
+                worksheet.write(row_idx + 3, 2, row["خرید"], cell_format)
+                worksheet.write(row_idx + 3, 3, row["مهندسی"], cell_format)
+                worksheet.write(row_idx + 3, 4, row["ساخت"], cell_format)
+                worksheet.write(row_idx + 3, 5, row["قیمت کل(ریال)"], cell_format)
+                worksheet.write(row_idx + 3, 6, row["قیمت"], cell_format)
+                worksheet.write(row_idx + 3, 7, row["تعداد"], cell_format)
+                worksheet.write(row_idx + 3, 8, row["شرح"], cell_format)
+                worksheet.write(row_idx + 3, 9, row["ردیف"], cell_format)
+
+            # تنظیم عرض ستون‌ها
+            worksheet.set_column('J:J', 6)  # ردیف
+            worksheet.set_column('I:I', 25)  # شرح
+            worksheet.set_column('H:H', 6)  # تعداد
+            worksheet.set_column('F:G', 15)  # قیمت، قیمت کل
+            worksheet.set_column('C:E', 12)  # نفر ساعت‌ها
 
 
-class DictionaryViewer(QMainWindow):
+class DictionaryTreeViewer(QMainWindow):
     def __init__(self, data, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Project Details Viewer")

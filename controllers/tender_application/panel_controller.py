@@ -183,7 +183,7 @@ class PanelController:
                 order_number=bimetal["order_number"],
                 specifications=(
                     f"Current: {bimetal['min_current']}A ~ {bimetal['max_current''']}A\n"
-                    f"Trip Time: {bimetal['trip_time']} sec"),
+                    f"Tripping Threshold: {bimetal['tripping_threshold']} A"),
                 quantity=total_qty,
                 price=bimetal['price'],
                 last_price_update=f"{bimetal['supplier_name']}\n{bimetal['date']}",
@@ -319,9 +319,9 @@ class PanelController:
                           specification="6")
         self.process_item(motor_objects=motor_objects, attr_name="contactor_aux_contact_qty",
                           comp_type="Contactor Aux Contact")
-        self.process_item(motor_objects=motor_objects, attr_name="mpcb_mccb_aux_contact_qty",
+        self.process_item(motor_objects=motor_objects, attr_name="mccb_aux_contact_qty",
                           comp_type="MCCB Aux Contact")
-        self.process_item(motor_objects=motor_objects, attr_name="mpcb_mccb_aux_contact_qty",
+        self.process_item(motor_objects=motor_objects, attr_name="mpcb_aux_contact_qty",
                           comp_type="MPCB Aux Contact")
         self.process_item(motor_objects=motor_objects, attr_name="relay_1no_1nc_qty", comp_type="Relay",
                           specification="1")
@@ -345,16 +345,16 @@ class PanelController:
         if total_motors == 0:
             return
         elif total_motors < 3:
-            width, height, depth = 80, 100, 25
+            width, height, depth = 800, 1000, 300
             qty = 1
         elif total_motors < 4:
-            width, height, depth = 80, 160, 25
+            width, height, depth = 800, 1600, 300
             qty = 1
         elif total_motors < 8:
-            width, height, depth = 120, 220, 30
+            width, height, depth = 1200, 2200, 600
             qty = 1
         else:
-            width, height, depth = 120, 200, 30
+            width, height, depth = 1200, 2000, 600
             qty = 2
 
         success, electrical_panel = get_electrical_panel_by_spec(type="Electrical Panel", width=width, height=height,
@@ -693,7 +693,7 @@ class PanelController:
     def choose_internal_power_wire(self, motor_objects):
         """
         Adds internal power panel wire or busbar based on motor power:
-        - For motors <= 45kW: 4 meters of 1x1.6 wire per motor
+        - For motors <= 45kW: 4 meters of 1x6 wire per motor
         - For motors > 45kW: 5 meters of busbar per motor
         """
         wire_length = 0
@@ -713,13 +713,13 @@ class PanelController:
                     busbar_notes.append(f"{motor_busbar_length} m for {motor.usage}")
 
         if wire_length > 0:
-            success, cable = get_wire_cable_by_spec("Wire", 1, 1.5, brand=None, note=None)
+            success, cable = get_wire_cable_by_spec("Wire", 1, 6, brand=None, note=None)
             if success:
                 self.add_to_panel(
                     type="Internal Power Panel Wire",
                     brand=cable["brand"],
                     order_number=cable["order_number"],
-                    specifications="Size: 1x1.5 mm²",
+                    specifications="Size: 1x6 mm²",
                     quantity=wire_length,
                     price=cable['price'],
                     last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
@@ -730,7 +730,7 @@ class PanelController:
                     type="Internal Power Panel Wire",
                     brand="",
                     order_number="",
-                    specifications="Size: 1x1.5 mm²",
+                    specifications="Size: 1x6 mm²",
                     quantity=wire_length,
                     price=0,
                     last_price_update="❌ Wire not found",

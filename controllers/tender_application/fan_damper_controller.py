@@ -24,7 +24,9 @@ class FanDamperController(PanelController):
 
         if damper_config["start_type"] == "Pneumatic":
             damper.mpcb_qty = 0
+            damper.mpcb_aux_contact_qty=0
             damper.mccb_qty = 1
+            damper.mccb_aux_contact_qty=1
             damper.relay_1no_1nc_qty = 6
             damper.plc_do = 2
         elif damper_config["start_type"] == "Motorized On/Off":
@@ -41,7 +43,7 @@ class FanDamperController(PanelController):
             damper.plc_do = 2
             damper.plc_ai = 1
             damper.plc_ao = 1
-            damper.button_qty = 4
+            damper.button_qty = 3
             damper.relay_1no_1nc_qty = 5
         motor_objects = [(damper, damper_config["qty"])]
 
@@ -75,7 +77,10 @@ class FanDamperController(PanelController):
         fan.thermal_protection = fan_config["thermal_protection"]
         fan.space_heater = fan_config["space_heater"]
         fan.mpcb_qty = 0
+        fan.mpcb_aux_contact_qty = 0
         fan.mccb_qty = 1
+        fan.mccb_aux_contact_qty = 1
+
         fan.bimetal_qty = 1
 
         motor_objects.append((fan, fan_config["qty"]))

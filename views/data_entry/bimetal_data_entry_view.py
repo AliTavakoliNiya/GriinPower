@@ -16,7 +16,7 @@ class BimetalDataEntryView:
         self.ui.bimetal_save_btn.clicked.connect(self.save_bimetal_to_db_func)
 
         self.history_table_headers = (
-                ["min_current", "max_current", "trip_time", "class"] + self.ui.history_table_headers)
+                ["min_current", "max_current", "tripping_threshold", "class"] + self.ui.history_table_headers)
 
         self.refresh_page()
 
@@ -32,7 +32,7 @@ class BimetalDataEntryView:
 
     def clear_bimetal_form(self):
         # Reset form fields to default
-        for spin in [self.ui.bimetal_min_current, self.ui.bimetal_max_current, self.ui.bimetal_trip_time]:
+        for spin in [self.ui.bimetal_min_current, self.ui.bimetal_max_current, self.ui.bimetal_tripping_threshold]:
             spin.setValue(0)
         for combo in [self.ui.bimetal_brand, self.ui.bimetal_supplier_list]:
             combo.setCurrentIndex(0)
@@ -60,19 +60,19 @@ class BimetalDataEntryView:
         min_current = self.ui.bimetal_min_current.value()
         max_current = self.ui.bimetal_max_current.value()
         bimetal_class = self.ui.bimetal_class.text().strip() if self.ui.bimetal_class.text().strip() else None
-        trip_time = self.ui.bimetal_trip_time.value()
+        tripping_threshold = self.ui.bimetal_tripping_threshold.value()
         brand = self.ui.bimetal_brand.currentText().strip() if self.ui.bimetal_brand.currentIndex() else None
         supplier = self.ui.bimetal_supplier_list.currentText().strip() if self.ui.bimetal_supplier_list.currentIndex() else None
         price = parse_price(self.ui.bimetal_price.text())
         order_number = self.ui.bimetal_order_number.text().strip() if self.ui.bimetal_order_number.text().strip() else None
-        if not all([min_current, max_current, bimetal_class, trip_time, brand, supplier, price, order_number]):
+        if not all([min_current, max_current, bimetal_class, tripping_threshold, brand, supplier, price, order_number]):
             show_message("Please fill in all required fields.", title="Error")
             return
 
         bimetal_details = {
             "min_current": min_current,
             "max_current": max_current,
-            "trip_time": trip_time,
+            "tripping_threshold": tripping_threshold,
             "class": bimetal_class,
             "brand": brand,
             "supplier": supplier,

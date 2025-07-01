@@ -254,7 +254,7 @@ QPushButton:pressed {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>8</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -1708,7 +1708,32 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
-               <string>Calibration</string>
+               <string>Delta Pressure Transmitter Calibration</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Pressure Transmitter Calibration</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Pressure Gauge Calibration</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Temperature Transmitter Calibration</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Vibration Transmitter Calibration</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Level Transmitter Calibration</string>
               </property>
              </item>
             </widget>
@@ -2848,6 +2873,9 @@ QPushButton:pressed {
              <property name="buttonSymbols">
               <enum>QAbstractSpinBox::NoButtons</enum>
              </property>
+             <property name="maximum">
+              <double>999.990000000000009</double>
+             </property>
             </widget>
            </item>
            <item row="2" column="6">
@@ -2957,7 +2985,7 @@ QPushButton:pressed {
             </widget>
            </item>
            <item row="2" column="3">
-            <widget class="QDoubleSpinBox" name="bimetal_trip_time">
+            <widget class="QDoubleSpinBox" name="bimetal_tripping_threshold">
              <property name="minimumSize">
               <size>
                <width>62</width>
@@ -2984,7 +3012,7 @@ QPushButton:pressed {
            <item row="2" column="0" colspan="2">
             <widget class="QLabel" name="label_43">
              <property name="text">
-              <string>*Trip Time</string>
+              <string>*Tripping Threshold</string>
              </property>
             </widget>
            </item>
@@ -3098,6 +3126,9 @@ QPushButton:pressed {
              </property>
              <property name="buttonSymbols">
               <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="maximum">
+              <double>999.990000000000009</double>
              </property>
             </widget>
            </item>
@@ -3431,6 +3462,18 @@ QPushButton:pressed {
       </widget>
       <widget class="QWidget" name="wire_cable">
        <layout class="QGridLayout" name="gridLayout_23">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_12">
           <property name="title">
@@ -3538,19 +3581,6 @@ QPushButton:pressed {
              <property name="icon">
               <iconset>
                <normaloff>../../assets/plus.png</normaloff>../../assets/plus.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="12" column="11">
-            <widget class="QPushButton" name="wire_cable_save_btn">
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>💾 Save To Database</string>
              </property>
             </widget>
            </item>
@@ -3855,6 +3885,19 @@ QPushButton:pressed {
              </property>
              <property name="text">
               <string>*Price (IRR)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="12" column="10" colspan="2" alignment="Qt::AlignRight">
+            <widget class="QPushButton" name="wire_cable_save_btn">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>💾 Save To Database</string>
              </property>
             </widget>
            </item>
@@ -4182,19 +4225,6 @@ QPushButton:pressed {
              </property>
             </widget>
            </item>
-           <item row="5" column="0" colspan="2">
-            <widget class="QLabel" name="label_76">
-             <property name="maximumSize">
-              <size>
-               <width>73</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>*Brand</string>
-             </property>
-            </widget>
-           </item>
            <item row="8" column="1">
             <widget class="QLabel" name="label_70">
              <property name="maximumSize">
@@ -4286,6 +4316,19 @@ QPushButton:pressed {
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" colspan="2">
+            <widget class="QLabel" name="label_76">
+             <property name="maximumSize">
+              <size>
+               <width>73</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>*Brand</string>
              </property>
             </widget>
            </item>

@@ -16,7 +16,7 @@ class BimetalDataEntryController:
             min_current=bimetal_details["min_current"],
             max_current=bimetal_details["max_current"],
             _class=bimetal_details["class"],
-            trip_time=bimetal_details["trip_time"]
+            tripping_threshold=bimetal_details["tripping_threshold"]
         )
         if not success:
             return False, bimetal_id

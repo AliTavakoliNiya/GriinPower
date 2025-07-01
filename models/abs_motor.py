@@ -15,7 +15,8 @@ class Motor:
             mccb_qty=0,
             bimetal_qty=0,
             contactor_aux_contact_qty=1,
-            mpcb_mccb_aux_contact_qty=1,
+            mccb_aux_contact_qty=0,
+            mpcb_aux_contact_qty=1,
             button_qty=3,
             selector_switch_qty=1,
             signal_lamp_24v_qty=2,
@@ -40,7 +41,8 @@ class Motor:
         self.mccb_qty = mccb_qty
         self.bimetal_qty = bimetal_qty
         self.contactor_aux_contact_qty = contactor_aux_contact_qty
-        self.mpcb_mccb_aux_contact_qty = mpcb_mccb_aux_contact_qty
+        self.mccb_aux_contact_qty = mccb_aux_contact_qty
+        self.mpcb_aux_contact_qty = mpcb_aux_contact_qty
         self.terminal_4_qty = terminal_4_qty
         self.terminal_6_qty = terminal_6_qty
         self.relay_1no_1nc_qty = relay_1no_1nc_qty

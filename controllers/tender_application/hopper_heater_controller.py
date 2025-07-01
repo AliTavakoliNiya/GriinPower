@@ -22,7 +22,9 @@ class HopperHeaterController(PanelController):
                               terminal_6_qty=4 * 10,
                               relay_1no_1nc_qty=2,
                               mpcb_qty=0,
+                              mpcb_aux_contact_qty=0,
                               mccb_qty=1,
+                              mccb_aux_contact_qty=1,
                               button_qty=0,
                               selector_switch_qty=0,
                               signal_lamp_24v_qty=0)

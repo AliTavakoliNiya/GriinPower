@@ -16,15 +16,14 @@ class InstrumentDataEntryView:
         self.ui.instrument_save_btn.clicked.connect(self.save_instrument_to_db_func)
         self.ui.instrument_type.currentTextChanged.connect(self.instrument_type_change_func)
 
-
         self.history_table_headers = (["type", "hart_comminucation"] + self.ui.history_table_headers)
 
         self.refresh_page()
 
     def instrument_type_change_func(self):
         self.ui.instrument_has_hart.setChecked(False)
-        current_type = self.ui.instrument_type.currentText()
-        if current_type == "2 Ways Manifold" or current_type == "3 Ways Manifold" or current_type == "Calibration":
+        instrument_type = self.ui.instrument_type.currentText()
+        if "Manifold" in instrument_type or "Calibration" in instrument_type:
             self.ui.instrument_has_hart.hide()
         else:
             self.ui.instrument_has_hart.show()
@@ -45,7 +44,6 @@ class InstrumentDataEntryView:
             combo.setCurrentIndex(0)
         self.ui.instrument_price.setText("0")
         self.ui.instrument_has_hart.setChecked(False)
-
 
     def show_instruments_in_table(self, instruments_list):
         """

@@ -93,4 +93,4 @@ def normalize_string(s: str) -> str:
     if not s:
         return ''
     s = re.sub(r'\s+', ' ', s.strip())
-    return s[0].upper() + s[1:].lower() if len(s) > 0 else ''
+    return s[0].title() + s[1:].lower() if len(s) > 0 else ''

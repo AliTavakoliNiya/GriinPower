@@ -26,7 +26,9 @@ class FreshAirController(PanelController):
             freshair_motor.plc_ao = 1
         elif motors_config["freshair_motor"]["start_type"] == "Pneumatic":
             freshair_motor.mpcb_qty = 0
+            freshair_motor.mpcb_aux_contact_qty=0
             freshair_motor.mccb_qty = 1
+            freshair_motor.mccb_aux_contact_qty=1
             freshair_motor.relay_1no_1nc_qty = 6
             freshair_motor.plc_do = 2
         motor_objects.append((freshair_motor, motors_config["freshair_motor"]["qty"]))
@@ -36,7 +38,9 @@ class FreshAirController(PanelController):
         self.electrical_specs["fresh_air"]["motors"]["fresh_air_flap"]["motor"] = fresh_air_flap
         if motors_config["fresh_air_flap"]["start_type"] == "Pneumatic":
             fresh_air_flap.mpcb_qty = 0
+            fresh_air_flap.mpcb_aux_contact_qty=0
             fresh_air_flap.mccb_qty = 1
+            fresh_air_flap.mpcb_aux_contact_qty=1
             fresh_air_flap.relay_1no_1nc_qty = 6
             fresh_air_flap.plc_do = 2
         elif motors_config["fresh_air_flap"]["start_type"] == "Motorized On/Off":
@@ -62,7 +66,9 @@ class FreshAirController(PanelController):
         self.electrical_specs["fresh_air"]["motors"]["emergency_flap"]["motor"] = emergency_flap
         if motors_config["fresh_air_flap"]["start_type"] == "Pneumatic":
             emergency_flap.mpcb_qty = 0
+            emergency_flap.mpcb_aux_contact_qty=0
             emergency_flap.mccb_qty = 1
+            emergency_flap.mccb_aux_contact_qty=1
             emergency_flap.relay_1no_1nc_qty = 6
             emergency_flap.plc_do = 2
         elif motors_config["fresh_air_flap"]["start_type"] == "Motorized On/Off":

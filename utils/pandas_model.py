@@ -59,7 +59,7 @@ class PandasModel(QAbstractTableModel):
         if role != Qt.DisplayRole:
             return None
         if orientation == Qt.Horizontal:
-            return self._data.columns[section].replace("_", " ").upper()
+            return self._data.columns[section].replace("_", " ").title()
         if orientation == Qt.Vertical:
             return str(self._data.index[section])
         return None
