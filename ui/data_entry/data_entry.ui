@@ -254,7 +254,7 @@ QPushButton:pressed {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -1583,12 +1583,17 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
-               <string>United Electric</string>
+               <string>Rosemount</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Rosemount</string>
+               <string>Endress Hauser</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DBL</string>
               </property>
              </item>
              <item>
@@ -1623,16 +1628,22 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
-               <string>Endress Hauser</string>
+               <string>United Electric</string>
               </property>
              </item>
             </widget>
            </item>
            <item row="1" column="3">
             <widget class="QComboBox" name="instrument_type">
+             <property name="minimumSize">
+              <size>
+               <width>200</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>184</width>
+               <width>200</width>
                <height>16777215</height>
               </size>
              </property>
@@ -1713,7 +1724,17 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
+               <string>Delta Pressure Switch Calibration</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>Pressure Transmitter Calibration</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Pressure Switch Calibration</string>
               </property>
              </item>
              <item>
@@ -1734,6 +1755,11 @@ QPushButton:pressed {
              <item>
               <property name="text">
                <string>Level Transmitter Calibration</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Level Switch Calibration</string>
               </property>
              </item>
             </widget>

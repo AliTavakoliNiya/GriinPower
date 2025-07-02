@@ -188,26 +188,23 @@ class ResultTab(QWidget):
         tables["installation_table"] = self.main_view.installation_tab.installation_table
 
         file_name = f"{self.current_project.name}-{self.current_project.code}-{self.current_project.unique_no}-Rev{str(self.current_project.revision).zfill(2)}"
-        file_path, _ = QFileDialog.getSaveFileName(self, "Save Excel File", file_name, "Excel Files (*.xlsx)" )
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save Excel File", file_name, "Excel Files (*.xlsx)")
         if not file_path:
             return
 
         try:
             report_path = file_path.replace(".xlsx", "(ReportByGriinPower).xlsx")
-            factor_path = file_path.replace(".xlsx", "(FactorByGriinPower).xlsx")
 
-            self._export_report_excel(tables=tables, file_path= report_path)
-            self._export_factor_excel(tables=tables, file_path= factor_path)
+            self._export_report_excel(tables=tables, file_path=report_path)
 
             subprocess.Popen(['start', '', report_path], shell=True)
-            subprocess.Popen(['start', '', factor_path], shell=True)
 
         except Exception as e:
             show_message(message=str(e), title="Error")
 
     def _export_report_excel(self, tables, file_path):
-
         with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+            # Export main report sheets
             for name, table in tables.items():
                 model = table.model()
                 if model is None:
@@ -217,153 +214,137 @@ class ResultTab(QWidget):
                 df.index = range(1, len(df) + 1)
 
                 df.to_excel(writer, sheet_name=name, index=True, startrow=1)
+                self._style_excel_sheet(writer, name)
 
-                workbook = writer.book
-                worksheet = writer.sheets[name]
+            # Append factor sheets
+            instrument_df, summary_df = self._prepare_factor_data(tables)
 
-                # Styles
-                header_font = Font(bold=True, color="FFFFFF")
-                thin_border = openpyxl.styles.Border(
-                    left=openpyxl.styles.Side(style='thin'),
-                    right=openpyxl.styles.Side(style='thin'),
-                    top=openpyxl.styles.Side(style='thin'),
-                    bottom=openpyxl.styles.Side(style='thin')
-                )
-                center_alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center", wrap_text=True)
-                header_fill = PatternFill(start_color="FF4F81BD", end_color="FF4F81BD", fill_type="solid")
-                zebra_fill = PatternFill(start_color="FFF2F2F2", end_color="FFF2F2F2", fill_type="solid")
-                total_fill = PatternFill(start_color="FFFFAA00", end_color="FFFFAA00", fill_type="solid")
+            instrument_df.index = range(1, len(instrument_df) + 1)
+            instrument_df.to_excel(writer, sheet_name="اقلام ابزار دقیق", startrow=1, index=True)
+            self._style_excel_sheet(writer, "اقلام ابزار دقیق")
 
-                columns = list(df.columns.insert(0, df.index.name or ""))  # Including index
+            summary_df.index = range(1, len(summary_df) + 1)
+            summary_df.to_excel(writer, sheet_name="قیمت نهایی", startrow=1, index=True)
+            self._style_excel_sheet(writer, "قیمت نهایی")
 
-                # Format headers
-                for col_idx, col_name in enumerate(columns, 1):
-                    cell = worksheet.cell(row=2, column=col_idx)
-                    cell.font = header_font
-                    cell.fill = header_fill
-                    cell.alignment = center_alignment
-                    cell.border = thin_border
-
-                # Format data rows
-                for row in worksheet.iter_rows(min_row=3, max_row=worksheet.max_row, max_col=worksheet.max_column):
-                    row_idx = row[0].row
-                    for col_idx, cell in enumerate(row, 0):
-                        cell.alignment = center_alignment
-                        cell.border = thin_border
-
-                        col_name = columns[col_idx]
-                        if col_name.lower() in ("price", "total_price") and isinstance(cell.value, (int, float)):
-                            cell.number_format = '#,##0.00'
-
-                    if row_idx % 2 == 1:
-                        for cell in row:
-                            cell.fill = zebra_fill
-
-                # Special styling for Total row
-                total_row = worksheet.max_row
-                for cell in worksheet[total_row]:
-                    cell.fill = total_fill
-
-                # Auto-fit column widths
-                for column_cells in worksheet.columns:
-                    max_length = 0
-                    column = column_cells[0].column_letter
-                    for cell in column_cells:
-                        if cell.value:
-                            max_length = max(max_length, len(str(cell.value)))
-                    worksheet.column_dimensions[column].width = max(max_length + 2, 10)
-
-                # Freeze header row
-                worksheet.freeze_panes = worksheet["A3"]
-
-    def _export_factor_excel(self, tables, file_path):
+    def _prepare_factor_data(self, tables):
         instruments_list = [
-            'Switch',
-            'Transmitter',
-            'Gauge',
-            'Detector',
-            'Ptc',
-            'Calibration',
-            'Manifold']
+            'Delta Pressure Transmitter', 'Delta Pressure Switch', 'Pressure Transmitter',
+            'Pressure Switch', 'Pressure Gauge', 'Temperature Transmitter', 'Proximity Switch',
+            'Vibration Transmitter', 'Speed Detector', 'Level Switch', 'Level Transmitter',
+            'Ways Manifold', 'Calibration'
+        ]
 
         bagfilter_price = 0
         instruments_price = 0
+        instrument_items = []
+
         for name, table in tables.items():
             model = table.model()
-            if model is None or name=="summary_table" or name=="installation_table":
+            if model is None or name in ["summary_table", "installation_table"]:
                 continue
 
             df = model._data.copy()
-            for index, row in df.iterrows():
-                if "Total" in row["type"]:
+            df.columns = df.columns.str.lower()  # normalize column names
+
+            for _, row in df.iterrows():
+                if "total" in row["type"].lower():
                     continue
-                for instrument in instruments_list:
-                    if instrument in row["type"]:
-                        instruments_price += row['total_price']
 
+                if any(inst in row["type"] for inst in instruments_list):
+                    instruments_price += row['total_price']
+                    instrument_items.append({
+                        "شرح": row["type"],
+                        "برند": row.get("brand", ""),
+                        "تعداد": row.get("quantity", 1),
+                        "قیمت واحد": row.get("price", 0),
+                        "قیمت کل": row.get("total_price", 0),
+                    })
 
-            df_price = df.iloc[-1]['total_price']
-            bagfilter_price += df_price
+            bagfilter_price += df.iloc[-1]['total_price']
 
         bagfilter_price -= instruments_price
         el_motor_price = tables['summary_table'].model()._data.iloc[7]['Price']
-        # create dataframe
-        data = [
-            [0, 0, 0, 1*bagfilter_price, bagfilter_price, 1, "تابلو بگ فیلتر", 1],
-            [0, 0, 0, 1*instruments_price, instruments_price, 1, "ابزار دقیق", 2],
-            [0, 0, 0, 1*3700564000, 3700564000, 1, "کابل", 3],
-            [0, 0, 0, 1*3700564000, 3700564000, 1, "راه اندازی FAT", 4],
-            [0, 0, 0, 1*el_motor_price, el_motor_price, 1, f" الکتروموتور {int(self.electrical_specs['fan']['motors']['fan']['power']/1000)}KW {self.electrical_specs['fan']['motors']['fan']['brand']}  {self.electrical_specs['fan']['motors']['fan']['efficiency_class']} ", 5],]
-        df = pd.DataFrame(data, columns=["خرید", "مهندسی", "ساخت", "قیمت کل(ریال)", "قیمت", "تعداد", "شرح", "ردیف"])
 
-        # شروع نوشتن فایل با xlsxwriter
-        with pd.ExcelWriter(file_path, engine='xlsxwriter') as writer:
-            workbook = writer.book
-            worksheet = workbook.add_worksheet("قیمت نهایی")
-            writer.sheets["قیمت نهایی"] = worksheet
+        summary_data = [
+            [0, 0, 0, bagfilter_price, bagfilter_price, 1, "تابلوبگ فیلتر", 1],
+            [0, 0, 0, instruments_price, instruments_price, 1, "ابزار دقیق", 2],
+            [0, 0, 0, 3700564000, 0, 1, "کابل", 3],
+            [0, 0, 0, 3700564000, 0, 1, "راه اندازی FAT", 4],
+            [0, 0, 0, el_motor_price, el_motor_price, 1,
+             f" الکتروموتور {int(self.electrical_specs['fan']['motors']['fan']['power'] / 1000)}KW "
+             f"{self.electrical_specs['fan']['motors']['fan']['brand']} "
+             f"{self.electrical_specs['fan']['motors']['fan']['efficiency_class']}", 5]
+        ]
 
-            # قالب‌های مورد استفاده
-            header_format = workbook.add_format({
-                'bold': True, 'align': 'center', 'valign': 'vcenter',
-                'border': 1, 'text_wrap': True
-            })
-            cell_format = workbook.add_format({
-                'border': 1, 'align': 'center', 'valign': 'vcenter'
-            })
+        summary_df = pd.DataFrame(summary_data,
+                                  columns=["خرید", "مهندسی", "ساخت", "قیمت کل(ریال)", "قیمت", "تعداد", "شرح", "ردیف"])
+        summary_totals = summary_df[["خرید", "مهندسی", "ساخت", "قیمت کل(ریال)", "قیمت"]].sum().to_dict()
+        summary_df.loc[len(summary_df)] = {**summary_totals, "تعداد": "", "شرح": "جمع کل", "ردیف": ""}
 
-            # نوشتن هدرهای ترکیبی (3 ردیف اول)
-            today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d")
-            worksheet.merge_range('C1:J1', f'قیمت و نفر ساعت تقریبی یک دستگاه بگ‌فیلتر {self.current_project.name} ({self.current_project.code}-{self.current_project.unique_no}) {today_shamsi}', header_format)
-            worksheet.write('J2', 'ردیف', header_format)
-            worksheet.write('I2', 'شرح', header_format)
-            worksheet.write('H2', 'تعداد', header_format)
-            worksheet.write('G2', 'قیمت', header_format)
-            worksheet.write('F2', 'قیمت کل(ریال)', header_format)
+        instrument_df = pd.DataFrame(instrument_items)
+        if not instrument_df.empty:
+            total_price = instrument_df["قیمت کل"].sum()
+            instrument_df.loc[len(instrument_df)] = {
+                "شرح": "جمع کل", "برند": "", "تعداد": "", "قیمت واحد": "", "قیمت کل": total_price
+            }
 
-            worksheet.merge_range('C2:E2', 'نفر ساعت واحد', header_format)
+        return instrument_df, summary_df
 
-            # سطر سوم - زیرعنوان‌ها
-            worksheet.write('E3', 'خرید', header_format)
-            worksheet.write('D3', 'مهندسی', header_format)
-            worksheet.write('C3', 'ساخت', header_format)
+    def _style_excel_sheet(self, writer, sheet_name):
+        from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 
-            # نوشتن داده‌ها
-            for row_idx, row in df.iterrows():
-                worksheet.write(row_idx + 3, 2, row["خرید"], cell_format)
-                worksheet.write(row_idx + 3, 3, row["مهندسی"], cell_format)
-                worksheet.write(row_idx + 3, 4, row["ساخت"], cell_format)
-                worksheet.write(row_idx + 3, 5, row["قیمت کل(ریال)"], cell_format)
-                worksheet.write(row_idx + 3, 6, row["قیمت"], cell_format)
-                worksheet.write(row_idx + 3, 7, row["تعداد"], cell_format)
-                worksheet.write(row_idx + 3, 8, row["شرح"], cell_format)
-                worksheet.write(row_idx + 3, 9, row["ردیف"], cell_format)
+        worksheet = writer.sheets[sheet_name]
+        max_row = worksheet.max_row
+        max_col = worksheet.max_column
 
-            # تنظیم عرض ستون‌ها
-            worksheet.set_column('J:J', 6)  # ردیف
-            worksheet.set_column('I:I', 35)  # شرح
-            worksheet.set_column('H:H', 6)  # تعداد
-            worksheet.set_column('F:G', 15)  # قیمت، قیمت کل
-            worksheet.set_column('C:E', 12)  # نفر ساعت‌ها
+        # === Styles ===
+        header_font = Font(bold=True, color="FFFFFF")
+        header_fill = PatternFill(start_color="FF4F81BD", end_color="FF4F81BD", fill_type="solid")
+        zebra_fill = PatternFill(start_color="FFF2F2F2", end_color="FFF2F2F2", fill_type="solid")
+        total_fill = PatternFill(start_color="FFFFAA00", end_color="FFFFAA00", fill_type="solid")
+        alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        thin_border = Border(
+            left=Side(style='thin'), right=Side(style='thin'),
+            top=Side(style='thin'), bottom=Side(style='thin')
+        )
+
+        # === Apply to header row ===
+        for col_idx in range(1, max_col + 1):
+            cell = worksheet.cell(row=2, column=col_idx)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = alignment
+            cell.border = thin_border
+
+        # === Apply to data rows ===
+        for row in worksheet.iter_rows(min_row=3, max_row=max_row, max_col=max_col):
+            for cell in row:
+                cell.alignment = alignment
+                cell.border = thin_border
+
+                # Price formatting
+                if isinstance(cell.value, (int, float)) and cell.column_letter in ['D', 'E', 'F', 'G']:
+                    cell.number_format = '#,##0'
+
+            if row[0].row % 2 == 1:
+                for cell in row:
+                    cell.fill = zebra_fill
+
+        # === Total row formatting ===
+        for cell in worksheet[max_row]:
+            if isinstance(cell.value, str) and "جمع کل" in cell.value:
+                for c in worksheet[max_row]:
+                    c.fill = total_fill
+
+        # === Auto column widths ===
+        for column_cells in worksheet.columns:
+            max_length = max((len(str(cell.value)) for cell in column_cells if cell.value), default=0)
+            column_letter = column_cells[0].column_letter
+            worksheet.column_dimensions[column_letter].width = max(max_length + 2, 10)
+
+        # === Freeze header ===
+        worksheet.freeze_panes = worksheet["A3"]
 
 
 class DictionaryTreeViewer(QMainWindow):

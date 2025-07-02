@@ -412,11 +412,12 @@ class BagfilterController(PanelController):
                     print(manifold_obj)
 
             # ------------ Calibration ------------
-            if "transmitter" in name and qty != 0:
-                success, calibration = get_instrument_by_spec(type="Calibration")
+            if "proximity_switch" != name and "speed_detector" != name and "ptc" != name and qty != 0:
+                calibration_name = instrument_name.title().replace("_", " ") + " Calibration"
+                success, calibration = get_instrument_by_spec(type=calibration_name)
                 if success:
                     self.add_to_panel(
-                        type="CALIBRATION",
+                        type=calibration_name,
                         brand=calibration['brand'],
                         quantity=qty,
                         price=calibration['price'],
@@ -425,7 +426,7 @@ class BagfilterController(PanelController):
                     )
                 else:
                     self.add_to_panel(
-                        type="CALIBRATION",
+                        type=calibration_name,
                         brand="",
                         quantity=qty,
                         price=0,

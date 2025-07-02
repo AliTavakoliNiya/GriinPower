@@ -23,7 +23,14 @@ class InstrumentDataEntryView:
     def instrument_type_change_func(self):
         self.ui.instrument_has_hart.setChecked(False)
         instrument_type = self.ui.instrument_type.currentText()
-        if "Manifold" in instrument_type or "Calibration" in instrument_type:
+        if "Calibration" in instrument_type:
+            self.ui.instrument_has_hart.hide()
+            self.ui.instrument_brand.hide()
+        else:
+            self.ui.instrument_has_hart.show()
+            self.ui.instrument_brand.show()
+
+        if "Manifold" in instrument_type:
             self.ui.instrument_has_hart.hide()
         else:
             self.ui.instrument_has_hart.show()
@@ -64,11 +71,11 @@ class InstrumentDataEntryView:
     def save_instrument_to_db_func(self):
         type = self.ui.instrument_type.currentText().strip() if self.ui.instrument_type.currentIndex() else None
         has_hart = True if self.ui.instrument_has_hart.isChecked() else False
-        brand = self.ui.instrument_brand.currentText().strip() if self.ui.instrument_brand.currentIndex() else None
+        brand = self.ui.instrument_brand.currentText().strip() if self.ui.instrument_brand.currentIndex() else ""
         supplier = self.ui.instrument_supplier_list.currentText().strip() if self.ui.instrument_supplier_list.currentIndex() else None
         price = parse_price(self.ui.instrument_price.text())
 
-        if not all([type, brand, supplier, price]):
+        if not all([type, supplier, price]):
             show_message("Please fill in all required fields.", title="Error")
             return
 
