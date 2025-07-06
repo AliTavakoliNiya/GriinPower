@@ -2,6 +2,7 @@ import math
 import re
 from copy import deepcopy
 
+from config import COSNUS_PI, ETA
 from controllers.tender_application.panel_controller import PanelController
 
 from models.items.electrical_panel import get_electrical_panel_by_spec
@@ -89,8 +90,8 @@ class BagfilterController(PanelController):
         """ ----------------------- Add plc ----------------------- """
         self.choose_plc()
 
-        """ ----------------------- Add Components for Motors ----------------------- """
-        self.choose_mccb()
+        """ ----------------------- Add MCCB ----------------------- """
+        self.choose_input_mccb()
 
         """ ----------------------- Calculate and add PLC I/O requirements ----------------------- """
         self.calculate_plc_io_requirements(total_do, total_di, total_ao, total_ai)
@@ -187,26 +188,40 @@ class BagfilterController(PanelController):
         if "olm" in general_items:
             self.process_item(comp_type="OLM", qty=self.bagfilter_general_items["olm"])
 
-    def choose_mccb(self):
+    def choose_input_mccb(self):
         """
         Adds an MCCB entry to the panel based on the total motor power in the Tender Application.
         """
-        total_current = 0.0
+        total_power = 0.0
 
-        for section in self.electrical_specs.values():
+        for section_name, section in self.electrical_specs.items():
             motors = section.get("motors", {})
             for motor_name, motor_data in motors.items():
                 try:
+                    # Skip "fan" motor if its voltage type is "MV"
+                    if motor_name == "fan" and self.electrical_specs["fan"]["motors"]["voltage_type"]=="MV":
+                        continue
+
                     qty = motor_data.get("qty", 0)
-                    current = motor_data.get("motor", 0).current
-                    total_current += qty * current
-                except Exception:
-                    pass
+                    motor = motor_data.get("motor", None)
+                    if motor:
+                        power = motor_data.get("power", 0)  # Assuming 'power' is an attribute of motor
+                        total_power += qty * power
+                except Exception as e:
+                    print(str(e))
+                    continue
+
+        try:
+            volt = self.electrical_specs["project_info"]["l_voltage"]
+            total_current = round(total_power / (math.sqrt(3) * volt * COSNUS_PI * ETA), 2)
+        except Exception as e:
+            print(f"Error calculating total current: {e}")
+            total_current = 0.0
 
         if total_current == 0:
             return
 
-        success, mccb = get_mccb_by_current(rated_current=total_current,
+        success, mccb = get_mccb_by_current(rated_current=total_current*1.25,
                                             brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
@@ -214,7 +229,7 @@ class BagfilterController(PanelController):
                 brand=mccb['brand'],
                 order_number=mccb["order_number"],
                 specifications=(
-                    f"Total Motor Current: {total_current:.2f}A"
+                    f"Total Motor Current: {total_current*1.25:.2f}A"
                 ),
                 quantity=1,
                 price=mccb['price'],

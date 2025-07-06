@@ -84,7 +84,7 @@ class TenderApplication(QMainWindow):
     def on_tab_changed(self, index):
         """Validates data after a tab has been changed. Reverts if invalid."""
 
-        # If switched to Electrical tab (index 1)
+        # If switched to other tab (index 1)
         if index == 1:
             if not self.project_information_tab.check_info_tab_ui_rules():
                 # Revert back to Project Information tab
@@ -92,7 +92,6 @@ class TenderApplication(QMainWindow):
 
         # If switched to Installation or Result (index 2 or 3)
         elif index in (2, 3):
-            prev_index = self.tabWidget.currentIndex()
 
             # If switched directly from one to the other (2 <-> 3), do nothing
             # (but this will NOT work because currentIndex is now the *new* index)
@@ -102,10 +101,11 @@ class TenderApplication(QMainWindow):
                 self._last_tab_index = index
                 return
 
-            if not self.electrical_tab.check_electrical_tab_ui_rules():
-                self.tabWidget.setCurrentIndex(1)
-            elif not self.project_information_tab.check_info_tab_ui_rules():
+
+            if not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
+            elif not self.electrical_tab.check_electrical_tab_ui_rules():
+                self.tabWidget.setCurrentIndex(1)
             else:
                 self.installation_tab.generate_result()
                 self.result_tab.generate_panels()

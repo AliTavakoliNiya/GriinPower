@@ -3390,13 +3390,6 @@ QPushButton:pressed {
             </property>
            </widget>
           </item>
-          <item row="7" column="1">
-           <widget class="QLabel" name="label_20">
-            <property name="text">
-             <string>Cooling Method</string>
-            </property>
-           </widget>
-          </item>
           <item row="4" column="3">
            <widget class="QComboBox" name="fan_kw">
             <property name="maximumSize">
@@ -3823,6 +3816,13 @@ QPushButton:pressed {
            <widget class="QLabel" name="label_29">
             <property name="text">
              <string>Damper ProximityS</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1" colspan="2">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>Cooling Method</string>
             </property>
            </widget>
           </item>

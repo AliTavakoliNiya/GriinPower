@@ -1,3 +1,4 @@
+import math
 from math import sqrt
 from collections import defaultdict
 from config import COSNUS_PI, ETA
@@ -135,11 +136,15 @@ class PanelController:
         """
         Adds an MCCB entry to the panel based on motor current specifications.
         """
-        if qty == 0 or motor.current == 0 or motor.mccb_qty == 0:
+        volt = self.electrical_specs["project_info"]["l_voltage"]
+
+        if qty == 0 or motor.power == 0 or motor.mccb_qty == 0:
             return
         total_qty = qty * motor.mccb_qty
 
-        success, mccb = get_mccb_by_current(rated_current=motor.current,
+        motor_current = round(motor.power / (math.sqrt(3) * volt * COSNUS_PI * ETA), 2)
+
+        success, mccb = get_mccb_by_current(rated_current=motor_current,
                                             brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
@@ -150,18 +155,18 @@ class PanelController:
                 quantity=total_qty,
                 price=mccb['price'],
                 last_price_update=f"{mccb['supplier_name']}\n{mccb['date']}",
-                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor_current}A {motor.usage}"
             )
         else:
             self.add_to_panel(
                 type=f"MCCB",
                 brand="",
                 order_number="",
-                specifications=f"At Least: {motor.current * 1.25:.2f}A",
+                specifications=f"At Least: {motor_current * 1.25:.2f}A",
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ MCCB not found",
-                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor_current}A {motor.usage}"
             )
             print(mccb)
 
