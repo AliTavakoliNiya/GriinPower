@@ -1,12 +1,15 @@
 import json
+import subprocess
 
 from PyQt5 import uic
 from PyQt5.QtCore import QSettings
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtGui import QIcon, QPainter
+from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
+from PyQt5.QtWidgets import QFileDialog, QMainWindow
 
 from controllers.tender_application.project_session_controller import ProjectSession
-from models.projects import get_project
+from models.projects import get_project, save_project
+from views.message_box_view import confirmation, show_message
 from views.tender_application.electrical_tab_view import ElectricalTab
 from views.tender_application.installation_tab_view import InstallationTab
 from views.tender_application.project_information_view import ProjectInformationTab
@@ -16,6 +19,7 @@ from views.tender_application.result_tab_view import ResultTab
 class TenderApplication(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.parent = parent
 
         # Load the main tender application UI
         uic.loadUi("ui/tender_application/tender_application.ui", self)
@@ -75,11 +79,62 @@ class TenderApplication(QMainWindow):
         # Tab change validation and updates
         self.tabWidget.currentChanged.connect(self.on_tab_changed)
 
+        # Menue Bar
+        self.actionNew_Project.triggered.connect(self.new_project)
+        self.actionOpen_Project.triggered.connect(self.open_project)
+        self.actionSave_Changes.triggered.connect(self.save_current_rev_changes)
+        self.actionSave_and_Create_New_Rev.triggered.connect(self.save_and_new_revision)
+        self.actionPrint_From.triggered.connect(self.print_current_view)
+        self.actionSave_Image.triggered.connect(self.save_image)
+        self.actionClose.triggered.connect(self.close_window)
+        self.actionQuite.triggered.connect(self.exit_project)
+
         # Set initial tab index
         self.tabWidget.setCurrentIndex(0)
 
         # Launch window maximized
         self.showMaximized()
+
+    def new_project(self):
+        if not confirmation(f"You’ll lose your current changes. Are you sure you want to continue?"):
+            return
+        self.close()
+        self.parent.tender_application_func()
+
+    def open_project(self):
+        if not confirmation(f"You’ll lose your current changes. Are you sure you want to continue?"):
+            return
+        self.close()
+        self.parent.tender_application_func(True)
+
+    def save_current_rev_changes(self):
+        if not confirmation(f"You are about to save changes, Are you sure?"):
+            return
+
+        success, msg = save_project(self.current_project)
+        if success:
+            show_message(msg, title="Saved")
+        else:
+            show_message(msg, title="Error")
+
+    def save_and_new_revision(self):
+        if not confirmation(f"You are about to permanently save the current revision. Are you sure?"):
+            return
+
+        success, msg = save_project(self.current_project)
+        if not success:
+            show_message(msg, title="Error")
+            return
+
+        self.current_project.id = None
+        self.current_project.revision += 1
+        success, msg = save_project(self.current_project)
+        if not success:
+            show_message(msg, title="Saved")
+            return
+
+        self.close()
+        self.parent.tender_application_window = TenderApplication(parent=self)
 
     def on_tab_changed(self, index):
         """Validates data after a tab has been changed. Reverts if invalid."""
@@ -101,7 +156,6 @@ class TenderApplication(QMainWindow):
                 self._last_tab_index = index
                 return
 
-
             if not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
             elif not self.electrical_tab.check_electrical_tab_ui_rules():
@@ -112,6 +166,59 @@ class TenderApplication(QMainWindow):
 
         # Update the cached tab index
         self._last_tab_index = index
+
+    def print_current_view(self):
+        # Create a printer object
+        printer = QPrinter(QPrinter.HighResolution)
+        printer.setPageSize(QPrinter.A4)
+        printer.setOrientation(QPrinter.Landscape)
+
+        # Open print dialog
+        dialog = QPrintDialog(printer, self)
+        if dialog.exec_() == QPrintDialog.Accepted:
+            # Begin painting on the printer device
+            painter = QPainter(printer)
+
+            # Scale to fit page
+            scale = min(
+                printer.pageRect().width() / self.width(),
+                printer.pageRect().height() / self.height()
+            )
+            painter.scale(scale, scale)
+
+            # Render the entire main window to the printer
+            self.render(painter)
+
+            painter.end()
+
+    def save_image(self):
+        # open a dialog to choose save location and file name
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Project Snapshot",
+            "Project_snapshot.png",
+            "PNG Files (*.png);;JPEG Files (*.jpg);;All Files (*)"
+        )
+
+        if file_path:
+            # grab the entire main window
+            pixmap = self.grab()
+
+            # save the image to the selected path
+            pixmap.save(file_path)
+
+        show_message("Saved Successfully")
+        subprocess.Popen(['start', '', file_path], shell=True)
+
+    def close_window(self):
+        if not confirmation(f"You are about to close project without save changes, Are you sure?"):
+            return
+        self.close()
+
+    def exit_project(self):
+        if not confirmation(f"You are about to exit program without save changes, Are you sure?"):
+            return
+        self.parent.close()
 
     def set_rev_hint(self, rev_number):
         success, revision_project = get_project(code=self.current_project.code,

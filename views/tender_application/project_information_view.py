@@ -1,7 +1,9 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox
+from PyQt5.QtWidgets import QFileDialog, QWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox
 from controllers.tender_application.project_session_controller import ProjectSession
+from controllers.user_session_controller import UserSession
 from views.message_box_view import show_message
+from models.documents import save_document
 
 
 class ProjectInformationTab(QWidget):
@@ -11,8 +13,11 @@ class ProjectInformationTab(QWidget):
         self.main_view = main_view
 
         self.current_project = ProjectSession()
+        self.current_user = UserSession()
         self.electrical_specs = self.current_project.project_electrical_specs
         self._initialize_info()
+
+        self.upload_technical_data_btn.clicked.connect(self.upload_technical_data)
 
         if self.current_project.revision != None:
             self.set_project_info_ui_values()
@@ -88,6 +93,25 @@ class ProjectInformationTab(QWidget):
 
         # Set the value
         target[path_list[-1]] = value
+
+    """ --------------------------- Project Documents --------------------------- """
+    def upload_technical_data(self):
+        # Open file dialog to select a document
+        file_path, _ = QFileDialog.getOpenFileName(None, "Select Document File")
+        if file_path:
+            # Call save_document with proper arguments
+            result, message = save_document(
+                filepath=file_path,
+                project_id=self.current_project.id,
+                project_unique_no=self.current_project.unique_no,  # new argument
+                revision=self.current_project.revision,
+                modified_by_id=self.current_user.id,
+                note=""  # or get note from user input if you want
+            )
+            if result:
+                show_message("Saved successfully", "Saved")
+            else:
+                show_message(message, "Error")
 
     """ --------------------------- Project Information --------------------------- """
 

@@ -1,13 +1,16 @@
-from sqlalchemy import Column, Integer, String, Text
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, ForeignKey, Integer, String, Text
 import json
+
+from sqlalchemy.orm import relationship
+
 from models.abs_motor import Motor
 from utils.database import SessionLocal
 import jdatetime
 import traceback
+from models import Base
 
 
-Base = declarative_base()
+
 today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
 
 
@@ -17,11 +20,15 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     code = Column(String)
-    unique_no = Column(String)
+    unique_no = Column(Integer, unique=True)  # should be Integer to match foreign key
     revision = Column(Integer)
-    modified_by_id = Column(Integer)
+    modified_by_id = Column(Integer, ForeignKey("users.id"))
     modified_at = Column(String)
     project_electrical_specs = Column(Text)
+
+    documents = relationship("Document", back_populates="project", lazy="joined")
+    modified_by = relationship("User")
+
 
     def serialize_project_data(self, data: dict) -> dict:
         def convert(obj):

@@ -24,7 +24,6 @@ class OpenProjectView(QDialog):
         self.project_code.textChanged.connect(self.code_change)
         self.project_unique_code.currentIndexChanged.connect(self.projec_unique_code_changed)
         self.open_project_btn.clicked.connect(self.open_project_btn_clicked)
-        # self.new_revision_btn.clicked.connect(self.new_revision_btn_clicked)  # (If needed)
 
         # Load data
         success, self.all_projects = get_all_project()
@@ -106,12 +105,3 @@ class OpenProjectView(QDialog):
         # Accept the dialog (QDialog.Accepted)
         self.accept()
 
-
-    # def new_revision_btn_clicked(self):
-    #     if not self.selected_project:
-    #         show_message("Please select a project before continuing.")
-    #         return
-    #
-    #     self.selected_project.id = None # to save new project
-    #     self.selected_project.revision += 1
-    #     self.accept()  # Closes the dialog and sets result to Accepted (True)

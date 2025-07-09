@@ -9,6 +9,7 @@ __all__ = [
     "Project",
     "User",
     "Supplier",
+    "Document",
     "ComponentSupplier"
 ]
 
@@ -17,6 +18,5 @@ from .component_attributes import ComponentAttribute
 from .projects import Project
 from .user_model import User
 from .supplier import Supplier
+from .documents import Document
 from .component_suppliers import ComponentSupplier
-
-

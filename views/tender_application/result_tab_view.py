@@ -18,7 +18,6 @@ from controllers.tender_application.hopper_heater_controller import HopperHeater
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.tender_application.transport_controller import TransportController
 from controllers.tender_application.vibration_controller import VibrationController
-from models import projects
 from utils.pandas_model import PandasModel
 from views.message_box_view import confirmation, show_message
 
@@ -61,23 +60,12 @@ class ResultTab(QWidget):
 
         self.excel_btn.clicked.connect(self._export_to_excel)
         self.show_datail_btn.clicked.connect(self.show_datail_btn_handler)
-        self.save_changes_btn.clicked.connect(self.save_changes_btn_handler)
 
         self.update_table.clicked.connect(self.generate_panels)
 
     def show_datail_btn_handler(self):
         self.show_datail_window = DictionaryTreeViewer(data=self.electrical_specs, parent=self.main_view)
 
-    def save_changes_btn_handler(self):
-        if not confirmation(f"You are about to save changes, Are you sure?"):
-            return
-
-        current_project = ProjectSession()
-        success, msg = projects.save_project(current_project)
-        if success:
-            show_message(msg, title="Saved")
-        else:
-            show_message(msg, title="Error")
 
     def _setup_result_table(self):
         for table in self.tables.values():
@@ -306,7 +294,7 @@ class ResultTab(QWidget):
             bagfilter_price += df.iloc[-1]['total_price']
 
         bagfilter_price -= instruments_price
-        el_motor_price = tables['summary_table'].model()._data.iloc[7]['Price'] #????????????????????????????
+        el_motor_price = tables['summary_table'].model()._data.iloc[7]['Price']  #????????????????????????????
 
         summary_data = [
             [0, 0, 0, bagfilter_price, bagfilter_price, 1, "تابلوبگ فیلتر", 1],

@@ -59,6 +59,73 @@
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1366</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>☰</string>
+    </property>
+    <addaction name="actionNew_Project"/>
+    <addaction name="actionOpen_Project"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_Changes"/>
+    <addaction name="actionSave_and_Create_New_Rev"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrint_From"/>
+    <addaction name="actionSave_Image"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose"/>
+    <addaction name="actionQuite"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <action name="actionNew_Project">
+   <property name="text">
+    <string>🔌 New Project</string>
+   </property>
+  </action>
+  <action name="actionOpen_Project">
+   <property name="text">
+    <string>📂 Open Project</string>
+   </property>
+  </action>
+  <action name="actionSave_Changes">
+   <property name="text">
+    <string>💾 Save Current Rev. Changes</string>
+   </property>
+  </action>
+  <action name="actionSave_and_Create_New_Rev">
+   <property name="text">
+    <string>📤 Save and Create New Rev.</string>
+   </property>
+  </action>
+  <action name="actionPrint_From">
+   <property name="text">
+    <string>🖨 Print From</string>
+   </property>
+  </action>
+  <action name="actionSave_Image">
+   <property name="text">
+    <string>📷 Snapshot</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionQuite">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

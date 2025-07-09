@@ -54,6 +54,9 @@ class GriinPower(QMainWindow):
             f"Welcome, {self.current_user.first_name.title()} {self.current_user.last_name.title()}\n{self.current_user.role}"
         )
 
+        if self.current_user.role != "admin":
+            self.account_btn.hide()
+
         # Connect main UI buttons to their respective functions
         self.new_project_btn.clicked.connect(self.tender_application_func)
         self.open_project_btn.clicked.connect(lambda: self.tender_application_func(True))

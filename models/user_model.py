@@ -1,5 +1,7 @@
 import jdatetime
 from sqlalchemy import Column, String, Integer
+from sqlalchemy.orm import relationship
+
 from utils.database import SessionLocal
 from views.message_box_view import show_message
 from models import Base
@@ -11,10 +13,10 @@ def now_jalali():
 
 
 class User(Base):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    username = Column(String, primary_key=True, unique=True, nullable=False)
+    username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
@@ -22,6 +24,10 @@ class User(Base):
     email = Column(String, unique=True, nullable=True)
     role = Column(String, nullable=False)
     created_at = Column(String, nullable=False, default=now_jalali)
+
+    modified_documents = relationship("Document", back_populates="modified_by", lazy="joined")
+
+
 
     def __repr__(self):
         return f"<User(username='{self.username}', role='{self.role}')>"

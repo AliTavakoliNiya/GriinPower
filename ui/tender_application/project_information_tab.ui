@@ -1691,7 +1691,7 @@ QPushButton:pressed {
          </spacer>
         </item>
         <item row="0" column="7">
-         <widget class="QPushButton" name="pushButton_13">
+         <widget class="QPushButton" name="download_techdata_btn">
           <property name="maximumSize">
            <size>
             <width>20</width>

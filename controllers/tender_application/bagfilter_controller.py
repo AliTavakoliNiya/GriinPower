@@ -414,7 +414,7 @@ class BagfilterController(PanelController):
                         quantity=qty,
                         price=manifold_obj['price'],
                         last_price_update=f"{manifold_obj['supplier_name']}\n{manifold_obj['date']}",
-                        note=f"manifold for {instrument_name.replace('_', ' ').title()}")
+                        note=f"Manifold for {instrument_name.replace('_', ' ').title()}")
                 else:
                     self.add_to_panel(
                         type=manifold_ways,
@@ -423,7 +423,7 @@ class BagfilterController(PanelController):
                         quantity=qty,
                         price=0,
                         last_price_update=f"❌Manifold not found",
-                        note=f"manifold for {instrument_name.replace('_', ' ').title()}")
+                        note=f"Manifold for {instrument_name.replace('_', ' ').title()}")
                     print(manifold_obj)
 
             # ------------ Calibration ------------
@@ -437,7 +437,7 @@ class BagfilterController(PanelController):
                         quantity=qty,
                         price=calibration['price'],
                         last_price_update=f"{calibration['supplier_name']}\n{calibration['date']}",
-                        note=f"calibration for {instrument_name.replace('_', ' ').title()}"
+                        note=f"Calibration for {instrument_name.replace('_', ' ').title()}"
                     )
                 else:
                     self.add_to_panel(
@@ -446,7 +446,7 @@ class BagfilterController(PanelController):
                         quantity=qty,
                         price=0,
                         last_price_update=f"❌ Calibration not found",
-                        note=f"calibration for {instrument_name.replace('_', ' ').title()}"
+                        note=f"Calibration for {instrument_name.replace('_', ' ').title()}"
                     )
                     print(calibration)
 
