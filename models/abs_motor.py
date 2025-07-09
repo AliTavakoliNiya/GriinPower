@@ -5,7 +5,6 @@ class Motor:
             current=0,
             usage=None,
             brand=None,
-            lcb_qty=1,
             terminal_4_qty=4,
             terminal_6_qty=10,
             relay_1no_1nc_qty=4,
@@ -24,7 +23,6 @@ class Motor:
             power_cable_cofactor=1,
             duct_cover_qty=0.5,
             miniatory_rail_qty=0.3,
-            lcb_for_speed_qty=1,
             panel_wire_qty=5,
             plc_di=5,
             plc_do=1,
@@ -35,7 +33,6 @@ class Motor:
         self.current = current
         self.usage = usage
         self.brand = brand
-        self.lcb_qty = lcb_qty
         self.contactor_qty = contactor_qty
         self.mpcb_qty = mpcb_qty
         self.mccb_qty = mccb_qty
@@ -55,7 +52,6 @@ class Motor:
         self.duct_cover_qty = duct_cover_qty
         self.miniatory_rail_qty = miniatory_rail_qty
         self.panel_wire_qty = panel_wire_qty
-        self.lcb_for_speed_qty = lcb_for_speed_qty
         self.plc_di = plc_di
         self.plc_do = plc_do
         self.plc_ai = plc_ai

@@ -14,7 +14,6 @@ class InstallationController(PanelController):
     Specialized controller for bagfilter panel.
     """
 
-
     def __init__(self):
         super().__init__("installation")
 
@@ -22,16 +21,6 @@ class InstallationController(PanelController):
         """
                 Main controller for building installation from tender_application specifications.
         """
-
-        instruments = self.electrical_specs["bagfilter"]["instruments"]
-        for instrument_name, properties in instruments.items():
-            qty = properties["qty"]
-            if qty == 0:
-                continue
-
-
-        parts = self.electrical_specs["bagfilter"]["order"].replace("x", ".")
-        parts = parts.split(".")
 
         # calculate n_valves and n_airtanks
         result = []
@@ -85,12 +74,11 @@ class InstallationController(PanelController):
             for instrument_name, instrument_data in instruments.items():
                 try:
                     if instrument_name == "ptc" or instrument_name == "vibration_transmitter":
-                        continue # skip this 2 instruments
-                    qty  = instrument_data.get("qty", 0)
+                        continue  # skip this 2 instruments
+                    qty = instrument_data.get("qty", 0)
                     self.total_instruments += qty
                 except Exception:
                     pass
-
 
         if self.n_airtank <= 2:
             self.ladder_size = self.tray_size = 200  # mm
@@ -320,7 +308,7 @@ class InstallationController(PanelController):
                 type="Flexible Conduit Fixer",
                 brand=conduit_fixer["brand"],
                 order_number="",
-                quantity= self.total_instruments * 2,
+                quantity=self.total_instruments * 2,
                 price=conduit_fixer["price"],
                 last_price_update=f"{conduit_fixer.get('supplier_name', '')}\n{conduit_fixer.get('date', '')}",
                 note=f"For {self.total_instruments} Instruments"
@@ -331,7 +319,7 @@ class InstallationController(PanelController):
                 brand="",
                 order_number="",
                 specifications="",
-                quantity= self.total_instruments * 2,
+                quantity=self.total_instruments * 2,
                 price=0,
                 last_price_update=f"❌ Flexible Conduit Fixer not found",
                 note=f"For {self.total_instruments} Instruments"
@@ -448,7 +436,7 @@ class InstallationController(PanelController):
                 else:
                     self.add_to_panel(
                         type=f"Power Cable",
-                        note="Power Cable For {motor.usage} Not Found"
+                        note=f"Power Cable For {motor.usage} Not Found"
                     )
 
         for size_mm, data in cable_grouping.items():
@@ -940,7 +928,7 @@ class InstallationController(PanelController):
                 type="Cable Tag",
                 brand=cable_tag["brand"],
                 order_number="",
-                quantity= self.n_airtank + self.total_instruments,
+                quantity=self.n_airtank + self.total_instruments,
                 price=cable_tag["price"],
                 last_price_update=f"{cable_tag.get('supplier_name', '')}\n{cable_tag.get('date', '')}",
                 note=f"For {self.n_airtank} and {self.total_instruments} Instruments"
@@ -951,7 +939,7 @@ class InstallationController(PanelController):
                 brand="",
                 order_number="",
                 specifications="",
-                quantity= self.n_airtank + self.total_instruments,
+                quantity=self.n_airtank + self.total_instruments,
                 price=0,
                 last_price_update=f"❌ Cable Tag not found",
                 note=f"For {self.n_airtank} and {self.total_instruments} Instruments"

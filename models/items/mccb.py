@@ -64,7 +64,6 @@ def get_mccb_by_current(rated_current, brands=[], order_number=None):
     session = SessionLocal()
     try:
         current_val = float(rated_current)
-        min_val = current_val * 1.25
 
         mccbs = (
             session.query(Component)
@@ -81,7 +80,7 @@ def get_mccb_by_current(rated_current, brands=[], order_number=None):
         for mccb in mccbs:
             attr_dict = {attr.key: attr.value for attr in mccb.attributes}
             rc = safe_float(attr_dict.get("rated_current"))
-            if rc is None or rc < min_val:
+            if rc is None or rc < current_val:
                 continue
 
             brand = attr_dict.get("brand")

@@ -19,8 +19,7 @@ class VibrationController(PanelController):
         motors_config = self.electrical_specs["vibration"]["motors"]
         vibration = Motor(motors_config["vibration"]["power"],
                           usage="Vibration Motor",
-                          plc_di=4,
-                          lcb_for_speed_qty=0)
+                          plc_di=4)
         vibration.current = self.calculate_motor_current(power=vibration.power)
         self.electrical_specs["vibration"]["motors"]["vibration"]["motor"] = vibration
         motor_objects = [(vibration, motors_config["vibration"]["qty"])]

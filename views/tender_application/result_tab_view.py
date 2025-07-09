@@ -1,21 +1,16 @@
 import copy
 import subprocess
 
-import jdatetime
-import openpyxl
 import pandas as pd
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter
 from PyQt5.QtPrintSupport import QPrinter
-from PyQt5.QtWidgets import (
-    QMainWindow, QWidget, QTreeWidget, QTreeWidgetItem,
-    QPushButton, QVBoxLayout, QFileDialog
-)
-from PyQt5.QtWidgets import QTableView, QHeaderView
-from openpyxl.styles import Font, PatternFill
+from PyQt5.QtWidgets import QFileDialog, QHeaderView, QMainWindow, QPushButton, QTableView, QTreeWidget, \
+    QTreeWidgetItem, QVBoxLayout, QWidget
 
 from controllers.tender_application.bagfilter_controller import BagfilterController
+from controllers.tender_application.cable_controller import CableController
 from controllers.tender_application.electric_motor_controller import ElectricMotorController
 from controllers.tender_application.fan_damper_controller import FanDamperController
 from controllers.tender_application.fresh_air_controller import FreshAirController
@@ -23,9 +18,9 @@ from controllers.tender_application.hopper_heater_controller import HopperHeater
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.tender_application.transport_controller import TransportController
 from controllers.tender_application.vibration_controller import VibrationController
-from utils.pandas_model import PandasModel
 from models import projects
-from views.message_box_view import show_message, confirmation
+from utils.pandas_model import PandasModel
+from views.message_box_view import confirmation, show_message
 
 
 class ResultTab(QWidget):
@@ -45,8 +40,20 @@ class ResultTab(QWidget):
             "fresh_air_table": self.fresh_air_table,
             "vibration_table": self.vibration_table,
             "hopper_heater_table": self.hopper_heater_table,
+            "cable_table": self.cable_table,
             "summary_table": self.summary_table
         }
+
+        self.all_tabs = [
+            ("bagfilter_table", self.bagfilter_tab, "Bagfilter"),
+            ("fan_damper_table", self.fan_damper_tab, "Fan Damper"),
+            ("transport_table", self.transport_tab, "Transport"),
+            ("fresh_air_table", self.fresh_air_tab, "Fresh Air"),
+            ("vibration_table", self.vibration_tab, "Vibration"),
+            ("hopper_heater_table", self.hopper_heater_tab, "Hopper Heater"),
+            ("cable_table", self.cable_tab, "Cable"),
+            ("summary_table", self.summary_tab, "Summary"),
+        ]
 
         self.panels = {}
 
@@ -97,6 +104,8 @@ class ResultTab(QWidget):
         self.panels["vibration_panel"] = vibration_controller.build_panel()
         hopper_heater_controller = HopperHeaterController()
         self.panels["hopper_heater_panel"] = hopper_heater_controller.build_panel()
+        cable_controller = CableController()
+        self.panels["cable_panel"] = cable_controller.build_panel()
         if self.main_view.electrical_tab.fan_checkbox.isChecked():
             electric_motor_controller = ElectricMotorController()
             electric_motor_price_and_effective_date = electric_motor_controller.calculate_price()
@@ -107,6 +116,7 @@ class ResultTab(QWidget):
         self.generate_table(panel=self.panels["fresh_air_panel"], table=self.tables["fresh_air_table"])
         self.generate_table(panel=self.panels["vibration_panel"], table=self.tables["vibration_table"])
         self.generate_table(panel=self.panels["hopper_heater_panel"], table=self.tables["hopper_heater_table"])
+        self.generate_table(panel=self.panels["cable_panel"], table=self.tables["cable_table"])
 
         panels = copy.deepcopy(self.panels)
         panels["installation_panel"] = self.main_view.installation_tab.installation_panel
@@ -117,6 +127,8 @@ class ResultTab(QWidget):
             summary_data = self._generate_summary_table(panels=panels)
         self.generate_table(panel=summary_data, table=self.tables["summary_table"])
 
+        self.refresh_tabs()
+
     def _add_summary_row(self, df):
         summary = {
             col: df[col].sum() if col == "total_price" else ("Total" if col.lower() == "type" else "")
@@ -125,14 +137,17 @@ class ResultTab(QWidget):
         return pd.concat([df, pd.DataFrame([summary], index=["Total"])])
 
     def generate_table(self, panel, table):
+        # Convert panel data to DataFrame
         df = pd.DataFrame(panel)
+
+        # Add summary row
         df = self._add_summary_row(df)
+
+        # Build and assign the model to the table
         model = PandasModel(df)
         table.setModel(model)
-        # if 'total_price' in df.columns and df.iloc[-1]['total_price'] == 0: # hide 0 price tabs
-        #     tab_name = f"self.{table.objectName().replace('table', 'tab')}.hide()"
-        #     eval(tab_name)
 
+        # Resize table columns based on content
         header = table.horizontalHeader()
         for col in range(model.columnCount(None) - 1):
             header.setSectionResizeMode(col, QHeaderView.ResizeToContents)
@@ -140,6 +155,24 @@ class ResultTab(QWidget):
 
         self._resize_columns_to_contents(model, table)
         table.resizeRowsToContents()
+
+    def refresh_tabs(self):
+        # Clear all tabs
+        while self.tabWidget.count():
+            self.tabWidget.removeTab(0)
+
+        # Add back tabs where total_price > 0
+        for table_name, tab_widget, label in self.all_tabs:
+            table = self.tables[table_name]
+            model = table.model()
+            if not model:
+                continue
+
+            df = model._data
+            if "total_price" in df.columns and df.iloc[-1]["total_price"] == 0:
+                continue  # Skip tabs with zero price
+
+            self.tabWidget.addTab(tab_widget, label)
 
     def _resize_columns_to_contents(self, model, table):
         metrics = table.fontMetrics()
@@ -211,8 +244,12 @@ class ResultTab(QWidget):
                     continue
 
                 df = model._data.copy()
-                df.index = range(1, len(df) + 1)
 
+                # Check for total_price column and its total row value
+                if "total_price" in df.columns and df.iloc[-1]["total_price"] == 0:
+                    continue  # Skip exporting this sheet
+
+                df.index = range(1, len(df) + 1)
                 df.to_excel(writer, sheet_name=name, index=True, startrow=1)
                 self._style_excel_sheet(writer, name)
 
@@ -220,11 +257,11 @@ class ResultTab(QWidget):
             instrument_df, summary_df = self._prepare_factor_data(tables)
 
             instrument_df.index = range(1, len(instrument_df) + 1)
-            instrument_df.to_excel(writer, sheet_name="اقلام ابزار دقیق", startrow=1, index=True)
+            instrument_df.to_excel(writer, sheet_name="اقلام ابزار دقیق", startrow=1, index=False)
             self._style_excel_sheet(writer, "اقلام ابزار دقیق")
 
             summary_df.index = range(1, len(summary_df) + 1)
-            summary_df.to_excel(writer, sheet_name="قیمت نهایی", startrow=1, index=True)
+            summary_df.to_excel(writer, sheet_name="قیمت نهایی", startrow=1, index=False)
             self._style_excel_sheet(writer, "قیمت نهایی")
 
     def _prepare_factor_data(self, tables):
@@ -237,6 +274,7 @@ class ResultTab(QWidget):
 
         bagfilter_price = 0
         instruments_price = 0
+        cable_price = 0
         instrument_items = []
 
         for name, table in tables.items():
@@ -246,6 +284,10 @@ class ResultTab(QWidget):
 
             df = model._data.copy()
             df.columns = df.columns.str.lower()  # normalize column names
+
+            if name == "cable_table":
+                cable_price = df.iloc[-1]['total_price']
+                continue
 
             for _, row in df.iterrows():
                 if "total" in row["type"].lower():
@@ -264,13 +306,13 @@ class ResultTab(QWidget):
             bagfilter_price += df.iloc[-1]['total_price']
 
         bagfilter_price -= instruments_price
-        el_motor_price = tables['summary_table'].model()._data.iloc[7]['Price']
+        el_motor_price = tables['summary_table'].model()._data.iloc[7]['Price'] #????????????????????????????
 
         summary_data = [
             [0, 0, 0, bagfilter_price, bagfilter_price, 1, "تابلوبگ فیلتر", 1],
             [0, 0, 0, instruments_price, instruments_price, 1, "ابزار دقیق", 2],
-            [0, 0, 0, 3700564000, 0, 1, "کابل", 3],
-            [0, 0, 0, 3700564000, 0, 1, "راه اندازی FAT", 4],
+            [0, 0, 0, cable_price, cable_price, 1, "کابل", 3],
+            [0, 0, 0, 0, 0, 1, "راه اندازی FAT", 4],
             [0, 0, 0, el_motor_price, el_motor_price, 1,
              f" الکتروموتور {int(self.electrical_specs['fan']['motors']['fan']['power'] / 1000)}KW "
              f"{self.electrical_specs['fan']['motors']['fan']['brand']} "
@@ -283,11 +325,26 @@ class ResultTab(QWidget):
         summary_df.loc[len(summary_df)] = {**summary_totals, "تعداد": "", "شرح": "جمع کل", "ردیف": ""}
 
         instrument_df = pd.DataFrame(instrument_items)
+
         if not instrument_df.empty:
+            # Add "ردیف" column starting from 1
+            instrument_df.insert(0, "ردیف", range(1, len(instrument_df) + 1))
+
+            # Calculate total price
             total_price = instrument_df["قیمت کل"].sum()
+
+            # Add total row (with empty "ردیف")
             instrument_df.loc[len(instrument_df)] = {
-                "شرح": "جمع کل", "برند": "", "تعداد": "", "قیمت واحد": "", "قیمت کل": total_price
+                "ردیف": "",
+                "شرح": "جمع کل",
+                "برند": "",
+                "تعداد": "",
+                "قیمت واحد": "",
+                "قیمت کل": total_price
             }
+
+            # Reverse column order (mirror the columns)
+            instrument_df = instrument_df[instrument_df.columns[::-1]]
 
         return instrument_df, summary_df
 

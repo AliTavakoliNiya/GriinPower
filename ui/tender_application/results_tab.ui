@@ -62,9 +62,9 @@
              <enum>QTabWidget::South</enum>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
-            <widget class="QWidget" name="bagfilter_panel_tab">
+            <widget class="QWidget" name="bagfilter_tab">
              <attribute name="title">
               <string>Bagfilter</string>
              </attribute>
@@ -186,6 +186,29 @@
              <layout class="QGridLayout" name="gridLayout_5">
               <item row="0" column="0">
                <widget class="QTableView" name="hopper_heater_table">
+                <property name="selectionMode">
+                 <enum>QAbstractItemView::SingleSelection</enum>
+                </property>
+                <property name="selectionBehavior">
+                 <enum>QAbstractItemView::SelectRows</enum>
+                </property>
+                <attribute name="horizontalHeaderCascadingSectionResizes">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderCascadingSectionResizes">
+                 <bool>true</bool>
+                </attribute>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="cable_tab">
+             <attribute name="title">
+              <string>Cable</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_11">
+              <item row="0" column="0">
+               <widget class="QTableView" name="cable_table">
                 <property name="selectionMode">
                  <enum>QAbstractItemView::SingleSelection</enum>
                 </property>

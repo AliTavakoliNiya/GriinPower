@@ -17,7 +17,6 @@ class HopperHeaterController(PanelController):
         hopper_heater = Motor(motors_config["elements"]["power"],
                               usage="Hopper Heater",
                               plc_di=4,
-                              lcb_for_speed_qty=4,
                               terminal_4_qty=4 * 8,
                               terminal_6_qty=4 * 10,
                               relay_1no_1nc_qty=2,

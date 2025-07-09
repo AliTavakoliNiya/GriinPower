@@ -67,7 +67,6 @@ def get_contactor_by_current(rated_current, brands=[], order_number=None):
     session = SessionLocal()
     try:
         current_val = float(rated_current)
-        min_val = current_val * 1.25
 
         contactors = (
             session.query(Component)
@@ -87,7 +86,7 @@ def get_contactor_by_current(rated_current, brands=[], order_number=None):
             rc = float(attr_dict.get("rated_current", -1))
             brand = attr_dict.get("brand")
 
-            if rc < min_val:
+            if rc < current_val:
                 continue
 
             if brands and brand not in brands:

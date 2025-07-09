@@ -71,7 +71,7 @@ class PanelController:
             return
         total_qty = qty * motor.contactor_qty
 
-        success, contactor = get_contactor_by_current(rated_current=motor.current,
+        success, contactor = get_contactor_by_current(rated_current=motor.current * 1.25,
                                                       brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
@@ -105,7 +105,7 @@ class PanelController:
             return
         total_qty = qty * motor.mpcb_qty
 
-        success, mpcb = get_mpcb_by_current(rated_current=motor.current,
+        success, mpcb = get_mpcb_by_current(rated_current=motor.current * 1.25,
                                             brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
@@ -124,7 +124,7 @@ class PanelController:
                 type=f"MPCB",
                 brand="",
                 order_number="",
-                specifications=f"Current: {motor.current * 1.25:.2f}A",
+                specifications=f"At Least: {motor.current * 1.25:.2f}A",
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ MPCB not found",
@@ -136,15 +136,12 @@ class PanelController:
         """
         Adds an MCCB entry to the panel based on motor current specifications.
         """
-        volt = self.electrical_specs["project_info"]["l_voltage"]
 
-        if qty == 0 or motor.power == 0 or motor.mccb_qty == 0:
+        if qty == 0 or motor.current == 0 or motor.mccb_qty == 0:
             return
         total_qty = qty * motor.mccb_qty
 
-        motor_current = round(motor.power / (math.sqrt(3) * volt * COSNUS_PI * ETA), 2)
-
-        success, mccb = get_mccb_by_current(rated_current=motor_current,
+        success, mccb = get_mccb_by_current(rated_current=motor.current * 1.25,
                                             brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
@@ -155,18 +152,18 @@ class PanelController:
                 quantity=total_qty,
                 price=mccb['price'],
                 last_price_update=f"{mccb['supplier_name']}\n{mccb['date']}",
-                note=f"{total_qty} x Motor Current: {motor_current}A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
         else:
             self.add_to_panel(
                 type=f"MCCB",
                 brand="",
                 order_number="",
-                specifications=f"At Least: {motor_current * 1.25:.2f}A",
+                specifications=f"At Least: {motor.current * 1.25:.2f}A",
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ MCCB not found",
-                note=f"{total_qty} x Motor Current: {motor_current}A {motor.usage}"
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
             print(mccb)
 
@@ -178,7 +175,7 @@ class PanelController:
             return
         total_qty = qty * motor.bimetal_qty
 
-        success, bimetal = get_bimetal_by_current(rated_current=motor.current*1.25,
+        success, bimetal = get_bimetal_by_current(rated_current=motor.current * 1.25,
                                                   brands=self.electrical_specs["project_info"]["proj_avl"])
 
         if success:
@@ -199,7 +196,7 @@ class PanelController:
                 type=f"Bimetal",
                 brand="",
                 order_number="",
-                specifications=f"Current: {motor.current * 1.25:.2f}A",
+                specifications=f"At Least: {motor.current * 1.25:.2f}A",
                 quantity=total_qty,
                 price=0,
                 last_price_update="❌ BIMETAL not found",
@@ -604,7 +601,7 @@ class PanelController:
                                                 or instrument_name == "outlet_temperature_transmitter" \
                                                 or instrument_name == "bearing_temperature_transmitter" \
                                                 or instrument_name == "pt100" \
-                else instrument_name
+                                                else instrument_name
             name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
             n_di = instruments_pins[name]["n_di"]
@@ -631,7 +628,6 @@ class PanelController:
                 motor_wire_length = qty * motor.miniatory_rail_qty
                 rail_length += motor_wire_length
                 rail_notes.append(f"{motor_wire_length} m for {motor.usage}")
-
 
         if rail_length > 0:
             success, rail = get_wire_cable_by_spec("MiniatoryRail", 1)
@@ -668,7 +664,6 @@ class PanelController:
                 motor_wire_length = qty * motor.duct_cover_qty
                 duct_length += motor_wire_length
                 duct_notes.append(f"{motor_wire_length} m for {motor.usage}")
-
 
         if duct_length > 0:
             success, duct = get_wire_cable_by_spec("DuctCover", 1)
@@ -770,7 +765,6 @@ class PanelController:
 
             print(cable)
 
-
     def choose_internal_signal_wire(self, motor_objects):
         """
         Adds internal signal panel wire (1x1.5) entries for each motor.
@@ -813,7 +807,6 @@ class PanelController:
             )
             print(cable)
 
-
     """ ------------------------------------- Calculate Motor Current ------------------------------------- """
 
     def calculate_motor_current(self, power, volt=False):
@@ -821,5 +814,3 @@ class PanelController:
             volt = self.electrical_specs["project_info"]["l_voltage"]
 
         return round(power / (sqrt(3) * volt * COSNUS_PI * ETA), 2)
-
-
