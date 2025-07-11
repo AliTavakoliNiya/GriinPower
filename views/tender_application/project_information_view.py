@@ -1,9 +1,21 @@
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor
+
 from PyQt5 import uic
-from PyQt5.QtWidgets import QFileDialog, QWidget, QComboBox, QSpinBox, QLineEdit, QCheckBox
+from PyQt5.QtWidgets import QComboBox, QSpinBox, QCheckBox
+from PyQt5.QtWidgets import (
+    QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem,
+    QPushButton, QFileDialog, QMessageBox, QLineEdit
+)
+from sqlalchemy.orm import Session
+from sqlalchemy.orm import joinedload
+
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.user_session_controller import UserSession
+from models.documents import Document
+from models.documents import upload_document
+from utils.database import SessionLocal
 from views.message_box_view import show_message
-from models.documents import save_document
 
 
 class ProjectInformationTab(QWidget):
@@ -18,6 +30,7 @@ class ProjectInformationTab(QWidget):
         self._initialize_info()
 
         self.upload_technical_data_btn.clicked.connect(self.upload_technical_data)
+        self.download_technical_data_btn.clicked.connect(self.download_technical_data)
 
         if self.current_project.revision != None:
             self.set_project_info_ui_values()
@@ -95,12 +108,13 @@ class ProjectInformationTab(QWidget):
         target[path_list[-1]] = value
 
     """ --------------------------- Project Documents --------------------------- """
+
     def upload_technical_data(self):
         # Open file dialog to select a document
         file_path, _ = QFileDialog.getOpenFileName(None, "Select Document File")
         if file_path:
             # Call save_document with proper arguments
-            result, message = save_document(
+            result, message = upload_document(
                 filepath=file_path,
                 project_id=self.current_project.id,
                 project_unique_no=self.current_project.unique_no,  # new argument
@@ -112,6 +126,15 @@ class ProjectInformationTab(QWidget):
                 show_message("Saved successfully", "Saved")
             else:
                 show_message(message, "Error")
+
+    def download_technical_data(self):
+        if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
+            self.document_downloader_view = DocumentDownloader(self)
+        self.document_downloader_view.load_documents(
+            project_id=self.current_project.id,
+            project_unique_no=self.current_project.unique_no
+        )
+        self.document_downloader_view.show()
 
     """ --------------------------- Project Information --------------------------- """
 
@@ -212,9 +235,11 @@ class ProjectInformationTab(QWidget):
             self.electrical_specs["project_info"]["proj_avl"].remove("siemens")
 
     def _handle_proj_avl_schneider_changed(self):
-        if self.proj_avl_schneider.isChecked() and "schneider electric" not in self.electrical_specs["project_info"]["proj_avl"]:
+        if self.proj_avl_schneider.isChecked() and "schneider electric" not in self.electrical_specs["project_info"][
+            "proj_avl"]:
             self.electrical_specs["project_info"]["proj_avl"].append("schneider electric")
-        elif not self.proj_avl_schneider.isChecked() and "schneider electric" in self.electrical_specs["project_info"]["proj_avl"]:
+        elif not self.proj_avl_schneider.isChecked() and "schneider electric" in self.electrical_specs["project_info"][
+            "proj_avl"]:
             self.electrical_specs["project_info"]["proj_avl"].remove("schneider electric")
 
     def _handle_proj_avl_hyundai_changed(self):
@@ -235,6 +260,7 @@ class ProjectInformationTab(QWidget):
         return True
 
     """ Load Pervios Revision as need """
+
     def set_project_info_ui_values(self):
         """
         Set values for UI elements.
@@ -267,7 +293,7 @@ class ProjectInformationTab(QWidget):
             self.co_contact_phone.setText(self.electrical_specs['project_info']['co_contact_phone'])
 
             # Electrical Specifications - Voltage
-            self.project_m_voltage.setCurrentText(str(self.electrical_specs['project_info']['m_voltage']/1000))
+            self.project_m_voltage.setCurrentText(str(self.electrical_specs['project_info']['m_voltage'] / 1000))
             self.project_l_voltage.setCurrentText(str(int(self.electrical_specs['project_info']['l_voltage'])))
             self.project_voltage_variation.setCurrentText(
                 str(int(self.electrical_specs['project_info']['voltage_variation'])))
@@ -284,7 +310,8 @@ class ProjectInformationTab(QWidget):
             self.altitude_elevation.setValue(self.electrical_specs['project_info']['altitude_elevation'])
 
             # Available Equipment Checkboxes
-            self.proj_avl_schneider.setChecked('schneider electric' in self.electrical_specs['project_info']['proj_avl'])
+            self.proj_avl_schneider.setChecked(
+                'schneider electric' in self.electrical_specs['project_info']['proj_avl'])
             self.proj_avl_hyundai.setChecked('hyundai' in self.electrical_specs['project_info']['proj_avl'])
             self.proj_avl_siemens.setChecked('siemens' in self.electrical_specs['project_info']['proj_avl'])
         except KeyError as e:
@@ -294,3 +321,99 @@ class ProjectInformationTab(QWidget):
         except Exception as e:
             show_message(f"Unexpected error: {e}")
 
+
+class DocumentDownloader(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Document Downloader")
+        self.setGeometry(200, 200, 800, 400)
+
+        self.setWindowFlags(Qt.Window | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
+
+        self.layout = QVBoxLayout()
+
+        self.table = QTableWidget()
+        self.table.setColumnCount(6)
+        self.table.setHorizontalHeaderLabels([
+            "Filename", "Filetype", "Revision", "Size", "Modified By", "Modified At", "Note"
+        ])
+        self.table.setSelectionBehavior(self.table.SelectRows)
+
+        self.download_button = QPushButton("Download Selected")
+        self.download_button.clicked.connect(self.download_document)
+
+        self.layout.addWidget(self.table)
+        self.layout.addWidget(self.download_button)
+        self.setLayout(self.layout)
+
+        self.documents = []
+
+    def load_documents(self, project_id: int, project_unique_no: str = None):
+        """Load documents for a given project_id and optional unique_no."""
+        self.documents.clear()
+        self.table.setRowCount(0)
+
+        session: Session = SessionLocal()
+        try:
+            query = session.query(Document).options(joinedload(Document.modified_by)).filter(
+                Document.project_id == project_id
+            )
+            if project_unique_no:
+                query = query.filter(Document.project_unique_no == project_unique_no)
+
+            self.documents = query.all()
+            self.table.setRowCount(len(self.documents))
+
+            for row, doc in enumerate(self.documents):
+                modified_by_name = (
+                    f"{doc.modified_by.first_name} {doc.modified_by.last_name}".title()
+                    if doc.modified_by else "Unknown"
+                )
+
+                if doc.data:
+                    size_bytes = len(doc.data)
+                    if size_bytes >= 1024 * 1024:
+                        size_str = f"{size_bytes / (1024 * 1024):.2f} MB"
+                    else:
+                        size_str = f"{size_bytes / 1024:.1f} KB"
+                else:
+                    size_str = "0 KB"
+
+                items = [
+                    QTableWidgetItem(doc.filename),
+                    QTableWidgetItem(doc.filetype),
+                    QTableWidgetItem(str(doc.revision)),
+                    QTableWidgetItem(size_str),
+                    QTableWidgetItem(modified_by_name),
+                    QTableWidgetItem(doc.modified_at),
+                    QTableWidgetItem(doc.note or "")
+                ]
+
+                for col, item in enumerate(items):
+                    item.setForeground(QColor("black"))
+                    self.table.setItem(row, col, item)
+
+            self.table.resizeColumnsToContents()
+            self.table.horizontalHeader().setStretchLastSection(True)
+
+        except Exception as e:
+            QMessageBox.critical(self, "Load Error", str(e))
+        finally:
+            session.close()
+
+    def download_document(self):
+        selected = self.table.currentRow()
+        if selected < 0 or selected >= len(self.documents):
+            QMessageBox.warning(self, "No Selection", "Please select a document to download.")
+            return
+
+        doc = self.documents[selected]
+        save_path, _ = QFileDialog.getSaveFileName(self, "Save File", doc.filename)
+
+        if save_path:
+            try:
+                with open(save_path, "wb") as f:
+                    f.write(doc.data)
+                QMessageBox.information(self, "Success", f"File saved to:\n{save_path}")
+            except Exception as e:
+                QMessageBox.critical(self, "Save Error", str(e))

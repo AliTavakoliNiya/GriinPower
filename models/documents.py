@@ -8,7 +8,9 @@ from sqlalchemy.orm import relationship
 
 from utils.database import SessionLocal
 
-today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
+
+def now_jalali():
+    return jdatetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 
 class Document(Base):
@@ -16,22 +18,25 @@ class Document(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
-    project_unique_no = Column(Integer, ForeignKey("projects.unique_no"), nullable=True)  # nullable since not NOT NULL in schema
+    project_unique_no = Column(Integer, ForeignKey("projects.unique_no"), nullable=True)
     revision = Column(Integer, nullable=False)
     filename = Column(String, nullable=False)
     filetype = Column(String, nullable=False)
     data = Column(LargeBinary, nullable=False)
     modified_by_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    modified_at = Column(String, nullable=False)
+    modified_at = Column(String, nullable=False, default=now_jalali)
     note = Column(Text, nullable=True)
 
-    # relationships
-    project = relationship("Project", back_populates="documents")
-    project_by_unique_no = relationship("Project")
+    # Relationships
+    project = relationship("Project", foreign_keys=[project_id], back_populates="documents")
+    project_by_unique_no = relationship("Project", foreign_keys=[project_unique_no], backref="documents_by_unique_no")
     modified_by = relationship("User", back_populates="modified_documents")
 
+    def __repr__(self):
+        return f"<Document id={self.id} filename='{self.filename}' revision={self.revision}>"
 
-def save_document(filepath, project_id, project_unique_no, revision, modified_by_id, note=None):
+
+def upload_document(filepath, project_id, project_unique_no, revision, modified_by_id, note=None):
     """
     Save a binary document to the database with foreign key constraints.
 
@@ -55,7 +60,7 @@ def save_document(filepath, project_id, project_unique_no, revision, modified_by
         # Extract metadata
         filename = os.path.basename(filepath)
         filetype = filename.split('.')[-1].lower()
-        modified_at = now_jalali_str()
+        modified_at = now_jalali()
 
         # Create new document instance
         doc = Document(
@@ -79,6 +84,7 @@ def save_document(filepath, project_id, project_unique_no, revision, modified_by
         return False, f"Error saving document: {str(e)}"
     finally:
         session.close()
+
 
 def retrieve_document(doc_id, output_path):
     """

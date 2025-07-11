@@ -25,12 +25,12 @@ class User(Base):
     role = Column(String, nullable=False)
     created_at = Column(String, nullable=False, default=now_jalali)
 
+    # Relationships
     modified_documents = relationship("Document", back_populates="modified_by", lazy="joined")
-
-
 
     def __repr__(self):
         return f"<User(username='{self.username}', role='{self.role}')>"
+
 
 def get_all_users():
     session = SessionLocal()
@@ -43,7 +43,6 @@ def get_all_users():
         return False, []
     finally:
         session.close()
-
 
 
 def get_user_by_username(username: str, password: str):

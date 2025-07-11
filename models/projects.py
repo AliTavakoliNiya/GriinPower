@@ -10,8 +10,8 @@ import traceback
 from models import Base
 
 
-
-today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
+def now_jalali():
+    return jdatetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 
 class Project(Base):
@@ -20,15 +20,15 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     code = Column(String)
-    unique_no = Column(Integer, unique=True)  # should be Integer to match foreign key
+    unique_no = Column(String, unique=True)
     revision = Column(Integer)
     modified_by_id = Column(Integer, ForeignKey("users.id"))
-    modified_at = Column(String)
+    modified_at = Column(String, default=now_jalali)
     project_electrical_specs = Column(Text)
 
-    documents = relationship("Document", back_populates="project", lazy="joined")
+    # Relationships
+    documents = relationship("Document", back_populates="project", lazy="joined", foreign_keys="[Document.project_id]")
     modified_by = relationship("User")
-
 
     def serialize_project_data(self, data: dict) -> dict:
         def convert(obj):
@@ -39,10 +39,14 @@ class Project(Base):
             elif isinstance(obj, list):
                 return [convert(i) for i in obj]
             return obj
+
         return convert(data)
 
     def set_data(self, data_dict: dict):
         self.project_electrical_specs = json.dumps(self.serialize_project_data(data_dict))
+
+    def __repr__(self):
+        return f"<Project id={self.id} name='{self.name}' code='{self.code}'>"
 
 
 def save_project(current_project):
@@ -53,7 +57,7 @@ def save_project(current_project):
     saving_project.unique_no = current_project.unique_no
     saving_project.revision = current_project.revision
     saving_project.modified_by_id = current_project.modified_by_id
-    saving_project.modified_at = today_shamsi
+    saving_project.modified_at = now_jalali()
     saving_project.set_data(current_project.project_electrical_specs)
 
     session = SessionLocal()
@@ -107,7 +111,6 @@ def get_project(project_id=None, code=None, unique_no=None, revision=None):
         return False, f"Error loading project\n{str(e)}"
     finally:
         session.close()
-
 
 
 def get_all_project():

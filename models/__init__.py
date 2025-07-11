@@ -16,7 +16,7 @@ __all__ = [
 from .components import Component
 from .component_attributes import ComponentAttribute
 from .projects import Project
-from .user_model import User
-from .supplier import Supplier
+from .users import User
+from .suppliers import Supplier
 from .documents import Document
 from .component_suppliers import ComponentSupplier
