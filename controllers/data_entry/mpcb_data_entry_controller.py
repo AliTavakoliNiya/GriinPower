@@ -9,7 +9,7 @@ from PyQt5.QtCore import QObject, pyqtSignal, QRunnable, QThreadPool
 
 from models.component_suppliers import insert_component_suppliers_to_db
 from models.items.mpcb import get_all_mpcbs, insert_mpcb_to_db
-from models.supplier import get_supplier_by_name
+from models.suppliers import get_supplier_by_name
 
 
 class MPCBUpdateWorkerSignals(QObject):

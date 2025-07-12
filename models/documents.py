@@ -7,6 +7,7 @@ from models import Base
 from sqlalchemy.orm import relationship
 
 from utils.database import SessionLocal
+from sqlalchemy.orm import joinedload
 
 
 def now_jalali():
@@ -17,6 +18,7 @@ class Document(Base):
     __tablename__ = "documents"
 
     id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
+    document_title = Column(String, nullable=False)
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
     project_unique_no = Column(Integer, ForeignKey("projects.unique_no"), nullable=True)
     revision = Column(Integer, nullable=False)
@@ -36,7 +38,7 @@ class Document(Base):
         return f"<Document id={self.id} filename='{self.filename}' revision={self.revision}>"
 
 
-def upload_document(filepath, project_id, project_unique_no, revision, modified_by_id, note=None):
+def upload_document(filepath, document_title, project_id, project_unique_no, revision, modified_by_id, note=None):
     """
     Save a binary document to the database with foreign key constraints.
 
@@ -65,6 +67,7 @@ def upload_document(filepath, project_id, project_unique_no, revision, modified_
         # Create new document instance
         doc = Document(
             project_id=project_id,
+            document_title=document_title,
             project_unique_no=project_unique_no,
             revision=revision,
             filename=filename,
@@ -86,22 +89,24 @@ def upload_document(filepath, project_id, project_unique_no, revision, modified_
         session.close()
 
 
-def retrieve_document(doc_id, output_path):
-    """
-    Retrieve a document from DB and save to disk.
-    """
-    session = SessionLocal()
+def get_documents(project_id: int, project_unique_no: str = None, document_title: str = ""):
+    """Retrieve documents matching project and title filter."""
+    Session = SessionLocal()
     try:
-        doc = session.query(Document).filter(Document.id == doc_id).first()
-        if not doc:
-            return False, f"Document with ID {doc_id} not found."
+        if not document_title.strip():
+            return False, "Document title is required.", []
 
-        with open(output_path, 'wb') as f:
-            f.write(doc.data)
+        query = Session.query(Document).options(joinedload(Document.modified_by)).filter(
+            Document.project_id == project_id,
+            Document.document_title.ilike(f"%{document_title.strip()}%")
+        )
 
-        return True, f"Document saved to '{output_path}'"
+        if project_unique_no:
+            query = query.filter(Document.project_unique_no == project_unique_no)
+
+        documents = query.all()
+        return True, "", documents
     except Exception as e:
-        print(traceback.format_exc())
-        return False, f"Error retrieving document: {str(e)}"
+        return False, str(e), []
     finally:
-        session.close()
+        Session.close()

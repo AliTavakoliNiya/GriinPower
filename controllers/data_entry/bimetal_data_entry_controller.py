@@ -1,6 +1,6 @@
 from models.component_suppliers import insert_component_suppliers_to_db
 from models.items.bimetal import get_all_bimetals, insert_bimetal_to_db
-from models.supplier import get_supplier_by_name
+from models.suppliers import get_supplier_by_name
 
 
 class BimetalDataEntryController:

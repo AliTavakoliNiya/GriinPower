@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 from models.component_suppliers import insert_component_suppliers_to_db
 from models.items.mccb import get_all_mccbs, insert_mccb_to_db
-from models.supplier import get_supplier_by_name
+from models.suppliers import get_supplier_by_name
 
 
 class MCCBUpdateWorkerSignals(QObject):

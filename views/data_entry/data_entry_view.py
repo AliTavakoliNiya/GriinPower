@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QTableView
 
 from controllers.user_session_controller import UserSession
-from models.supplier import get_all_suppliers
+from models.suppliers import get_all_suppliers
 from views.data_entry.bimetal_data_entry_view import BimetalDataEntryView
 from views.data_entry.contactor_data_entry_view import ContactorDataEntryView
 from views.data_entry.electrical_panel_data_entry_view import ElectricalPanelDataEntryView

@@ -4,7 +4,7 @@ from sqlalchemy.orm import joinedload
 from controllers.user_session_controller import UserSession
 from models import Component, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
-from models.user_model import User
+from models.users import User
 
 """
 attribute_keys:

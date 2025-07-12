@@ -1,4 +1,4 @@
-from models.user_model import get_user_by_username
+from models.users import get_user_by_username
 
 
 class UserSession:

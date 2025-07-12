@@ -1,20 +1,13 @@
+from PyQt5 import uic
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QCheckBox, QComboBox, QFileDialog, QLineEdit, QMessageBox, QPushButton, QSpinBox, \
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
 
-from PyQt5 import uic
-from PyQt5.QtWidgets import QComboBox, QSpinBox, QCheckBox
-from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem,
-    QPushButton, QFileDialog, QMessageBox, QLineEdit
-)
-from sqlalchemy.orm import Session
-from sqlalchemy.orm import joinedload
-
+from controllers.tender_application.document_controller import DocumentController
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.user_session_controller import UserSession
-from models.documents import Document
 from models.documents import upload_document
-from utils.database import SessionLocal
 from views.message_box_view import show_message
 
 
@@ -31,6 +24,15 @@ class ProjectInformationTab(QWidget):
 
         self.upload_technical_data_btn.clicked.connect(self.upload_technical_data)
         self.download_technical_data_btn.clicked.connect(self.download_technical_data)
+
+        self.upload_p_id_btn.clicked.connect(self.upload_p_id)
+        self.download_p_id_btn.clicked.connect(self.download_p_id)
+
+        self.upload_tender_doc1_btn.clicked.connect(self.upload_tender_doc1)
+        self.download_tender_doc1_btn.clicked.connect(self.download_tender_doc1)
+
+        self.upload_tender_doc2_btn.clicked.connect(self.upload_tender_doc2)
+        self.download_tender_doc2_btn.clicked.connect(self.download_tender_doc2)
 
         if self.current_project.revision != None:
             self.set_project_info_ui_values()
@@ -116,11 +118,12 @@ class ProjectInformationTab(QWidget):
             # Call save_document with proper arguments
             result, message = upload_document(
                 filepath=file_path,
+                document_title="TechnicalData",
                 project_id=self.current_project.id,
-                project_unique_no=self.current_project.unique_no,  # new argument
+                project_unique_no=self.current_project.unique_no,
                 revision=self.current_project.revision,
                 modified_by_id=self.current_user.id,
-                note=""  # or get note from user input if you want
+                note=""
             )
             if result:
                 show_message("Saved successfully", "Saved")
@@ -132,7 +135,95 @@ class ProjectInformationTab(QWidget):
             self.document_downloader_view = DocumentDownloader(self)
         self.document_downloader_view.load_documents(
             project_id=self.current_project.id,
-            project_unique_no=self.current_project.unique_no
+            project_unique_no=self.current_project.unique_no,
+            document_title="TechnicalData"
+        )
+        self.document_downloader_view.show()
+
+    def upload_p_id(self):
+        # Open file dialog to select a document
+        file_path, _ = QFileDialog.getOpenFileName(None, "Select Document File")
+        if file_path:
+            # Call save_document with proper arguments
+            result, message = upload_document(
+                filepath=file_path,
+                document_title="PAndID",
+                project_id=self.current_project.id,
+                project_unique_no=self.current_project.unique_no,
+                revision=self.current_project.revision,
+                modified_by_id=self.current_user.id,
+                note=""
+            )
+            if result:
+                show_message("Saved successfully", "Saved")
+            else:
+                show_message(message, "Error")
+
+    def download_p_id(self):
+        if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
+            self.document_downloader_view = DocumentDownloader(self)
+        self.document_downloader_view.load_documents(
+            project_id=self.current_project.id,
+            project_unique_no=self.current_project.unique_no,
+            document_title="PAndID"
+        )
+        self.document_downloader_view.show()
+
+    def upload_tender_doc1(self):
+        # Open file dialog to select a document
+        file_path, _ = QFileDialog.getOpenFileName(None, "Select Document File")
+        if file_path:
+            # Call save_document with proper arguments
+            result, message = upload_document(
+                filepath=file_path,
+                document_title="TenderDoc1",
+                project_id=self.current_project.id,
+                project_unique_no=self.current_project.unique_no,
+                revision=self.current_project.revision,
+                modified_by_id=self.current_user.id,
+                note=""
+            )
+            if result:
+                show_message("Saved successfully", "Saved")
+            else:
+                show_message(message, "Error")
+
+    def download_tender_doc1(self):
+        if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
+            self.document_downloader_view = DocumentDownloader(self)
+        self.document_downloader_view.load_documents(
+            project_id=self.current_project.id,
+            project_unique_no=self.current_project.unique_no,
+            document_title="TenderDoc1"
+        )
+        self.document_downloader_view.show()
+
+    def upload_tender_doc2(self):
+        # Open file dialog to select a document
+        file_path, _ = QFileDialog.getOpenFileName(None, "Select Document File")
+        if file_path:
+            # Call save_document with proper arguments
+            result, message = upload_document(
+                filepath=file_path,
+                document_title="TenderDoc2",
+                project_id=self.current_project.id,
+                project_unique_no=self.current_project.unique_no,
+                revision=self.current_project.revision,
+                modified_by_id=self.current_user.id,
+                note=""
+            )
+            if result:
+                show_message("Saved successfully", "Saved")
+            else:
+                show_message(message, "Error")
+
+    def download_tender_doc2(self):
+        if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
+            self.document_downloader_view = DocumentDownloader(self)
+        self.document_downloader_view.load_documents(
+            project_id=self.current_project.id,
+            project_unique_no=self.current_project.unique_no,
+            document_title="TenderDoc2"
         )
         self.document_downloader_view.show()
 
@@ -327,13 +418,11 @@ class DocumentDownloader(QWidget):
         super().__init__(parent)
         self.setWindowTitle("Document Downloader")
         self.setGeometry(200, 200, 800, 400)
-
         self.setWindowFlags(Qt.Window | Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
 
         self.layout = QVBoxLayout()
-
         self.table = QTableWidget()
-        self.table.setColumnCount(6)
+        self.table.setColumnCount(7)
         self.table.setHorizontalHeaderLabels([
             "Filename", "Filetype", "Revision", "Size", "Modified By", "Modified At", "Note"
         ])
@@ -341,79 +430,83 @@ class DocumentDownloader(QWidget):
 
         self.download_button = QPushButton("Download Selected")
         self.download_button.clicked.connect(self.download_document)
+        self.table.cellDoubleClicked.connect(self.handle_double_click)
 
         self.layout.addWidget(self.table)
         self.layout.addWidget(self.download_button)
         self.setLayout(self.layout)
 
         self.documents = []
+        self.controller = DocumentController(self)
 
-    def load_documents(self, project_id: int, project_unique_no: str = None):
-        """Load documents for a given project_id and optional unique_no."""
-        self.documents.clear()
-        self.table.setRowCount(0)
+    def load_documents(self, project_id: int, project_unique_no: str = None, document_title: str = ""):
+        """Delegate loading to controller."""
+        success, message, documents = self.controller.load_documents(project_id, project_unique_no, document_title)
+        if not success:
+            show_message("Load Error", message)
+        else:
+            self.populate_table(documents)
 
-        session: Session = SessionLocal()
-        try:
-            query = session.query(Document).options(joinedload(Document.modified_by)).filter(
-                Document.project_id == project_id
-            )
-            if project_unique_no:
-                query = query.filter(Document.project_unique_no == project_unique_no)
+    def populate_table(self, documents):
+        self.documents = documents
+        self.table.setRowCount(len(documents))
 
-            self.documents = query.all()
-            self.table.setRowCount(len(self.documents))
+        for row, doc in enumerate(documents):
+            modified_by = f"{doc.modified_by.first_name} {doc.modified_by.last_name}".title() if doc.modified_by else "Unknown"
+            size_str = f"{len(doc.data) / 1024:.1f} KB" if doc.data else "0 KB"
+            if len(doc.data) >= 1024 * 1024:
+                size_str = f"{len(doc.data) / (1024 * 1024):.2f} MB"
 
-            for row, doc in enumerate(self.documents):
-                modified_by_name = (
-                    f"{doc.modified_by.first_name} {doc.modified_by.last_name}".title()
-                    if doc.modified_by else "Unknown"
-                )
+            items = [
+                QTableWidgetItem(doc.filename),
+                QTableWidgetItem(doc.filetype),
+                QTableWidgetItem(str(doc.revision)),
+                QTableWidgetItem(size_str),
+                QTableWidgetItem(modified_by),
+                QTableWidgetItem(doc.modified_at),
+                QTableWidgetItem(doc.note or "")
+            ]
 
-                if doc.data:
-                    size_bytes = len(doc.data)
-                    if size_bytes >= 1024 * 1024:
-                        size_str = f"{size_bytes / (1024 * 1024):.2f} MB"
-                    else:
-                        size_str = f"{size_bytes / 1024:.1f} KB"
-                else:
-                    size_str = "0 KB"
+            for col, item in enumerate(items):
+                item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+                item.setForeground(QColor("black"))
+                self.table.setItem(row, col, item)
 
-                items = [
-                    QTableWidgetItem(doc.filename),
-                    QTableWidgetItem(doc.filetype),
-                    QTableWidgetItem(str(doc.revision)),
-                    QTableWidgetItem(size_str),
-                    QTableWidgetItem(modified_by_name),
-                    QTableWidgetItem(doc.modified_at),
-                    QTableWidgetItem(doc.note or "")
-                ]
-
-                for col, item in enumerate(items):
-                    item.setForeground(QColor("black"))
-                    self.table.setItem(row, col, item)
-
-            self.table.resizeColumnsToContents()
-            self.table.horizontalHeader().setStretchLastSection(True)
-
-        except Exception as e:
-            QMessageBox.critical(self, "Load Error", str(e))
-        finally:
-            session.close()
+        self.table.resizeColumnsToContents()
+        self.table.horizontalHeader().setStretchLastSection(True)
 
     def download_document(self):
         selected = self.table.currentRow()
         if selected < 0 or selected >= len(self.documents):
-            QMessageBox.warning(self, "No Selection", "Please select a document to download.")
+            self.show_warning("No Selection", "Please select a document to download.")
             return
 
         doc = self.documents[selected]
         save_path, _ = QFileDialog.getSaveFileName(self, "Save File", doc.filename)
+        if save_path:
+            success, message = self.controller.download_document(doc, save_path)
+            if not success:
+                show_message(success, message)
+
+
+    def handle_double_click(self, row, column):
+        if row < 0 or row >= len(self.documents):
+            return
+
+        doc = self.documents[row]
+        save_path, _ = QFileDialog.getSaveFileName(self, "Save File", doc.filename)
 
         if save_path:
-            try:
-                with open(save_path, "wb") as f:
-                    f.write(doc.data)
-                QMessageBox.information(self, "Success", f"File saved to:\n{save_path}")
-            except Exception as e:
-                QMessageBox.critical(self, "Save Error", str(e))
+            success, message = self.controller.download_document(doc, save_path)
+            if not success:
+                show_message(success, message)
+
+    # UI Feedback Helpers
+    def show_warning(self, title, message):
+        QMessageBox.warning(self, title, message)
+
+    def show_info(self, title, message):
+        QMessageBox.information(self, title, message)
+
+    def show_critical(self, title, message):
+        QMessageBox.critical(self, title, message)

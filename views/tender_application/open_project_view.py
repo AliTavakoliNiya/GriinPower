@@ -4,7 +4,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QDialog
 
 from models.projects import get_all_project
-from models.user_model import get_all_users
+from models.users import get_all_users
 from views.message_box_view import show_message
 
 

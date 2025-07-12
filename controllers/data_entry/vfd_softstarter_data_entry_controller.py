@@ -1,6 +1,6 @@
 from models.component_suppliers import insert_component_suppliers_to_db
 from models.items.vfd_softstarter import get_all_vfds_softstarters, insert_vfd_softstarter_to_db
-from models.supplier import get_supplier_by_name
+from models.suppliers import get_supplier_by_name
 
 
 class VFDSoftStarterDataEntryController:

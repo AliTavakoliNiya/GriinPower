@@ -1,7 +1,7 @@
 import re
 
 from models import Supplier
-from models.supplier import get_all_suppliers, save_supplier_to_db
+from models.suppliers import get_all_suppliers, save_supplier_to_db
 
 
 class SupplierController:

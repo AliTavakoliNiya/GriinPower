@@ -1,6 +1,6 @@
 from models.component_suppliers import insert_component_suppliers_to_db
 from models.items.general import get_all_generals, insert_general_to_db
-from models.supplier import get_supplier_by_name
+from models.suppliers import get_supplier_by_name
 
 
 class GeneralDataEntryController:
