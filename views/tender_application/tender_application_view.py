@@ -118,7 +118,13 @@ class TenderApplication(QMainWindow):
             show_message(msg, title="Error")
 
     def save_and_new_revision(self):
-        if not confirmation(f"You are about to permanently save the current revision. Are you sure?"):
+        if not confirmation(f"You are about to permanently save the current revision.\n\n"
+                            f"Project Name: {self.current_project.name}\n"
+                            f"Project Code: {self.current_project.code}\n"
+                            f"Project Unique No.: {self.current_project.unique_no}\n"
+                            f"Current Revision: {self.current_project.revision}\n\n"
+                            f"Are you sure?",
+                            centeralize=False):
             return
 
         success, msg = save_project(self.current_project)

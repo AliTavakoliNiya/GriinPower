@@ -75,6 +75,11 @@ class ProjectInformationTab(QWidget):
         self.co_contact_position.textChanged.connect(self._handle_co_contact_position_changed)
         self.co_contact_phone.textChanged.connect(self._handle_co_contact_phone_changed)
 
+        """ --------------------------- Sales Contact Person --------------------------- """
+        self.sales_contact_name.textChanged.connect(self._handle_sales_contact_name_changed)
+        self.sales_contact_phone.textChanged.connect(self._handle_sales_contact_phone_changed)
+        self.sales_contact_position.textChanged.connect(self._handle_sales_contact_position_changed)
+
         """ --------------------------- Approve Vendor List --------------------------- """
         self.proj_avl_siemens.stateChanged.connect(self._handle_proj_avl_siemens_changed)
         self.proj_avl_schneider.stateChanged.connect(self._handle_proj_avl_schneider_changed)
@@ -306,6 +311,16 @@ class ProjectInformationTab(QWidget):
     def _handle_co_contact_phone_changed(self):
         self._update_project_value(["project_info", "co_contact_phone"], str(self.co_contact_phone.text()))
 
+    """ --------------------------- Sales Contact Person --------------------------- """
+    def _handle_sales_contact_name_changed(self):
+        self._update_project_value(["project_info", "sales_contact_name"], str(self.sales_contact_name.text()))
+
+    def _handle_sales_contact_phone_changed(self):
+        self._update_project_value(["project_info", "sales_contact_phone"], str(self.sales_contact_phone.text()))
+
+    def _handle_sales_contact_position_changed(self):
+        self._update_project_value(["project_info", "sales_contact_position"], str(self.sales_contact_position.text()))
+
     """ --------------------------- Owner --------------------------- """
 
     def _handle_owner_changed(self):
@@ -382,6 +397,11 @@ class ProjectInformationTab(QWidget):
             self.co_contact_name.setText(self.electrical_specs['project_info']['co_contact_name'])
             self.co_contact_position.setText(self.electrical_specs['project_info']['co_contact_position'])
             self.co_contact_phone.setText(self.electrical_specs['project_info']['co_contact_phone'])
+
+            # Contact Information - Sales Dep.
+            self.sales_contact_name.setText(self.electrical_specs['project_info']['sales_contact_name'])
+            self.sales_contact_position.setText(self.electrical_specs['project_info']['sales_contact_position'])
+            self.sales_contact_phone.setText(self.electrical_specs['project_info']['sales_contact_phone'])
 
             # Electrical Specifications - Voltage
             self.project_m_voltage.setCurrentText(str(self.electrical_specs['project_info']['m_voltage'] / 1000))

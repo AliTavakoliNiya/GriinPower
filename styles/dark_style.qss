@@ -826,10 +826,29 @@ QTableView::item:alternate {
 }
 
 QTableView::item:selected {
-    background-color: #3399FF; /* or any contrasting color */
-    color: black; /* ensure text is visible */
+    background-color: #F77F00; /* or any contrasting color */
+    color: #ffffff; /* ensure text is visible */
 }
 
+QListView::item {
+	font-size: 10pt;
+	font-family: "Segoe UI";
+	padding: 5px;
+	color: #ffffff;
+    background: #151a1e;
+}
+
+QListView::item:alternate {
+	font-size: 10pt;
+	font-family: "Segoe UI";
+	color: #ffffff;
+    background: lightgray;
+}
+
+QListView::item:selected {
+    background-color: #F77F00;
+    color: #ffffff; 
+}
 
 
 QLabel {

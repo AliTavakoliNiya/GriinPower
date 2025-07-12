@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.user_session_controller import UserSession
 from utils.database import SessionLocal
+from views.account_view import Account
 from views.data_entry.data_entry_view import DataEntry
 from views.login_view import LoginView
 from views.message_box_view import show_message
@@ -62,6 +63,7 @@ class GriinPower(QMainWindow):
         self.open_project_btn.clicked.connect(lambda: self.tender_application_func(True))
         self.data_entry_btn.clicked.connect(self.data_entry_func)
         self.supplier_btn.clicked.connect(self.suppliers_func)
+        self.account_btn.clicked.connect(self.account_func)
 
         self.show()
 
@@ -111,6 +113,10 @@ class GriinPower(QMainWindow):
     def suppliers_func(self):
         """Open the supplier entry form."""
         self.venor_application_window = SupplierEntry(parent=self)
+
+    def account_func(self):
+        self.account_window = Account(parent=self)
+
 
 
 if __name__ == "__main__":
