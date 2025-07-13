@@ -1267,7 +1267,7 @@ Firstname &amp; Lastname</string>
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>New Password:</string>
+         <string>🔒 New Password:</string>
         </property>
        </widget>
       </item>

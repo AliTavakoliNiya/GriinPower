@@ -118,12 +118,12 @@
   </action>
   <action name="actionClose">
    <property name="text">
-    <string>Close</string>
+    <string>❌ Close</string>
    </property>
   </action>
   <action name="actionQuite">
    <property name="text">
-    <string>Quit</string>
+    <string>🏃 Quit</string>
    </property>
   </action>
  </widget>

@@ -37,7 +37,7 @@ class GriinPower(QMainWindow):
             "coffee": "styles/coffee_style.qss",
             "light": "styles/light_style.qss"
         }
-        self.theme_menu = self.menuBar().addMenu("Change Theme")
+        self.theme_menu = self.menuBar().addMenu("🎨 Change Theme")
 
         # Populate theme menu and connect theme change signals
         for name, path in self.themes.items():

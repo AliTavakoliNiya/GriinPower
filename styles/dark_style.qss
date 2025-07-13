@@ -4,22 +4,6 @@ QMainWindow , QWidget {
 	background-color:#151a1e;
 }
 
-QMenu {
-	background-color: #2c2f2f;
-	color: #d3dae3;
-	border: 1px solid #4c566a;
-}
-
-QMenu::item {
-	color: #d3dae3;
-	padding: 6px 20px;
-	background-color: #2c2f2f;
-}
-
-QMenu::item:selected {
-	background-color: #2c2f2f;
-	color: #d3dae3;
-}
 
 QMenu::separator {
 	height: 1px;
@@ -179,7 +163,7 @@ QLineEdit:disabled {
 	border-style: solid;
 	border-color: #4fa08b;
     background-color: #151a1e;
-    color: #151a1e;
+    color: #ffffff;
 }
 
 QLCDNumber {
@@ -237,14 +221,14 @@ QMenu {
 QMenu::item:selected {
 	font-size: 10pt;
 	font-family: "Segoe UI";
-	background-color: #252a2e;
+    background-color: #F77F00;
 	color: #FFFFFF;
 }
 
 QMenu::item {
 	font-size: 10pt;
 	font-family: "Segoe UI";
-	color: #d3dae3;
+    color: #ffffff;
 	background-color: #151a1e;
 }
 
@@ -757,12 +741,6 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 	background: none;
 }
 
-QComboBox {
-	font-size: 10pt;
-	font-family: "Segoe UI";
-	color: #ffffff;
-    font-weight: bold;
-}
 
 QRadioButton, QComboBox {
 	font-size: 10pt;
@@ -842,7 +820,7 @@ QListView::item:alternate {
 	font-size: 10pt;
 	font-family: "Segoe UI";
 	color: #ffffff;
-    background: lightgray;
+    background: #151a1e;
 }
 
 QListView::item:selected {

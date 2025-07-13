@@ -1,13 +1,15 @@
 from PyQt5 import uic
 from PyQt5.QtCore import QSettings
-from PyQt5.QtGui import QIcon, QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QIcon, QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import QDialog
 
 from models.users import User, create_or_update_user, get_all_users
 from views.message_box_view import show_message
 
+
 def normalize(text):
     return text.strip().lower() if text else ""
+
 
 class Account(QDialog):
     def __init__(self, parent=None):
@@ -87,7 +89,8 @@ class Account(QDialog):
         self.selected_user.email = normalize(self.email_field.text())
         self.selected_user.role = normalize(self.role_field.currentText())
 
-        if not all([self.selected_user.username, self.selected_user.first_name, self.selected_user.last_name, self.selected_user.role]):
+        if not all([self.selected_user.username, self.selected_user.first_name, self.selected_user.last_name,
+                    self.selected_user.role]):
             show_message("Username, first name, last name, and role are required.", "Error")
             return
 
@@ -96,6 +99,7 @@ class Account(QDialog):
             password = self.password_field.text().strip()
             if not password:
                 show_message("Password is required for new users.", "Error")
+                self.password_field.setFocus()
                 return
             self.selected_user.password = password
         else:

@@ -34,6 +34,7 @@ class UserSession:
 
 
 def authenticate(username: str, password: str) -> bool:
+    print(f"username:{username}, password:{password}")
     user = get_user_by_username(username, password)
     if user:
         UserSession().set_user(user)

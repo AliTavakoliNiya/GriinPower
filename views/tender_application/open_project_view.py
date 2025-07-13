@@ -52,17 +52,27 @@ class OpenProjectView(QDialog):
             self.clear_form()
             return
 
-        # Find all projects matching the entered code (case-insensitive)
-        self.selected_projects = [
+        # Filter projects matching the entered code (case-insensitive)
+        matching_projects = [
             project for project in self.all_projects
             if (project.code or "").strip().lower() == entered_code.lower()
         ]
 
-        if not self.selected_projects:
+        if not matching_projects:
             self.clear_form()
             return
 
-        # Populate unique_no combobox
+        # Keep only the highest revision project for each unique_no
+        unique_projects = {}
+        for project in matching_projects:
+            key = project.unique_no
+            if key not in unique_projects or project.revision > unique_projects[key].revision:
+                unique_projects[key] = project
+
+        # Save the filtered list to self.selected_projects
+        self.selected_projects = list(unique_projects.values())
+
+        # Populate the combo box with unique_no values
         self.project_unique_code.clear()
         for proj in self.selected_projects:
             self.project_unique_code.addItem(proj.unique_no)

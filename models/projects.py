@@ -27,7 +27,6 @@ class Project(Base):
     project_electrical_specs = Column(Text)
 
     # Relationships
-    documents = relationship("Document", back_populates="project", lazy="joined", foreign_keys="[Document.project_id]")
     modified_by = relationship("User")
 
     def serialize_project_data(self, data: dict) -> dict:

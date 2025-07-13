@@ -43,6 +43,14 @@ class ProjectInformationTab(QWidget):
         self.project_code.textChanged.connect(self._handle_project_code_changed)
         self.project_unique_code.textChanged.connect(self._handle_project_unique_code_changed)
         self.project_site_location.textChanged.connect(self._handle_project_site_location_changed)
+        if self.current_project.revision == 0 or self.current_project.revision == None:
+            self.project_name.setEnabled(True)
+            self.project_code.setEnabled(True)
+            self.project_unique_code.setEnabled(True)
+        else:
+            self.project_name.setEnabled(False)
+            self.project_code.setEnabled(False)
+            self.project_unique_code.setEnabled(False)
 
         """ --------------------------- Site Condition --------------------------- """
         self.project_m_voltage.currentIndexChanged.connect(self._handle_m_voltage_changed)
@@ -124,7 +132,7 @@ class ProjectInformationTab(QWidget):
             result, message = upload_document(
                 filepath=file_path,
                 document_title="TechnicalData",
-                project_id=self.current_project.id,
+                project_code=self.current_project.code,
                 project_unique_no=self.current_project.unique_no,
                 revision=self.current_project.revision,
                 modified_by_id=self.current_user.id,
@@ -139,7 +147,7 @@ class ProjectInformationTab(QWidget):
         if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
             self.document_downloader_view = DocumentDownloader(self)
         self.document_downloader_view.load_documents(
-            project_id=self.current_project.id,
+            project_code=self.current_project.code,
             project_unique_no=self.current_project.unique_no,
             document_title="TechnicalData"
         )
@@ -153,7 +161,7 @@ class ProjectInformationTab(QWidget):
             result, message = upload_document(
                 filepath=file_path,
                 document_title="PAndID",
-                project_id=self.current_project.id,
+                project_code=self.current_project.code,
                 project_unique_no=self.current_project.unique_no,
                 revision=self.current_project.revision,
                 modified_by_id=self.current_user.id,
@@ -168,7 +176,7 @@ class ProjectInformationTab(QWidget):
         if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
             self.document_downloader_view = DocumentDownloader(self)
         self.document_downloader_view.load_documents(
-            project_id=self.current_project.id,
+            project_code=self.current_project.code,
             project_unique_no=self.current_project.unique_no,
             document_title="PAndID"
         )
@@ -182,7 +190,7 @@ class ProjectInformationTab(QWidget):
             result, message = upload_document(
                 filepath=file_path,
                 document_title="TenderDoc1",
-                project_id=self.current_project.id,
+                project_code=self.current_project.code,
                 project_unique_no=self.current_project.unique_no,
                 revision=self.current_project.revision,
                 modified_by_id=self.current_user.id,
@@ -197,7 +205,7 @@ class ProjectInformationTab(QWidget):
         if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
             self.document_downloader_view = DocumentDownloader(self)
         self.document_downloader_view.load_documents(
-            project_id=self.current_project.id,
+            project_code=self.current_project.code,
             project_unique_no=self.current_project.unique_no,
             document_title="TenderDoc1"
         )
@@ -211,7 +219,7 @@ class ProjectInformationTab(QWidget):
             result, message = upload_document(
                 filepath=file_path,
                 document_title="TenderDoc2",
-                project_id=self.current_project.id,
+                project_code=self.current_project.code,
                 project_unique_no=self.current_project.unique_no,
                 revision=self.current_project.revision,
                 modified_by_id=self.current_user.id,
@@ -226,7 +234,7 @@ class ProjectInformationTab(QWidget):
         if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
             self.document_downloader_view = DocumentDownloader(self)
         self.document_downloader_view.load_documents(
-            project_id=self.current_project.id,
+            project_code=self.current_project.code,
             project_unique_no=self.current_project.unique_no,
             document_title="TenderDoc2"
         )
@@ -459,9 +467,9 @@ class DocumentDownloader(QWidget):
         self.documents = []
         self.controller = DocumentController(self)
 
-    def load_documents(self, project_id: int, project_unique_no: str = None, document_title: str = ""):
+    def load_documents(self, project_code: int, project_unique_no: str = None, document_title: str = ""):
         """Delegate loading to controller."""
-        success, message, documents = self.controller.load_documents(project_id, project_unique_no, document_title)
+        success, message, documents = self.controller.load_documents(project_code, project_unique_no, document_title)
         if not success:
             show_message("Load Error", message)
         else:

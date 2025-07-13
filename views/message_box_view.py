@@ -32,8 +32,8 @@ def confirmation(text, centeralize = True):
     layout.addWidget(label)
 
     button_layout = QHBoxLayout()
-    yes_button = QPushButton("Yes")
-    no_button = QPushButton("No")
+    yes_button = QPushButton("👍Yes")
+    no_button = QPushButton("❌No")
     yes_button.clicked.connect(dialog.accept)
     no_button.clicked.connect(dialog.reject)
     button_layout.addStretch()

@@ -107,8 +107,27 @@ class TenderApplication(QMainWindow):
         self.close()
         self.parent.tender_application_func(True)
 
+    def _validate_project_fields(self):
+        """Ensure project name, code, and unique_no are not empty or None."""
+        if not self.current_project:
+            show_message("No project loaded.")
+            return False
+
+        if not all([
+            self.current_project.name and self.current_project.name.strip(),
+            self.current_project.code and self.current_project.code.strip(),
+            self.current_project.unique_no and self.current_project.unique_no.strip()
+        ]):
+            show_message("Project Name, Code, and Unique No. cannot be empty.")
+            return False
+
+        return True
+
     def save_current_rev_changes(self):
-        if not confirmation(f"You are about to save changes, Are you sure?"):
+        if not self._validate_project_fields():
+            return
+
+        if not confirmation("You are about to save changes, Are you sure?"):
             return
 
         success, msg = save_project(self.current_project)
@@ -118,6 +137,9 @@ class TenderApplication(QMainWindow):
             show_message(msg, title="Error")
 
     def save_and_new_revision(self):
+        if not self._validate_project_fields():
+            return
+
         if not confirmation(f"You are about to permanently save the current revision.\n\n"
                             f"Project Name: {self.current_project.name}\n"
                             f"Project Code: {self.current_project.code}\n"

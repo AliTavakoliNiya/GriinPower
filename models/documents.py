@@ -19,8 +19,8 @@ class Document(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     document_title = Column(String, nullable=False)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
-    project_unique_no = Column(Integer, ForeignKey("projects.unique_no"), nullable=True)
+    project_code = Column(String, ForeignKey("projects.code"), nullable=False)
+    project_unique_no = Column(String, ForeignKey("projects.unique_no"), nullable=True)
     revision = Column(Integer, nullable=False)
     filename = Column(String, nullable=False)
     filetype = Column(String, nullable=False)
@@ -30,28 +30,27 @@ class Document(Base):
     note = Column(Text, nullable=True)
 
     # Relationships
-    project = relationship("Project", foreign_keys=[project_id], back_populates="documents")
-    project_by_unique_no = relationship("Project", foreign_keys=[project_unique_no], backref="documents_by_unique_no")
     modified_by = relationship("User", back_populates="modified_documents")
 
     def __repr__(self):
         return f"<Document id={self.id} filename='{self.filename}' revision={self.revision}>"
 
 
-def upload_document(filepath, document_title, project_id, project_unique_no, revision, modified_by_id, note=None):
+def upload_document(filepath, document_title, project_code, project_unique_no, revision, modified_by_id, note=None):
     """
     Save a binary document to the database with foreign key constraints.
 
     Args:
         filepath (str): Path to the file to save.
-        project_id (int): FK to projects.id.
-        project_unique_no (int): FK to projects.unique_no.
+        project_code (str): FK to projects.code.
+        project_unique_no (str): FK to projects.unique_no.
         revision (int): Document revision number.
         modified_by_id (int): FK to users.id (modifier).
         note (str, optional): Additional notes.
 
     Returns:
         tuple: (success: bool, message: str)
+        :param document_title:
     """
     session = SessionLocal()
     try:
@@ -66,7 +65,7 @@ def upload_document(filepath, document_title, project_id, project_unique_no, rev
 
         # Create new document instance
         doc = Document(
-            project_id=project_id,
+            project_code=project_code,
             document_title=document_title,
             project_unique_no=project_unique_no,
             revision=revision,
@@ -89,7 +88,7 @@ def upload_document(filepath, document_title, project_id, project_unique_no, rev
         session.close()
 
 
-def get_documents(project_id: int, project_unique_no: str = None, document_title: str = ""):
+def get_documents(project_code: int, project_unique_no: str = None, document_title: str = ""):
     """Retrieve documents matching project and title filter."""
     Session = SessionLocal()
     try:
@@ -97,7 +96,7 @@ def get_documents(project_id: int, project_unique_no: str = None, document_title
             return False, "Document title is required.", []
 
         query = Session.query(Document).options(joinedload(Document.modified_by)).filter(
-            Document.project_id == project_id,
+            Document.project_code == project_code,
             Document.document_title.ilike(f"%{document_title.strip()}%")
         )
 

@@ -48,6 +48,7 @@ def get_user_by_username(username: str, password: str):
         return None
     except Exception as e:
         session.rollback()
+        print(f"Error fetching user: {str(e)}")
         return None
     finally:
         session.close()
