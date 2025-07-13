@@ -391,7 +391,6 @@ class BagfilterController(PanelController):
                     price=0,
                     last_price_update=f"❌ Instrument not found",
                 )
-                print(instrument)
 
             # ------------ Choose Manifold ------------
             manifold_qty = 0
@@ -424,7 +423,6 @@ class BagfilterController(PanelController):
                         price=0,
                         last_price_update=f"❌Manifold not found",
                         note=f"Manifold for {instrument_name.replace('_', ' ').title()}")
-                    print(manifold_obj)
 
             # ------------ Calibration ------------
             if "proximity_switch" != name and "speed_detector" != name and "ptc" != name and qty != 0:
@@ -448,7 +446,6 @@ class BagfilterController(PanelController):
                         last_price_update=f"❌ Calibration not found",
                         note=f"Calibration for {instrument_name.replace('_', ' ').title()}"
                     )
-                    print(calibration)
 
     def choose_plc(self):
         """

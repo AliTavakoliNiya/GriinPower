@@ -93,9 +93,6 @@ def get_motor_by_spec(
         rpm_val = int(rpm)
         voltage_val = int(voltage)
 
-        min_power = power_val
-        max_power = power_val * 1.1  # 10% margin
-
         motors = (
             session.query(Component)
             .filter(Component.type == "Motor")
@@ -114,82 +111,81 @@ def get_motor_by_spec(
             try:
                 motor_power = float(attr_dict.get("power", -1))
                 motor_rpm = int(attr_dict.get("rpm", -1))
-                motor_voltage = int(attr_dict.get("voltage", -1))
+                motor_voltage = float(attr_dict.get("voltage", -1))
             except ValueError:
-                continue  # skip invalid records
+                continue  # skip invalid
 
-            if not (min_power <= motor_power <= max_power):
-                continue
-            if motor_rpm != rpm_val or motor_voltage != voltage_val:
-                continue
-            if attr_dict.get("brand") != brand:
+            # Check for exact match on power and rpm
+            if motor_power != power_val or motor_rpm != rpm_val:
                 continue
 
-            # Optional filters
-            if start_type and attr_dict.get("start_type") != start_type:
-                continue
-            if cooling_method and attr_dict.get("cooling_method") != cooling_method:
-                continue
-            if ip_rating and attr_dict.get("ip_rating") != ip_rating:
-                continue
-            if efficiency_class and attr_dict.get("efficiency_class") != efficiency_class:
-                continue
-            if painting_ral and attr_dict.get("painting_ral") != painting_ral:
-                continue
-            if thermal_protection and attr_dict.get("thermal_protection") != thermal_protection:
-                continue
-            if is_official and attr_dict.get("is_official") != is_official:
-                continue
-            if is_routine and attr_dict.get("is_routine") != is_routine:
-                continue
+            # Calculate match score
+            score = 0
+            if abs(motor_voltage - voltage_val) < 1e-3:
+                score += 1
+            if attr_dict.get("brand") == brand:
+                score += 1
+            if start_type and attr_dict.get("start_type") == start_type:
+                score += 1
+            if cooling_method and attr_dict.get("cooling_method") == cooling_method:
+                score += 1
+            if ip_rating and attr_dict.get("ip_rating") == ip_rating:
+                score += 1
+            if efficiency_class and attr_dict.get("efficiency_class") == efficiency_class:
+                score += 1
+            if painting_ral and attr_dict.get("painting_ral") == painting_ral:
+                score += 1
+            if thermal_protection and attr_dict.get("thermal_protection") == thermal_protection:
+                score += 1
+            if is_official and attr_dict.get("is_official") == is_official:
+                score += 1
+            if is_routine and attr_dict.get("is_routine") == is_routine:
+                score += 1
 
             latest_supplier = max(motor.suppliers, key=lambda s: s.date if s.date else "", default=None)
 
             matching_motors.append({
                 "component": motor,
                 "attr_dict": attr_dict,
-                "latest_supplier": latest_supplier
+                "latest_supplier": latest_supplier,
+                "score": score
             })
 
         if not matching_motors:
-            return False, "❌ Motor not found"
+            return False, "❌ No motors matched exact power and rpm"
 
-        latest = max(
-            matching_motors,
-            key=lambda item: item["latest_supplier"].date if item["latest_supplier"] else ""
-        )
+        matching_motors.sort(key=lambda m: m["score"], reverse=True)
 
-        supplier = latest["latest_supplier"]
-        attr = latest["attr_dict"]
+        results = []
+        for m in matching_motors:
+            attr = m["attr_dict"]
+            supplier = m["latest_supplier"]
 
-        result = {
-            "id": latest["component"].id,
-            "power": attr.get("power"),
-            "rpm": attr.get("rpm"),
-            "voltage": attr.get("voltage"),
-            "brand": attr.get("brand"),
-            "start_type": attr.get("start_type", ""),
-            "cooling_method": attr.get("cooling_method", ""),
-            "ip_rating": attr.get("ip_rating", ""),
-            "efficiency_class": attr.get("efficiency_class", ""),
-            "painting_ral": attr.get("painting_ral", ""),
-            "thermal_protection": attr.get("thermal_protection", ""),
-            "is_official": attr.get("is_official", ""),
-            "is_routine": attr.get("is_routine", ""),
-            "supplier_name": supplier.supplier.name if supplier else "",
-            "price": supplier.price if supplier else 0,
-            "currency": supplier.currency if supplier else "",
-            "date": str(supplier.date) if supplier else "",
-        }
+            brand_prices = {}
+            for s in m["component"].suppliers:
+                b_name = attr.get("brand")
+                price = s.price
+                if s.supplier and price:
+                    brand_prices[s.supplier.name] = price
 
-        return True, result
+            selected_brand = supplier.supplier.name if supplier else list(brand_prices.keys())[0]
+            selected_price = brand_prices.get(selected_brand, 0)
+
+            results.append({
+                "Title": "Electric Motor",
+                "Price": selected_price,
+                "Note": selected_brand,
+                "brands": brand_prices
+            })
+
+        return True, results
 
     except Exception as e:
         session.rollback()
-        print(str(e))
-        return False, f"error {str(e)}"
+        return False, f"⚠️ Error: {str(e)}"
     finally:
         session.close()
+
 
 
 def insert_motor_to_db(

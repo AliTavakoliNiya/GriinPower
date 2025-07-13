@@ -398,7 +398,6 @@ class InstallationController(PanelController):
                 last_price_update="❌ Cable not found",
                 note=f"For {self.total_motors_qty} Motors"
             )
-            print(cable)
 
     # power cable to motors
     def choose_power_cable_to_motors(self):
@@ -467,7 +466,6 @@ class InstallationController(PanelController):
                     last_price_update="❌ Cable not found",
                     note="\n".join(data["notes"])
                 )
-                print(cable)
 
     """ ladder """
 
@@ -497,8 +495,6 @@ class InstallationController(PanelController):
                 price=0,
                 last_price_update="❌ Ladder not found",
                 note=f"For {self.n_airtank} Air Tanks")
-
-            print(ladder)
 
         success, ladder_cover = get_wire_cable_by_spec("LadderCover", l_number=1, l_size=self.ladder_size)
         if success:
@@ -700,7 +696,6 @@ class InstallationController(PanelController):
                 last_price_update="❌ Tray not found",
                 note=f"For {self.n_airtank} Air Tanks")
 
-            print(tray)
 
         success, tray_cover = get_wire_cable_by_spec("TrayCover", l_number=1, l_size=self.ladder_size)
         if success:

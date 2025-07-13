@@ -74,7 +74,6 @@ def save_project(current_project):
         return True, "Successfully saved!"
     except Exception as e:
         session.rollback()
-        print(traceback.format_exc())
         return False, f"Error Saving Project\n{str(e)}"
     finally:
         session.close()
@@ -106,7 +105,6 @@ def get_project(project_id=None, code=None, unique_no=None, revision=None):
 
         return True, project
     except Exception as e:
-        print(traceback.format_exc())
         return False, f"Error loading project\n{str(e)}"
     finally:
         session.close()
@@ -119,7 +117,6 @@ def get_all_project():
         return True, projects
     except Exception as e:
         session.rollback()
-        print(traceback.format_exc())
         return False, f"Error fetching projects\n{str(e)}"
     finally:
         session.close()

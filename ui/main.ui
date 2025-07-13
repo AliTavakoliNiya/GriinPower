@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1285</width>
+    <width>1342</width>
     <height>686</height>
    </rect>
   </property>
@@ -18,260 +18,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="5" column="3">
-     <spacer name="verticalSpacer_3">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="8" column="2" colspan="2">
-     <widget class="QPushButton" name="data_entry_btn">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-	font-size: 20pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #F77F00;
-}
-
-QPushButton:hover {
-	font-size: 20pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #1c1f1f;
-}
-QPushButton:pressed {
-	font-size: 20pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #2c2f2f;
-}
-</string>
-      </property>
-      <property name="text">
-       <string>Prices</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="3">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="3" column="0">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="4" column="2" colspan="2">
-     <widget class="QPushButton" name="new_project_btn">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-	font-size: 20pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #F77F00;
-}
-
-QPushButton:hover {
-	font-size: 20pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #1c1f1f;
-}
-QPushButton:pressed {
-	font-size: 20pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #2c2f2f;
-}
-</string>
-      </property>
-      <property name="text">
-       <string>New Project</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2" alignment="Qt::AlignRight">
-     <widget class="QLabel" name="user_details_field">
-      <property name="maximumSize">
-       <size>
-        <width>150</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Welcome, Ali Tavakoliniya
-admin</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QLabel" name="label_2">
-      <property name="maximumSize">
-       <size>
-        <width>60</width>
-        <height>60</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap>../assets/user.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1" rowspan="11">
-     <widget class="QLabel" name="label">
-      <property name="maximumSize">
-       <size>
-        <width>980</width>
-        <height>300</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
-      </property>
-      <property name="pixmap">
-       <pixmap>../assets/Background.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="2" colspan="2">
-     <widget class="QPushButton" name="account_btn">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-	font-size: 20pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #F77F00;
-}
-
-QPushButton:hover {
-	font-size: 20pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #1c1f1f;
-}
-QPushButton:pressed {
-	font-size: 20pt;
-	font-family: &quot;Segoe UI&quot;;
-	border-style: solid;
-	border-color: #050a0e;
-	border-width: 1px;
-	border-radius: 5px;
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #2c2f2f;
-}
-</string>
-      </property>
-      <property name="text">
-       <string>Accounts</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="2" colspan="2">
+    <item row="10" column="3" colspan="2">
      <widget class="QPushButton" name="supplier_btn">
       <property name="minimumSize">
        <size>
@@ -321,8 +68,8 @@ QPushButton:pressed {
       </property>
      </widget>
     </item>
-    <item row="14" column="3">
-     <spacer name="verticalSpacer_7">
+    <item row="9" column="4">
+     <spacer name="verticalSpacer_8">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -337,8 +84,77 @@ QPushButton:pressed {
       </property>
      </spacer>
     </item>
-    <item row="1" column="2">
-     <spacer name="verticalSpacer_6">
+    <item row="8" column="3" colspan="2">
+     <widget class="QPushButton" name="data_entry_btn">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	font-size: 20pt;
+	font-family: &quot;Segoe UI&quot;;
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:hover {
+	font-size: 20pt;
+	font-family: &quot;Segoe UI&quot;;
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #1c1f1f;
+}
+QPushButton:pressed {
+	font-size: 20pt;
+	font-family: &quot;Segoe UI&quot;;
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Prices</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QLabel" name="label_2">
+      <property name="maximumSize">
+       <size>
+        <width>60</width>
+        <height>60</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>../assets/user.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="4">
+     <spacer name="verticalSpacer_3">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -353,13 +169,10 @@ QPushButton:pressed {
       </property>
      </spacer>
     </item>
-    <item row="7" column="3">
-     <spacer name="verticalSpacer_4">
+    <item row="13" column="4">
+     <spacer name="verticalSpacer_2">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
       </property>
       <property name="sizeHint" stdset="0">
        <size>
@@ -369,7 +182,23 @@ QPushButton:pressed {
       </property>
      </spacer>
     </item>
-    <item row="11" column="3">
+    <item row="2" column="5">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="11" column="4">
      <spacer name="verticalSpacer_5">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -385,8 +214,24 @@ QPushButton:pressed {
       </property>
      </spacer>
     </item>
-    <item row="13" column="3">
-     <spacer name="verticalSpacer_2">
+    <item row="14" column="4">
+     <spacer name="verticalSpacer_7">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="3" column="4">
+     <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -398,7 +243,145 @@ QPushButton:pressed {
       </property>
      </spacer>
     </item>
-    <item row="6" column="2" colspan="2">
+    <item row="3" column="0">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="3" colspan="2">
+     <widget class="QPushButton" name="new_project_btn">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	font-size: 20pt;
+	font-family: &quot;Segoe UI&quot;;
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:hover {
+	font-size: 20pt;
+	font-family: &quot;Segoe UI&quot;;
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #1c1f1f;
+}
+QPushButton:pressed {
+	font-size: 20pt;
+	font-family: &quot;Segoe UI&quot;;
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>New Project</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="3" colspan="2">
+     <widget class="QPushButton" name="account_btn">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	font-size: 20pt;
+	font-family: &quot;Segoe UI&quot;;
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:hover {
+	font-size: 20pt;
+	font-family: &quot;Segoe UI&quot;;
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #1c1f1f;
+}
+QPushButton:pressed {
+	font-size: 20pt;
+	font-family: &quot;Segoe UI&quot;;
+	border-style: solid;
+	border-color: #050a0e;
+	border-width: 1px;
+	border-radius: 5px;
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Accounts</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1" rowspan="11">
+     <widget class="QLabel" name="label">
+      <property name="maximumSize">
+       <size>
+        <width>980</width>
+        <height>300</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="pixmap">
+       <pixmap>../assets/Background.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="3" colspan="2">
      <widget class="QPushButton" name="open_project_btn">
       <property name="minimumSize">
        <size>
@@ -448,8 +431,40 @@ QPushButton:pressed {
       </property>
      </widget>
     </item>
-    <item row="2" column="4">
-     <spacer name="horizontalSpacer">
+    <item row="1" column="3">
+     <spacer name="verticalSpacer_6">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="7" column="4">
+     <spacer name="verticalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="2">
+     <spacer name="horizontalSpacer_3">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -464,21 +479,28 @@ QPushButton:pressed {
       </property>
      </spacer>
     </item>
-    <item row="9" column="3">
-     <spacer name="verticalSpacer_8">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
+    <item row="2" column="2" colspan="2">
+     <widget class="QLabel" name="user_details_field">
+      <property name="minimumSize">
        <size>
-        <width>20</width>
-        <height>40</height>
+        <width>180</width>
+        <height>0</height>
        </size>
       </property>
-     </spacer>
+      <property name="maximumSize">
+       <size>
+        <width>150</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Welcome, Ali Tavakoliniya
+admin</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

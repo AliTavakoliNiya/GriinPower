@@ -1299,11 +1299,6 @@ Contact Person</string>
           </item>
           <item>
            <property name="text">
-            <string>380</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
             <string>400</string>
            </property>
           </item>

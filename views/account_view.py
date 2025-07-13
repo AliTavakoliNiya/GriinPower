@@ -3,6 +3,7 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon, QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import QDialog
 
+from controllers.user_session_controller import UserSession
 from models.users import User, create_or_update_user, get_all_users
 from views.message_box_view import show_message
 
@@ -19,6 +20,7 @@ class Account(QDialog):
         self.setWindowTitle("Accounts")
         self.settings = QSettings("Griin", "GriinPower")
 
+        self.current_user = UserSession()
         self.selected_user = User()
         self.username_field.setFocus()
         self.users_list.clicked.connect(self.user_selected)
@@ -28,6 +30,13 @@ class Account(QDialog):
         self.all_users = []
         self.refresh_page()
         self.clear_form(refresh=False)
+
+        if self.current_user.role != "admin":
+            self.username_field.setEnabled(False)
+            self.role_field.setEnabled(False)
+            self.clear_form_btn.hide()
+            self.users_list.hide()
+            self.user_selected()
 
         self.users_list.setAlternatingRowColors(True)
         self.show()
@@ -48,12 +57,15 @@ class Account(QDialog):
             model.appendRow(item)
         self.users_list.setModel(model)
 
-    def user_selected(self, index):
-        item = self.users_list.model().itemFromIndex(index)
-        if item is None or item.data() is None:
-            return
+    def user_selected(self, index=None):
 
-        self.selected_user = item.data()
+        if self.current_user.role != "admin":
+            self.selected_user = self.current_user
+        else:
+            item = self.users_list.model().itemFromIndex(index)
+            if item is None or item.data() is None:
+                return
+            self.selected_user = item.data()
 
         user_id_name = f"User ID: {self.selected_user.id}\n\n" + f"{self.selected_user.first_name} {self.selected_user.last_name}".title()
         self.user_id_name_filed.setText(user_id_name)
@@ -112,3 +124,5 @@ class Account(QDialog):
             self.clear_form()
         else:
             show_message(message, "Error")
+
+        self.close()

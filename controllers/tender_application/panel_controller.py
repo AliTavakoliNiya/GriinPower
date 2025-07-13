@@ -95,7 +95,6 @@ class PanelController:
                 last_price_update="❌ Contactor not found",
                 note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
-            print(contactor)
 
     def choose_mpcb(self, motor, qty):
         """
@@ -130,7 +129,6 @@ class PanelController:
                 last_price_update="❌ MPCB not found",
                 note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
-            print(mpcb)
 
     def choose_mccb(self, motor, qty):
         """
@@ -165,7 +163,6 @@ class PanelController:
                 last_price_update="❌ MCCB not found",
                 note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
-            print(mccb)
 
     def choose_bimetal(self, motor, qty):
         """
@@ -202,7 +199,6 @@ class PanelController:
                 last_price_update="❌ BIMETAL not found",
                 note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
             )
-            print(bimetal)
 
     def choose_vfd(self, motor, total_qty):
         """
@@ -237,7 +233,6 @@ class PanelController:
                     last_price_update="❌ VFD not found",
                     note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
                 )
-                print(vfd)
 
     def choose_soft_starter(self, motor, total_qty):
         """
@@ -271,7 +266,6 @@ class PanelController:
                     last_price_update="❌ VFD not found",
                     note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
                 )
-                print(soft_starter)
 
     """ ------------------------------------- Generals ------------------------------------- """
 
@@ -424,7 +418,6 @@ class PanelController:
                     price=0,
                     last_price_update=f"❌ Instrument not found",
                 )
-                print(instrument)
 
             # ------------ Choose Manifold ------------
             manifold_qty = 0
@@ -458,7 +451,6 @@ class PanelController:
                         price=0,
                         last_price_update=f"❌Manifold not found",
                         note=f"Manifold for {instrument_name.replace('_', ' ').title()}")
-                    print(manifold_obj)
 
             # ------------ Calibration ------------
             if "proximity_switch" != name and "speed_detector" != name and "ptc" != name and qty != 0:
@@ -483,7 +475,6 @@ class PanelController:
                         note=f"Calibration for {instrument_name.replace('_', ' ').title()}"
 
                     )
-                    print(calibration)
 
     def calculate_plc_io_requirements(self, motor_objects, instruments=None):
         total_di = total_do = total_ai = total_ao = 0
@@ -653,7 +644,6 @@ class PanelController:
                     last_price_update="❌ Miniatory Rail not found",
                     note="\n".join(rail_notes)
                 )
-                print(rail)
 
     def choose_duct_cover(self, motor_objects):
         duct_length = 0
@@ -689,7 +679,6 @@ class PanelController:
                     last_price_update="❌ Duct not found",
                     note="\n".join(duct_notes)
                 )
-                print(duct)
 
     def choose_internal_power_wire(self, motor_objects):
         """
@@ -737,7 +726,6 @@ class PanelController:
                     last_price_update="❌ Wire not found",
                     note="\n".join(wire_notes)
                 )
-                print(cable)
 
         if busbar_length > 0:
 
@@ -763,7 +751,6 @@ class PanelController:
                     last_price_update="❌ Busbar not found",
                     note="\n".join(busbar_notes))
 
-            print(cable)
 
     def choose_internal_signal_wire(self, motor_objects):
         """
@@ -805,7 +792,6 @@ class PanelController:
                 last_price_update="❌ Wire not found",
                 note="\n".join(notes)
             )
-            print(cable)
 
     """ ------------------------------------- Calculate Motor Current ------------------------------------- """
 

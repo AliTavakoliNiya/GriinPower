@@ -3530,6 +3530,11 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>400.0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>450.0</string>
              </property>
             </item>

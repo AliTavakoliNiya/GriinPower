@@ -3,11 +3,13 @@ import subprocess
 
 import pandas as pd
 from PyQt5 import uic
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QAbstractTableModel, Qt
 from PyQt5.QtGui import QPainter
 from PyQt5.QtPrintSupport import QPrinter
-from PyQt5.QtWidgets import QFileDialog, QHeaderView, QMainWindow, QPushButton, QTableView, QTreeWidget, \
+from PyQt5.QtWidgets import QComboBox, QFileDialog, QHeaderView, QMainWindow, QPushButton, QStyledItemDelegate, \
+    QTableView, QTreeWidget, \
     QTreeWidgetItem, QVBoxLayout, QWidget
+from PyQt5.QtCore import QModelIndex
 
 from controllers.tender_application.bagfilter_controller import BagfilterController
 from controllers.tender_application.cable_controller import CableController
@@ -19,7 +21,7 @@ from controllers.tender_application.project_session_controller import ProjectSes
 from controllers.tender_application.transport_controller import TransportController
 from controllers.tender_application.vibration_controller import VibrationController
 from utils.pandas_model import PandasModel
-from views.message_box_view import confirmation, show_message
+from views.message_box_view import show_message
 
 
 class ResultTab(QWidget):
@@ -66,7 +68,6 @@ class ResultTab(QWidget):
     def show_datail_btn_handler(self):
         self.show_datail_window = DictionaryTreeViewer(data=self.electrical_specs, parent=self.main_view)
 
-
     def _setup_result_table(self):
         for table in self.tables.values():
             table.setAlternatingRowColors(True)
@@ -77,6 +78,7 @@ class ResultTab(QWidget):
             table.setWordWrap(True)
             table.setTextElideMode(Qt.ElideRight)
             table.verticalHeader().setVisible(False)
+            table.horizontalHeader().setVisible(True)
 
     def generate_panels(self):
 
@@ -94,9 +96,6 @@ class ResultTab(QWidget):
         self.panels["hopper_heater_panel"] = hopper_heater_controller.build_panel()
         cable_controller = CableController()
         self.panels["cable_panel"] = cable_controller.build_panel()
-        if self.main_view.electrical_tab.fan_checkbox.isChecked():
-            electric_motor_controller = ElectricMotorController()
-            electric_motor_price_and_effective_date = electric_motor_controller.calculate_price()
 
         self.generate_table(panel=self.panels["bagfilter_panel"], table=self.tables["bagfilter_table"])
         self.generate_table(panel=self.panels["fan_damper_panel"], table=self.tables["fan_damper_table"])
@@ -109,11 +108,19 @@ class ResultTab(QWidget):
         panels = copy.deepcopy(self.panels)
         panels["installation_panel"] = self.main_view.installation_tab.installation_panel
         if self.main_view.electrical_tab.fan_checkbox.isChecked():
-            summary_data = self._generate_summary_table(
-                electric_motor_price_and_effective_date=electric_motor_price_and_effective_date, panels=panels)
+            electric_motor_controller = ElectricMotorController()
+            electric_motor_price_and_info = electric_motor_controller.calculate_price()
+            summary_data = self._generate_summary_table(electric_motor_price_and_info=electric_motor_price_and_info, panels=panels)
+
+            summary_rows = pd.DataFrame(summary_data).to_dict(orient="records")
+            model = SummaryTableModel(summary_rows)
+            self.tables["summary_table"].setModel(model)
+            self._resize_columns_to_contents(model, self.tables["summary_table"])
+            self.tables["summary_table"].setItemDelegateForColumn(2, BrandComboDelegate(self.tables["summary_table"]))
+
         else:
             summary_data = self._generate_summary_table(panels=panels)
-        self.generate_table(panel=summary_data, table=self.tables["summary_table"])
+            self.generate_table(panel=summary_data, table=self.tables["summary_table"])
 
         self.refresh_tabs()
 
@@ -124,25 +131,24 @@ class ResultTab(QWidget):
         }
         return pd.concat([df, pd.DataFrame([summary], index=["Total"])])
 
+
+
     def generate_table(self, panel, table):
-        # Convert panel data to DataFrame
         df = pd.DataFrame(panel)
-
-        # Add summary row
         df = self._add_summary_row(df)
-
-        # Build and assign the model to the table
         model = PandasModel(df)
         table.setModel(model)
 
-        # Resize table columns based on content
         header = table.horizontalHeader()
-        for col in range(model.columnCount(None) - 1):
-            header.setSectionResizeMode(col, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(model.columnCount(None) - 1, QHeaderView.Stretch)
+        column_count = model.columnCount(None)
 
-        self._resize_columns_to_contents(model, table)
+        for col in range(column_count - 1):
+            header.setSectionResizeMode(col, QHeaderView.ResizeToContents)
+
+        header.setSectionResizeMode(column_count - 1, QHeaderView.Stretch)
+
         table.resizeRowsToContents()
+
 
     def refresh_tabs(self):
         # Clear all tabs
@@ -157,8 +163,14 @@ class ResultTab(QWidget):
                 continue
 
             df = model._data
-            if "total_price" in df.columns and df.iloc[-1]["total_price"] == 0:
-                continue  # Skip tabs with zero price
+
+            # پشتیبانی از هر دو حالت DataFrame و لیست دیکشنری‌ها
+            if isinstance(df, pd.DataFrame):
+                if "total_price" in df.columns and not df.empty and df.iloc[-1]["total_price"] == 0:
+                    continue
+            elif isinstance(df, list) and len(df) > 0 and isinstance(df[-1], dict):
+                if "Price" in df[-1] and df[-1]["Price"] == 0:
+                    continue
 
             self.tabWidget.addTab(tab_widget, label)
 
@@ -173,33 +185,40 @@ class ResultTab(QWidget):
                 max_width = max(max_width, metrics.horizontalAdvance(text) + 20)
             table.setColumnWidth(col, max_width)
 
-    def _generate_summary_table(self, panels, electric_motor_price_and_effective_date=None):
+    def _generate_summary_table(self, panels, electric_motor_price_and_info=None):
         summary = {
             "Title": [],
             "Price": [],
-            "Note": []
+            "Note": [],
+            "brands": []  # 🔥 اضافه شده برای ComboBox
         }
 
         total_sum = 0
 
         for name, panel in panels.items():
-            summary["Title"].append(name.replace("_", " ").title())
             panel_df = pd.DataFrame(panel)
             panel_total = panel_df["total_price"].sum() if "total_price" in panel_df.columns else 0
+            if panel_total == 0:
+                continue
+
+            summary["Title"].append(name.replace("_", " ").title())
             summary["Price"].append(panel_total)
             summary["Note"].append("")
+            summary["brands"].append({})  # عادی‌ها برند ندارند
             total_sum += panel_total
 
-        if self.electrical_specs["fan"]["status"]:
-            summary["Title"].append("Electric Motor")
-            motor_price = electric_motor_price_and_effective_date[0]
-            total_sum += motor_price
-            summary["Price"].append(motor_price)
-            summary["Note"].append(electric_motor_price_and_effective_date[1])
+        if self.electrical_specs["fan"]["status"] and electric_motor_price_and_info:
+            for motor in electric_motor_price_and_info:
+                summary["Title"].append(motor["Title"])
+                summary["Price"].append(motor["Price"])
+                summary["Note"].append(motor["Note"])  # برند پیش‌فرض
+                summary["brands"].append(motor["brands"])  # لیست برندها و قیمت‌ها
+                total_sum += motor["Price"]
 
         summary["Title"].append("Total")
         summary["Price"].append(total_sum)
         summary["Note"].append("")
+        summary["brands"].append({})
 
         return summary
 
@@ -232,6 +251,11 @@ class ResultTab(QWidget):
                     continue
 
                 df = model._data.copy()
+                if isinstance(df, list):
+                    df = pd.DataFrame(df)
+                elif not isinstance(df, pd.DataFrame):
+                    # اگر نوعی غیر منتظره بود، ادامه بده یا خطا بگیر
+                    continue
 
                 # Check for total_price column and its total row value
                 if "total_price" in df.columns and df.iloc[-1]["total_price"] == 0:
@@ -270,41 +294,72 @@ class ResultTab(QWidget):
             if model is None or name in ["summary_table", "installation_table"]:
                 continue
 
-            df = model._data.copy()
-            df.columns = df.columns.str.lower()  # normalize column names
+            df_raw = model._data
+            if isinstance(df_raw, list):
+                df = pd.DataFrame(df_raw)
+            elif isinstance(df_raw, pd.DataFrame):
+                df = df_raw.copy()
+            else:
+                # اگر df_raw نه لیست است نه DataFrame، احتمالا یک نوع داده دیگر است؛ آن را تبدیل کنید یا خطا بدهید
+                raise TypeError(f"Unexpected type for model._data: {type(df_raw)}")
+
+            df = df.drop(columns=["brands"], errors="ignore")
+
+            if isinstance(df, list):  # در صورت استفاده از SummaryTableModel
+                df = pd.DataFrame(df)
+
+            df.columns = df.columns.str.lower()  # نرمال‌سازی اسامی ستون‌ها
 
             if name == "cable_table":
-                cable_price = df.iloc[-1]['total_price']
+                cable_price = df.iloc[-1]['total_price'] if 'total_price' in df.columns else 0
                 continue
 
             for _, row in df.iterrows():
-                if "total" in row["type"].lower():
+                if "type" in row and "total" in str(row["type"]).lower():
                     continue
 
-                if any(inst in row["type"] for inst in instruments_list):
-                    instruments_price += row['total_price']
+                if any(inst in str(row.get("type", "")) for inst in instruments_list):
+                    instruments_price += row.get('total_price', 0)
                     instrument_items.append({
-                        "شرح": row["type"],
+                        "شرح": row.get("type", ""),
                         "برند": row.get("brand", ""),
                         "تعداد": row.get("quantity", 1),
                         "قیمت واحد": row.get("price", 0),
                         "قیمت کل": row.get("total_price", 0),
                     })
 
-            bagfilter_price += df.iloc[-1]['total_price']
+            bagfilter_price += df.iloc[-1]['total_price'] if 'total_price' in df.columns else 0
 
+        # کسر ابزار دقیق از قیمت کلی بگ‌فیلتر
         bagfilter_price -= instruments_price
-        el_motor_price = tables['summary_table'].model()._data.iloc[7]['Price']  #????????????????????????????
+
+        # 🛠 خواندن قیمت الکتروموتور با جستجو در جدول summary_table
+        el_motor_price = 0
+        el_motor_desc = ""
+
+        summary_model = tables.get('summary_table').model()
+        if summary_model:
+            summary_data = summary_model._data
+            if isinstance(summary_data, list):  # برای SummaryTableModel
+                for row in summary_data:
+                    if isinstance(row, dict) and "Electric Motor" in row.get("Title", ""):
+                        el_motor_price += row.get("Price", 0)
+
+                # توصیف برای موتور از electrical_specs خوانده شود (در صورت وجود)
+                fan_motor = self.electrical_specs.get("fan", {}).get("motors", {}).get("fan", {})
+                if fan_motor:
+                    el_motor_desc = f" الکتروموتور {int(fan_motor.get('power', 0) / 1000)}KW " \
+                                    f"{fan_motor.get('brand', '')} " \
+                                    f"{fan_motor.get('efficiency_class', '')}"
+                else:
+                    el_motor_desc = "الکتروموتور"
 
         summary_data = [
             [0, 0, 0, bagfilter_price, bagfilter_price, 1, "تابلوبگ فیلتر", 1],
             [0, 0, 0, instruments_price, instruments_price, 1, "ابزار دقیق", 2],
             [0, 0, 0, cable_price, cable_price, 1, "کابل", 3],
             [0, 0, 0, 0, 0, 1, "راه اندازی FAT", 4],
-            [0, 0, 0, el_motor_price, el_motor_price, 1,
-             f" الکتروموتور {int(self.electrical_specs['fan']['motors']['fan']['power'] / 1000)}KW "
-             f"{self.electrical_specs['fan']['motors']['fan']['brand']} "
-             f"{self.electrical_specs['fan']['motors']['fan']['efficiency_class']}", 5]
+            [0, 0, 0, el_motor_price, el_motor_price, 1, el_motor_desc, 5]
         ]
 
         summary_df = pd.DataFrame(summary_data,
@@ -525,3 +580,88 @@ class DictionaryTreeViewer(QMainWindow):
             count += 1
             count += self.count_all_items(parent_item.child(i))
         return count
+
+class SummaryTableModel(QAbstractTableModel):
+    def __init__(self, data):
+        super().__init__()
+        self._data = data  # list of dicts with keys: Title, Price, Note, brands
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            headers = ["Title", "Price", "Note"]
+            if section < len(headers):
+                return headers[section]
+        return super().headerData(section, orientation, role)
+
+    def rowCount(self, parent=None):
+        return len(self._data)
+
+    def columnCount(self, parent=None):
+        return 3
+
+    def data(self, index, role=Qt.DisplayRole):
+        if not index.isValid():
+            return None
+
+        row, col = index.row(), index.column()
+        item = self._data[row]
+        if role in (Qt.DisplayRole, Qt.EditRole):
+            if col == 0:
+                return item["Title"]
+            elif col == 1:
+                if role == Qt.DisplayRole:
+                    return "{:,}".format(item["Price"])  # نمایش هزارگان برای حالت نمایشی
+                elif role == Qt.EditRole:
+                    return item["Price"]  # مقدار اصلی برای ویرایش
+
+        elif col == 2:
+                return item["Note"]
+
+    def setData(self, index, value, role=Qt.EditRole):
+        if not index.isValid() or role != Qt.EditRole:
+            return False
+
+        row, col = index.row(), index.column()
+
+        if col == 2 and row < self.rowCount() - 1:  # تغییر برند مجاز به جز Total
+            item = self._data[row]
+            item["Note"] = value
+            item["Price"] = item["brands"].get(value, item["Price"])
+            self.dataChanged.emit(self.index(row, 1), self.index(row, 1))
+            self.dataChanged.emit(index, index)
+            self._update_total()
+            return True
+        return False
+
+    def flags(self, index):
+        if not index.isValid():
+            return Qt.ItemIsEnabled
+        if index.column() == 2 and index.row() < self.rowCount() - 1:
+            return Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+
+    def _update_total(self):
+        total_row = self.rowCount() - 1
+        total = sum(row["Price"] for row in self._data[:-1])
+        self._data[total_row]["Price"] = total
+        self.dataChanged.emit(self.index(total_row, 1), self.index(total_row, 1))
+
+
+class BrandComboDelegate(QStyledItemDelegate):
+    def createEditor(self, parent, option, index):
+        row = index.row()
+        brands_dict = index.model()._data[row].get("brands", {})
+        if not brands_dict:
+            return None  # برند ندارد، ComboBox لازم نیست
+        combo = QComboBox(parent)
+        combo.addItems(list(brands_dict.keys()))
+        return combo
+
+    def setEditorData(self, editor, index):
+        current = index.model().data(index, Qt.EditRole)
+        idx = editor.findText(current)
+        if idx >= 0:
+            editor.setCurrentIndex(idx)
+
+    def setModelData(self, editor, model, index):
+        model.setData(index, editor.currentText(), Qt.EditRole)

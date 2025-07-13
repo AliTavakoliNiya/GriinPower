@@ -13,6 +13,7 @@ class UserSession:
             cls._instance.password = None
             cls._instance.first_name = None
             cls._instance.last_name = None
+            cls._instance.phone = None
             cls._instance.email = None
             cls._instance.role = None
             cls._instance.created_at = None
@@ -24,6 +25,7 @@ class UserSession:
         self.password = user.password
         self.first_name = user.first_name
         self.last_name = user.last_name
+        self.phone = user.phone
         self.email = user.email
         self.role = user.role
         self.created_at = user.created_at
@@ -34,7 +36,6 @@ class UserSession:
 
 
 def authenticate(username: str, password: str) -> bool:
-    print(f"username:{username}, password:{password}")
     user = get_user_by_username(username, password)
     if user:
         UserSession().set_user(user)

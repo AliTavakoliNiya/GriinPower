@@ -24,10 +24,9 @@ class ElectricMotorController():
             painting_ral=motor["painting_ral"],
             thermal_protection=motor["thermal_protection"],
         )
-        if success:
-            return electric_motor.component_supplier.price, f"{electric_motor.component_supplier.supplier.name}\n{electric_motor.component_supplier.date}",
-        elif success == False:
-            # show_message(electric_motor, title="Error")
-            return 0, ""
 
+        if not success or not electric_motor:
+            return [{"Title": "Electric Motor", "Price": 0, "Note": "Not Found", "brands": {}}]
+
+        return electric_motor
 

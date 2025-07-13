@@ -86,8 +86,6 @@ def get_mpcb_by_current(rated_current, brands=[], order_number=None):
             min_c = safe_float(attr_dict.get("min_current"))
             max_c = safe_float(attr_dict.get("max_current"))
 
-            print("\n\n", type(min_c), ":", min_c , type(max_c), ":", max_c, "\n\n")
-
             if min_c is None or max_c is None:
                 continue
 

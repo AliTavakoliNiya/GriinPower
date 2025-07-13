@@ -34,7 +34,6 @@ class CableController(PanelController):
                         current = round(power / (math.sqrt(3) * volt * COSNUS_PI * ETA), 2)
                         self.motors.append({"motor": motor_name, "qty": qty, "power": power, "current": current})
                 except Exception as e:
-                    print(str(e))
                     continue
 
         self.length = self.electrical_specs["bagfilter"]["cable_dimension"]
