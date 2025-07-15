@@ -27,6 +27,6 @@ class ElectricMotorController():
 
         if not success or not electric_motor:
             return [{"Title": "Electric Motor", "Price": 0, "Note": "Not Found", "brands": {}}]
-
-        return electric_motor
+        else:
+            return electric_motor
 

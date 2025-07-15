@@ -1,7 +1,19 @@
+QListView::item {
+	font-size: 10pt;
+	font-family: "Segoe UI";
+	padding: 5px;
+	color: #ffffff;
+    background: #151a1e;
+}
 
+QListView::item:alternate {
+	font-size: 10pt;
+	font-family: "Segoe UI";
+	color: #ffffff;
+    background: #151a1e;
+}
 
-
-import hashlib
-
-hashed_pw = hashlib.sha256("6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b".encode()).hexdigest()
-print(hashed_pw)
+QListView::item:selected {
+    background-color: #F77F00;
+    color: #ffffff; 
+}

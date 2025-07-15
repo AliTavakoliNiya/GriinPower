@@ -165,35 +165,32 @@ class TenderApplication(QMainWindow):
         self.parent.tender_application_window = TenderApplication(parent=self)
 
     def on_tab_changed(self, index):
-        """Validates data after a tab has been changed. Reverts if invalid."""
+        """Handles validation and actions when switching tabs."""
+        # Cache last visited index to detect jumps between Installation and Result
+        last_index = getattr(self, "_last_tab_index", None)
+        self._last_tab_index = index
 
-        # If switched to other tab (index 1)
+        # Switching to Project Info (index 0) or From/To it doesn't need checks
         if index == 1:
+            # Validate Project Information
             if not self.project_information_tab.check_info_tab_ui_rules():
-                # Revert back to Project Information tab
                 self.tabWidget.setCurrentIndex(0)
 
-        # If switched to Installation or Result (index 2 or 3)
         elif index in (2, 3):
-
-            # If switched directly from one to the other (2 <-> 3), do nothing
-            # (but this will NOT work because currentIndex is now the *new* index)
-            # So instead, cache the last index in the class manually
-
-            if getattr(self, "_last_tab_index", None) in (2, 3):
-                self._last_tab_index = index
+            # Skip validation if switching directly between installation and result
+            if last_index in (2, 3):
                 return
 
+            # Check project info tab first
             if not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
+            # Then check electrical tab
             elif not self.electrical_tab.check_electrical_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(1)
             else:
+                # Only proceed if all tabs are valid
                 self.installation_tab.generate_result()
-                self.result_tab.generate_panels()
-
-        # Update the cached tab index
-        self._last_tab_index = index
+                self.result_tab.generate_data()
 
     def print_current_view(self):
         # Create a printer object

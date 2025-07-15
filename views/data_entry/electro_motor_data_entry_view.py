@@ -25,6 +25,8 @@ class ElectroMotorDataEntryView:
     def refresh_page(self):
         self.clear_motor_form()
         all_items = self.electro_motor_data_entry_controller.get_all_motors()
+        for motor in all_items:
+            motor['power'] = float(motor['power'])/1000
         self.show_motors_in_table(all_items)
 
     def format_price_fields(self):
