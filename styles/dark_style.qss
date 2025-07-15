@@ -487,7 +487,7 @@ QComboBox QAbstractItemView {
 	font-family: "Segoe UI";
 	background-color: #222b2e;
 	color: #d3dae3;
-	selection-background-color: #007acc;
+	selection-background-color: #F77F00;
 }
 
 QDial {
@@ -742,7 +742,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }
 
 
-QRadioButton, QComboBox {
+QRadioButton {
 	font-size: 10pt;
 	color: #ffffff;
     font-family: Calibri;

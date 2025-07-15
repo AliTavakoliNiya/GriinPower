@@ -166,15 +166,28 @@ def get_motor_by_spec(
                 b_name = attr.get("brand")
                 price = s.price
                 if s.supplier and price:
-                    brand_prices[s.supplier.name] = price
+                    brand_prices[(f"\n"
+                                  f"Brand: {b_name}\n"
+                                  f"Start Type: {attr.get('start_type')}\n"
+                                  f"Cooling Method: {attr.get('cooling_method')}\n"
+                                  f"IP Rating: {attr.get('ip_rating')}\n"
+                                  f"Efficiency Class: {attr.get('efficiency_class')}\n"
+                                  f"Painting Ral: {attr.get('painting_ral')}\n"
+                                  f"Thermal Protection: {attr.get('thermal_protection')}\n"
+                                  f"Phone/Email: {attr.get('is_official')}\n"
+                                  f"Special/Routine: {attr.get('is_routine')}\n"
+                                  f"Price: {price}\n"
+                                  f"\n")] = price
 
             selected_brand = supplier.supplier.name if supplier else list(brand_prices.keys())[0]
             selected_price = brand_prices.get(selected_brand, 0)
+            selected_info = f"Brand: {selected_brand}, Price: {selected_price}"
+
 
             results.append({
                 "Title": "Electric Motor",
                 "Price": selected_price,
-                "Note": selected_brand,
+                "Note": selected_info,
                 "brands": brand_prices
             })
 

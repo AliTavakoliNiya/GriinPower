@@ -23,8 +23,6 @@ from utils.pandas_model import PandasModel
 from views.message_box_view import show_message
 
 
-
-
 class ResultTab(QWidget):
     def __init__(self, main_view):
         super().__init__()
@@ -39,7 +37,7 @@ class ResultTab(QWidget):
         self._style_all_tables()
 
         self.excel_btn.clicked.connect(self._export_to_excel)
-        self.show_datail_btn.clicked.connect(self._show_detail)
+        self.show_datail_btn.clicked.connect(self._show_detail_tree)
         self.update_table.clicked.connect(self.generate_data)
 
     def _init_tables(self):
@@ -68,20 +66,17 @@ class ResultTab(QWidget):
 
     def _style_all_tables(self):
         for table in self.tables.values():
-            self._style_table(table)
+            table.setAlternatingRowColors(True)
+            table.setHorizontalScrollMode(QTableView.ScrollPerPixel)
+            table.setVerticalScrollMode(QTableView.ScrollPerPixel)
+            table.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+            table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+            table.setWordWrap(True)
+            table.setTextElideMode(Qt.ElideRight)
+            table.verticalHeader().setVisible(False)
+            table.horizontalHeader().setVisible(True)
 
-    def _style_table(self, table: QTableView):
-        table.setAlternatingRowColors(True)
-        table.setHorizontalScrollMode(QTableView.ScrollPerPixel)
-        table.setVerticalScrollMode(QTableView.ScrollPerPixel)
-        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        table.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        table.setWordWrap(True)
-        table.setTextElideMode(Qt.ElideRight)
-        table.verticalHeader().setVisible(False)
-        table.horizontalHeader().setVisible(True)
-
-    def _show_detail(self):
+    def _show_detail_tree(self):
         viewer = DictionaryTreeViewer(data=self.electrical_specs, parent=self.main_view)
         viewer.show()
 
@@ -169,13 +164,20 @@ class ResultTab(QWidget):
             summary["brands"].append({})
             total += panel_total
 
-        if self.electrical_specs["fan"]["status"] and electric_motor_price_and_info:
+        if self.electrical_specs["fan"].get("status") and electric_motor_price_and_info:
+            # Merge all available brand options from motor_info
+            merged_brands = {}
             for motor in electric_motor_price_and_info:
-                summary["Title"].append(motor["Title"])
-                summary["Price"].append(motor["Price"])
-                summary["Note"].append(motor["Note"])
-                summary["brands"].append(motor["brands"])
-                total += motor["Price"]
+                merged_brands.update(motor.get("brands", {}))
+
+            # Select default (first) brand
+            default_note, default_price = next(iter(merged_brands.items()), ("", 0))
+
+            summary["Title"].append("Electric Motor")
+            summary["Price"].append(default_price)
+            summary["Note"].append(default_note)
+            summary["brands"].append(merged_brands)
+            total += default_price
 
         summary["Title"].append("Total")
         summary["Price"].append(total)
@@ -183,7 +185,6 @@ class ResultTab(QWidget):
         summary["brands"].append({})
 
         return summary
-
     def _set_summary_model(self, summary_data, use_brands=False):
         rows = pd.DataFrame(summary_data).to_dict(orient="records")
         model = SummaryTableModel(rows)
@@ -215,47 +216,43 @@ class ResultTab(QWidget):
                 keys += ["installation_table", "summary_table"]
                 tables = {k: tables[k] for k in keys}
 
-            # Call the report export method with tables
-            self._export_report_excel(tables=tables, file_path=report_path)
+            # Add "اقلام ابزار دقیق" and "قیمت نهایی"
+            with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+                # Export main report sheets
+                for name, table in tables.items():
+                    model = table.model()
+                    if model is None:
+                        continue
 
-            if sys.platform.startswith("win"):
+                    df = model._data.copy()
+                    if isinstance(df, list):
+                        df = pd.DataFrame(df)
+                    elif not isinstance(df, pd.DataFrame):
+                        continue
+
+                    # Check for total_price column and its total row value
+                    if "total_price" in df.columns and df.iloc[-1]["total_price"] == 0:
+                        continue  # Skip exporting this sheet
+
+                    df.index = range(1, len(df) + 1)
+                    df.to_excel(writer, sheet_name=name, index=True, startrow=1)
+                    self._style_excel_sheet(writer, name)
+
+                # Append factor sheets
+                instrument_df, summary_df = self._prepare_factor_sheet(tables)
+
+                instrument_df.index = range(1, len(instrument_df) + 1)
+                instrument_df.to_excel(writer, sheet_name="اقلام ابزار دقیق", startrow=1, index=False)
+                self._style_excel_sheet(writer, "اقلام ابزار دقیق")
+
+                summary_df.index = range(1, len(summary_df) + 1)
+                summary_df.to_excel(writer, sheet_name="قیمت نهایی", startrow=1, index=False)
+                self._style_excel_sheet(writer, "قیمت نهایی")
+
                 subprocess.Popen(['start', '', report_path], shell=True)
 
         except Exception as e:
             show_message(message=str(e), title="Error")
-
-    def _export_report_excel(self, tables, file_path):
-        with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
-            # Export main report sheets
-            for name, table in tables.items():
-                model = table.model()
-                if model is None:
-                    continue
-
-                df = model._data.copy()
-                if isinstance(df, list):
-                    df = pd.DataFrame(df)
-                elif not isinstance(df, pd.DataFrame):
-                    continue
-
-                # Check for total_price column and its total row value
-                if "total_price" in df.columns and df.iloc[-1]["total_price"] == 0:
-                    continue  # Skip exporting this sheet
-
-                df.index = range(1, len(df) + 1)
-                df.to_excel(writer, sheet_name=name, index=True, startrow=1)
-                self._style_excel_sheet(writer, name)
-
-            # Append factor sheets
-            instrument_df, summary_df = self._prepare_factor_data(tables)
-
-            instrument_df.index = range(1, len(instrument_df) + 1)
-            instrument_df.to_excel(writer, sheet_name="اقلام ابزار دقیق", startrow=1, index=False)
-            self._style_excel_sheet(writer, "اقلام ابزار دقیق")
-
-            summary_df.index = range(1, len(summary_df) + 1)
-            summary_df.to_excel(writer, sheet_name="قیمت نهایی", startrow=1, index=False)
-            self._style_excel_sheet(writer, "قیمت نهایی")
 
     def _style_excel_sheet(self, writer, sheet_name):
         from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -312,7 +309,7 @@ class ResultTab(QWidget):
         # === Freeze header ===
         worksheet.freeze_panes = worksheet["A3"]
 
-    def _prepare_factor_data(self, tables):
+    def _prepare_factor_sheet(self, tables):
         """Generates instrument and summary DataFrames for factor sheets."""
         instruments_list = [
             'Delta Pressure Transmitter', 'Delta Pressure Switch', 'Pressure Transmitter',
@@ -376,8 +373,10 @@ class ResultTab(QWidget):
             summary_data = summary_model._data
             if isinstance(summary_data, list):
                 for row in summary_data:
-                    if isinstance(row, dict) and "Electric Motor" in row.get("Title", ""):
-                        el_motor_price += row.get("Price", 0)
+                    if isinstance(row, dict) and row.get("Title") == "Electric Motor":
+                        el_motor_price = row.get("Price", 0)
+                        el_motor_desc = row.get("Note", "")
+                        break
 
             fan_motor = self.electrical_specs.get("fan", {}).get("motors", {}).get("fan", {})
             if fan_motor:
@@ -413,6 +412,92 @@ class ResultTab(QWidget):
             instrument_df = instrument_df[instrument_df.columns[::-1]]
 
         return instrument_df, summary_df
+
+
+class SummaryTableModel(QAbstractTableModel):
+    def __init__(self, data):
+        super().__init__()
+        self._data = data  # list of dicts with keys: Title, Price, Note, brands
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            headers = ["Title", "Price", "Note"]
+            if section < len(headers):
+                return headers[section]
+        return super().headerData(section, orientation, role)
+
+    def rowCount(self, parent=None):
+        return len(self._data)
+
+    def columnCount(self, parent=None):
+        return 3
+
+    def data(self, index, role=Qt.DisplayRole):
+        if not index.isValid():
+            return None
+
+        row, col = index.row(), index.column()
+        item = self._data[row]
+        if role in (Qt.DisplayRole, Qt.EditRole):
+            if col == 0:
+                return item["Title"]
+            elif col == 1:
+                if role == Qt.DisplayRole:
+                    return "{:,}".format(item["Price"])  # نمایش هزارگان برای حالت نمایشی
+                elif role == Qt.EditRole:
+                    return item["Price"]  # مقدار اصلی برای ویرایش
+
+        elif col == 2:
+            return item["Note"]
+
+    def setData(self, index, value, role=Qt.EditRole):
+        if not index.isValid() or role != Qt.EditRole:
+            return False
+
+        row, col = index.row(), index.column()
+
+        if col == 2 and row < self.rowCount() - 1:  # تغییر برند مجاز به جز Total
+            item = self._data[row]
+            item["Note"] = value
+            item["Price"] = item["brands"].get(value, item["Price"])
+            self.dataChanged.emit(self.index(row, 1), self.index(row, 1))
+            self.dataChanged.emit(index, index)
+            self._update_total()
+            return True
+        return False
+
+    def flags(self, index):
+        if not index.isValid():
+            return Qt.ItemIsEnabled
+        if index.column() == 2 and index.row() < self.rowCount() - 1:
+            return Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+
+    def _update_total(self):
+        total_row = self.rowCount() - 1
+        total = sum(row["Price"] for row in self._data[:-1])
+        self._data[total_row]["Price"] = total
+        self.dataChanged.emit(self.index(total_row, 1), self.index(total_row, 1))
+
+
+class BrandComboDelegate(QStyledItemDelegate):
+    def createEditor(self, parent, option, index):
+        row = index.row()
+        brands_dict = index.model()._data[row].get("brands", {})
+        if not brands_dict:
+            return None  # برند ندارد، ComboBox لازم نیست
+        combo = QComboBox(parent)
+        combo.addItems(list(brands_dict.keys()))
+        return combo
+
+    def setEditorData(self, editor, index):
+        current = index.model().data(index, Qt.EditRole)
+        idx = editor.findText(current)
+        if idx >= 0:
+            editor.setCurrentIndex(idx)
+
+    def setModelData(self, editor, model, index):
+        model.setData(index, editor.currentText(), Qt.EditRole)
 
 
 class DictionaryTreeViewer(QMainWindow):
@@ -548,89 +633,3 @@ class DictionaryTreeViewer(QMainWindow):
             count += 1
             count += self.count_all_items(parent_item.child(i))
         return count
-
-
-class SummaryTableModel(QAbstractTableModel):
-    def __init__(self, data):
-        super().__init__()
-        self._data = data  # list of dicts with keys: Title, Price, Note, brands
-
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            headers = ["Title", "Price", "Note"]
-            if section < len(headers):
-                return headers[section]
-        return super().headerData(section, orientation, role)
-
-    def rowCount(self, parent=None):
-        return len(self._data)
-
-    def columnCount(self, parent=None):
-        return 3
-
-    def data(self, index, role=Qt.DisplayRole):
-        if not index.isValid():
-            return None
-
-        row, col = index.row(), index.column()
-        item = self._data[row]
-        if role in (Qt.DisplayRole, Qt.EditRole):
-            if col == 0:
-                return item["Title"]
-            elif col == 1:
-                if role == Qt.DisplayRole:
-                    return "{:,}".format(item["Price"])  # نمایش هزارگان برای حالت نمایشی
-                elif role == Qt.EditRole:
-                    return item["Price"]  # مقدار اصلی برای ویرایش
-
-        elif col == 2:
-            return item["Note"]
-
-    def setData(self, index, value, role=Qt.EditRole):
-        if not index.isValid() or role != Qt.EditRole:
-            return False
-
-        row, col = index.row(), index.column()
-
-        if col == 2 and row < self.rowCount() - 1:  # تغییر برند مجاز به جز Total
-            item = self._data[row]
-            item["Note"] = value
-            item["Price"] = item["brands"].get(value, item["Price"])
-            self.dataChanged.emit(self.index(row, 1), self.index(row, 1))
-            self.dataChanged.emit(index, index)
-            self._update_total()
-            return True
-        return False
-
-    def flags(self, index):
-        if not index.isValid():
-            return Qt.ItemIsEnabled
-        if index.column() == 2 and index.row() < self.rowCount() - 1:
-            return Qt.ItemIsEditable | Qt.ItemIsEnabled | Qt.ItemIsSelectable
-        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
-
-    def _update_total(self):
-        total_row = self.rowCount() - 1
-        total = sum(row["Price"] for row in self._data[:-1])
-        self._data[total_row]["Price"] = total
-        self.dataChanged.emit(self.index(total_row, 1), self.index(total_row, 1))
-
-
-class BrandComboDelegate(QStyledItemDelegate):
-    def createEditor(self, parent, option, index):
-        row = index.row()
-        brands_dict = index.model()._data[row].get("brands", {})
-        if not brands_dict:
-            return None  # برند ندارد، ComboBox لازم نیست
-        combo = QComboBox(parent)
-        combo.addItems(list(brands_dict.keys()))
-        return combo
-
-    def setEditorData(self, editor, index):
-        current = index.model().data(index, Qt.EditRole)
-        idx = editor.findText(current)
-        if idx >= 0:
-            editor.setCurrentIndex(idx)
-
-    def setModelData(self, editor, model, index):
-        model.setData(index, editor.currentText(), Qt.EditRole)
