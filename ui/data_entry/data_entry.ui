@@ -21,155 +21,7 @@
     <property name="horizontalSpacing">
      <number>6</number>
     </property>
-    <item row="0" column="4">
-     <spacer name="verticalSpacer_12">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="4" column="6">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="5" column="4">
-     <spacer name="verticalSpacer_9">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="4" column="0">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Minimum</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="4" column="5">
-     <widget class="QTableView" name="history_list">
-      <property name="minimumSize">
-       <size>
-        <width>540</width>
-        <height>540</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1" rowspan="2">
-     <widget class="QListWidget" name="item_list">
-      <property name="minimumSize">
-       <size>
-        <width>120</width>
-        <height>600</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>135</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="currentRow">
-       <number>-1</number>
-      </property>
-      <item>
-       <property name="text">
-        <string>Electrical Motor</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>PLC</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Instrument</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Contactor</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>MPCB</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>MCCB</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Bimetal</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>VFD/SoftStarter</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Wire/Cable/...</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>EL Panel/LCB/JB</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Generals</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="3" column="3" colspan="3">
+    <item row="3" column="3" colspan="4">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="hide_show_item_stack_btn">
@@ -229,6 +81,48 @@ QPushButton:pressed {
        </spacer>
       </item>
      </layout>
+    </item>
+    <item row="4" column="7">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="0">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="6">
+     <widget class="QTableView" name="history_list">
+      <property name="minimumSize">
+       <size>
+        <width>540</width>
+        <height>540</height>
+       </size>
+      </property>
+     </widget>
     </item>
     <item row="4" column="3" colspan="2">
      <widget class="QStackedWidget" name="item_stack">
@@ -4806,6 +4700,156 @@ QPushButton:pressed {
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="3" column="1" rowspan="2">
+     <widget class="QListWidget" name="item_list">
+      <property name="minimumSize">
+       <size>
+        <width>120</width>
+        <height>600</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>135</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="currentRow">
+       <number>-1</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>Electrical Motor</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>PLC</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Instrument</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Contactor</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MPCB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>MCCB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Bimetal</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>VFD/SoftStarter</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Wire/Cable/...</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>EL Panel/LCB/JB</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Generals</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="4">
+     <spacer name="verticalSpacer_12">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="5" column="4">
+     <spacer name="verticalSpacer_9">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="5" column="6" alignment="Qt::AlignRight|Qt::AlignTop">
+     <widget class="QPushButton" name="delete_item_btn">
+      <property name="maximumSize">
+       <size>
+        <width>17</width>
+        <height>17</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Show/Hide Add New Motor</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
+      </property>
+      <property name="text">
+       <string>❌</string>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>17</width>
+        <height>17</height>
+       </size>
+      </property>
      </widget>
     </item>
     <item row="0" column="1">

@@ -106,9 +106,6 @@ class DataEntry(QMainWindow):
         self.wire_cable_supplier.addItems(suppliers_name)
         self.electrical_panel_supplier.addItems(suppliers_name)
 
-    # def load_brands(self):
-    #     success, all_brands = get_all_brands()
-
     def hide_show_item_stack_btn_func(self):
         # Toggle visibility of motor_list table view
         is_visible = self.item_stack.isVisible()
@@ -118,18 +115,3 @@ class DataEntry(QMainWindow):
         self.hide_show_item_stack_btn.setText(
             "⏩" if is_visible else "⏪"
         )
-
-    # def validate_shamsi_date(self, date_str):
-    #     pattern = r'^\d{4}/\d{2}/\d{2}$'
-    #     if not re.match(pattern, date_str):
-    #         return False
-    #
-    #     try:
-    #         year, month, day = map(int, date_str.split('/'))
-    #         input_date = jdatetime.date(year, month, day)
-    #
-    #         today_date = jdatetime.date.today()
-    #
-    #         return input_date <= today_date
-    #     except ValueError:
-    #         return False
