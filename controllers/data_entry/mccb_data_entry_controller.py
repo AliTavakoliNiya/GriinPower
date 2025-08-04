@@ -112,7 +112,6 @@ class MCCBDataEntryController:
             for p in products:
                 order_number = None
                 rated_current = None
-                breaking_capacity = None
                 price = None
 
                 code_span = p.find('span', class_='stats-label', string='کد فنی:')

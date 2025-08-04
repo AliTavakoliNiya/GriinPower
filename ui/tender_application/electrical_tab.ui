@@ -192,6 +192,11 @@
             </item>
             <item>
              <property name="text">
+              <string>2.2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>3</string>
              </property>
             </item>
@@ -442,6 +447,11 @@
             <item>
              <property name="text">
               <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
              </property>
             </item>
             <item>
@@ -947,6 +957,11 @@
             </item>
             <item>
              <property name="text">
+              <string>2.2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>3</string>
              </property>
             </item>
@@ -1136,6 +1151,11 @@
             <item>
              <property name="text">
               <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
              </property>
             </item>
             <item>
@@ -1331,6 +1351,11 @@
             <item>
              <property name="text">
               <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
              </property>
             </item>
             <item>
@@ -1594,6 +1619,11 @@
             </item>
             <item>
              <property name="text">
+              <string>2.2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>3</string>
              </property>
             </item>
@@ -1730,6 +1760,11 @@
             <item>
              <property name="text">
               <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
              </property>
             </item>
             <item>
@@ -1908,6 +1943,11 @@
             <item>
              <property name="text">
               <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
              </property>
             </item>
             <item>
@@ -2097,6 +2137,11 @@
             <item>
              <property name="text">
               <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
              </property>
             </item>
             <item>
@@ -2384,6 +2429,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
              </property>
             </item>
             <item>
@@ -2690,7 +2740,7 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
-              <string>Simence</string>
+              <string>Siemens</string>
              </property>
             </item>
             <item>
@@ -3183,6 +3233,11 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>2.2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>3</string>
              </property>
             </item>
@@ -3451,6 +3506,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
              </property>
             </item>
             <item>

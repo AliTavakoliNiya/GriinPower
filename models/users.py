@@ -5,6 +5,9 @@ from utils.database import SessionLocal
 from models import Base
 import hashlib
 
+from views.message_box_view import show_message
+
+
 def now_jalali():
     return jdatetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -48,7 +51,7 @@ def get_user_by_username(username: str, password: str):
         return None
     except Exception as e:
         session.rollback()
-        print(f"Error fetching user: {str(e)}")
+        show_message(f"Error fetching user: {str(e)}")
         return None
     finally:
         session.close()

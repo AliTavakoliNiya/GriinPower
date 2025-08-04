@@ -148,7 +148,7 @@ QPushButton:pressed {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -3049,6 +3049,35 @@ QPushButton:pressed {
              </property>
              <property name="maximum">
               <double>999.990000000000009</double>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0" colspan="2">
+            <widget class="QPushButton" name="update_bimetal_prices_btn">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>16666</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string> Update Prices</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>../../assets/refresh.png</normaloff>../../assets/refresh.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>17</width>
+               <height>17</height>
+              </size>
              </property>
             </widget>
            </item>

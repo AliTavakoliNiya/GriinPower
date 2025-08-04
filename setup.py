@@ -10,12 +10,17 @@ build_options = {
         "PyQt5",
         "sqlalchemy"
     ],
-    "excludes": ["PyQt5.QtQml", "PyQt5.QtQuick"],  # <- QML disabled
+    "excludes": ["PyQt5.QtQml", "PyQt5.QtQuick"],
     "include_files": [
-        ("F:/Griin/GriinPower/assets", "assets")
+        # Include the assets folder (will be copied to "assets/")
+        ("D:/GriinPower/assets", "assets"),
+
+        # Include the database file (copied into "data/GriinPower.db")
+        ("D:/GriinPower/data/GriinPower.db", "data/GriinPower.db")
     ]
 }
 
+# Use Win32GUI base to hide the console for PyQt5 apps on Windows
 base = "Win32GUI" if sys.platform == "win32" else None
 
 executables = [
@@ -23,7 +28,7 @@ executables = [
         "main.py",
         base=base,
         target_name="GriinPower.exe",
-        icon="F:/Griin/GriinPower/assets/Logo.ico"
+        icon="D:/GriinPower/assets/Logo.ico"
     )
 ]
 

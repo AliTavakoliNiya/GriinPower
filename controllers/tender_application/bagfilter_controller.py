@@ -276,7 +276,7 @@ class BagfilterController(PanelController):
         self.add_to_panel(
             type=f"{io_type} 16 Channel",
             brand=brand,
-            specifications=f"Total: {total}",
+            specifications=f"Total: {total} {io_type}s",
             quantity=cards,
             price=price,
             last_price_update=effective_date,

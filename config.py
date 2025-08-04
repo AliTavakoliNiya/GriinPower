@@ -1,14 +1,17 @@
 import os
+import sys
 
 # Base directory of the application
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys, 'frozen', False):
+    # If the app is run from a compiled executable
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    # If the app is run as a .py script
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Directory for data files
-DATABASE_DIR = os.path.join(BASE_DIR, 'data')
-
-# Database file path
-DATABASE_DIR = os.path.join(DATABASE_DIR, 'GriinPower.db')
-DATABASE_PATH = f'sqlite:///{DATABASE_DIR}'
+# Database file path inside 'data' folder
+DATABASE_FILE = os.path.join(BASE_DIR, 'data', 'GriinPower.db')
+DATABASE_PATH = f'sqlite:///{DATABASE_FILE}'
 
 # Application settings
 APP_NAME = "Electronic Component Manager"

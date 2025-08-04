@@ -150,7 +150,8 @@ def insert_bimetal_to_db(
         max_current,
         _class,
         tripping_threshold,
-        ):
+        created_by_id=None):
+
     brand = brand.lower()
     today_shamsi = jdatetime.datetime.today().strftime("%Y/%m/%d %H:%M")
     current_user = UserSession()
@@ -175,6 +176,7 @@ def insert_bimetal_to_db(
             ):
                 return True, component.id
 
+        created_by_id = created_by_id if created_by_id else str(current_user.id)
         new_bimetal = Component(
             type="Bimetal",
             attributes=[
@@ -184,7 +186,7 @@ def insert_bimetal_to_db(
                 ComponentAttribute(key='max_current', value=max_current),
                 ComponentAttribute(key='class', value=_class),
                 ComponentAttribute(key='tripping_threshold', value=tripping_threshold),
-                ComponentAttribute(key='created_by_id', value=str(current_user.id)),
+                ComponentAttribute(key='created_by_id', value=created_by_id),
                 ComponentAttribute(key='created_at', value=today_shamsi),
             ]
         )
