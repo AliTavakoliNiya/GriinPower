@@ -24,7 +24,7 @@ class CableController(PanelController):
             for motor_name, motor_data in motor.items():
                 try:
                     # Skip "fan" motor if its voltage type is "MV"
-                    if motor_name == "fan" and self.electrical_specs["fan"]["motors"]["voltage_type"] == "MV":
+                    if motor_name == "fan" and self.electrical_specs["fan"]["motors"]["fan"]["voltage_type"] == "MV":
                         continue
 
                     qty = motor_data.get("qty", 0)
@@ -34,11 +34,11 @@ class CableController(PanelController):
                         current = round(power / (math.sqrt(3) * volt * COSNUS_PI * ETA), 2)
                         self.motors.append({"motor": motor_name, "qty": qty, "power": power, "current": current})
                 except Exception as e:
+                    print(f"Error: {e}")
                     continue
 
         self.length = self.electrical_specs["bagfilter"]["cable_dimension"]
         self.note_motors = ", ".join(f'{motor["motor"]} (x{motor["qty"]})' for motor in self.motors)
-
 
         # calculate n_valves and n_airtanks
         result = []
@@ -121,9 +121,8 @@ class CableController(PanelController):
         shield_total_qty = sum(item["qty"] for item in shield_instruments)
         shield_summary = ", ".join(f'{item["instruments"]} (x{item["qty"]})' for item in shield_instruments)
 
-
         success, cable = get_wire_cable_by_spec(type="Cable", note="Shield", l_number=3, l_size=1.5)
-        if success:
+        if success and shield_total_qty:
             self.add_to_panel(
                 type=f"Cable 3x1.5",
                 brand=cable["brand"],
@@ -134,7 +133,7 @@ class CableController(PanelController):
                 last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
                 note=shield_summary
             )
-        else:
+        elif shield_total_qty and not success:
             self.add_to_panel(
                 type=f"Cable 3x1.5",
                 brand="",
@@ -170,8 +169,6 @@ class CableController(PanelController):
                 note=flexible_summary
             )
 
-
-
     def signal_cable(self):
         total_motors = sum(motor["qty"] for motor in self.motors)
 
@@ -181,7 +178,7 @@ class CableController(PanelController):
                 type=f"Cable 7x1.5",
                 brand=cable["brand"],
                 order_number=cable["order_number"],
-                specifications=f"7x1.5mm",
+                specifications=f"7x1.5mm²",
                 quantity=self.length * total_motors,
                 price=cable['price'],
                 last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
@@ -192,7 +189,7 @@ class CableController(PanelController):
                 type=f"Cable 7x1.5",
                 brand="",
                 order_number="",
-                specifications=f"7x1.5mm",
+                specifications=f"7x1.5mm²",
                 quantity=self.length * total_motors,
                 price=0,
                 last_price_update="❌ Cable not found",
@@ -252,10 +249,7 @@ class CableController(PanelController):
 
 def cable_rating(cable_length_m, cable_current_a):
     cable_rating = \
-        [{'cable_size_mm': 1.5, 'cable_length_m': 10, 'cable_current_a': 27.0},
-         {'cable_size_mm': 1.5, 'cable_length_m': 50, 'cable_current_a': 15.0},
-         {'cable_size_mm': 1.5, 'cable_length_m': 100, 'cable_current_a': 7.0},
-         {'cable_size_mm': 1.5, 'cable_length_m': 150, 'cable_current_a': 5.0},
+        [
          {'cable_size_mm': 2.5, 'cable_length_m': 10, 'cable_current_a': 36.0},
          {'cable_size_mm': 2.5, 'cable_length_m': 50, 'cable_current_a': 25.0},
          {'cable_size_mm': 2.5, 'cable_length_m': 100, 'cable_current_a': 12.0},

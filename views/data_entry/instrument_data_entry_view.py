@@ -76,7 +76,7 @@ class InstrumentDataEntryView:
         price = parse_price(self.ui.instrument_price.text())
 
         if not all([type, supplier, price]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving Instrument")
             return
 
         instrument_details = {

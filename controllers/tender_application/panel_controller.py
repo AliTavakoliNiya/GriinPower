@@ -353,8 +353,7 @@ class PanelController:
             width, height, depth = 1200, 2000, 600
             qty = 2
 
-        success, electrical_panel = get_electrical_panel_by_spec(type="Electrical Panel", width=width, height=height,
-                                                                 depth=depth)
+        success, electrical_panel = get_electrical_panel_by_spec(type="Electrical Panel", width=width, height=height, depth=depth)
         if success:
             self.add_to_panel(
                 type="Electrical Panel",
@@ -512,7 +511,7 @@ class PanelController:
         ao_cards = self.calculate_and_add_io("AO", total_ao, ao_notes)
 
         total_20pin = di_cards + do_cards + ai_cards + ao_cards
-        if total_20pin > 0:
+        if total_20pin > 0 and self.electrical_specs["bagfilter"]["plc_series"]=="S7-300 Series":
             success, pin_card = get_general_by_spec(type="Front Connector", specification="20")
             if success:
                 self.add_to_panel(
@@ -709,8 +708,8 @@ class PanelController:
                     type="Internal Power Panel Wire",
                     brand=cable["brand"],
                     order_number=cable["order_number"],
-                    specifications="Size: 1x6 mm²",
-                    quantity=wire_length,
+                    specifications="(3x) Size: 1x6 mm²",
+                    quantity=wire_length*3,
                     price=cable['price'],
                     last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
                     note="\n".join(wire_notes)
@@ -720,8 +719,8 @@ class PanelController:
                     type="Internal Power Panel Wire",
                     brand="",
                     order_number="",
-                    specifications="Size: 1x6 mm²",
-                    quantity=wire_length,
+                    specifications="(3x) Size: 1x6 mm²",
+                    quantity=wire_length*3,
                     price=0,
                     last_price_update="❌ Wire not found",
                     note="\n".join(wire_notes)
@@ -735,8 +734,8 @@ class PanelController:
                     type="Internal Power Busbar",
                     brand=cable["brand"],
                     order_number=cable["order_number"],
-                    specifications="For motors > 45kW",
-                    quantity=busbar_length,
+                    specifications="(3x) For motors > 45kW",
+                    quantity=busbar_length*3,
                     price=cable['price'],
                     last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
                     note="\n".join(busbar_notes))
@@ -745,8 +744,8 @@ class PanelController:
                     type="Internal Power Busbar",
                     brand="",
                     order_number="",
-                    specifications="For motors > 45kW",
-                    quantity=busbar_length,
+                    specifications="(3x) For motors > 45kW",
+                    quantity=busbar_length*3,
                     price=0,
                     last_price_update="❌ Busbar not found",
                     note="\n".join(busbar_notes))

@@ -5,8 +5,8 @@ class Motor:
             current=0,
             usage=None,
             brand=None,
-            terminal_4_qty=4,
-            terminal_6_qty=10,
+            terminal_4_qty=10,
+            terminal_6_qty=4,
             relay_1no_1nc_qty=4,
             relay_2no_2nc_qty=1,
             contactor_qty=1,
@@ -16,7 +16,7 @@ class Motor:
             contactor_aux_contact_qty=1,
             mccb_aux_contact_qty=0,
             mpcb_aux_contact_qty=1,
-            button_qty=3,
+            button_qty=2,
             selector_switch_qty=1,
             signal_lamp_24v_qty=2,
             signal_cable_7x1p5_l_cofactor=1,
@@ -56,8 +56,6 @@ class Motor:
         self.plc_do = plc_do
         self.plc_ai = plc_ai
         self.plc_ao = plc_ao
-        self.plc_front_input_connector = self.plc_di + self.plc_ai
-        self.plc_front_output_connector = self.plc_do + self.plc_ao
 
     def __repr__(self):
         return (

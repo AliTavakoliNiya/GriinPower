@@ -251,7 +251,7 @@ class GeneralDataEntryView:
         order_number = ""
 
         if not all([type, specification, brand, supplier, price]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving Generals")
             return
 
         specification = "" if self.ui.general_spec_entry.text().strip() == "None" else specification

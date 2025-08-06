@@ -71,7 +71,7 @@ class MPCBDataEntryView:
         order_number = self.ui.mpcb_order_number.text().strip() if self.ui.mpcb_order_number.text().strip() else None
 
         if not all([min_current, max_current, trip_class, breaking_capacity, brand, supplier, price, order_number]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving MPCB")
             return
 
         mpcb_details = {

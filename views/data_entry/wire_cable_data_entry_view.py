@@ -61,7 +61,7 @@ class WireCableDataEntryView:
         price = parse_price(self.ui.wire_cable_price.text())
 
         if not all([type, brand, l_number, l_size, supplier, price]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving Wire")
             return
 
         wire_cable_details = {

@@ -67,7 +67,7 @@ class ElectricalPanelDataEntryView:
         price = parse_price(self.ui.electrical_panel_price.text())
 
         if not all([type, width, height, depth, brand, supplier, price]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving Electrical Panel")
             return
 
         electrical_panel_details = {

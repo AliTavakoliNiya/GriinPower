@@ -72,7 +72,7 @@ class ElectroMotorDataEntryView:
         price = parse_price(self.ui.motor_price.text())
 
         if not all([power, rpm, voltage, brand, supplier, phone_email, special_routine, price]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving Electro Motor")
             return
 
         start_type = self.optional_text(self.ui.motor_starting_method)

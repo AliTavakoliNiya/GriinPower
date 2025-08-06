@@ -112,31 +112,6 @@ class BagfilterController(PanelController):
 
         return self.panel
 
-    def choose_electrical_panel(self):
-
-        success, electrical_panel = get_electrical_panel_by_spec(type="Electrical Panel")
-        if success:
-            self.add_to_panel(
-                type="Electrical Panel",
-                brand=electrical_panel.get("brand", ""),
-                order_number="",
-                specifications=f"{electrical_panel.width}mm x {electrical_panel.height}mm x {electrical_panel.depth}mm",
-                quantity=1,
-                price=electrical_panel.get("price", 0),
-                last_price_update=f"{electrical_panel.get('supplier_name', '')}\n{electrical_panel.get('date', '')}",
-                note=""
-            )
-        else:
-            self.add_to_panel(
-                type="Electrical Panel",
-                brand="",
-                order_number="",
-                specifications="",
-                quantity=1,
-                price=0,
-                last_price_update="❌ Electrical Panel not found",
-                note=""
-            )
 
     def process_item(self, comp_type, qty, specification=""):
         if qty <= 0:
@@ -199,7 +174,7 @@ class BagfilterController(PanelController):
             for motor_name, motor_data in motors.items():
                 try:
                     # Skip "fan" motor if its voltage type is "MV"
-                    if motor_name == "fan" and self.electrical_specs["fan"]["motors"]["voltage_type"]=="MV":
+                    if motor_name == "fan" and self.electrical_specs["fan"]["motors"]["fan"]["voltage_type"]=="MV":
                         continue
 
                     qty = motor_data.get("qty", 0)
@@ -327,7 +302,7 @@ class BagfilterController(PanelController):
                 total_20pin += cards
                 self.calculate_and_add_io(io["general_name"], io["count"], io["notes"])
 
-        if total_20pin > 0:
+        if total_20pin > 0 and self.electrical_specs["bagfilter"]["plc_series"]=="S7-300 Series":
             success, pin_card = get_general_by_spec(type="Front Connector", specification="20")
             if success:
                 self.add_to_panel(

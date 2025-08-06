@@ -4,7 +4,8 @@ from controllers.user_session_controller import UserSession
 from models import Component, ComponentAttribute, ComponentSupplier
 from utils.database import SessionLocal
 from models.users import User
-
+from sqlalchemy.orm import aliased
+from sqlalchemy import desc
 """
 attribute_keys:
     series --> required
@@ -120,6 +121,10 @@ def get_plc_by_spec(series, **optional_filters):
                 (alias.c.key == key) &
                 (alias.c.value == val_str)
             )
+
+        supplier_alias = aliased(ComponentSupplier)
+        query = query.join(supplier_alias, supplier_alias.component_id == Component.id)
+        query = query.order_by(desc(supplier_alias.date))
 
         plc = query.first()
         if not plc:

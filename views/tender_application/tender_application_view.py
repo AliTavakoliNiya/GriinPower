@@ -332,10 +332,10 @@ class TenderApplication(QMainWindow):
 
         # ---------------- Fan - Damper ----------------
         el_tab.damper_checkbox.setToolTip(f"Rev:<b>{rev_number}</b><br><b>{rev_specs['damper']['status']}</b>")
+        el_tab.damper_qty.setToolTip(
+            f"Rev:<b>{rev_number}</b><br><b>{rev_specs['damper']['motors']['damper']['qty']}</b> QTY")
         el_tab.damper_kw.setToolTip(
             f"Rev:<b>{rev_number}</b><br><b>{rev_specs['damper']['motors']['damper']['power']}</b>KW")
-        el_tab.damper_brand.setToolTip(
-            f"Rev:<b>{rev_number}</b><br><b>{rev_specs['damper']['motors']['damper']['brand']}</b>")
         el_tab.damper_start_type.setToolTip(
             f"Rev:<b>{rev_number}</b><br><b>{rev_specs['damper']['motors']['damper']['start_type']}</b>")
 

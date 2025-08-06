@@ -70,7 +70,7 @@ class ContactorDataEntryView:
         order_number = self.ui.contactor_order_number.text().strip() if self.ui.contactor_order_number.text().strip() else None
 
         if not all([current, voltage, brand, supplier, price, order_number]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving Contactor")
             return
 
         contactor_details = {"current": current,

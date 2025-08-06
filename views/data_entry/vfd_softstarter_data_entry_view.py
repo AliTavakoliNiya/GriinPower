@@ -63,7 +63,7 @@ class VFDSoftStarterDataEntryView:
         order_number = self.ui.vfd_softstarter_order_number.text().strip() if self.ui.vfd_softstarter_order_number.text().strip() else None
 
         if not all([type, power, brand, order_number, supplier, price]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving VFD")
             return
 
         vfd_softstarter_details = {

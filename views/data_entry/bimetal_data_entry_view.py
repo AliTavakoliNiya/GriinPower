@@ -69,7 +69,7 @@ class BimetalDataEntryView:
         price = parse_price(self.ui.bimetal_price.text())
         order_number = self.ui.bimetal_order_number.text().strip() if self.ui.bimetal_order_number.text().strip() else None
         if not all([min_current, max_current, bimetal_class, tripping_threshold, brand, supplier, price, order_number]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving Bimetal")
             return
 
         bimetal_details = {

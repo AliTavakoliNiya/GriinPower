@@ -137,8 +137,8 @@ class ElectricalTab(QWidget):
         """ ------------ Damper ------------ """
         self.damper_checkbox.stateChanged.connect(self._handle_damper_checkbox_changed)
 
+        self.damper_qty.valueChanged.connect(self._handle_damper_qty_changed)
         self.damper_kw.currentIndexChanged.connect(self._handle_damper_kw_changed)
-        self.damper_brand.currentIndexChanged.connect(self._handle_damper_brand_changed)
         self.damper_start_type.currentIndexChanged.connect(self._handle_damper_start_type_changed)
 
         self.damper_zs_qty.valueChanged.connect(self._handle_damper_zs_qty_changed)
@@ -319,12 +319,11 @@ class ElectricalTab(QWidget):
         self._update_project_value(["hopper_heater", "instruments", "ptc", "brand"])
 
     """ ------------Damper handlers ------------ """
+    def _handle_damper_qty_changed(self, value):
+        self._update_project_value(["damper", "motors", "damper", "qty"], value)
 
     def _handle_damper_kw_changed(self):
         self._handle_combobox_float_kilo(["damper", "motors", "damper", "power"])
-
-    def _handle_damper_brand_changed(self):
-        self._update_project_value(["damper", "motors", "damper", "brand"])
 
     def _handle_damper_start_type_changed(self):
         self._update_project_value(["damper", "motors", "damper", "start_type"])
@@ -511,7 +510,7 @@ class ElectricalTab(QWidget):
 
         """ ------------Enable/disable individual damper widgets ------------ """
         self.damper_kw.setEnabled(enabled)
-        self.damper_brand.setEnabled(enabled)
+        self.damper_qty.setEnabled(enabled)
         self.damper_start_type.setEnabled(enabled)
         self.damper_zs_qty.setEnabled(enabled)
         self.damper_zs_brand.setEnabled(enabled)
@@ -519,7 +518,7 @@ class ElectricalTab(QWidget):
         """ ------------Reset values if disabling ------------ """
         if not enabled:
             self.damper_kw.setCurrentIndex(0)
-            self.damper_brand.setCurrentIndex(0)
+            self.damper_qty.setValue(0)
             self.damper_start_type.setCurrentIndex(0)
             self.damper_zs_qty.setValue(0)
             self.damper_zs_brand.setCurrentIndex(0)
@@ -868,6 +867,7 @@ class ElectricalTab(QWidget):
                 self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['qty'])
             self.fan_bearing_tt_qty.setValue(
                 self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['qty'])
+            self.damper_qty.setValue(self.electrical_specs['damper']['motors']['damper']['qty'])
             self.damper_zs_qty.setValue(self.electrical_specs['damper']['instruments']['proximity_switch']['qty'])
             self.fan_pt_qty.setValue(self.electrical_specs['fan']['instruments']['pressure_transmitter']['qty'])
             self.fan_tt_qty.setValue(self.electrical_specs['fan']['instruments']['temperature_transmitter']['qty'])
@@ -957,8 +957,6 @@ class ElectricalTab(QWidget):
                 str(self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['brand']) if
                 self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['brand'] else "")
             self.damper_kw.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['power'] / 1000))
-            self.damper_brand.setCurrentText(str(self.electrical_specs['damper']['motors']['damper']['brand']) if
-                                             self.electrical_specs['damper']['motors']['damper']['brand'] else "")
             self.damper_start_type.setCurrentText(
                 str(self.electrical_specs['damper']['motors']['damper']['start_type']) if
                 self.electrical_specs['damper']['motors']['damper']['start_type'] else "")
@@ -1003,7 +1001,7 @@ class ElectricalTab(QWidget):
                 self.electrical_specs['bagfilter']['instruments']['delta_pressure_switch']['brand'] else "")
             self.touch_panel_model.setCurrentText(
                 str(self.electrical_specs['bagfilter']['touch_panel']) if self.electrical_specs['bagfilter'][
-                    'touch_panel'] else "")
+                    'touch_panel'] else "None")
             self.plc_protocol.setCurrentText(
                 str(self.electrical_specs['bagfilter']['plc_protocol']) if self.electrical_specs['bagfilter'][
                     'plc_protocol'] else "")

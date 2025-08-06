@@ -7,7 +7,7 @@ from controllers.tender_application.panel_controller import PanelController
 from models.items.electrical_panel import get_electrical_panel_by_spec
 from models.items.general import get_general_by_spec
 from models.items.wire_cable import get_wire_cable_by_spec
-
+import json
 
 class InstallationController(PanelController):
     """
@@ -159,7 +159,7 @@ class InstallationController(PanelController):
                 quantity=self.total_motors_qty,
                 price=jb['price'],
                 last_price_update=f"{jb['supplier_name']}\n{jb['date']}",
-                note=""
+                note=f"For {self.total_motors_qty} Motors"
             )
         else:
             self.add_to_panel(
@@ -170,7 +170,7 @@ class InstallationController(PanelController):
                 quantity=self.total_motors_qty,
                 price=0,
                 last_price_update="❌ Junction Box not found",
-                note=""
+                note=f"For {self.total_motors_qty} Motors"
             )
 
         success, jb = get_electrical_panel_by_spec(type="Junction Box", width=100, height=100, depth=60)
@@ -183,7 +183,7 @@ class InstallationController(PanelController):
                 quantity=self.total_instruments,
                 price=jb['price'],
                 last_price_update=f"{jb['supplier_name']}\n{jb['date']}",
-                note=""
+                note=f"For {self.total_instruments} Instruments"
             )
         else:
             self.add_to_panel(
@@ -194,7 +194,7 @@ class InstallationController(PanelController):
                 quantity=self.total_instruments,
                 price=0,
                 last_price_update="❌ Junction Box not found",
-                note=""
+                note=f"For {self.total_instruments} Instruments"
             )
 
     def choose_gland_valvecable_flexible_conduit(self):
@@ -425,17 +425,25 @@ class InstallationController(PanelController):
                     pass
 
         for motor, qty in motor_objects:
-            if qty > 0 and motor.power > 0:
-                current = motor.power * correction_factor
+            try:
+                motor_power = motor.power
+                motor_usage = motor.usage
+            except:
+                m = motor['Motor'].split(',')
+                motor_power = float(m[0].split('=')[1])
+                motor_usage = m[2].split('=')[1]
+
+            if qty > 0 and motor_power > 0:
+                current = motor_power * correction_factor
                 cable = cable_rating(cable_length_m=length, cable_current_a=current)
                 if cable:
-                    motor_length = length * motor.power_cable_cofactor * qty
+                    motor_length = length  * qty
                     cable_grouping[cable]["total_length"] += motor_length
-                    cable_grouping[cable]["notes"].append(f"{motor_length:.1f} m for {motor.usage}")
+                    cable_grouping[cable]["notes"].append(f"{motor_length:.1f} m for {motor_usage}")
                 else:
                     self.add_to_panel(
                         type=f"Power Cable",
-                        note=f"Power Cable For {motor.usage} Not Found"
+                        note=f"Power Cable For {motor_usage} Not Found"
                     )
 
         for size_mm, data in cable_grouping.items():

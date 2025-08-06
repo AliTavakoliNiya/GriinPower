@@ -2522,6 +2522,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -2538,6 +2548,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -2561,6 +2576,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -2577,6 +2602,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -2600,6 +2630,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -2616,6 +2656,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -2639,6 +2684,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -2655,6 +2710,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -2903,6 +2963,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -2919,6 +2989,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -2971,6 +3046,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -2987,6 +3072,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -3010,6 +3100,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -3026,6 +3126,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -3049,6 +3154,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -3065,6 +3180,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -3105,6 +3225,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -3121,6 +3251,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -3166,170 +3301,6 @@ QPushButton:pressed {
             <property name="checked">
              <bool>true</bool>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QComboBox" name="damper_kw">
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.06</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.09</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.12</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.18</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.25</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.37</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.55</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.75</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>1.1</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>1.5</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2.2</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>3</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>4</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>5.5</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>7.5</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>9</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>11</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>15</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>18.5</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>22</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>30</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>45</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>55</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>75</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>90</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>110</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="5" colspan="2">
-           <widget class="QComboBox" name="damper_brand">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Auma</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Proval</string>
-             </property>
-            </item>
            </widget>
           </item>
           <item row="9" column="1" colspan="3">
@@ -3590,6 +3561,11 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>135.0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>400.0</string>
              </property>
             </item>
@@ -3635,6 +3611,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -3651,6 +3637,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -3891,6 +3882,170 @@ QPushButton:pressed {
             </property>
            </widget>
           </item>
+          <item row="0" column="5">
+           <widget class="QComboBox" name="damper_kw">
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.06</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.09</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.12</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.18</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.25</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.37</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.55</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.75</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1.1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>7.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>9</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>11</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>15</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>18.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>22</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>30</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>45</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>55</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>75</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>90</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>110</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QSpinBox" name="damper_qty">
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="displayIntegerBase">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -3938,6 +4093,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -3954,6 +4119,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -3977,6 +4147,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -3993,6 +4173,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -4114,6 +4299,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -4130,6 +4325,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -4237,6 +4437,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -4253,6 +4463,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -4290,6 +4505,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -4306,6 +4531,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -4353,6 +4583,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -4369,6 +4609,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>
@@ -4427,7 +4672,7 @@ QPushButton:pressed {
           <item row="0" column="3" colspan="3">
            <widget class="QLineEdit" name="bagfilter_order">
             <property name="text">
-             <string>8.96x5.(2.7m).10</string>
+             <string/>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -4557,6 +4802,16 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>DBL</string>
              </property>
             </item>
@@ -4573,6 +4828,11 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
              </property>
             </item>
             <item>

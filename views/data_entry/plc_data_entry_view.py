@@ -97,7 +97,7 @@ class PLCDataEntryView:
         order_number = self.ui.plc_order_number.text().strip() if self.ui.plc_order_number.text().strip() else None
 
         if not all([series, model, brand, supplier, price, order_number]):
-            show_message("Please fill in all required fields.", title="Error")
+            show_message("Please fill in all required fields.", title="Error Saving PLC")
             return
 
         plc_details = {
