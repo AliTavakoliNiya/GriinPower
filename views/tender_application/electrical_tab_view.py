@@ -37,7 +37,6 @@ class ElectricalTab(QWidget):
         self.ee.stateChanged.connect(self._handle_ee_changed)
         self.me.stateChanged.connect(self._handle_me_changed)
         self.cable_supply.stateChanged.connect(self._handle_cable_supply_changed)
-        self.cable_length.valueChanged.connect(self._handle_cable_length_changed)
         self.spare_pins.valueChanged.connect(self._handle_spare_pins_changed)
 
         """ ------------Bagfilter instruments ------------ """
@@ -881,11 +880,9 @@ class ElectricalTab(QWidget):
                 self.electrical_specs['bagfilter']['instruments']['inlet_temperature_transmitter']['qty'])
             self.bagfilter_dps_qty.setValue(
                 self.electrical_specs['bagfilter']['instruments']['delta_pressure_switch']['qty'])
-            self.cable_length.setValue(self.electrical_specs['bagfilter']['cable_dimension'])
             self.bagfilter_outlet_tt_qty.setValue(
                 self.electrical_specs['bagfilter']['instruments']['outlet_temperature_transmitter']['qty'])
             self.bagfilter_pg_qty.setValue(self.electrical_specs['bagfilter']['instruments']['pressure_gauge']['qty'])
-            self.cable_length.setValue(self.electrical_specs['bagfilter']['cable_dimension'])
 
             # QComboBox elements
             self.hopper_heater_kw.setCurrentText(

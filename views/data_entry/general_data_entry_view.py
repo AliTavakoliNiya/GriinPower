@@ -117,31 +117,23 @@ class GeneralDataEntryView:
                 'label': "",
                 'entry': "None"
             },
-            'Ladder Screw': {
+            'Screw': {
                 'show': False,
                 'label': "",
                 'entry': "None"
             },
-            'Tray Screw': {
-                'show': False,
-                'label': "",
-                'entry': "None"
-            },
-            'Ladder Support U': {
+
+            'Support U': {
                 'show': True,
                 'label': "*Size",
                 'entry': ""
             },
-            'Ladder Support L': {
+            'Support L': {
                 'show': True,
                 'label': "*Size",
                 'entry': ""
             },
-            'Ladder Support Screw': {
-                'show': True,
-                'label': "*Size",
-                'entry': ""
-            },
+
             'Ladder Riser': {
                 'show': True,
                 'label': "*Size",
@@ -157,11 +149,7 @@ class GeneralDataEntryView:
                 'label': "*Size",
                 'entry': ""
             },
-            'Tray Support Screw': {
-                'show': True,
-                'label': "*Size",
-                'entry': ""
-            },
+
             'Tray Riser': {
                 'show': True,
                 'label': "*Size",

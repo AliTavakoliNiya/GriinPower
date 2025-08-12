@@ -292,8 +292,6 @@ class TenderApplication(QMainWindow):
         el_tab.ee.setToolTip(f"Rev:<b>{rev_number}</b><br><b>{rev_specs['bagfilter']['ee']}</b>")
         el_tab.me.setToolTip(f"Rev:<b>{rev_number}</b><br><b>{rev_specs['bagfilter']['me']}</b>")
         el_tab.cable_supply.setToolTip(f"Rev:<b>{rev_number}</b><br><b>{rev_specs['bagfilter']['cable_supply']}</b>")
-        el_tab.cable_length.setToolTip(
-            f"Rev:<b>{rev_number}</b><br><b>{rev_specs['bagfilter']['cable_dimension']}</b>m")
 
         el_tab.bagfilter_dpt_qty.setToolTip(
             f"Rev:<b>{rev_number}</b><br><b>{rev_specs['bagfilter']['instruments']['delta_pressure_transmitter']['qty']}</b> QTY")

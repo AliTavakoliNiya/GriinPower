@@ -148,7 +148,7 @@ QPushButton:pressed {
        <enum>QFrame::Plain</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>10</number>
       </property>
       <widget class="QWidget" name="electrica_motor">
        <layout class="QGridLayout" name="gridLayout">
@@ -4434,6 +4434,11 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
+               <string>Screw</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>Ladder Connector</string>
               </property>
              </item>
@@ -4444,42 +4449,12 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
-               <string>Ladder Screw</string>
+               <string>Support U</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Tray Screw</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Ladder Support U</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Tray Support U</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Ladder Support L</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Tray Support L</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Ladder Support Screw</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Tray Support Screw</string>
+               <string>Support L</string>
               </property>
              </item>
              <item>
@@ -4494,12 +4469,12 @@ QPushButton:pressed {
              </item>
              <item>
               <property name="text">
-               <string>Cable Trap</string>
+               <string>Cable Tyrap</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Cable Tag</string>
+               <string>Cable MetalTag</string>
               </property>
              </item>
             </widget>

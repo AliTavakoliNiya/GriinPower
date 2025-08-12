@@ -27,6 +27,16 @@ class PanelController:
         self.panel = self._create_empty_panel()
         self.electrical_specs = ProjectSession().project_electrical_specs
 
+        self.total_motors_in_project_qty = 0
+        for section in self.electrical_specs.values():
+            motors = section.get("motors", {})
+            for motor_name, motor_data in motors.items():
+                try:
+                    qty = motor_data.get("qty", 0)
+                    self.total_motors_in_project_qty += qty
+                except Exception:
+                    pass
+
     def _create_empty_panel(self):
         """
         Initializes and returns an empty panel dictionary to collect all components.
@@ -244,28 +254,27 @@ class PanelController:
         success, soft_starter = get_vfd_softstarter_by_power(type="SoftStarter", power=motor.power,
                                                              brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
-            if success:
-                self.add_to_panel(
-                    type=f"SoftStarter",
-                    brand=soft_starter["brand"],
-                    order_number=soft_starter["order_number"],
-                    specifications=f"Power: {soft_starter['power']}",
-                    quantity=total_qty,
-                    price=soft_starter['price'],
-                    last_price_update=f"{soft_starter['supplier_name']}\n{soft_starter['date']}",
-                    note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
-                )
-            else:
-                self.add_to_panel(
-                    type=f"SoftStarter",
-                    brand="",
-                    order_number="",
-                    specifications=f"At Least: {motor.power / 1000}KW",
-                    quantity=total_qty,
-                    price=0,
-                    last_price_update="❌ VFD not found",
-                    note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
-                )
+            self.add_to_panel(
+                type=f"SoftStarter",
+                brand=soft_starter["brand"],
+                order_number=soft_starter["order_number"],
+                specifications=f"Power: {soft_starter['power']}",
+                quantity=total_qty,
+                price=soft_starter['price'],
+                last_price_update=f"{soft_starter['supplier_name']}\n{soft_starter['date']}",
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
+            )
+        else:
+            self.add_to_panel(
+                type=f"SoftStarter",
+                brand="",
+                order_number="",
+                specifications=f"At Least: {motor.power / 1000}KW",
+                quantity=total_qty,
+                price=0,
+                last_price_update="❌ SoftStarter not found",
+                note=f"{total_qty} x Motor Current: {motor.current}A {motor.usage}"
+            )
 
     """ ------------------------------------- Generals ------------------------------------- """
 
@@ -338,22 +347,23 @@ class PanelController:
         """
         Chooses electrical panel size based on number of motors and retrieves real component data.
         """
-        if total_motors == 0:
+        if self.total_motors_in_project_qty == 0:
             return
-        elif total_motors < 3:
+        elif self.total_motors_in_project_qty < 3:
             width, height, depth = 800, 1000, 300
             qty = 1
-        elif total_motors < 4:
+        elif self.total_motors_in_project_qty < 4:
             width, height, depth = 800, 1600, 300
             qty = 1
-        elif total_motors < 8:
+        elif self.total_motors_in_project_qty < 8:
             width, height, depth = 1200, 2200, 600
             qty = 1
         else:
             width, height, depth = 1200, 2000, 600
             qty = 2
 
-        success, electrical_panel = get_electrical_panel_by_spec(type="Electrical Panel", width=width, height=height, depth=depth)
+        success, electrical_panel = get_electrical_panel_by_spec(type="Electrical Panel", width=width, height=height,
+                                                                 depth=depth)
         if success:
             self.add_to_panel(
                 type="Electrical Panel",
@@ -361,9 +371,9 @@ class PanelController:
                 order_number="",
                 specifications=f"{width}mm x {height}mm x {depth}mm",
                 quantity=qty,
-                price=electrical_panel.get("price", 0),
+                price=electrical_panel.get("price", 0)/self.total_motors_in_project_qty,
                 last_price_update=f"{electrical_panel.get('supplier_name', '')}\n{electrical_panel.get('date', '')}",
-                note=f"total motors: {total_motors}"
+                note=f"{total_motors}/{self.total_motors_in_project_qty} Of Electrical Panel Price"
             )
         else:
             self.add_to_panel(
@@ -374,7 +384,7 @@ class PanelController:
                 quantity=qty,
                 price=0,
                 last_price_update="❌ Electrical Panel not found",
-                note=f"total motors: {total_motors}"
+                note=f"{total_motors}/{self.total_motors_in_project_qty} Of Electrical Panel Price"
             )
 
     """ ------------------------------------- Instrument ------------------------------------- """
@@ -511,7 +521,7 @@ class PanelController:
         ao_cards = self.calculate_and_add_io("AO", total_ao, ao_notes)
 
         total_20pin = di_cards + do_cards + ai_cards + ao_cards
-        if total_20pin > 0 and self.electrical_specs["bagfilter"]["plc_series"]=="S7-300 Series":
+        if total_20pin > 0 and self.electrical_specs["bagfilter"]["plc_series"] == "S7-300 Series":
             success, pin_card = get_general_by_spec(type="Front Connector", specification="20")
             if success:
                 self.add_to_panel(
@@ -591,7 +601,7 @@ class PanelController:
                                                 or instrument_name == "outlet_temperature_transmitter" \
                                                 or instrument_name == "bearing_temperature_transmitter" \
                                                 or instrument_name == "pt100" \
-                                                else instrument_name
+                else instrument_name
             name = "vibration_transmitter" if name == "bearing_vibration_transmitter" else name
 
             n_di = instruments_pins[name]["n_di"]
@@ -709,7 +719,7 @@ class PanelController:
                     brand=cable["brand"],
                     order_number=cable["order_number"],
                     specifications="(3x) Size: 1x6 mm²",
-                    quantity=wire_length*3,
+                    quantity=wire_length * 3,
                     price=cable['price'],
                     last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
                     note="\n".join(wire_notes)
@@ -720,7 +730,7 @@ class PanelController:
                     brand="",
                     order_number="",
                     specifications="(3x) Size: 1x6 mm²",
-                    quantity=wire_length*3,
+                    quantity=wire_length * 3,
                     price=0,
                     last_price_update="❌ Wire not found",
                     note="\n".join(wire_notes)
@@ -735,7 +745,7 @@ class PanelController:
                     brand=cable["brand"],
                     order_number=cable["order_number"],
                     specifications="(3x) For motors > 45kW",
-                    quantity=busbar_length*3,
+                    quantity=busbar_length * 3,
                     price=cable['price'],
                     last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
                     note="\n".join(busbar_notes))
@@ -745,11 +755,10 @@ class PanelController:
                     brand="",
                     order_number="",
                     specifications="(3x) For motors > 45kW",
-                    quantity=busbar_length*3,
+                    quantity=busbar_length * 3,
                     price=0,
                     last_price_update="❌ Busbar not found",
                     note="\n".join(busbar_notes))
-
 
     def choose_internal_signal_wire(self, motor_objects):
         """
