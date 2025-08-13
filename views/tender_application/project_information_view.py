@@ -28,11 +28,8 @@ class ProjectInformationTab(QWidget):
         self.upload_p_id_btn.clicked.connect(self.upload_p_id)
         self.download_p_id_btn.clicked.connect(self.download_p_id)
 
-        self.upload_tender_doc1_btn.clicked.connect(self.upload_tender_doc1)
-        self.download_tender_doc1_btn.clicked.connect(self.download_tender_doc1)
-
-        self.upload_tender_doc2_btn.clicked.connect(self.upload_tender_doc2)
-        self.download_tender_doc2_btn.clicked.connect(self.download_tender_doc2)
+        self.upload_tender_doc_btn.clicked.connect(self.upload_tender_doc)
+        self.download_tender_doc_btn.clicked.connect(self.download_tender_doc)
 
         self.upload_report_btn.clicked.connect(self.download_report)
         self.download_upload_btn.clicked.connect(self.upload_report)
@@ -186,7 +183,7 @@ class ProjectInformationTab(QWidget):
         )
         self.document_downloader_view.show()
 
-    def upload_tender_doc1(self):
+    def upload_tender_doc(self):
         # Open file dialog to select a document
         file_path, _ = QFileDialog.getOpenFileName(None, "Select Document File")
         if file_path:
@@ -205,42 +202,13 @@ class ProjectInformationTab(QWidget):
             else:
                 show_message(message, "Error")
 
-    def download_tender_doc1(self):
+    def download_tender_doc(self):
         if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
             self.document_downloader_view = DocumentDownloader(self)
         self.document_downloader_view.load_documents(
             project_code=self.current_project.code,
             project_unique_no=self.current_project.unique_no,
             document_title="TenderDoc1"
-        )
-        self.document_downloader_view.show()
-
-    def upload_tender_doc2(self):
-        # Open file dialog to select a document
-        file_path, _ = QFileDialog.getOpenFileName(None, "Select Document File")
-        if file_path:
-            # Call save_document with proper arguments
-            result, message = upload_document(
-                filepath=file_path,
-                document_title="TenderDoc2",
-                project_code=self.current_project.code,
-                project_unique_no=self.current_project.unique_no,
-                revision=self.current_project.revision,
-                modified_by_id=self.current_user.id,
-                note=""
-            )
-            if result:
-                show_message("Saved successfully", "Saved")
-            else:
-                show_message(message, "Error")
-
-    def download_tender_doc2(self):
-        if not hasattr(self, 'document_downloader_view') or self.document_downloader_view is None:
-            self.document_downloader_view = DocumentDownloader(self)
-        self.document_downloader_view.load_documents(
-            project_code=self.current_project.code,
-            project_unique_no=self.current_project.unique_no,
-            document_title="TenderDoc2"
         )
         self.document_downloader_view.show()
 

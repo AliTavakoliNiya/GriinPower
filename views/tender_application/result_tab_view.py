@@ -16,6 +16,7 @@ from controllers.tender_application.electric_motor_controller import ElectricMot
 from controllers.tender_application.fan_damper_controller import FanDamperController
 from controllers.tender_application.fresh_air_controller import FreshAirController
 from controllers.tender_application.hopper_heater_controller import HopperHeaterController
+from controllers.tender_application.installation_controller import InstallationController
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.tender_application.transport_controller import TransportController
 from controllers.tender_application.vibration_controller import VibrationController
@@ -49,6 +50,7 @@ class ResultTab(QWidget):
             "vibration_table": self.vibration_table,
             "hopper_heater_table": self.hopper_heater_table,
             "cable_table": self.cable_table,
+            "installation_table": self.installation_table,
             "summary_table": self.summary_table
         }
 
@@ -61,6 +63,7 @@ class ResultTab(QWidget):
             ("vibration_table", self.vibration_tab, "Vibration"),
             ("hopper_heater_table", self.hopper_heater_tab, "Hopper Heater"),
             ("cable_table", self.cable_tab, "Cable"),
+            ("installation_table", self.installation_tab, "Installation"),
             ("summary_table", self.summary_tab, "Summary")
         ]
 
@@ -88,7 +91,6 @@ class ResultTab(QWidget):
                 self._populate_table_view(panel, self.tables[table_name])
 
         panels_copy = copy.deepcopy(self.panels)
-        panels_copy["installation_panel"] = self.main_view.installation_tab.installation_panel
 
         if self.main_view.electrical_tab.fan_checkbox.isChecked():
             motor_ctrl = ElectricMotorController()
@@ -110,6 +112,7 @@ class ResultTab(QWidget):
             "vibration_panel": VibrationController,
             "hopper_heater_panel": HopperHeaterController,
             "cable_panel": CableController,
+            "installation_panel": InstallationController,
         }
         return {key: ctrl().build_panel() for key, ctrl in controllers.items()}
 
@@ -206,15 +209,6 @@ class ResultTab(QWidget):
 
             # Collect tables and add installation table
             tables = {name: table for name, table in self.tables.items()}
-            tables["installation_table"] = self.main_view.installation_tab.installation_table
-
-            # Ensure summary_table and installation_table appear last
-            keys = list(tables.keys())
-            if "summary_table" in keys and "installation_table" in keys:
-                keys.remove("summary_table")
-                keys.remove("installation_table")
-                keys += ["installation_table", "summary_table"]
-                tables = {k: tables[k] for k in keys}
 
             # Add "اقلام ابزار دقیق" and "قیمت نهایی"
             with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
@@ -395,19 +389,19 @@ class ResultTab(QWidget):
         ]
 
         summary_df = pd.DataFrame(summary_data, columns=[
-            "خرید", "مهندسی", "ساخت", "قیمت کل(ریال)", "قیمت", "تعداد", "شرح", "ردیف"
+            "خرید", "مهندسی", "ساخت", "قیمت کل(ریال)", "قیمت(ریال)", "تعداد", "شرح", "ردیف"
         ])
-        summary_totals = summary_df[["خرید", "مهندسی", "ساخت", "قیمت کل(ریال)", "قیمت"]].sum().to_dict()
-        summary_df.loc[len(summary_df)] = {**summary_totals, "تعداد": "", "شرح": "جمع کل", "ردیف": ""}
+        summary_totals = summary_df[["خرید", "مهندسی", "ساخت", "قیمت کل(ریال)", "قیمت(ریال)"]].sum().to_dict()
+        summary_df.loc[len(summary_df)] = {**summary_totals, "تعداد": "", "شرح": "جمع کل(ریال)", "ردیف": ""}
 
         instrument_df = pd.DataFrame(instrument_items)
 
         if not instrument_df.empty:
             instrument_df.insert(0, "ردیف", range(1, len(instrument_df) + 1))
-            total_price = instrument_df["قیمت کل"].sum()
+            total_price = instrument_df["قیمت کل(ریال)"].sum()
             instrument_df.loc[len(instrument_df)] = {
-                "ردیف": "", "شرح": "جمع کل", "برند": "", "تعداد": "",
-                "قیمت واحد": "", "قیمت کل": total_price
+                "ردیف": "", "شرح": "جمع کل(ریال)", "برند": "", "تعداد": "",
+                "قیمت واحد(ریال)": "", "قیمت کل(ریال)": total_price
             }
             instrument_df = instrument_df[instrument_df.columns[::-1]]
 
