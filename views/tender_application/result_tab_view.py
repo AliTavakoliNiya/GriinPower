@@ -350,8 +350,8 @@ class ResultTab(QWidget):
                         "شرح": row.get("type", ""),
                         "برند": row.get("brand", ""),
                         "تعداد": row.get("quantity", 1),
-                        "قیمت واحد": row.get("price", 0),
-                        "قیمت کل": row.get("total_price", 0),
+                        "قیمت واحد(ریال)": row.get("price", 0),
+                        "قیمت کل(ریال)": row.get("total_price", 0),
                     })
 
             bagfilter_price += df.iloc[-1].get('total_price', 0)

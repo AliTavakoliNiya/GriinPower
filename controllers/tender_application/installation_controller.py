@@ -84,8 +84,8 @@ class InstallationController(PanelController):
         else:
             self.ladder_size = self.tray_size = 400  # mm
 
-        self.ladder_length = round(self.electrical_specs["installation"]["height"] * 1.5, 2)  # ~ ladder_cover_length
-        self.tray_length = round(self.electrical_specs["installation"]["width"] * 1.5, 2)
+        self.ladder_length = round(self.electrical_specs["project_info"]["height"] * 1.5, 2)  # ~ ladder_cover_length
+        self.tray_length = round(self.electrical_specs["project_info"]["width"] * 1.5, 2)
 
         self.choose_lcb()
         self.choose_jb()
@@ -432,7 +432,7 @@ class InstallationController(PanelController):
     """ ladder """
 
     def choose_ladder_and_cover(self):
-        if self.n_airtank == 0 or self.electrical_specs["installation"]["height"] == 0:
+        if self.n_airtank == 0 or self.electrical_specs["project_info"]["height"] == 0:
             return
 
         success, ladder = get_wire_cable_by_spec("Ladder", l_number=1, l_size=self.ladder_size)
@@ -482,7 +482,7 @@ class InstallationController(PanelController):
                 note=f"For {self.n_airtank} Air Tanks")
 
     def choose_ladder_connector_and_screw(self):
-        if self.electrical_specs["installation"]["height"] == 0:
+        if self.electrical_specs["project_info"]["height"] == 0:
             return
 
         n_connectors = int(self.ladder_length / 2) * 2
@@ -496,7 +496,7 @@ class InstallationController(PanelController):
                 quantity=n_connectors,
                 price=connector['price'],
                 last_price_update=f"{connector['supplier_name']}\n{connector['date']}",
-                note=f"Height({self.electrical_specs['installation']['height']})*1.5/2)*2"
+                note=f"Height({self.electrical_specs['project_info']['height']})*1.5/2)*2"
             )
         else:
             self.add_to_panel(
@@ -507,7 +507,7 @@ class InstallationController(PanelController):
                 quantity=n_connectors,
                 price=0,
                 last_price_update="❌ Ladder Connector not found",
-                note=f"Height({self.electrical_specs['installation']['height']})*1.5/2)*2"
+                note=f"Height({self.electrical_specs['project_info']['height']})*1.5/2)*2"
             )
 
         n_screw = n_connectors * 16 + int(self.ladder_length / 1.5) * 8 + self.tray_length * 16 + int(
@@ -546,11 +546,11 @@ class InstallationController(PanelController):
             )
 
     def choose_supports(self):
-        if self.electrical_specs["installation"]["height"] == 0:
+        if self.electrical_specs["project_info"]["height"] == 0:
             return
 
-        n_support_u = round(self.electrical_specs["installation"]["height"] / 1.5 * 2, 2)
-        n_support_u += round(self.electrical_specs["installation"]["width"] / 1.5 * 2, 2)
+        n_support_u = round(self.electrical_specs["project_info"]["height"] / 1.5 * 2, 2)
+        n_support_u += round(self.electrical_specs["project_info"]["width"] / 1.5 * 2, 2)
         n_support_u += round(self.total_instruments * 2, 2)
         success, support_u = get_general_by_spec(type="Support U", specification="8")
         if success:
@@ -562,8 +562,8 @@ class InstallationController(PanelController):
                 quantity=n_support_u,
                 price=support_u['price'],
                 last_price_update=f"{support_u['supplier_name']}\n{support_u['date']}",
-                note=f"Height({self.electrical_specs['installation']['height']})/1.5*2 \n"
-                     f"Width({self.electrical_specs['installation']['width']})/1.5*2 \n"
+                note=f"Height({self.electrical_specs['project_info']['height']})/1.5*2 \n"
+                     f"Width({self.electrical_specs['project_info']['width']})/1.5*2 \n"
                      f"{self.total_instruments} Instruments")
         else:
             self.add_to_panel(
@@ -574,12 +574,12 @@ class InstallationController(PanelController):
                 quantity=n_support_u,
                 price=0,
                 last_price_update="❌ Support U not found",
-                note=f"Height({self.electrical_specs['installation']['height']})/1.5*2 \n"
-                     f"Width({self.electrical_specs['installation']['width']})/1.5*2 \n"
+                note=f"Height({self.electrical_specs['project_info']['height']})/1.5*2 \n"
+                     f"Width({self.electrical_specs['project_info']['width']})/1.5*2 \n"
                      f"{self.total_instruments} Instruments")
 
-        n_support_l = round(self.electrical_specs["installation"]["height"] / 1.5 * 0.6, 2)
-        n_support_l += round(self.electrical_specs["installation"]["width"] / 1.5 * 0.6, 2)
+        n_support_l = round(self.electrical_specs["project_info"]["height"] / 1.5 * 0.6, 2)
+        n_support_l += round(self.electrical_specs["project_info"]["width"] / 1.5 * 0.6, 2)
         n_support_l += round(self.total_instruments * 0.5, 2)
         success, support_l = get_general_by_spec(type="Support L", specification="5")
         if success:
@@ -591,8 +591,8 @@ class InstallationController(PanelController):
                 quantity=n_support_l,
                 price=support_l['price'],
                 last_price_update=f"{support_l['supplier_name']}\n{support_l['date']}",
-                note=f"Height({self.electrical_specs['installation']['height']})/1.5*0.5 \n"
-                     f"Width({self.electrical_specs['installation']['width']})/1.5*0.5 \n"
+                note=f"Height({self.electrical_specs['project_info']['height']})/1.5*0.5 \n"
+                     f"Width({self.electrical_specs['project_info']['width']})/1.5*0.5 \n"
                      f"{self.total_instruments} Instruments")
         else:
             self.add_to_panel(
@@ -603,8 +603,8 @@ class InstallationController(PanelController):
                 quantity=n_support_l,
                 price=0,
                 last_price_update="❌ Support L not found",
-                note=f"Height({self.electrical_specs['installation']['height']})/1.5*0.5 \n"
-                     f"Width({self.electrical_specs['installation']['width']})/1.5*0.5 \n"
+                note=f"Height({self.electrical_specs['project_info']['height']})/1.5*0.5 \n"
+                     f"Width({self.electrical_specs['project_info']['width']})/1.5*0.5 \n"
                      f"{self.total_instruments} Instruments")
 
         n_riser = 2
@@ -681,7 +681,7 @@ class InstallationController(PanelController):
                 note=f"For {self.n_airtank} Air Tanks")
 
     def choose_tray_riser(self):
-        if self.electrical_specs["installation"]["width"] == 0:
+        if self.electrical_specs["project_info"]["width"] == 0:
             return
 
         n_riser = 2

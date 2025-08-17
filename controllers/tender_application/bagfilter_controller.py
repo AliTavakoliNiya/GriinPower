@@ -4,8 +4,6 @@ from copy import deepcopy
 
 from config import COSNUS_PI, ETA
 from controllers.tender_application.panel_controller import PanelController
-
-from models.items.electrical_panel import get_electrical_panel_by_spec
 from models.items.general import get_general_by_spec
 from models.items.instrument import get_instrument_by_spec
 from models.items.mccb import get_mccb_by_current
@@ -73,7 +71,7 @@ class BagfilterController(PanelController):
         self.bagfilter_general_items["bagfilter_cards"] = n_bagfilter_cards
 
         do_bagfilter_card = math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digist use in binary
-        total_do += do_bagfilter_card + 5 # 1bits control pulse and 4bits address
+        total_do += do_bagfilter_card + 5  # 1bits control pulse and 4bits address
 
         has_hmi = True if self.electrical_specs["bagfilter"]["touch_panel"] else False
         if has_hmi:
@@ -103,7 +101,6 @@ class BagfilterController(PanelController):
         # # ----------------------- Add General Accessories -----------------------
         self.choose_general(self.bagfilter_general_items)
 
-
         # # ----------------------- Add Electrical Panel -----------------------
         # self.choose_electrical_panel()
 
@@ -111,7 +108,6 @@ class BagfilterController(PanelController):
         self.choose_instruments()
 
         return self.panel
-
 
     def process_item(self, comp_type, qty, specification=""):
         if qty <= 0:
@@ -158,7 +154,6 @@ class BagfilterController(PanelController):
                           qty=general_items.get("touch_panel", 0))
         self.process_item(comp_type="Signal Lamp", specification="24", qty=general_items.get("signal_lamp_24v", 0))
 
-
         # Optional OLM
         if "olm" in general_items:
             self.process_item(comp_type="OLM", qty=self.bagfilter_general_items["olm"])
@@ -174,7 +169,7 @@ class BagfilterController(PanelController):
             for motor_name, motor_data in motors.items():
                 try:
                     # Skip "fan" motor if its voltage type is "MV"
-                    if motor_name == "fan" and self.electrical_specs["fan"]["motors"]["fan"]["voltage_type"]=="MV":
+                    if motor_name == "fan" and self.electrical_specs["fan"]["motors"]["fan"]["voltage_type"] == "MV":
                         continue
 
                     qty = motor_data.get("qty", 0)
@@ -196,7 +191,7 @@ class BagfilterController(PanelController):
         if total_current == 0:
             return
 
-        success, mccb = get_mccb_by_current(rated_current=total_current*1.25,
+        success, mccb = get_mccb_by_current(rated_current=total_current * 1.25,
                                             brands=self.electrical_specs["project_info"]["proj_avl"])
         if success:
             self.add_to_panel(
@@ -204,7 +199,7 @@ class BagfilterController(PanelController):
                 brand=mccb['brand'],
                 order_number=mccb["order_number"],
                 specifications=(
-                    f"Total Motor Current: {total_current*1.25:.2f}A"
+                    f"Total Motor Current: {total_current * 1.25:.2f}A"
                 ),
                 quantity=1,
                 price=mccb['price'],
@@ -302,7 +297,7 @@ class BagfilterController(PanelController):
                 total_20pin += cards
                 self.calculate_and_add_io(io["general_name"], io["count"], io["notes"])
 
-        if total_20pin > 0 and self.electrical_specs["bagfilter"]["plc_series"]=="S7-300 Series":
+        if total_20pin > 0 and self.electrical_specs["bagfilter"]["plc_series"] == "S7-300 Series":
             success, pin_card = get_general_by_spec(type="Front Connector", specification="20")
             if success:
                 self.add_to_panel(

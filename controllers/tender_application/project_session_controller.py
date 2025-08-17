@@ -43,7 +43,14 @@ class ProjectSession:
                                                           "humidity": 0,
                                                           "altitude_elevation": 0,
                                                           "voltage_frequency": 0,
-                                                          "frequency_variation": 0},
+                                                          "frequency_variation": 0,
+                                                          "height": 0,
+                                                          "width": 0,
+                                                          "depth": 0,
+                                                          "mcc_distance": 0,
+                                                          "feeder_distance": 0,
+                                                          "structure_distance": 0,
+                                                          },
                                          "bagfilter": {"type": "",
                                                        "order": "",
                                                        "plc_series": "",
@@ -153,12 +160,6 @@ class ProjectSession:
                                              "motors": {"elements": {"motor": Motor(power=0), "qty": 0,
                                                                      "power": 0}},
                                              "instruments": {"ptc": {"qty": 0, "brand": None}}
-                                         },
-                                         "installation": {
-                                             "height": 0,
-                                             "width": 0,
-                                             "depth": 0,
-                                             "ccr": 0,
                                          },
                                          }
 

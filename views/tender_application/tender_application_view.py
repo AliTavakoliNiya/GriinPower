@@ -11,7 +11,6 @@ from controllers.tender_application.project_session_controller import ProjectSes
 from models.projects import get_project, save_project
 from views.message_box_view import confirmation, show_message
 from views.tender_application.electrical_tab_view import ElectricalTab
-from views.tender_application.installation_tab_view import InstallationTab
 from views.tender_application.project_information_view import ProjectInformationTab
 from views.tender_application.result_tab_view import ResultTab
 
@@ -41,15 +40,9 @@ class TenderApplication(QMainWindow):
         self.electrical_tab = ElectricalTab(self)
         self.tabWidget.addTab(self.electrical_tab, "Electrical")
 
-        # Add "Installation" tab
-        self.installation_tab = InstallationTab(self)
-        self.tabWidget.addTab(self.installation_tab, "Installation")
-
         # Add "Result" tab
         self.result_tab = ResultTab(self)
         self.tabWidget.addTab(self.result_tab, "Result")
-
-        self._last_tab_index = 0  # start at the first tab
 
         # Handle revision number and hint logic
         if self.current_project.revision is None:
@@ -165,10 +158,6 @@ class TenderApplication(QMainWindow):
         self.parent.tender_application_window = TenderApplication(parent=self)
 
     def on_tab_changed(self, index):
-        """Handles validation and actions when switching tabs."""
-        # Cache last visited index to detect jumps between Installation and Result
-        last_index = getattr(self, "_last_tab_index", None)
-        self._last_tab_index = index
 
         # Switching to Project Info (index 0) or From/To it doesn't need checks
         if index == 1:
@@ -176,10 +165,7 @@ class TenderApplication(QMainWindow):
             if not self.project_information_tab.check_info_tab_ui_rules():
                 self.tabWidget.setCurrentIndex(0)
 
-        elif index in (2, 3):
-            # Skip validation if switching directly between installation and result
-            if last_index in (2, 3):
-                return
+        elif index == 2:
 
             # Check project info tab first
             if not self.project_information_tab.check_info_tab_ui_rules():
@@ -189,7 +175,6 @@ class TenderApplication(QMainWindow):
                 self.tabWidget.setCurrentIndex(1)
             else:
                 # Only proceed if all tabs are valid
-                self.installation_tab.generate_result()
                 self.result_tab.generate_data()
 
     def print_current_view(self):
