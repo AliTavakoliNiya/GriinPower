@@ -18,7 +18,10 @@ build_options = {
         ("D:/GriinPower/assets", "assets"),
 
         # Include the database file (copied into "data/GriinPower.db")
-        ("D:/GriinPower/data/GriinPower.db", "data/GriinPower.db")
+        ("D:/GriinPower/data/GriinPower.db", "data/GriinPower.db"),
+
+        ("D:/GriinPower/ui", "ui"),
+        ("D:/GriinPower/styles", "styles"),
     ]
 }
 

@@ -165,9 +165,6 @@ class ElectricalTab(QWidget):
         self.pt100_qty.valueChanged.connect(self._handle_fan_pt100_qty_changed)
         self.pt100_brand.currentIndexChanged.connect(self._handle_fan_pt100_brand_changed)
 
-        self.fan_bearing_tt_qty.valueChanged.connect(self._handle_fan_bearing_tt_qty_changed)
-        self.fan_bearing_tt_brand.currentIndexChanged.connect(self._handle_fan_bearing_tt_brand_changed)
-
         self.fan_bearing_vt_qty.valueChanged.connect(self._handle_fan_bearing_vt_qty_changed)
         self.fan_bearing_vt_brand.currentIndexChanged.connect(self._handle_fan_bearing_vt_brand_changed)
 
@@ -401,12 +398,6 @@ class ElectricalTab(QWidget):
     def _handle_fan_pt100_brand_changed(self):
         self._update_project_value(["fan", "instruments", "pt100", "brand"])
 
-    def _handle_fan_bearing_tt_qty_changed(self, value):
-        self._update_project_value(["fan", "instruments", "bearing_temperature_transmitter", "qty"], value)
-
-    def _handle_fan_bearing_tt_brand_changed(self):
-        self._update_project_value(["fan", "instruments", "bearing_temperature_transmitter", "brand"])
-
     def _handle_fan_bearing_vt_qty_changed(self, value):
         self._update_project_value(["fan", "instruments", "bearing_vibration_transmitter", "qty"], value)
 
@@ -544,8 +535,6 @@ class ElectricalTab(QWidget):
             self.fan_painting_ral,
             self.fan_thermal_protection,
             self.fan_space_heater,
-            self.fan_bearing_tt_qty,
-            self.fan_bearing_tt_brand,
             self.fan_bearing_vt_qty,
             self.fan_bearing_vt_brand,
             self.fan_pt_qty,
@@ -864,8 +853,6 @@ class ElectricalTab(QWidget):
             self.transport_spd_qty.setValue(self.electrical_specs['transport']['instruments']['speed_detector']['qty'])
             self.fan_bearing_vt_qty.setValue(
                 self.electrical_specs['fan']['instruments']['bearing_vibration_transmitter']['qty'])
-            self.fan_bearing_tt_qty.setValue(
-                self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['qty'])
             self.damper_qty.setValue(self.electrical_specs['damper']['motors']['damper']['qty'])
             self.damper_zs_qty.setValue(self.electrical_specs['damper']['instruments']['proximity_switch']['qty'])
             self.fan_pt_qty.setValue(self.electrical_specs['fan']['instruments']['pressure_transmitter']['qty'])
@@ -960,9 +947,6 @@ class ElectricalTab(QWidget):
             self.fan_painting_ral.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['painting_ral']) if
                                                  self.electrical_specs['fan']['motors']['fan']['painting_ral'] else "")
             self.fan_kw.setCurrentText(str(self.electrical_specs['fan']['motors']['fan']['power'] / 1000))
-            self.fan_bearing_tt_brand.setCurrentText(
-                str(self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['brand']) if
-                self.electrical_specs['fan']['instruments']['bearing_temperature_transmitter']['brand'] else "")
             self.fan_efficiency_class.setCurrentText(
                 str(self.electrical_specs['fan']['motors']['fan']['efficiency_class']) if
                 self.electrical_specs['fan']['motors']['fan']['efficiency_class'] else "")

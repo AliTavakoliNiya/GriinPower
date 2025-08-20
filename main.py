@@ -1,14 +1,13 @@
+import json
 import os
 import sys
-import json
-import jdatetime
+import traceback
 
-from PyQt5 import uic, QtWidgets
+from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
+from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow
 
-# Import application modules
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.user_session_controller import UserSession
 from utils.database import SessionLocal
@@ -16,9 +15,9 @@ from views.account_view import Account
 from views.data_entry.data_entry_view import DataEntry
 from views.login_view import LoginView
 from views.message_box_view import show_message
+from views.supplier_view import SupplierEntry
 from views.tender_application.open_project_view import OpenProjectView
 from views.tender_application.tender_application_view import TenderApplication
-from views.supplier_view import SupplierEntry
 
 
 class GriinPower(QMainWindow):
@@ -119,20 +118,36 @@ class GriinPower(QMainWindow):
 
 
 
+
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    try:
+        app = QApplication(sys.argv)
 
-    # Initialize the database session
-    db_session = SessionLocal()
+        # Initialize DB
+        db_session = SessionLocal()
 
-    # Launch login window
-    login = LoginView(db_session)
-    if login.exec_() == QDialog.Accepted:
-        # Load last logged-in username (for possible future use)
-        session = QSettings("Griin", "GriinPower")
-        username = session.value("last_username", "")
+        # Show login dialog
+        login = LoginView(db_session)
+        if login.exec_() == QDialog.Accepted:
+            session = QSettings("Griin", "GriinPower")
+            username = session.value("last_username", "")
 
-        # Launch the main application window
-        window = GriinPower()
-        window.show()
-        sys.exit(app.exec_())
+            window = GriinPower()
+            window.show()
+            sys.exit(app.exec_())
+
+    except Exception:
+        # گرفتن متن کامل خطا
+        error_message = traceback.format_exc()
+
+        # ذخیره در فایل
+        with open("error_log.txt", "w", encoding="utf-8") as f:
+            f.write(error_message)
+
+        show_message(error_message, "Error")
+
+        # اطلاع‌رسانی و جلوگیری از بسته شدن فوری exe
+        print("An error occurred! Please check 'error_log.txt' for details.")
+        input("Press Enter to exit...")
+
+

@@ -350,11 +350,6 @@ class TenderApplication(QMainWindow):
         el_tab.fan_space_heater.setToolTip(
             f"Rev:<b>{rev_number}</b><br><b>{rev_specs['fan']['motors']['fan']['space_heater']}</b>")
 
-        el_tab.fan_bearing_tt_qty.setToolTip(
-            f"Rev:<b>{rev_number}</b><br><b>{rev_specs['fan']['instruments']['bearing_temperature_transmitter']['qty']}</b> QTY")
-        el_tab.fan_bearing_tt_brand.setToolTip(
-            f"Rev:<b>{rev_number}</b><br><b>{rev_specs['fan']['instruments']['bearing_temperature_transmitter']['brand']}</b>")
-
         el_tab.fan_bearing_vt_qty.setToolTip(
             f"Rev:<b>{rev_number}</b><br><b>{rev_specs['fan']['instruments']['bearing_vibration_transmitter']['qty']}</b> QTY")
         el_tab.fan_bearing_vt_brand.setToolTip(

@@ -2781,20 +2781,48 @@ QPushButton:pressed {
           <string>Fan - Damper</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="14" column="0" colspan="2">
-           <widget class="QCheckBox" name="fan_space_heater">
-            <property name="text">
-             <string>Space Heater</string>
+          <item row="22" column="3" alignment="Qt::AlignRight">
+           <widget class="QSpinBox" name="fan_pt_qty">
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="displayIntegerBase">
+             <number>10</number>
             </property>
            </widget>
           </item>
-          <item row="15" column="0" colspan="7">
-           <widget class="QFrame" name="frame">
-            <property name="frameShape">
-             <enum>QFrame::HLine</enum>
+          <item row="12" column="1" colspan="3">
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Winding Thermal Protection</string>
             </property>
-            <property name="frameShadow">
-             <enum>QFrame::Plain</enum>
+           </widget>
+          </item>
+          <item row="23" column="3" alignment="Qt::AlignRight">
+           <widget class="QSpinBox" name="fan_tt_qty">
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="displayIntegerBase">
+             <number>10</number>
             </property>
            </widget>
           </item>
@@ -2832,11 +2860,38 @@ QPushButton:pressed {
             </item>
            </widget>
           </item>
-          <item row="14" column="5" alignment="Qt::AlignRight">
-           <widget class="QLabel" name="label_27">
-            <property name="text">
-             <string>QSS</string>
+          <item row="15" column="0" colspan="7">
+           <widget class="QFrame" name="frame">
+            <property name="frameShape">
+             <enum>QFrame::HLine</enum>
             </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="5" colspan="2">
+           <widget class="QComboBox" name="fan_cooling_method">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Acc To IEC</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>IC411</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>IC616</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="19" column="1" colspan="2">
@@ -2846,18 +2901,8 @@ QPushButton:pressed {
             </property>
            </widget>
           </item>
-          <item row="4" column="0" colspan="2">
-           <widget class="QCheckBox" name="fan_checkbox">
-            <property name="text">
-             <string>Fan Control</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="22" column="5" colspan="2">
-           <widget class="QComboBox" name="fan_pt_brand">
+          <item row="11" column="5" colspan="2">
+           <widget class="QComboBox" name="fan_painting_ral">
             <item>
              <property name="text">
               <string>--------------------</string>
@@ -2865,143 +2910,14 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
-              <string>Endress Hauser</string>
+              <string>7032</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Rosemount</string>
+              <string>7030</string>
              </property>
             </item>
-            <item>
-             <property name="text">
-              <string>DBL</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Wika</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="20" column="1" colspan="2">
-           <widget class="QLabel" name="label_32">
-            <property name="text">
-             <string>Bearing TemperatureT</string>
-            </property>
-           </widget>
-          </item>
-          <item row="20" column="5" colspan="2">
-           <widget class="QComboBox" name="fan_bearing_tt_brand">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Endress Hauser</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Rosemount</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DBL</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Wika</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="8" column="1" colspan="2">
-           <widget class="QLabel" name="label_21">
-            <property name="text">
-             <string>IP</string>
-            </property>
-           </widget>
-          </item>
-          <item row="22" column="1" colspan="2">
-           <widget class="QLabel" name="label_30">
-            <property name="text">
-             <string>Inlet Fan PressureT</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QSpinBox" name="damper_qty">
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="displayIntegerBase">
-             <number>10</number>
-            </property>
            </widget>
           </item>
           <item row="19" column="0">
@@ -3020,10 +2936,82 @@ QPushButton:pressed {
             </property>
            </spacer>
           </item>
-          <item row="13" column="0" colspan="7">
-           <widget class="QCheckBox" name="fan_de_nde">
+          <item row="19" column="3" alignment="Qt::AlignRight">
+           <widget class="QSpinBox" name="damper_zs_qty">
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="displayIntegerBase">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="23" column="1" colspan="2">
+           <widget class="QLabel" name="label_31">
             <property name="text">
-             <string>Fan Motor DE and NDE (Thermal Ptotection)</string>
+             <string>Inlet Fan TT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="21" column="1" colspan="2">
+           <widget class="QLabel" name="label_33">
+            <property name="text">
+             <string>Bearing VibrationT</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1" colspan="3">
+           <widget class="QLabel" name="fan_voltage_type_text">
+            <property name="text">
+             <string>Voltage Type</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="5" colspan="2">
+           <widget class="QComboBox" name="fan_thermal_protection">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Not Included</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3xPTC</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6xPTC</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="7" column="1" colspan="2">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>Cooling Method</string>
             </property>
            </widget>
           </item>
@@ -3087,49 +3075,204 @@ QPushButton:pressed {
             </item>
            </widget>
           </item>
-          <item row="21" column="1" colspan="2">
-           <widget class="QLabel" name="label_33">
+          <item row="14" column="6">
+           <widget class="QPushButton" name="qss_btn">
+            <property name="maximumSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Generate</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
+    border: none;                      /* Optional: remove the border */
+}
+QPushButton:hover {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #F77F00;
+}
+QPushButton:pressed {
+	color: #d3dae3;
+	padding: 2px;
+	background-color: #2c2f2f;
+}</string>
+            </property>
             <property name="text">
-             <string>Bearing VibrationT</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../../assets/setting.png</normaloff>../../assets/setting.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
             </property>
            </widget>
           </item>
-          <item row="20" column="3" alignment="Qt::AlignRight">
-           <widget class="QSpinBox" name="fan_bearing_tt_qty">
+          <item row="14" column="5" alignment="Qt::AlignRight">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>QSS</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <widget class="QComboBox" name="damper_kw">
             <property name="maximumSize">
              <size>
               <width>50</width>
               <height>16777215</height>
              </size>
             </property>
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="displayIntegerBase">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="23" column="3" alignment="Qt::AlignRight">
-           <widget class="QSpinBox" name="fan_tt_qty">
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="displayIntegerBase">
-             <number>10</number>
-            </property>
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.06</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.09</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.12</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.18</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.25</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.37</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.55</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>0.75</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1.1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2.2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>7.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>9</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>11</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>15</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>18.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>22</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>30</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>45</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>55</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>75</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>90</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>110</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="11" column="1" colspan="3">
@@ -3139,75 +3282,14 @@ QPushButton:pressed {
             </property>
            </widget>
           </item>
-          <item row="12" column="1" colspan="3">
-           <widget class="QLabel" name="label_25">
-            <property name="text">
-             <string>Winding Thermal Protection</string>
-            </property>
-           </widget>
-          </item>
-          <item row="19" column="5" colspan="2">
-           <widget class="QComboBox" name="damper_zs_brand">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Endress Hauser</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Rosemount</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DBL</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Wika</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="17" column="1">
+          <item row="20" column="1">
            <widget class="QLabel" name="label_26">
             <property name="text">
              <string>PT 100</string>
             </property>
            </widget>
           </item>
-          <item row="17" column="3" alignment="Qt::AlignRight">
+          <item row="20" column="3" alignment="Qt::AlignRight">
            <widget class="QSpinBox" name="pt100_qty">
             <property name="maximumSize">
              <size>
@@ -3226,8 +3308,8 @@ QPushButton:pressed {
             </property>
            </widget>
           </item>
-          <item row="17" column="5" colspan="2">
-           <widget class="QComboBox" name="pt100_brand">
+          <item row="21" column="5" colspan="2">
+           <widget class="QComboBox" name="fan_bearing_vt_brand">
             <item>
              <property name="text">
               <string>--------------------</string>
@@ -3280,31 +3362,8 @@ QPushButton:pressed {
             </item>
            </widget>
           </item>
-          <item row="7" column="1" colspan="2">
-           <widget class="QLabel" name="label_20">
-            <property name="text">
-             <string>Cooling Method</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="5" colspan="2">
-           <widget class="QLineEdit" name="fan_rpm">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="placeholderText">
-             <string>R.P.M.</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="5" colspan="2">
-           <widget class="QComboBox" name="fan_cooling_method">
+          <item row="10" column="5" colspan="2">
+           <widget class="QComboBox" name="fan_voltage_type">
             <item>
              <property name="text">
               <string>--------------------</string>
@@ -3312,17 +3371,149 @@ QPushButton:pressed {
             </item>
             <item>
              <property name="text">
-              <string>Acc To IEC</string>
+              <string>MV</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>IC411</string>
+              <string>LV</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="23" column="5" colspan="2">
+           <widget class="QComboBox" name="fan_tt_brand">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>IC616</string>
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DBL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Danfoss</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>IFM</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Telemecanique</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>POOYESH HASSAGER</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="22" column="5" colspan="2">
+           <widget class="QComboBox" name="fan_pt_brand">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DBL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Danfoss</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>IFM</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Telemecanique</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>POOYESH HASSAGER</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="5" column="3" colspan="4">
+           <widget class="QComboBox" name="fan_start_type">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Direct</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Delta/Star</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Soft Starter</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>VFD</string>
              </property>
             </item>
            </widget>
@@ -3487,51 +3678,138 @@ QPushButton:pressed {
             </item>
            </widget>
           </item>
-          <item row="14" column="6">
-           <widget class="QPushButton" name="qss_btn">
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="damper_checkbox">
+            <property name="text">
+             <string>Damper</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QCheckBox" name="fan_checkbox">
+            <property name="text">
+             <string>Fan Control</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="19" column="5" colspan="2">
+           <widget class="QComboBox" name="damper_zs_brand">
+            <item>
+             <property name="text">
+              <string>--------------------</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Endress Hauser</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rosemount</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DBL</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Danfoss</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>IFM</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>JUMO</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wika</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Telemecanique</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>POOYESH HASSAGER</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="21" column="3" alignment="Qt::AlignRight">
+           <widget class="QSpinBox" name="fan_bearing_vt_qty">
             <property name="maximumSize">
              <size>
-              <width>16</width>
-              <height>16</height>
+              <width>50</width>
+              <height>16777215</height>
              </size>
             </property>
-            <property name="toolTip">
-             <string>Generate</string>
+            <property name="minimum">
+             <number>0</number>
             </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-    background-color: rgba(0, 0, 0, 0); /* Fully transparent background */
-    border: none;                      /* Optional: remove the border */
-}
-QPushButton:hover {
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #F77F00;
-}
-
-QPushButton:pressed {
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #F77F00;
-}
-QPushButton:pressed {
-	color: #d3dae3;
-	padding: 2px;
-	background-color: #2c2f2f;
-}</string>
+            <property name="value">
+             <number>0</number>
             </property>
-            <property name="text">
-             <string/>
+            <property name="displayIntegerBase">
+             <number>10</number>
             </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>../../assets/setting.png</normaloff>../../assets/setting.png</iconset>
-            </property>
-            <property name="iconSize">
+           </widget>
+          </item>
+          <item row="4" column="5" colspan="2">
+           <widget class="QLineEdit" name="fan_rpm">
+            <property name="maximumSize">
              <size>
-              <width>16</width>
-              <height>16</height>
+              <width>16777215</width>
+              <height>16777215</height>
              </size>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="placeholderText">
+             <string>R.P.M.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="0" colspan="7">
+           <widget class="QCheckBox" name="fan_de_nde">
+            <property name="text">
+             <string>Fan Motor DE and NDE (Thermal Ptotection)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QSpinBox" name="damper_qty">
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="displayIntegerBase">
+             <number>10</number>
             </property>
            </widget>
           </item>
@@ -3564,29 +3842,30 @@ QPushButton:pressed {
             </item>
            </widget>
           </item>
-          <item row="10" column="1" colspan="3">
-           <widget class="QLabel" name="fan_voltage_type_text">
+          <item row="22" column="1" colspan="2">
+           <widget class="QLabel" name="label_30">
             <property name="text">
-             <string>Voltage Type</string>
+             <string>Inlet Fan PressureT</string>
             </property>
            </widget>
           </item>
-          <item row="19" column="3" alignment="Qt::AlignRight">
-           <widget class="QSpinBox" name="damper_zs_qty">
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>16777215</height>
-             </size>
+          <item row="8" column="1" colspan="2">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>IP</string>
             </property>
-            <property name="minimum">
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLabel" name="label_19">
+            <property name="frameShadow">
+             <enum>QFrame::Sunken</enum>
+            </property>
+            <property name="lineWidth">
              <number>0</number>
             </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="displayIntegerBase">
-             <number>10</number>
+            <property name="text">
+             <string>Brand</string>
             </property>
            </widget>
           </item>
@@ -3619,167 +3898,10 @@ QPushButton:pressed {
             </item>
            </widget>
           </item>
-          <item row="0" column="5">
-           <widget class="QComboBox" name="damper_kw">
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.06</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.09</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.12</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.18</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.25</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.37</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.55</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>0.75</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>1.1</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>1.5</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>2.2</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>3</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>4</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>5.5</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>7.5</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>9</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>11</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>15</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>18.5</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>22</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>30</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>45</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>55</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>75</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>90</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>110</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="21" column="3" alignment="Qt::AlignRight">
-           <widget class="QSpinBox" name="fan_bearing_vt_qty">
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="displayIntegerBase">
-             <number>10</number>
+          <item row="14" column="0" colspan="2">
+           <widget class="QCheckBox" name="fan_space_heater">
+            <property name="text">
+             <string>Space Heater</string>
             </property>
            </widget>
           </item>
@@ -3790,8 +3912,8 @@ QPushButton:pressed {
             </property>
            </widget>
           </item>
-          <item row="23" column="5" colspan="2">
-           <widget class="QComboBox" name="fan_tt_brand">
+          <item row="20" column="5" colspan="2">
+           <widget class="QComboBox" name="pt100_brand">
             <item>
              <property name="text">
               <string>--------------------</string>
@@ -3842,208 +3964,6 @@ QPushButton:pressed {
               <string>POOYESH HASSAGER</string>
              </property>
             </item>
-           </widget>
-          </item>
-          <item row="22" column="3" alignment="Qt::AlignRight">
-           <widget class="QSpinBox" name="fan_pt_qty">
-            <property name="maximumSize">
-             <size>
-              <width>50</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-            <property name="displayIntegerBase">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLabel" name="label_19">
-            <property name="frameShadow">
-             <enum>QFrame::Sunken</enum>
-            </property>
-            <property name="lineWidth">
-             <number>0</number>
-            </property>
-            <property name="text">
-             <string>Brand</string>
-            </property>
-           </widget>
-          </item>
-          <item row="21" column="5" colspan="2">
-           <widget class="QComboBox" name="fan_bearing_vt_brand">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Endress Hauser</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Rosemount</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DBL</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Danfoss</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>IFM</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>JUMO</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Wika</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Telemecanique</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>POOYESH HASSAGER</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="12" column="5" colspan="2">
-           <widget class="QComboBox" name="fan_thermal_protection">
-            <property name="font">
-             <font>
-              <family>Calibri</family>
-              <pointsize>10</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Not Included</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>3xPTC</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>6xPTC</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="23" column="1" colspan="2">
-           <widget class="QLabel" name="label_31">
-            <property name="text">
-             <string>Inlet Fan TT</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="5" colspan="2">
-           <widget class="QComboBox" name="fan_painting_ral">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>7032</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>7030</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="5" column="3" colspan="4">
-           <widget class="QComboBox" name="fan_start_type">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Direct</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Delta/Star</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Soft Starter</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>VFD</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="10" column="5" colspan="2">
-           <widget class="QComboBox" name="fan_voltage_type">
-            <item>
-             <property name="text">
-              <string>--------------------</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>MV</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>LV</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QCheckBox" name="damper_checkbox">
-            <property name="text">
-             <string>Damper</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
          </layout>
