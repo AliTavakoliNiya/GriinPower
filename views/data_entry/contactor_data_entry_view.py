@@ -20,7 +20,6 @@ class ContactorDataEntryView:
         self.ui.contactor_add_supplier_btn.clicked.connect(self.ui.add_supplier)
         self.ui.contactor_save_btn.clicked.connect(self.save_contactor_to_db_func)
         self.ui.update_contactor_prices_btn.clicked.connect(self.update_contactor_prices_btn_pressed)
-        self.ui.delete_item_btn.clicked.connect(self.delete_item)
 
         self.history_table_headers = (["rated_current", "coil_voltage"] + self.ui.history_table_headers)
 
@@ -113,30 +112,6 @@ class ContactorDataEntryView:
 
         self.refresh_page()
 
-    def delete_item(self):
-        # Get selected row
-        selected_indexes = self.ui.history_list.selectionModel().selectedRows()
-
-        if selected_indexes:
-            row = selected_indexes[0].row()
-
-            # Create a dictionary from column headers and row data
-            row_dict = {}
-            for column in range(self.model.columnCount(QModelIndex())):
-                index = self.model.index(row, column)
-                header = self.model.headerData(column, Qt.Horizontal)
-                value = self.model.data(index)
-                row_dict[header] = value
-
-            print(f"Selected row {row} data: {row_dict}")
-
-            # Optional: Remove the row from the model
-            # self.model.removeRow(row)
-
-            return row_dict
-        else:
-            print("No row selected")
-            return None
 
 
 class TableWindow(QMainWindow):

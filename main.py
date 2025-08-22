@@ -5,8 +5,12 @@ import traceback
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QSettings
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import (
+    QDialog, QLabel, QPushButton,
+    QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy
+)
 
 from controllers.tender_application.project_session_controller import ProjectSession
 from controllers.user_session_controller import UserSession
@@ -81,6 +85,12 @@ class GriinPower(QMainWindow):
 
     def tender_application_func(self, open_project_clicked=False):
         """Create a new project or open an existing one, then launch tender application UI."""
+
+        # Select Electrical or Mechanical App
+        El_app_selected = El_App_selected()
+        if El_app_selected.exec_() == QDialog.Rejected:
+            return
+
         current_project = ProjectSession()
         current_project.reset()  # Always start with a clean project session
 
@@ -102,6 +112,7 @@ class GriinPower(QMainWindow):
         # Assign the currently logged-in user as the modifier
         current_project.modified_by_id = self.current_user.id
 
+
         # Launch the tender application window
         self.tender_application_window = TenderApplication(parent=self)
 
@@ -116,7 +127,48 @@ class GriinPower(QMainWindow):
     def account_func(self):
         self.account_window = Account(parent=self)
 
+class El_App_selected(QDialog):
+    def __init__(self):
+        super().__init__()
 
+        # Set up dialog window
+        self.setWindowTitle("Select")
+        self.setWindowIcon(QIcon('assets/Logo.ico'))
+
+
+        self.de_button = QPushButton("Basic Design")
+        self.el_button = QPushButton("Electrical")
+        self.el_button.clicked.connect(self.el_login_func)
+
+        # Form layout (right side)
+        form_widget = QWidget()
+        form_layout = QVBoxLayout()
+        form_layout.addWidget(self.de_button)
+        form_layout.addWidget(self.el_button)
+        form_layout.addStretch()
+        form_widget.setLayout(form_layout)
+
+        # Allow form to expand vertically
+        form_widget.setSizePolicy(QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding))
+
+        # Combine logo and form
+        main_layout = QHBoxLayout()
+        main_layout.addWidget(form_widget)
+        self.setLayout(main_layout)
+
+        # Apply default stylesheet
+        self.apply_stylesheet("styles/dark_style.qss")
+
+    def apply_stylesheet(self, path):
+        """Apply QSS stylesheet to the dialog."""
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                self.setStyleSheet(f.read())
+        else:
+            show_message(f"file {path} not found.", "Details")
+
+    def el_login_func(self):
+        self.accept()  # Close dialog with Accepted resul
 
 
 if __name__ == "__main__":
@@ -137,17 +189,12 @@ if __name__ == "__main__":
             sys.exit(app.exec_())
 
     except Exception:
-        # گرفتن متن کامل خطا
         error_message = traceback.format_exc()
 
-        # ذخیره در فایل
         with open("error_log.txt", "w", encoding="utf-8") as f:
             f.write(error_message)
 
         show_message(error_message, "Error")
 
-        # اطلاع‌رسانی و جلوگیری از بسته شدن فوری exe
         print("An error occurred! Please check 'error_log.txt' for details.")
         input("Press Enter to exit...")
-
-

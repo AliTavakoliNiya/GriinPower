@@ -70,7 +70,11 @@ class BagfilterController(PanelController):
         n_bagfilter_cards = (n_valves + 15) // 16  # each card support 16 valves(round up)
         self.bagfilter_general_items["bagfilter_cards"] = n_bagfilter_cards
 
-        do_bagfilter_card = math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digist use in binary
+        try:
+            do_bagfilter_card = math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digist use in binary
+        except Exception as e:
+            do_bagfilter_card = 0
+
         total_do += do_bagfilter_card + 5  # 1bits control pulse and 4bits address
 
         has_hmi = True if self.electrical_specs["bagfilter"]["touch_panel"] else False

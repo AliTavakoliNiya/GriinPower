@@ -63,3 +63,21 @@ class PandasModel(QAbstractTableModel):
         if orientation == Qt.Vertical:
             return str(self._data.index[section])
         return None
+
+    def sort(self, column, order):
+        if column < 0 or column >= self._data.shape[1]:
+            show_message(f"Invalid column index {column} for sorting.", "Error")
+            return
+
+        colname = self._data.columns[column]
+        ascending = order == Qt.AscendingOrder
+
+        self.layoutAboutToBeChanged.emit()
+        try:
+            self._data.sort_values(by=colname, ascending=ascending, inplace=True)
+            self._data.reset_index(drop=True, inplace=True)
+        except Exception as e:
+            show_message(f"Failed to sort by column '{colname}': {e}", "Error")
+        self.layoutChanged.emit()
+
+
