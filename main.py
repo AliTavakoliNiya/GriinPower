@@ -8,7 +8,7 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtWidgets import (
-    QDialog, QLabel, QPushButton,
+    QDialog, QPushButton,
     QVBoxLayout, QHBoxLayout, QWidget, QSizePolicy
 )
 
@@ -57,6 +57,18 @@ class GriinPower(QMainWindow):
         self.user_details_field.setText(
             f"Welcome, {self.current_user.first_name.title()} {self.current_user.last_name.title()}\n{self.current_user.role}"
         )
+        # ----------------------------------------------- Must Change!
+        if self.current_user.username == "tavakoliniya":
+            pixmap = QPixmap("assets/users/tavakoliniya.jpg")
+            self.avatar_field.setPixmap(pixmap)
+
+        elif self.current_user.username == "afshinnejad-m":
+            pixmap = QPixmap("assets/users/afshinnejad.jpg")
+            self.avatar_field.setPixmap(pixmap)
+
+        else:
+            pixmap = QPixmap("assets/users/user.png")
+            self.avatar_field.setPixmap(pixmap)
 
         if self.current_user.role != "admin":
             self.account_btn.setText("My Account")

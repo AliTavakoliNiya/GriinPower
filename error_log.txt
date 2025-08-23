@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\GriinPower\main.py", line 199, in <module>
+    window = GriinPower()
+  File "D:\GriinPower\main.py", line 71, in __init__
+    self.avatar_field.setPixmap(pixmap)
+AttributeError: 'GriinPower' object has no attribute 'avatar_field'

@@ -4,12 +4,15 @@ from sqlalchemy.orm import relationship
 from utils.database import SessionLocal
 from models import Base
 import hashlib
+from sqlalchemy import LargeBinary
 
 from views.message_box_view import show_message
 
 
 def now_jalali():
     return jdatetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+from sqlalchemy import Column, String, Integer, LargeBinary
 
 class User(Base):
     __tablename__ = "users"
@@ -28,6 +31,7 @@ class User(Base):
 
     def __repr__(self):
         return f"<User(username='{self.username}', role='{self.role}')>"
+
 
 def get_all_users():
     session = SessionLocal()

@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtCore import QSettings
-from PyQt5.QtGui import QIcon, QStandardItem, QStandardItemModel
+from PyQt5.QtGui import QIcon, QPixmap, QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import QDialog
 
 from controllers.user_session_controller import UserSession
@@ -76,6 +76,19 @@ class Account(QDialog):
         self.phone_field.setText(self.selected_user.phone)
         self.email_field.setText(self.selected_user.email)
         self.role_field.setCurrentText(self.selected_user.role)
+
+        # ----------------------------------------------- Must Change!
+        if self.selected_user.username == "tavakoliniya":
+            pixmap = QPixmap("assets/users/tavakoliniya.jpg")
+            self.avatar_field.setPixmap(pixmap)
+
+        elif self.selected_user.username == "afshinnejad-m":
+            pixmap = QPixmap("assets/users/afshinnejad.jpg")
+            self.avatar_field.setPixmap(pixmap)
+
+        else:
+            pixmap = QPixmap("assets/users/user.png")
+            self.avatar_field.setPixmap(pixmap)
 
     def clear_form(self, refresh=True):
         self.selected_user = User()
