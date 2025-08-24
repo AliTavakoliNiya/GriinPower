@@ -148,7 +148,7 @@ class El_App_selected(QDialog):
         self.setWindowIcon(QIcon('assets/Logo.ico'))
 
 
-        self.de_button = QPushButton("Basic Design")
+        self.de_button = QPushButton("Mechanical and Basic Design")
         self.el_button = QPushButton("Electrical")
         self.el_button.clicked.connect(self.el_login_func)
 
@@ -183,30 +183,52 @@ class El_App_selected(QDialog):
         self.accept()  # Close dialog with Accepted resul
 
 
-if __name__ == "__main__":
+
+def main() -> int:
+    app = QApplication(sys.argv)
+
+    db_session = SessionLocal()
     try:
-        app = QApplication(sys.argv)
-
-        # Initialize DB
-        db_session = SessionLocal()
-
-        # Show login dialog
+        # Login
         login = LoginView(db_session)
-        if login.exec_() == QDialog.Accepted:
-            session = QSettings("Griin", "GriinPower")
-            username = session.value("last_username", "")
+        accepted = (login.exec_() == QDialog.Accepted)  # PyQt6: login.exec()
 
-            window = GriinPower()
-            window.show()
-            sys.exit(app.exec_())
+        if not accepted:
+            return 0  # user cancelled login
+
+        # Load last user (optional – you don’t use it yet)
+        session = QSettings("Griin", "GriinPower")
+        username = session.value("last_username", "")
+
+        # Main window
+        window = GriinPower()
+        window.show()
+
+        # Run event loop and return its exit code
+        return app.exec_()  # PyQt6/PySide6: app.exec()
 
     except Exception:
         error_message = traceback.format_exc()
 
-        with open("error_log.txt", "w", encoding="utf-8") as f:
-            f.write(error_message)
+        # Keep history of failures
+        with open("error_log.txt", "a", encoding="utf-8") as f:
+            f.write("\n" + "="*60 + "\n" + error_message)
 
-        show_message(error_message, "Error")
+        # Try to show a GUI error if possible, else print to stderr
+        try:
+            show_message(error_message, "Error")
+        except Exception:
+            sys.stderr.write("An error occurred; see 'error_log.txt'.\n")
+            sys.stderr.write(error_message + "\n")
 
-        print("An error occurred! Please check 'error_log.txt' for details.")
-        input("Press Enter to exit...")
+        return 1  # non-zero exit for failure
+
+    finally:
+        try:
+            db_session.close()
+        except Exception:
+            pass
+
+if __name__ == "__main__":
+    sys.exit(main())
+

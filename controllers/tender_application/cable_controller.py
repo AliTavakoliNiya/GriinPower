@@ -41,28 +41,13 @@ class CableController(PanelController):
         self.note_motors = ", ".join(f'{motor["motor"]} (x{motor["qty"]})' for motor in self.motors)
 
         # calculate n_valves and n_airtanks
-        result = []
-        # Split string into parts inside and outside parentheses
-        parts = re.split(r'(\(.*?\))', self.electrical_specs["bagfilter"]["order"])
-
-        for part in parts:
-            if part.startswith('(') and part.endswith(')'):
-                # Inside parentheses - extract decimal numbers
-                nums = re.findall(r'\d+\.\d+|\d+', part)
-                result.extend(nums)
-            else:
-                # Outside parentheses - replace 'x' with '.' and remove non-digit/dot
-                cleaned = part.replace('x', '.')
-                cleaned = re.sub(r'[^\d\.]', '', cleaned)
-                # split by dots
-                nums = [p for p in cleaned.split('.') if p]
-                result.extend(nums)
+        bagfilter_order_parts = extract_numbers(self.electrical_specs["bagfilter"]["order"])
 
         self.n_valves = 0
         self.n_airtank = 0
         if self.electrical_specs["bagfilter"]["type"] == "Griin/China":  # EX: 8.96x5.(2.7m).10
-            self.n_valves = int(result[2])  # ~ compartments ~ jacks
-            bags = int(result[1])
+            self.n_valves = int(bagfilter_order_parts[2])  # ~ compartments ~ jacks ~ valves
+            bags = int(bagfilter_order_parts[1])
             if bags >= 128:
                 self.n_airtank = 2
             elif bags >= 64 and self.n_valves >= 6:
@@ -70,11 +55,11 @@ class CableController(PanelController):
             elif bags <= 96 and self.n_valves <= 5:
                 self.n_airtank = 1
             else:
-                self.n_airtank = 0
+                self.n_airtank = 1 # ???????????????
 
-        if self.electrical_specs["bagfilter"]["type"] == "BETH":  # 6.78x2.3.10
-            n_valve_per_airtank = int(result[0])
-            self.n_airtank = int(result[2])
+        if self.electrical_specs["bagfilter"]["type"] == "BETH":  # 6.78x2.(3.5m).10
+            n_valve_per_airtank = int(bagfilter_order_parts[0])
+            self.n_airtank = int(bagfilter_order_parts[2])
             self.n_valves = n_valve_per_airtank * self.n_airtank
 
         # calculates n_instruments
@@ -209,7 +194,7 @@ class CableController(PanelController):
                     "motors": []
                 }
 
-            cable_group[cable_size]["length"] += self.length
+            cable_group[cable_size]["length"] += self.length * motor["qty"]
             cable_group[cable_size]["motors"].append(motor["motor"])
 
         # Step 2: Retrieve cable data for each cable_size (only once)
@@ -220,7 +205,7 @@ class CableController(PanelController):
 
         # Step 3: Add to panel
         for cable_size, data in cable_group.items():
-            total_length = data["length"]
+
             success, cable = cable_data[cable_size]
 
             if success:
@@ -229,10 +214,10 @@ class CableController(PanelController):
                     brand=cable["brand"],
                     order_number=cable["order_number"],
                     specifications=f"4x{cable_size}mm",
-                    quantity=total_length,
+                    quantity=data["length"],
                     price=cable['price'],
                     last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
-                    note=self.note_motors
+                    note=", ".join(data["motors"])
                 )
             else:
                 self.add_to_panel(
@@ -240,10 +225,10 @@ class CableController(PanelController):
                     brand="",
                     order_number="",
                     specifications=f"4x{cable_size}mm",
-                    quantity=total_length,
+                    quantity=data["length"],
                     price=0,
                     last_price_update="❌ Cable not found",
-                    note=self.note_motors
+                    note=", ".join(data["motors"])
                 )
 
 
@@ -431,3 +416,14 @@ def cable_rating(cable_length_m, cable_current_a):
         return filtered[0]['cable_size_mm']
     else:
         return None  # or raise an exception / return default
+
+def extract_numbers(text):
+    pattern = r'^(\d+)\.(\d+)x(\d+)\.\((\d+\.\d+)m\)\.(\d+)$'
+    match = re.match(pattern, text)
+    if not match:
+        return [0,0,0,0,0]  # or return [] or raise ValueError if preferred
+
+    g = match.groups()
+    # Convert the groups to int or float based on decimal point
+    result = [int(g[0]), int(g[1]), int(g[2]), float(g[3]), int(g[4])]
+    return result

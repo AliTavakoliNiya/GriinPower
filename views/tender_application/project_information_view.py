@@ -94,6 +94,17 @@ class ProjectInformationTab(QWidget):
         self.proj_avl_schneider.stateChanged.connect(self._handle_proj_avl_schneider_changed)
         self.proj_avl_hyundai.stateChanged.connect(self._handle_proj_avl_hyundai_changed)
 
+        """ --------------------------- Structure size --------------------------- """
+
+        self.width_field.valueChanged.connect(self.width_field_value_handler)
+        self.height_field.valueChanged.connect(self.height_field_value_handler)
+        self.depth_field.valueChanged.connect(self.depth_field_value_handler)
+
+        self.structure_distance_field.valueChanged.connect(self.structure_distance_field_value_handler)
+        self.mcc_distance_field.valueChanged.connect(self.mcc_distance_field_value_handler)
+        self.feeder_distance_field.valueChanged.connect(self.feeder_distance_field_value_handler)
+
+
     def _update_project_value(self, path_list, value=None):
         """Update tender_application details dictionary value at the specified path
 
@@ -377,6 +388,26 @@ class ProjectInformationTab(QWidget):
 
         return True
 
+    """ --------------------------- Structure Size --------------------------- """
+    def depth_field_value_handler(self):
+        self.electrical_specs["project_info"]["depth"] = self.depth_field.value()
+
+    def width_field_value_handler(self):
+        self.electrical_specs["project_info"]["width"] = self.width_field.value()
+
+    def height_field_value_handler(self):
+        self.electrical_specs["project_info"]["height"] = self.height_field.value()
+
+    def structure_distance_field_value_handler(self):
+            self.electrical_specs["project_info"]["structure_distance"] = self.structure_distance_field.value()
+
+    def mcc_distance_field_value_handler(self):
+            self.electrical_specs["project_info"]["mcc_distance"] = self.mcc_distance_field.value()
+
+    def feeder_distance_field_value_handler(self):
+            self.electrical_specs["project_info"]["feeder_distance"] = self.feeder_distance_field.value()
+
+
     """ Load Pervios Revision as need """
 
     def set_project_info_ui_values(self):
@@ -437,6 +468,16 @@ class ProjectInformationTab(QWidget):
                 'schneider electric' in self.electrical_specs['project_info']['proj_avl'])
             self.proj_avl_hyundai.setChecked('hyundai' in self.electrical_specs['project_info']['proj_avl'])
             self.proj_avl_siemens.setChecked('siemens' in self.electrical_specs['project_info']['proj_avl'])
+
+            # Structure Size
+            self.width_field.setValue(self.electrical_specs['project_info']['width'])
+            self.height_field.setValue(self.electrical_specs['project_info']['height'])
+            self.depth_field.setValue(self.electrical_specs['project_info']['depth'])
+
+            self.structure_distance_field.setValue(self.electrical_specs['project_info']['structure_distance'])
+            self.mcc_distance_field.setValue(self.electrical_specs['project_info']['mcc_distance'])
+            self.feeder_distance_field.setValue(self.electrical_specs['project_info']['feeder_distance'])
+
         except KeyError as e:
             show_message(f"KeyError: Missing key in electrical_specs: {e}")
         except AttributeError as e:

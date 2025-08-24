@@ -20,28 +20,13 @@ class InstallationController(PanelController):
         """
 
         # calculate n_valves and n_airtanks
-        result = []
-        # Split string into parts inside and outside parentheses
-        parts = re.split(r'(\(.*?\))', self.electrical_specs["bagfilter"]["order"])
-
-        for part in parts:
-            if part.startswith('(') and part.endswith(')'):
-                # Inside parentheses - extract decimal numbers
-                nums = re.findall(r'\d+\.\d+|\d+', part)
-                result.extend(nums)
-            else:
-                # Outside parentheses - replace 'x' with '.' and remove non-digit/dot
-                cleaned = part.replace('x', '.')
-                cleaned = re.sub(r'[^\d\.]', '', cleaned)
-                # split by dots
-                nums = [p for p in cleaned.split('.') if p]
-                result.extend(nums)
+        bagfilter_order_parts = extract_numbers(self.electrical_specs["bagfilter"]["order"])
 
         self.n_valves = 0
         self.n_airtank = 0
         if self.electrical_specs["bagfilter"]["type"] == "Griin/China":  # EX: 8.96x5.(2.7m).10
-            self.n_valves = int(result[2])  # ~ compartments ~ jacks
-            bags = int(result[1])
+            self.n_valves = int(bagfilter_order_parts[2])  # ~ compartments ~ jacks ~ jack
+            bags = int(bagfilter_order_parts[1])
             if bags >= 128:
                 self.n_airtank = 2
             elif bags >= 64 and self.n_valves >= 6:
@@ -51,9 +36,9 @@ class InstallationController(PanelController):
             else:
                 self.n_airtank = 0
 
-        if self.electrical_specs["bagfilter"]["type"] == "BETH":  # 6.78x2.3.10
-            n_valve_per_airtank = int(result[0])
-            self.n_airtank = int(result[2])
+        if self.electrical_specs["bagfilter"]["type"] == "BETH":  # 6.78x2.(3.5m).10
+            n_valve_per_airtank = int(bagfilter_order_parts[0])
+            self.n_airtank = int(bagfilter_order_parts[2])
             self.n_valves = n_valve_per_airtank * self.n_airtank
 
         # calculates n_motors
@@ -779,3 +764,14 @@ class InstallationController(PanelController):
                 last_price_update=f"❌ Cable MetalTag not found",
                 note=f"{self.n_airtank} AirTank\n{self.total_instruments} Intstrument"
             )
+
+def extract_numbers(text):
+    pattern = r'^(\d+)\.(\d+)x(\d+)\.\((\d+\.\d+)m\)\.(\d+)$'
+    match = re.match(pattern, text)
+    if not match:
+        return [0,0,0,0,0]  # or return [] or raise ValueError if preferred
+
+    g = match.groups()
+    # Convert the groups to int or float based on decimal point
+    result = [int(g[0]), int(g[1]), int(g[2]), float(g[3]), int(g[4])]
+    return result

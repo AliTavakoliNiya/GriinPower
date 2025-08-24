@@ -19,25 +19,7 @@ class InstallationTab(QWidget):
         self.current_project = ProjectSession()
         self.electrical_specs = self.current_project.project_electrical_specs
 
-        self.width_field.valueChanged.connect(self.width_field_value_handler)
-        self.height_field.valueChanged.connect(self.height_field_value_handler)
-        self.depth_field.valueChanged.connect(self.depth_field_value_handler)
-        self.ccr_distance.valueChanged.connect(self.ccr_field_value_handler)
-
         self.update_table.clicked.connect(self.generate_result)
-        self.set_installation_ui_values()
-
-    def depth_field_value_handler(self):
-        self.electrical_specs["installation"]["depth"] = self.depth_field.value()
-
-    def width_field_value_handler(self):
-        self.electrical_specs["installation"]["width"] = self.width_field.value()
-
-    def height_field_value_handler(self):
-        self.electrical_specs["installation"]["height"] = self.height_field.value()
-
-    def ccr_field_value_handler(self):
-        self.electrical_specs["installation"]["ccr"] = self.ccr_distance.value()
 
     def _setup_result_table(self):
         self.installation_panel.setAlternatingRowColors(True)
@@ -86,22 +68,4 @@ class InstallationTab(QWidget):
                 max_width = max(max_width, metrics.horizontalAdvance(text) + 20)
             table.setColumnWidth(col, max_width)
 
-    """ Load Pervios Revision as need """
 
-    def set_installation_ui_values(self):  # Using for open pervios project
-        """
-        Set values for UI elements based on the self.electrical_specs dictionary.
-        """
-        new_proj = True if self.current_project.revision == None else False
-        try:
-            # QLabel elements
-            self.height_field.setValue(float(self.electrical_specs['installation']['height']))
-            self.width_field.setValue(float(self.electrical_specs['installation']['width']))
-            self.depth_field.setValue(float(self.electrical_specs['installation']['depth']))
-            self.ccr_distance.setValue(float(self.electrical_specs['installation']['ccr']))
-        except KeyError as e:
-            show_message(f"KeyError: Missing key in electrical_specs: {e}")
-        except AttributeError as e:
-            show_message(f"AttributeError: UI element not found: {e}")
-        except Exception as e:
-            show_message(f"Unexpected error: {e}")

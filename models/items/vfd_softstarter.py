@@ -84,7 +84,7 @@ def get_vfd_softstarter_by_power(type, power, brands=[], order_number=None):
                 continue
 
             # تطابق توان
-            if attr_dict.get("power") != power:
+            if float(attr_dict.get("power")) != power:
                 continue
 
             # تطابق برند (در صورت وجود لیست برند)

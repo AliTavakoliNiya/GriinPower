@@ -8,6 +8,7 @@ from models.items.general import get_general_by_spec
 from models.items.instrument import get_instrument_by_spec
 from models.items.mccb import get_mccb_by_current
 from models.items.plc import get_plc_by_spec
+from models.items.wire_cable import get_wire_cable_by_spec
 
 
 class BagfilterController(PanelController):
@@ -23,40 +24,25 @@ class BagfilterController(PanelController):
         Main controller for building a bagfilter from tender_application specifications.
         """
 
-        result = []
-        # Split string into parts inside and outside parentheses
-        parts = re.split(r'(\(.*?\))', self.electrical_specs["bagfilter"]["order"])
+        bagfilter_order_parts = extract_numbers(self.electrical_specs["bagfilter"]["order"])
 
-        for part in parts:
-            if part.startswith('(') and part.endswith(')'):
-                # Inside parentheses - extract decimal numbers
-                nums = re.findall(r'\d+\.\d+|\d+', part)
-                result.extend(nums)
-            else:
-                # Outside parentheses - replace 'x' with '.' and remove non-digit/dot
-                cleaned = part.replace('x', '.')
-                cleaned = re.sub(r'[^\d\.]', '', cleaned)
-                # split by dots
-                nums = [p for p in cleaned.split('.') if p]
-                result.extend(nums)
-
-        n_valves = 0
+        self.n_valves = 0
         if self.electrical_specs["bagfilter"]["type"] == "Griin/China":  # EX: 8.96x5.(2.7m).10
-            n_valves = int(result[2])  # ~ compartments ~ jacks
+            self.n_valves = int(bagfilter_order_parts[2])  # ~ compartments ~ jacks ~ valves
 
-        if self.electrical_specs["bagfilter"]["type"] == "BETH":  # 6.78x2.3.10
-            n_valve_per_airtank = int(result[0])
-            n_airtank = int(result[2])
-            n_valves = n_valve_per_airtank * n_airtank
+        if self.electrical_specs["bagfilter"]["type"] == "BETH":  # 6.78x2.(3.5m).10
+            n_valve_per_airtank = int(bagfilter_order_parts[0])
+            n_airtank = int(bagfilter_order_parts[2])
+            self.n_valves = n_valve_per_airtank * n_airtank
 
         self.bagfilter_general_items = {
             "touch_panel": 0,
             "relay_1no_1nc": 3,
             "relay_2no_2nc": 3,
-            "terminal_4": n_valves * 2 + 20,
+            "terminal_4": self.n_valves * 2 + 20,
             "mpcb_mccb_aux_contact": 1,
-            "duct_cover": round(n_valves * 0.1, 2),
-            "miniatory_rail": round(n_valves * 0.3, 2),
+            "duct_cover": round(self.n_valves * 0.1, 2),
+            "miniatory_rail": round(self.n_valves * 0.3, 2),
             "power_outlet": 1,
             "mcb_4DC": 2,
             "mcb_2AC": 1,
@@ -67,7 +53,7 @@ class BagfilterController(PanelController):
         total_ao = 0
         total_ai = 0
 
-        n_bagfilter_cards = (n_valves + 15) // 16  # each card support 16 valves(round up)
+        n_bagfilter_cards = (self.n_valves + 15) // 16  # each card support 16 valves(round up)
         self.bagfilter_general_items["bagfilter_cards"] = n_bagfilter_cards
 
         try:
@@ -99,14 +85,13 @@ class BagfilterController(PanelController):
         self.calculate_plc_io_requirements(total_do, total_di, total_ao, total_ai)
 
         # # ----------------------- Add internal wiring -----------------------
-        # self.choose_internal_signal_wire(motor_objects)
-        # self.choose_internal_power_wire(motor_objects)
-        #
+        self.choose_internal_signal_wire()
+
         # # ----------------------- Add General Accessories -----------------------
         self.choose_general(self.bagfilter_general_items)
 
         # # ----------------------- Add Electrical Panel -----------------------
-        # self.choose_electrical_panel()
+        self.choose_electrical_panel(1)
 
         # # ----------------------- Add instruments -----------------------
         self.choose_instruments()
@@ -492,3 +477,48 @@ class BagfilterController(PanelController):
                 last_price_update="❌ PLC not found",
                 note=""
             )
+
+    def choose_internal_signal_wire(self):
+        """
+        Adds internal signal panel wire (1x1.5) entries for each valves.
+        Each motor gets 2 meters of wire if its quantity isn't 0.
+        """
+        total_length = 2 * self.n_valves
+
+        if total_length == 0:
+            return
+
+        success, cable = get_wire_cable_by_spec("Wire", 1, 1.5, brand=None, note=None)
+        if success:
+            self.add_to_panel(
+                type=f"Internal Signal Panel Wire",
+                brand=cable["brand"],
+                order_number=cable["order_number"],
+                specifications="Size: 1x1.5 mm²",
+                quantity=total_length,
+                price=cable['price'],
+                last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
+                note=f"For {self.n_valves} valves"
+            )
+        else:
+            self.add_to_panel(
+                type=f"Internal Signal Panel Wire",
+                brand="",
+                order_number="",
+                specifications="Size: 1x1.5 mm²",
+                quantity=total_length,
+                price=0,
+                last_price_update="❌ Wire not found",
+                note=f"For {self.n_valves} valves"
+            )
+
+def extract_numbers(text):
+    pattern = r'^(\d+)\.(\d+)x(\d+)\.\((\d+\.\d+)m\)\.(\d+)$'
+    match = re.match(pattern, text)
+    if not match:
+        return [0,0,0,0,0]  # or return [] or raise ValueError if preferred
+
+    g = match.groups()
+    # Convert the groups to int or float based on decimal point
+    result = [int(g[0]), int(g[1]), int(g[2]), float(g[3]), int(g[4])]
+    return result

@@ -593,10 +593,8 @@ class ElectricalTab(QWidget):
     def _handle_bagfilter_type_changed(self):
         if self.bagfilter_type.currentIndex() == 0:
             self.bagfilter_order.setPlaceholderText("Order")
-        if self.bagfilter_type.currentText() == "Griin/China":  # Griin/China
-            self.bagfilter_order.setPlaceholderText("Ex: 8.96×5.(2.7m).10")  # 5 valve ~ compartment
-        if self.bagfilter_type.currentText() == "BETH":  # BETH
-            self.bagfilter_order.setPlaceholderText("Ex: 6.78x2.3.10")  # 6x2 valve
+        else:
+            self.bagfilter_order.setPlaceholderText("Ex: 8.96×5.(2.7m).10")
 
         self._update_project_value(["bagfilter", "type"], self.bagfilter_type.currentText())
 

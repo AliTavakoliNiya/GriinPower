@@ -347,15 +347,14 @@ class PanelController:
         """
         Chooses electrical panel size based on number of motors and retrieves real component data.
         """
-        if self.total_motors_in_project_qty == 0:
-            return
-        elif self.total_motors_in_project_qty < 3:
+        # assume as main electrical panel is 1 motor
+        if self.total_motors_in_project_qty +1 < 3:
             width, height, depth = 800, 1000, 300
             qty = 1
-        elif self.total_motors_in_project_qty < 4:
+        elif self.total_motors_in_project_qty +1 < 4:
             width, height, depth = 800, 1600, 300
             qty = 1
-        elif self.total_motors_in_project_qty < 8:
+        elif self.total_motors_in_project_qty +1 < 8:
             width, height, depth = 1200, 2200, 600
             qty = 1
         else:
@@ -371,9 +370,9 @@ class PanelController:
                 order_number="",
                 specifications=f"{width}mm x {height}mm x {depth}mm",
                 quantity=qty,
-                price=electrical_panel.get("price", 0)/self.total_motors_in_project_qty,
+                price=electrical_panel.get("price", 0)/(self.total_motors_in_project_qty+1),
                 last_price_update=f"{electrical_panel.get('supplier_name', '')}\n{electrical_panel.get('date', '')}",
-                note=f"{total_motors}/{self.total_motors_in_project_qty} Of Electrical Panel Price"
+                note=f"{total_motors}/{self.total_motors_in_project_qty+1} Of Electrical Panel Price"
             )
         else:
             self.add_to_panel(
@@ -384,7 +383,7 @@ class PanelController:
                 quantity=qty,
                 price=0,
                 last_price_update="❌ Electrical Panel not found",
-                note=f"{total_motors}/{self.total_motors_in_project_qty} Of Electrical Panel Price"
+                note=f"{total_motors}/{self.total_motors_in_project_qty+1} Of Electrical Panel Price"
             )
 
     """ ------------------------------------- Instrument ------------------------------------- """
