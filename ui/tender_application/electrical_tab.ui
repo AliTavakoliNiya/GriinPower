@@ -3520,9 +3520,15 @@ QPushButton:pressed {
           </item>
           <item row="4" column="3">
            <widget class="QComboBox" name="fan_kw">
-            <property name="maximumSize">
+            <property name="minimumSize">
              <size>
               <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
               <height>16777215</height>
              </size>
             </property>

@@ -12,6 +12,10 @@ class HopperHeaterController(PanelController):
         """
         Main controller for building a hopper heater panel from tender_application specifications.
         """
+
+        if self.electrical_specs["hopper_heater"]["motors"]["elements"]["qty"] == 0 :
+            return self.panel
+
         # ----------------------- Initialize Motors -----------------------
         motors_config = self.electrical_specs["hopper_heater"]["motors"]
         hopper_heater = Motor(motors_config["elements"]["power"],

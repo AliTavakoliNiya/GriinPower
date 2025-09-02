@@ -14,6 +14,13 @@ class FreshAirController(PanelController):
         """
         Main controller for building a fresh air panel from tender_application specifications.
         """
+
+        if self.electrical_specs["fresh_air"]["motors"]["freshair_motor"]["qty"] == 0 \
+            and self.electrical_specs["fresh_air"]["motors"]["fresh_air_flap"]["qty"] == 0 \
+            and self.electrical_specs["fresh_air"]["motors"]["emergency_flap"]["qty"] == 0 :
+                    return self.panel
+
+
         # ----------------------- Initialize Motors -----------------------
         motors_config = self.electrical_specs["fresh_air"]["motors"]
         motor_objects = []

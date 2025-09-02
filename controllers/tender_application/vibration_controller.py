@@ -15,7 +15,12 @@ class VibrationController(PanelController):
         """
         Main controller for building a vibration panel from tender_application specifications.
         """
-        # ----------------------- Initialize Motors -----------------------
+
+
+        if self.electrical_specs["vibration"]["motors"]["vibration"]["qty"] == 0 :
+            return self.panel
+
+            # ----------------------- Initialize Motors -----------------------
         motors_config = self.electrical_specs["vibration"]["motors"]
         vibration = Motor(motors_config["vibration"]["power"],
                           usage="Vibration Motor",

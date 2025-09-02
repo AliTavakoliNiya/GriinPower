@@ -16,6 +16,14 @@ class TransportController(PanelController):
         """
         Main controller for building a transport panel from tender_application specifications.
         """
+
+        if self.electrical_specs["transport"]["motors"]["rotary"]["qty"] == 0 \
+            and self.electrical_specs["transport"]["motors"]["telescopic_chute"]["qty"] == 0 \
+            and self.electrical_specs["transport"]["motors"]["slide_gate"]["qty"] == 0 \
+            and self.electrical_specs["transport"]["motors"]["screw1"]["qty"] == 0 \
+            and self.electrical_specs["transport"]["motors"]["screw2"]["qty"] == 0 :
+                    return self.panel
+
         # ----------------------- Initialize Motors -----------------------
         motors_config = self.electrical_specs["transport"]["motors"]
 

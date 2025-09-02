@@ -31,8 +31,8 @@ class ProjectInformationTab(QWidget):
         self.upload_tender_doc_btn.clicked.connect(self.upload_tender_doc)
         self.download_tender_doc_btn.clicked.connect(self.download_tender_doc)
 
-        self.upload_report_btn.clicked.connect(self.download_report)
-        self.download_upload_btn.clicked.connect(self.upload_report)
+        self.upload_report_btn.clicked.connect(self.upload_report)
+        self.download_upload_btn.clicked.connect(self.download_report)
 
 
         if self.current_project.revision != None:

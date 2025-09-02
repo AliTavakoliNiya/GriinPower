@@ -16,6 +16,10 @@ class FanDamperController(PanelController):
         """
         Main controller for building a fan_damper panel from tender_application specifications.
         """
+        if self.electrical_specs["damper"]["motors"]["damper"]["qty"] == 0 \
+            and self.electrical_specs["fan"]["motors"]["fan"]["qty"] == 0 :
+                return self.panel
+
         # ----------------------- Initialize Motors -----------------------
         damper_config = self.electrical_specs["damper"]["motors"]["damper"]
         damper = Motor(damper_config["power"], usage="Damper")
