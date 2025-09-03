@@ -1848,7 +1848,7 @@
            <widget class="QSpinBox" name="transport_ls_bin_qty">
             <property name="maximumSize">
              <size>
-              <width>35</width>
+              <width>50</width>
               <height>16777215</height>
              </size>
             </property>
@@ -1867,7 +1867,7 @@
            <widget class="QSpinBox" name="transport_lt_qty">
             <property name="maximumSize">
              <size>
-              <width>35</width>
+              <width>50</width>
               <height>16777215</height>
              </size>
             </property>
@@ -2051,7 +2051,7 @@
            <widget class="QSpinBox" name="transport_spd_qty">
             <property name="maximumSize">
              <size>
-              <width>35</width>
+              <width>50</width>
               <height>16777215</height>
              </size>
             </property>
@@ -2339,7 +2339,7 @@ QPushButton:pressed {
            <widget class="QSpinBox" name="transport_zs_qty">
             <property name="maximumSize">
              <size>
-              <width>35</width>
+              <width>50</width>
               <height>16777215</height>
              </size>
             </property>

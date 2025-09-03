@@ -71,6 +71,9 @@ class FanDamperController(PanelController):
         elif fan_config["start_type"] == "VFD":
             fan.plc_ai = 1
             fan.plc_ao = 1
+            fan.contactor_qty = 0
+            fan.contactor_aux_contact_qty = 0
+
 
         fan.rpm = fan_config["rpm"]
         fan.brand = fan_config["brand"]

@@ -412,20 +412,20 @@ class BagfilterController(PanelController):
         """
         plc_series_spec = self.electrical_specs["bagfilter"]["plc_series"]
 
-        series = None
-        if "S7-1200 Series" in plc_series_spec:
-            series = "S7-1200"
-        elif "S7-300 Series" in plc_series_spec:
-            series = "S7-300"
-        elif "LOGO!" in plc_series_spec:
-            series = "LOGO!"
+        # Map series names
+        series_map = {
+            "S7-1200 Series": "S7-1200",
+            "S7-300 Series": "S7-300",
+            "LOGO!": "LOGO!"
+        }
+        series = next((v for k, v in series_map.items() if k in plc_series_spec), None)
 
         if not series:
             self.add_to_panel(
                 type="PLC",
                 brand="",
                 order_number="",
-                specifications=f"{series}",
+                specifications="❌ PLC series missing",
                 quantity=0,
                 price=0,
                 last_price_update="❌ PLC series missing",
@@ -433,22 +433,27 @@ class BagfilterController(PanelController):
             )
             return
 
+        # Map protocols
+        protocol_map = {
+            "profinet": {"has_profinet": True},
+            "profibus": {"has_profibus": True},
+            "hart": {"has_hart": True}
+        }
         plc_protocol = (self.electrical_specs.get("bagfilter", {}).get("plc_protocol") or "").lower()
-        protocol_filters = {}
-        if plc_protocol == "profinet":
-            protocol_filters["has_profinet"] = True
-        elif plc_protocol == "profibus":
-            protocol_filters["has_profibus"] = True
-        elif plc_protocol == "hart":
-            protocol_filters["has_hart"] = True
-        # else no protocol filters added, so these are optional
+        protocol_filters = protocol_map.get(plc_protocol, {})
 
-        success, plc = get_plc_by_spec(
-            series=series,
-            **protocol_filters
-        )
+        # Query PLC
+        success, plc = get_plc_by_spec(series=series, **protocol_filters)
 
         if success:
+            note = ", ".join([
+                f"Series: {plc.get('series', '')}",
+                f"Model: {plc.get('model', '')}",
+                f"DI pins: {plc.get('di_pins', '')}",
+                f"DO pins: {plc.get('do_pins', '')}",
+                f"AI pins: {plc.get('ai_pins', '')}",
+                f"AO pins: {plc.get('ao_pins', '')}",
+            ])
             self.add_to_panel(
                 type="PLC",
                 brand=plc.get('brand', ''),
@@ -457,14 +462,7 @@ class BagfilterController(PanelController):
                 quantity=1,
                 price=float(plc.get('price', 0)),
                 last_price_update=f"{plc.get('supplier_name', '')}\n{plc.get('date', '')}",
-                note=(
-                    f"Series: {plc.get('series', '')}, "
-                    f"Model: {plc.get('model', '')}, "
-                    f"DI pins: {plc.get('di_pins', '')}, "
-                    f"DO pins: {plc.get('do_pins', '')}, "
-                    f"AI pins: {plc.get('ai_pins', '')}, "
-                    f"AO pins: {plc.get('ao_pins', '')}"
-                )
+                note=note
             )
         else:
             self.add_to_panel(
