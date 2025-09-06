@@ -60,7 +60,6 @@ class ProjectSession:
                                                        "ee": False,
                                                        "me": False,
                                                        "cable_supply": False,
-                                                       "cable_dimension": 0,
                                                        "spare_pins": 0,
                                                        "instruments": {
                                                            "delta_pressure_transmitter": {"qty": 0,

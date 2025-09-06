@@ -322,10 +322,10 @@ class InstallationController(PanelController):
                 brand=flexible_conduit["brand"],
                 order_number="",
                 specifications=f"200m",
-                quantity=self.total_motors_qty * self.electrical_specs['bagfilter']['cable_dimension'] * 0.2,
+                quantity=self.total_motors_qty * self.electrical_specs['project_info']['structure_distance'] * 0.2,
                 price=flexible_conduit["price"],
                 last_price_update=f"{flexible_conduit.get('supplier_name', '')}\n{flexible_conduit.get('date', '')}",
-                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['bagfilter']['cable_dimension']}m)"
+                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['project_info']['structure_distance']}m)"
             )
         else:
             self.add_to_panel(
@@ -333,10 +333,10 @@ class InstallationController(PanelController):
                 brand="",
                 order_number="",
                 specifications=f"200m",
-                quantity=self.total_motors_qty * self.electrical_specs['bagfilter']['cable_dimension'] * 0.2,
+                quantity=self.total_motors_qty * self.electrical_specs['project_info']['structure_distance'] * 0.2,
                 price=0,
                 last_price_update=f"❌ Cable Tray not found",
-                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['bagfilter']['cable_dimension']}m)"
+                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['project_info']['structure_distance']}m)"
             )
 
         # Cable Tray 20 - Cover
@@ -347,10 +347,10 @@ class InstallationController(PanelController):
                 brand=flexible_conduit["brand"],
                 order_number="",
                 specifications=f"200m",
-                quantity=self.total_motors_qty * self.electrical_specs['bagfilter']['cable_dimension'] * 0.2,
+                quantity=self.total_motors_qty * self.electrical_specs['project_info']['structure_distance'] * 0.2,
                 price=flexible_conduit["price"],
                 last_price_update=f"{flexible_conduit.get('supplier_name', '')}\n{flexible_conduit.get('date', '')}",
-                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['bagfilter']['cable_dimension']}m)"
+                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['project_info']['structure_distance']}m)"
             )
         else:
             self.add_to_panel(
@@ -358,10 +358,10 @@ class InstallationController(PanelController):
                 brand="",
                 order_number="",
                 specifications=f"200m",
-                quantity=self.total_motors_qty * self.electrical_specs['bagfilter']['cable_dimension'] * 0.2,
+                quantity=self.total_motors_qty * self.electrical_specs['project_info']['structure_distance'] * 0.2,
                 price=0,
                 last_price_update=f"❌ Cable Tray not found",
-                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['bagfilter']['cable_dimension']}m)"
+                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['project_info']['structure_distance']}m)"
             )
 
         # Cable Tray 30
@@ -372,10 +372,10 @@ class InstallationController(PanelController):
                 brand=flexible_conduit["brand"],
                 order_number="",
                 specifications=f"300m",
-                quantity=self.total_motors_qty * self.electrical_specs['bagfilter']['cable_dimension'] * 0.2,
+                quantity=self.total_motors_qty * self.electrical_specs['project_info']['structure_distance'] * 0.2,
                 price=flexible_conduit["price"],
                 last_price_update=f"{flexible_conduit.get('supplier_name', '')}\n{flexible_conduit.get('date', '')}",
-                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['bagfilter']['cable_dimension']}m)"
+                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['project_info']['structure_distance']}m)"
             )
         else:
             self.add_to_panel(
@@ -383,10 +383,10 @@ class InstallationController(PanelController):
                 brand="",
                 order_number="",
                 specifications=f"300m",
-                quantity=self.total_motors_qty * self.electrical_specs['bagfilter']['cable_dimension'] * 0.2,
+                quantity=self.total_motors_qty * self.electrical_specs['project_info']['structure_distance'] * 0.2,
                 price=0,
                 last_price_update=f"❌ Cable Tray not found",
-                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['bagfilter']['cable_dimension']}m)"
+                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['project_info']['structure_distance']}m)"
             )
 
         # Cable Tray 30 - Cover
@@ -397,10 +397,10 @@ class InstallationController(PanelController):
                 brand=flexible_conduit["brand"],
                 order_number="",
                 specifications=f"300m",
-                quantity=self.total_motors_qty * self.electrical_specs['bagfilter']['cable_dimension'] * 0.2,
+                quantity=self.total_motors_qty * self.electrical_specs['project_info']['structure_distance'] * 0.2,
                 price=flexible_conduit["price"],
                 last_price_update=f"{flexible_conduit.get('supplier_name', '')}\n{flexible_conduit.get('date', '')}",
-                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['bagfilter']['cable_dimension']}m)"
+                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['project_info']['structure_distance']}m)"
             )
         else:
             self.add_to_panel(
@@ -408,10 +408,10 @@ class InstallationController(PanelController):
                 brand="",
                 order_number="",
                 specifications=f"300m",
-                quantity=self.total_motors_qty * self.electrical_specs['bagfilter']['cable_dimension'] * 0.2,
+                quantity=self.total_motors_qty * self.electrical_specs['project_info']['structure_distance'] * 0.2,
                 price=0,
                 last_price_update=f"❌ Cable Tray not found",
-                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['bagfilter']['cable_dimension']}m)"
+                note=f"{self.total_motors_qty}x Motors x 20% of Distance({self.electrical_specs['project_info']['structure_distance']}m)"
             )
 
     """ ladder """

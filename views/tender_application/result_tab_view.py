@@ -160,10 +160,15 @@ class ResultTab(QWidget):
     def _populate_table_view(self, panel, table: QTableView) -> None:
         """
         Convert panel (list of rows or dict-of-lists) to DataFrame,
-        append a summary row, put into a PandasModel, and set on the table.
+        append a summary row (except summary_table),
+        put into a PandasModel, and set on the table.
         """
         df = pd.DataFrame(panel)
-        df = self._add_summary_row(df)
+
+        # Only non-summary tables need an auto-added Total row
+        if table.objectName() != "summary_table":
+            df = self._add_summary_row(df)
+
         model = PandasModel(df)
         table.setModel(model)
         self._resize_columns(table, model)
@@ -184,31 +189,33 @@ class ResultTab(QWidget):
 
     def _add_summary_row(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Append a summary row:
-        - If 'total_price' exists, sum it (numeric coercion).
-        - If a 'type' column exists (case-insensitive), place the label 'Total' there.
-        Always returns a DataFrame (original + one extra row) unless df is empty.
+        Append a summary row that sums either 'total_price' or 'Price'.
+        Also writes label 'Total' into 'type' or 'Title' if present.
         """
         if df is None or df.empty:
             return df if df is not None else pd.DataFrame()
 
-        # Normalize columns for case-insensitive lookup
         lower_cols = {c.lower(): c for c in df.columns}
-
-        # Prepare summary template
         summary = {col: "" for col in df.columns}
 
-        # Sum total_price if present
+        # --- sum column: prefer total_price then Price ---
+        price_col = None
         if "total_price" in lower_cols:
             price_col = lower_cols["total_price"]
-            summary[price_col] = (
-                pd.to_numeric(df[price_col], errors="coerce").fillna(0).sum()
-            )
+        elif "price" in lower_cols:
+            price_col = lower_cols["price"]
 
-        # Put the label 'Total' in 'type' if present
+        if price_col:
+            summary[price_col] = pd.to_numeric(df[price_col], errors="coerce").fillna(0).sum()
+
+        # --- label column: prefer 'type' then 'Title' ---
+        label_col = None
         if "type" in lower_cols:
-            type_col = lower_cols["type"]
-            summary[type_col] = "Total"
+            label_col = lower_cols["type"]
+        elif "title" in lower_cols:
+            label_col = lower_cols["title"]
+        if label_col:
+            summary[label_col] = "Total"
 
         return pd.concat([df, pd.DataFrame([summary], index=["Total"])])
 
@@ -508,7 +515,8 @@ class ResultTab(QWidget):
         instrument_items: list[dict] = []
 
         for name, table in tables.items():
-            if name in ("summary_table", "installation_table"):
+            # ??? if name in ("summary_table", "installation_table"):
+            if name in ("summary_table"):
                 continue
 
             model = table.model()

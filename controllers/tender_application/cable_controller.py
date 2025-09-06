@@ -37,7 +37,9 @@ class CableController(PanelController):
                     print(f"Error: {e}")
                     continue
 
-        self.length = self.electrical_specs["bagfilter"]["cable_dimension"]
+        self.mcc_distance       = self.electrical_specs["project_info"]["mcc_distance"]
+        self.feeder_distance    = self.electrical_specs["project_info"]["feeder_distance"]
+        self.structure_distance = self.electrical_specs["project_info"]["structure_distance"]
         self.note_motors = ", ".join(f'{motor["motor"]} (x{motor["qty"]})' for motor in self.motors)
 
         # calculate n_valves and n_airtanks
@@ -113,7 +115,7 @@ class CableController(PanelController):
                 brand=cable["brand"],
                 order_number=cable["order_number"],
                 specifications=f"Shield 3x1.5mm",
-                quantity=shield_total_qty * self.length,
+                quantity=shield_total_qty * (self.structure_distance + self.electrical_specs["project_info"]["width"]),
                 price=cable['price'],
                 last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
                 note=shield_summary
@@ -124,7 +126,7 @@ class CableController(PanelController):
                 brand="",
                 order_number="",
                 specifications=f"Shield 3x1.5mm",
-                quantity=shield_total_qty * self.length,
+                quantity=shield_total_qty * (self.structure_distance + self.electrical_specs["project_info"]["width"]),
                 price=0,
                 last_price_update="❌ Cable not found",
                 note=shield_summary
@@ -137,7 +139,7 @@ class CableController(PanelController):
                 brand=cable["brand"],
                 order_number=cable["order_number"],
                 specifications=f"Flexible 3x1.5mm",
-                quantity=flexible_total_qty * self.length,
+                quantity=flexible_total_qty * (self.structure_distance + self.electrical_specs["project_info"]["height"]),
                 price=cable['price'],
                 last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
                 note=flexible_summary
@@ -148,7 +150,7 @@ class CableController(PanelController):
                 brand="",
                 order_number="",
                 specifications=f"Flexible 3x1.5mm",
-                quantity=flexible_total_qty * self.length,
+                quantity=flexible_total_qty * (self.structure_distance + self.electrical_specs["project_info"]["height"]),
                 price=0,
                 last_price_update="❌ Cable not found",
                 note=flexible_summary
@@ -164,7 +166,7 @@ class CableController(PanelController):
                 brand=cable["brand"],
                 order_number=cable["order_number"],
                 specifications=f"7x1.5mm²",
-                quantity=self.length * total_motors,
+                quantity= total_motors * (self.structure_distance + self.electrical_specs["project_info"]["height"]/2),
                 price=cable['price'],
                 last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
                 note=self.note_motors
@@ -175,7 +177,7 @@ class CableController(PanelController):
                 brand="",
                 order_number="",
                 specifications=f"7x1.5mm²",
-                quantity=self.length * total_motors,
+                quantity= total_motors * (self.structure_distance + self.electrical_specs["project_info"]["height"]/2),
                 price=0,
                 last_price_update="❌ Cable not found",
                 note=self.note_motors
@@ -186,7 +188,8 @@ class CableController(PanelController):
         cable_group = {}
 
         for motor in self.motors:
-            cable_size = cable_rating(cable_length_m=self.length, cable_current_a=motor["current"])
+            cable_size = cable_rating(cable_length_m = (self.structure_distance + self.electrical_specs["project_info"]["height"]/2)
+                                      , cable_current_a=motor["current"])
 
             if cable_size not in cable_group:
                 cable_group[cable_size] = {
@@ -194,7 +197,7 @@ class CableController(PanelController):
                     "motors": []
                 }
 
-            cable_group[cable_size]["length"] += self.length * motor["qty"]
+            cable_group[cable_size]["length"] += (self.structure_distance + self.electrical_specs["project_info"]["height"]/2) * motor["qty"]
             cable_group[cable_size]["motors"].append(motor["motor"])
 
         # Step 2: Retrieve cable data for each cable_size (only once)

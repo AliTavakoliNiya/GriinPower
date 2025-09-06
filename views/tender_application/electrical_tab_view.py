@@ -631,9 +631,6 @@ class ElectricalTab(QWidget):
     def _handle_cable_supply_changed(self, state):
         self._update_project_value(["bagfilter", "cable_supply"], state == Qt.Checked)
 
-    def _handle_cable_length_changed(self, value):
-        self._update_project_value(["bagfilter", "cable_dimension"], value)
-
     """ ------------ Bagfilter instrument handlers ------------ """
 
     def _handle_spare_pins_changed(self, value):
