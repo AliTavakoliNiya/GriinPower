@@ -57,7 +57,7 @@ class FreshAirController(PanelController):
             fresh_air_flap.plc_do = 2
             fresh_air_flap.button_qty = 4
             fresh_air_flap.relay_1no_1nc_qty = 5
-        elif motors_config["fresh_air_flap"]["start_type"] == "Motorized Gradual ":
+        elif motors_config["fresh_air_flap"]["start_type"] == "Motorized Gradual":
             fresh_air_flap.contactor_qty = 2
             fresh_air_flap.contactor_aux_contact_qty = 2
             fresh_air_flap.plc_di = 6
@@ -85,7 +85,7 @@ class FreshAirController(PanelController):
             emergency_flap.plc_do = 2
             emergency_flap.button_qty = 4
             emergency_flap.relay_1no_1nc_qty = 5
-        elif motors_config["fresh_air_flap"]["start_type"] == "Motorized Gradual ":
+        elif motors_config["fresh_air_flap"]["start_type"] == "Motorized Gradual":
             emergency_flap.contactor_qty = 2
             emergency_flap.contactor_aux_contact_qty = 2
             emergency_flap.plc_di = 6

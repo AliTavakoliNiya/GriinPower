@@ -17,8 +17,8 @@ class FanDamperController(PanelController):
         Main controller for building a fan_damper panel from tender_application specifications.
         """
         if self.electrical_specs["damper"]["motors"]["damper"]["qty"] == 0 \
-            and self.electrical_specs["fan"]["motors"]["fan"]["qty"] == 0 :
-                return self.panel
+                and self.electrical_specs["fan"]["motors"]["fan"]["qty"] == 0:
+            return self.panel
 
         # ----------------------- Initialize Motors -----------------------
         damper_config = self.electrical_specs["damper"]["motors"]["damper"]
@@ -40,7 +40,7 @@ class FanDamperController(PanelController):
             damper.plc_do = 2
             damper.button_qty = 4
             damper.relay_1no_1nc_qty = 5
-        elif damper_config["start_type"] == "Motorized Gradual ":
+        elif damper_config["start_type"] == "Motorized Gradual":
             damper.contactor_qty = 2
             damper.contactor_aux_contact_qty = 2
             damper.plc_di = 6
@@ -74,7 +74,6 @@ class FanDamperController(PanelController):
             fan.contactor_qty = 0
             fan.contactor_aux_contact_qty = 0
 
-
         fan.rpm = fan_config["rpm"]
         fan.brand = fan_config["brand"]
         fan.cooling_method = fan_config["cooling_method"]
@@ -106,7 +105,8 @@ class FanDamperController(PanelController):
 
         self.choose_mccb(damper, damper_config["qty"])
         fan_with_half_power = copy.deepcopy(fan)
-        fan_with_half_power.power = fan_with_half_power.power / 2 if fan_config["start_type"] == "Delta/Star" else fan_with_half_power.power
+        fan_with_half_power.power = fan_with_half_power.power / 2 if fan_config[
+                                                                         "start_type"] == "Delta/Star" else fan_with_half_power.power
         self.choose_mccb(fan_with_half_power, fan_config["qty"])
 
         self.choose_bimetal(damper, damper_config["qty"])

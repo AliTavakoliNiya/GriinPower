@@ -89,10 +89,6 @@ class TransportController(PanelController):
 
         # ----------------------- Add Electrical Panel -----------------------
         total_motors = sum(qty for _, qty in motor_objects)
-        total_motors += sum(0.5 * qty for motor, qty in motor_objects if motor.usage == "Telescopic Chute")
-        total_motors += sum(0.5 * qty for motor, qty in motor_objects if motor.usage == "Slide Gate")
-        total_motors = ceil(total_motors)
-
         if total_motors != 0:
             self.choose_electrical_panel(total_motors)
 

@@ -370,7 +370,7 @@ class PanelController:
                 order_number="",
                 specifications=f"{width}mm x {height}mm x {depth}mm",
                 quantity=qty,
-                price=electrical_panel.get("price", 0)/(self.total_motors_in_project_qty+1),
+                price=electrical_panel.get("price", 0)*total_motors/(self.total_motors_in_project_qty+1),
                 last_price_update=f"{electrical_panel.get('supplier_name', '')}\n{electrical_panel.get('date', '')}",
                 note=f"{total_motors}/{self.total_motors_in_project_qty+1} Of Electrical Panel Price"
             )
@@ -717,7 +717,7 @@ class PanelController:
                     type="Internal Power Panel Wire",
                     brand=cable["brand"],
                     order_number=cable["order_number"],
-                    specifications="(3x) Size: 1x6 mm²",
+                    specifications="(x3Ph) Size: 1x6 mm²",
                     quantity=wire_length * 3,
                     price=cable['price'],
                     last_price_update=f"{cable['supplier_name']}\n{cable['date']}",
@@ -728,7 +728,7 @@ class PanelController:
                     type="Internal Power Panel Wire",
                     brand="",
                     order_number="",
-                    specifications="(3x) Size: 1x6 mm²",
+                    specifications="(x3Ph) Size: 1x6 mm²",
                     quantity=wire_length * 3,
                     price=0,
                     last_price_update="❌ Wire not found",
