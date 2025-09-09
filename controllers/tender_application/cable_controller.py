@@ -197,7 +197,8 @@ class CableController(PanelController):
         cable_group = {}
         length = (self.structure_distance +
                   self.electrical_specs["project_info"]["width"] / 2 +
-                  self.electrical_specs["project_info"]["height"] / 2)
+                  self.electrical_specs["project_info"]["height"] / 2 +
+                  self.electrical_specs["project_info"]["depth"] / 2 )
 
         for motor in self.motors:
 
@@ -212,7 +213,7 @@ class CableController(PanelController):
                 }
 
             cable_group[cable_size]["length"] += length * motor["qty"]
-            cable_group[cable_size]["motors"].append(motor["motor"])
+            cable_group[cable_size]["motors"].append(f"{motor['motor']} (x{motor['qty']})")
 
         # Step 2: Retrieve cable data for each cable_size (only once)
         cable_data = {}

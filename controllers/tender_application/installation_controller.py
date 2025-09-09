@@ -521,7 +521,7 @@ class InstallationController(PanelController):
                 specifications="",
                 quantity=n_screw,
                 price=0,
-                last_price_update="❌ Ladder Connector found",
+                last_price_update="❌ Screw found",
                 note=f"Ladder Connector({n_connectors})x16\n"
                      f"Ladder Support({int(self.ladder_length / 1.5)})x8\n"
                      f"Tray Connector({self.tray_length})x16\n"
