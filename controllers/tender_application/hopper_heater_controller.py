@@ -26,8 +26,8 @@ class HopperHeaterController(PanelController):
                               relay_1no_1nc_qty=2,
                               mpcb_qty=0,
                               mpcb_aux_contact_qty=0,
-                              mccb_qty=1,
-                              mccb_aux_contact_qty=1,
+                              mccb_qty=0,
+                              mccb_aux_contact_qty=0,
                               button_qty=0,
                               selector_switch_qty=0,
                               signal_lamp_24v_qty=0)
@@ -39,9 +39,6 @@ class HopperHeaterController(PanelController):
         # ----------------------- Add Components for Motors -----------------------
         for motor, qty in motor_objects:
             self.choose_contactor(motor, qty)
-        for motor, qty in motor_objects:
-            self.choose_mccb(motor, qty)
-        # bi_metal???
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------
         instruments = self.electrical_specs["hopper_heater"]["instruments"]

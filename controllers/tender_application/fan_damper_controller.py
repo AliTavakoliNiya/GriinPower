@@ -29,8 +29,8 @@ class FanDamperController(PanelController):
         if damper_config["start_type"] == "Pneumatic":
             damper.mpcb_qty = 0
             damper.mpcb_aux_contact_qty = 0
-            damper.mccb_qty = 1
-            damper.mccb_aux_contact_qty = 1
+            damper.mccb_qty = 0
+            damper.mccb_aux_contact_qty = 0
             damper.relay_1no_1nc_qty = 6
             damper.plc_do = 2
         elif damper_config["start_type"] == "Motorized On/Off":
@@ -85,7 +85,7 @@ class FanDamperController(PanelController):
 
         fan.mpcb_qty = 0
         fan.mpcb_aux_contact_qty = 0
-        if fan.voltage_type == "LV":
+        if fan.voltage_type == "LV" and fan_config["start_type"] != "VFD":
             fan.mccb_qty = 1
             fan.mccb_aux_contact_qty = 1
             fan.bimetal_qty = 1
