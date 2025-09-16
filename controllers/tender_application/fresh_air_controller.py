@@ -105,9 +105,8 @@ class FreshAirController(PanelController):
             self.choose_mccb(motor, qty)
         for motor, qty in motor_objects:
             self.choose_bimetal(motor, qty)
-        for motor, qty in motor_objects:
-            if motor["start_type"] == "VFD":
-                self.choose_vfd(motor, qty)
+        if motors_config["freshair_motor"]["start_type"] == "VFD":
+            self.choose_vfd(freshair_motor, qty)
 
 
         # ----------------------- Calculate and add PLC I/O requirements -----------------------

@@ -481,7 +481,7 @@ class InstallationController(PanelController):
                 quantity=n_connectors,
                 price=connector['price'],
                 last_price_update=f"{connector['supplier_name']}\n{connector['date']}",
-                note=f"Height({self.electrical_specs['project_info']['height']})*1.5/2)*2"
+                note=f"(Height({self.electrical_specs['project_info']['height']})*1.5/2)*2"
             )
         else:
             self.add_to_panel(
@@ -492,7 +492,7 @@ class InstallationController(PanelController):
                 quantity=n_connectors,
                 price=0,
                 last_price_update="❌ Ladder Connector not found",
-                note=f"Height({self.electrical_specs['project_info']['height']})*1.5/2)*2"
+                note=f"(Height({self.electrical_specs['project_info']['height']})*1.5/2)*2"
             )
 
         n_screw = n_connectors * 16 + int(self.ladder_length / 1.5) * 8 + self.tray_length * 16 + int(

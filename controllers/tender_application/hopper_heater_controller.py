@@ -31,6 +31,7 @@ class HopperHeaterController(PanelController):
                               button_qty=0,
                               selector_switch_qty=0,
                               signal_lamp_24v_qty=0)
+
         hopper_heater.current = self.calculate_motor_current(power=hopper_heater.power)
         self.electrical_specs["hopper_heater"]["motors"]["elements"]["motor"] = hopper_heater
         motor_objects = [(hopper_heater, motors_config["elements"]["qty"])]
