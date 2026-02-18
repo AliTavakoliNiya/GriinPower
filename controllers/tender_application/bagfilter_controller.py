@@ -57,7 +57,7 @@ class BagfilterController(PanelController):
         self.bagfilter_general_items["bagfilter_cards"] = n_bagfilter_cards
 
         try:
-            do_bagfilter_card = math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digist use in binary
+            do_bagfilter_card = math.ceil(math.log2(n_bagfilter_cards))  # for address each card, digits use in binary
         except Exception as e:
             do_bagfilter_card = 0
 

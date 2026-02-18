@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1334</width>
+    <width>1297</width>
     <height>745</height>
    </rect>
   </property>
@@ -45,7 +45,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1316</width>
+        <width>1279</width>
         <height>745</height>
        </rect>
       </property>
@@ -3670,6 +3670,16 @@ QPushButton:pressed {
             <item>
              <property name="text">
               <string>132.0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>200.0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>250.0</string>
              </property>
             </item>
             <item>

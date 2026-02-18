@@ -1,14 +1,11 @@
-from PyQt5.QtCore import QModelIndex
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QTableView, QHBoxLayout, QPushButton
+import pandas as pd
+from PyQt5.QtGui import QStandardItem, QStandardItemModel
+from PyQt5.QtWidgets import QHBoxLayout, QMainWindow, QPushButton, QTableView, QVBoxLayout, QWidget
 
 from controllers.data_entry.contactor_data_entry_controller import ContactorDataEntryController
 from utils.pandas_model import PandasModel
 from utils.thousand_separator_line_edit import format_line_edit_text, parse_price
-import pandas as pd
-
-from views.message_box_view import show_message, confirmation
-from PyQt5.QtCore import Qt
+from views.message_box_view import confirmation, show_message
 
 
 class ContactorDataEntryView:
@@ -72,13 +69,8 @@ class ContactorDataEntryView:
             show_message("Please fill in all required fields.", title="Error Saving Contactor")
             return
 
-        contactor_details = {"current": current,
-                             "voltage": voltage,
-                             "brand": brand,
-                             "supplier": supplier,
-                             "price": price,
-                             "order_number": order_number,
-                             }
+        contactor_details = {"current": current, "voltage": voltage, "brand": brand, "supplier": supplier,
+                             "price": price, "order_number": order_number, }
 
         success, msg = self.contactor_data_entry_controller.save_contactor(contactor_details)
         if success:
@@ -92,8 +84,7 @@ class ContactorDataEntryView:
         if not confirmation(f"You are about to update the Schneider Electric contactor prices from:\n\n"
                             f"D series: https://elicaelectric.com/کنتاکتور-220-ولت-ac-سری-d-اشنایدر-contactor-220-v-ac-coil\n"
                             f"G series: https://elicaelectric.com/contactor-tesys-giga\n\n"
-                            f"Are you sure?",
-                            centeralize=False):
+                            f"Are you sure?", centeralize=False):
             return
 
         show_message("Fetching Datas...")
@@ -111,7 +102,6 @@ class ContactorDataEntryView:
             show_message(msg, title="Failed")
 
         self.refresh_page()
-
 
 
 class TableWindow(QMainWindow):

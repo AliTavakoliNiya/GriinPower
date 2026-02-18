@@ -98,7 +98,8 @@ class FanDamperController(PanelController):
 
         # ----------------------- Add Components for Motors -----------------------
         self.choose_contactor(damper, damper_config["qty"])
-        self.choose_contactor(fan, fan_config["qty"])
+        if fan_config["start_type"] != "Soft Starter":
+            self.choose_contactor(fan, fan_config["qty"])
 
         self.choose_mpcb(damper, damper_config["qty"])
         self.choose_mpcb(fan, fan_config["qty"])
@@ -110,7 +111,9 @@ class FanDamperController(PanelController):
         self.choose_mccb(fan_with_half_power, fan_config["qty"])
 
         self.choose_bimetal(damper, damper_config["qty"])
-        self.choose_bimetal(fan, fan_config["qty"])
+
+        if fan_config["start_type"] != "Soft Starter":
+            self.choose_bimetal(fan, fan_config["qty"])
 
         if fan_config["start_type"] == "VFD":
             self.choose_vfd(fan, fan_config["qty"])
